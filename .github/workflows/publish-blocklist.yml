@@ -1,0 +1,62 @@
+name: Publish Community Blocklist
+
+on:
+  schedule:
+    - cron: '0 */4 * * *'   # Every 4 hours — matches extension fetch interval
+  workflow_dispatch:          # Manual trigger
+
+permissions:
+  contents: write   # needed to push blocklist.json to docs/
+
+jobs:
+  publish:
+    name: Build and Publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install wrangler
+        run: npm install -g wrangler
+
+      - name: Authenticate wrangler
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: echo "Wrangler will use CLOUDFLARE_API_TOKEN from env"
+
+      - name: Build blocklist
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: node scripts/publish-blocklist.js
+
+      - name: Commit and push
+        run: |
+          git config user.name  "virgil-blocklist[bot]"
+          git config user.email "blocklist-bot@lumiosecurity"
+          git add docs/blocklist.json
+          if git diff --cached --quiet; then
+            echo "No changes to blocklist"
+          else
+            DOMAINS=$(node -e "const b=require('./docs/blocklist.json'); console.log(b.domainCount)")
+            git commit -m "chore: update community blocklist [${DOMAINS} domains]"
+            git push
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Blocklist Publish" >> $GITHUB_STEP_SUMMARY
+          if [ -f docs/blocklist.json ]; then
+            DOMAINS=$(node -e "const b=require('./docs/blocklist.json'); console.log(b.domainCount)")
+            GENERATED=$(node -e "const b=require('./docs/blocklist.json'); console.log(b.generatedAt)")
+            echo "✅ **${DOMAINS} domains** published at ${GENERATED}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ blocklist.json not generated" >> $GITHUB_STEP_SUMMARY
+          fi

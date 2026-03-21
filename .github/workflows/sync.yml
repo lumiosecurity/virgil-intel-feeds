@@ -1,0 +1,93 @@
+name: Sync Sublime Security Lists
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'   # Every Monday at 06:00 UTC
+  workflow_dispatch:        # Manual trigger from GitHub UI
+    inputs:
+      feeds:
+        description: 'Specific feeds to sync (space-separated, blank = all)'
+        required: false
+        default: ''
+      dry_run:
+        description: 'Dry run (no commits)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    name: Sync Feeds
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run sync
+        id: sync
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ARGS="${{ github.event.inputs.feeds }}"
+          DRY="${{ github.event.inputs.dry_run }}"
+          if [ "$DRY" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          node scripts/sync-sublime.js $ARGS 2>&1 | tee /tmp/sync-output.txt
+          echo "output<<EOF" >> $GITHUB_OUTPUT
+          cat /tmp/sync-output.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet feeds/ || echo "changed=true" >> $GITHUB_OUTPUT
+          echo "changed=$(git diff --quiet feeds/ && echo false || echo true)" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.changed == 'true' && github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.name  "virgil-sync[bot]"
+          git config user.email "sync-bot@lumiosecurity"
+          git add feeds/
+          CHANGED=$(git diff --cached --name-only | wc -l | tr -d ' ')
+          git commit -m "chore: sync Sublime Security lists [${CHANGED} files updated]
+
+          Automated sync from sublime-security/static-files
+          Run: ${{ github.run_id }}"
+          git push
+
+      - name: Create summary
+        if: always()
+        run: |
+          echo "## Sublime Feed Sync" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.changes.outputs.changed }}" = "true" ]; then
+            echo "✅ **Changes detected and committed**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ **No changes** — feeds are up to date" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat /tmp/sync-output.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              title: `Feed sync failed — ${new Date().toISOString().slice(0,10)}`,
+              body:  `The scheduled Sublime Security list sync failed.\n\nRun: https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              labels: ['sync-failure'],
+            });

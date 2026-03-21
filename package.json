@@ -1,0 +1,10 @@
+{
+  "name": "virgil-intel-feeds",
+  "version": "1.0.0",
+  "description": "Threat intelligence feed sync for Virgil",
+  "type": "module",
+  "scripts": {
+    "sync": "node scripts/sync-sublime.js",
+    "sync:dry": "node scripts/sync-sublime.js --dry-run"
+  }
+}

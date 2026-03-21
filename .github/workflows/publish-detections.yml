@@ -1,0 +1,91 @@
+name: Publish Detection Config
+
+on:
+  # Trigger when core-rules or community rules repos push to main
+  # Set up as a repository_dispatch event from those repos, OR
+  # run on a schedule as a fallback
+  schedule:
+    - cron: '0 2 * * *'    # Daily at 02:00 UTC — catches any rule changes
+  workflow_dispatch:         # Manual trigger
+    inputs:
+      dry_run:
+        description: 'Dry run (compile only, no publish)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Compile & Publish detections.json
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout intel-feeds
+        uses: actions/checkout@v4
+
+      - name: Checkout virgil-extension (for compile-feeds tool)
+        uses: actions/checkout@v4
+        with:
+          repository: lumiosecurity/extension
+          path: extension
+          # No token needed if extension repo is public
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Compile detections.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd extension
+          ARGS=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then ARGS="--dry-run"; fi
+          node tools/compile-feeds.js $ARGS 2>&1 | tee /tmp/compile-output.txt
+          # Copy generated detections.json to intel-feeds docs/
+          if [ -f src/background/detections.json ]; then
+            mkdir -p ../docs
+            cp src/background/detections.json ../docs/detections.json
+            echo "detections.json generated:"
+            node -e "const d=require('./src/background/detections.json'); console.log('  brands:', d.brandEntries?.length, 'patterns:', d.sourcePatterns?.length, 'TLDs:', Object.keys(d.tldRisk||{}).length)"
+          fi
+
+      - name: Commit and push
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.name  "virgil-detections[bot]"
+          git config user.email "detections-bot@lumiosecurity"
+          git add docs/detections.json
+          if git diff --cached --quiet; then
+            echo "No changes to detections.json"
+          else
+            VERSION=$(node -e "const d=require('./docs/detections.json'); console.log(d._meta?.version)")
+            BRANDS=$(node -e "const d=require('./docs/detections.json'); console.log(d.brandEntries?.length)")
+            PATTERNS=$(node -e "const d=require('./docs/detections.json'); console.log(d.sourcePatterns?.length)")
+            git commit -m "chore: update detections.json v${VERSION} [${BRANDS} brands, ${PATTERNS} patterns]"
+            git push
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Detection Config Publish" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f docs/detections.json ]; then
+            VERSION=$(node -e "const d=require('./docs/detections.json'); console.log(d._meta?.version)")
+            BRANDS=$(node -e "const d=require('./docs/detections.json'); console.log(d.brandEntries?.length)")
+            PATTERNS=$(node -e "const d=require('./docs/detections.json'); console.log(d.sourcePatterns?.length)")
+            echo "✅ \`detections.json\` v${VERSION} — **${BRANDS} brands**, **${PATTERNS} patterns**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Served at: \`https://lumiosecurity.github.io/intel-feeds/detections.json\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ detections.json not generated" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat /tmp/compile-output.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
