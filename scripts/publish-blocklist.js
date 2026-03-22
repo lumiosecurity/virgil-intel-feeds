@@ -110,7 +110,7 @@ async function main() {
   let feedRows = [];
   try {
     const feedOutput = execSync(
-      `wrangler d1 execute virgil-telemetry --command="${feedSql.replace(/"/g, '\\"')}" --json`,
+      `wrangler d1 execute virgil-telemetry --remote --command="${feedSql.replace(/"/g, '\\"')}" --json`,
       { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }
     );
     const feedResult = JSON.parse(feedOutput);
