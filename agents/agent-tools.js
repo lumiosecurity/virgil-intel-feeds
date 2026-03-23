@@ -3,6 +3,9 @@
 // All external I/O goes through here — agents stay focused on logic.
 
 import { execSync } from 'child_process';
+import { writeFileSync, unlinkSync } from 'fs';
+import { tmpdir } from 'os';
+import { join } from 'path';
 
 // ── Configuration (all from environment) ──────────────────────────────────────
 
@@ -12,33 +15,74 @@ export const cfg = {
   safeBrowsingKey: process.env.SAFE_BROWSING_API_KEY,
   d1Database:      process.env.D1_DATABASE    || 'virgil-telemetry',
   orgName:         process.env.ORG_NAME        || 'lumiosecurity',
-  coreRulesRepo:   process.env.CORE_RULES_REPO || 'core-rules',
-  communityRepo:   process.env.COMMUNITY_REPO  || 'rules',
+  coreRulesRepo:   process.env.CORE_RULES_REPO || 'virgil-core-rules',
+  communityRepo:   process.env.COMMUNITY_REPO  || 'virgil-rules',
   model:           'claude-sonnet-4-20250514',
 };
 
 // ── D1 Query ──────────────────────────────────────────────────────────────────
 
 export function d1(sql) {
+  const tmpFile = join(tmpdir(), `virgil-query-${Date.now()}.sql`);
   try {
-    const escaped = sql.replace(/"/g, '\\"').replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+    writeFileSync(tmpFile, sql.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim());
     const output = execSync(
+<<<<<<< Updated upstream
       `wrangler d1 execute ${cfg.d1Database} --remote --command="${escaped}" --json`,
       { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }
+=======
+      `wrangler d1 execute ${cfg.d1Database} --remote --file="${tmpFile}" --json`,
+      {
+        encoding: 'utf8',
+        stdio: ['pipe', 'pipe', 'pipe'],
+        env: { ...process.env },
+      }
+>>>>>>> Stashed changes
     );
     const result = JSON.parse(output);
     return result?.[0]?.results || [];
   } catch (e) {
-    console.error('[D1] Query failed:', e.message.slice(0, 200));
+    console.error('[D1] Query failed:', e.message.slice(0, 300));
     return [];
+  } finally {
+    try { unlinkSync(tmpFile); } catch {}
   }
 }
 
 // ── Claude API ─────────────────────────────────────────────────────────────────
 // All agent Claude calls go here — consistent model, temperature, token budget
 
-export async function claude(systemPrompt, userContent, maxTokens = 2000) {
+export async function claude(systemPrompt, userContent, maxTokens = 2000, imageUrl = null) {
   if (!cfg.anthropicKey) throw new Error('ANTHROPIC_API_KEY not set');
+
+  // Build message content — optionally prepend screenshot
+  let messageContent;
+  if (imageUrl) {
+    try {
+      const imgResp = await fetch(imageUrl, { signal: AbortSignal.timeout(8000) });
+      if (imgResp.ok) {
+        const imgBuffer = await imgResp.arrayBuffer();
+        const base64 = Buffer.from(imgBuffer).toString('base64');
+        const mediaType = imgResp.headers.get('content-type') || 'image/jpeg';
+        messageContent = [
+          {
+            type: 'image',
+            source: { type: 'base64', media_type: mediaType, data: base64 },
+          },
+          { type: 'text', text: userContent },
+        ];
+        console.log('Screenshot included in Claude request, size:', base64.length);
+      } else {
+        console.warn('Could not fetch screenshot for Claude:', imgResp.status);
+        messageContent = userContent;
+      }
+    } catch (e) {
+      console.warn('Screenshot fetch failed:', e.message);
+      messageContent = userContent;
+    }
+  } else {
+    messageContent = userContent;
+  }
 
   const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -51,7 +95,7 @@ export async function claude(systemPrompt, userContent, maxTokens = 2000) {
       model:      cfg.model,
       max_tokens: maxTokens,
       system:     systemPrompt,
-      messages:   [{ role: 'user', content: userContent }],
+      messages:   [{ role: 'user', content: messageContent }],
     }),
   });
 
@@ -159,30 +203,34 @@ export async function checkSafeBrowsing(url) {
 
 // ── Domain intelligence ────────────────────────────────────────────────────────
 
-export async function getDomainIntel(domain) {
+export async function getDomainIntel(hostname) {
+  // Extract registered domain from full hostname for D1 queries
+  const parts = hostname.split('.');
+  const registeredDomain = parts.slice(-2).join('.');
+
   const [ct, gsb] = await Promise.allSettled([
-    getCTAge(domain),
-    checkSafeBrowsing(`https://${domain}`),
+    getCTAge(hostname),                          // CT on full hostname
+    checkSafeBrowsing(`https://${hostname}`),    // GSB on full hostname
   ]);
 
-  // Corpus hit count
+  // Corpus queries use registered_domain column
   const corpusRows = d1(`
     SELECT COUNT(DISTINCT install_id) as reports, AVG(confidence) as avg_conf,
            MAX(risk_level) as max_risk
     FROM verdicts
-    WHERE registered_domain = '${domain.replace(/'/g,"''")}' AND risk_level != 'safe'
+    WHERE registered_domain = '${registeredDomain.replace(/'/g,"''")}' AND risk_level != 'safe'
   `);
 
-  // Ingested feed hit count
   const feedRows = d1(`
     SELECT COUNT(*) as hits, AVG(risk_score) as avg_score,
            GROUP_CONCAT(DISTINCT feed_source) as feeds
     FROM ingested_urls
-    WHERE registered_domain = '${domain.replace(/'/g,"''")}' AND risk_score >= 0.5
+    WHERE registered_domain = '${registeredDomain.replace(/'/g,"''")}' AND risk_score >= 0.5
   `);
 
   return {
-    domain,
+    hostname,
+    registeredDomain,
     ct:     ct.status === 'fulfilled' ? ct.value : null,
     gsb:    gsb.status === 'fulfilled' ? gsb.value : null,
     corpus: corpusRows[0] || { reports: 0, avg_conf: null, max_risk: null },
@@ -245,16 +293,20 @@ export function analyzeUrl(url) {
 
 export function fmtIntel(intel) {
   const lines = [];
+  const label = intel.hostname !== intel.registeredDomain
+    ? `\`${intel.hostname}\` (registered: \`${intel.registeredDomain}\`)`
+    : `\`${intel.hostname}\``;
+  lines.push(`**Checked:** ${label}`);
   if (intel.ct) {
-    lines.push(`**CT log age:** ${intel.ct.ageDays} days (first cert ${new Date(intel.ct.firstSeenTs).toISOString().slice(0,10)})`);
+    lines.push(`**CT log age:** ${intel.ct.ageDays} days (first cert ${new Date(intel.ct.firstSeenTs).toISOString().slice(0,10)}) — note: subdomain certs may differ from root domain`);
   } else {
-    lines.push('**CT log age:** not found (domain may be very new or use private CA)');
+    lines.push('**CT log age:** not found for this specific hostname (may be new, using wildcard cert, or private CA)');
   }
   if (intel.gsb?.matched)   lines.push(`**Safe Browsing:** ⚠ MATCHED — ${intel.gsb.threatTypes.join(', ')}`);
   else if (intel.gsb)       lines.push('**Safe Browsing:** clean');
   else                       lines.push('**Safe Browsing:** not checked (no key)');
-  lines.push(`**Corpus reports:** ${intel.corpus.reports} distinct installs, avg confidence ${intel.corpus.avg_conf?.toFixed(2) || 'N/A'}, max verdict ${intel.corpus.max_risk || 'none'}`);
-  lines.push(`**Feed hits:** ${intel.feeds.hits} ingested URLs, avg score ${intel.feeds.avg_score?.toFixed(2) || 'N/A'}, sources: ${intel.feeds.feeds || 'none'}`);
+  lines.push(`**Corpus reports (${intel.registeredDomain}):** ${intel.corpus.reports} distinct installs, avg confidence ${intel.corpus.avg_conf?.toFixed(2) || 'N/A'}, max verdict ${intel.corpus.max_risk || 'none'}`);
+  lines.push(`**Feed hits (${intel.registeredDomain}):** ${intel.feeds.hits} ingested URLs, avg score ${intel.feeds.avg_score?.toFixed(2) || 'N/A'}, sources: ${intel.feeds.feeds || 'none'}`);
   return lines.join('\n');
 }
 
