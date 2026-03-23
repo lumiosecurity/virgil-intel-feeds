@@ -40,7 +40,7 @@ jobs:
 
       - name: Compile detections.json
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
         run: |
           cd extension
           ARGS=""
@@ -81,7 +81,7 @@ jobs:
             PATTERNS=$(node -e "const d=require('./docs/detections.json'); console.log(d.sourcePatterns?.length)")
             echo "✅ \`detections.json\` v${VERSION} — **${BRANDS} brands**, **${PATTERNS} patterns**" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "Served at: \`https://lumiosecurity.github.io/intel-feeds/detections.json\`" >> $GITHUB_STEP_SUMMARY
+            echo "Served at: \`https://lumiosecurity.github.io/virgil-intel-feeds/detections.json\`" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ detections.json not generated" >> $GITHUB_STEP_SUMMARY
           fi
