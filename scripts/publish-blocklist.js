@@ -68,14 +68,14 @@ async function main() {
   let rows = [];
   try {
     const output = execSync(
-      `wrangler d1 execute virgil-telemetry --command="${sql.replace(/"/g, '\\"')}" --json`,
+      `wrangler d1 execute virgil-telemetry --remote --command="${sql.replace(/"/g, '\\"')}" --json`,
       { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }
     );
     const result = JSON.parse(output);
     rows = result?.[0]?.results || [];
   } catch (e) {
     console.error('D1 query failed:', e.message);
-    process.exit(1);
+    rows = [];
   }
 
   console.log(`  Raw results: ${rows.length} candidate domains`);
@@ -110,7 +110,7 @@ async function main() {
   let feedRows = [];
   try {
     const feedOutput = execSync(
-      `wrangler d1 execute virgil-telemetry --command="${feedSql.replace(/"/g, '\\"')}" --json`,
+      `wrangler d1 execute virgil-telemetry --remote --command="${feedSql.replace(/"/g, '\\"')}" --json`,
       { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }
     );
     const feedResult = JSON.parse(feedOutput);

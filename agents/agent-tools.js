@@ -23,7 +23,7 @@ export function d1(sql) {
   try {
     const escaped = sql.replace(/"/g, '\\"').replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
     const output = execSync(
-      `wrangler d1 execute ${cfg.d1Database} --command="${escaped}" --json`,
+      `wrangler d1 execute ${cfg.d1Database} --remote --command="${escaped}" --json`,
       { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }
     );
     const result = JSON.parse(output);

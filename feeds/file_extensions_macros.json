@@ -1,0 +1,33 @@
+{
+  "_meta": {
+    "source": "https://github.com/sublime-security/static-files/blob/master/file_extensions_macros.txt",
+    "syncedAt": "2026-03-23T05:40:28.627Z",
+    "role": "macro_extensions",
+    "description": "Macro-capable file extensions — suspicious as download links on credential pages",
+    "count": 22
+  },
+  "entries": [
+    "doc",
+    "docm",
+    "docx",
+    "dot",
+    "dotm",
+    "odt",
+    "ppa",
+    "ppam",
+    "ppsm",
+    "ppt",
+    "pptm",
+    "pptx",
+    "wbk",
+    "xla",
+    "xlam",
+    "xlm",
+    "xls",
+    "xlsb",
+    "xlsm",
+    "xlsx",
+    "xlt",
+    "xltm"
+  ]
+}

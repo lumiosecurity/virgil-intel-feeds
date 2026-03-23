@@ -29,23 +29,31 @@ jobs:
       - name: Checkout virgil-extension (for compile-feeds tool)
         uses: actions/checkout@v4
         with:
-          repository: lumiosecurity/extension
+          repository: lumiosecurity/virgil-extension
           path: extension
-          # No token needed if extension repo is public
+          token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
+      - name: Sync Sublime Security feeds
+        env:
+          GITHUB_TOKEN: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+        run: |
+          node scripts/sync-sublime.js 2>&1 | tee /tmp/sync-output.txt
+          echo "Sublime sync complete"
+
       - name: Compile detections.json
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
         run: |
           cd extension
-          ARGS=""
-          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then ARGS="--dry-run"; fi
-          node tools/compile-feeds.js $ARGS 2>&1 | tee /tmp/compile-output.txt
+          ARGS="--local"
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          # Point compile-feeds to the checked-out intel-feeds (parent dir)
+          INTEL_FEEDS_PATH="${{ github.workspace }}" node tools/compile-feeds.js $ARGS 2>&1 | tee /tmp/compile-output.txt
           # Copy generated detections.json to intel-feeds docs/
           if [ -f src/background/detections.json ]; then
             mkdir -p ../docs
@@ -53,19 +61,23 @@ jobs:
             echo "detections.json generated:"
             node -e "const d=require('./src/background/detections.json'); console.log('  brands:', d.brandEntries?.length, 'patterns:', d.sourcePatterns?.length, 'TLDs:', Object.keys(d.tldRisk||{}).length)"
           fi
+          # Also copy feeds-compiled.json back to intel-feeds for serving
+          if [ -f src/background/feeds-compiled.json ]; then
+            cp src/background/feeds-compiled.json ../docs/feeds-compiled.json
+          fi
 
       - name: Commit and push
         if: github.event.inputs.dry_run != 'true'
         run: |
           git config user.name  "virgil-detections[bot]"
           git config user.email "detections-bot@lumiosecurity"
-          git add docs/detections.json
+          git add docs/detections.json docs/feeds-compiled.json feeds/
           if git diff --cached --quiet; then
-            echo "No changes to detections.json"
+            echo "No changes"
           else
-            VERSION=$(node -e "const d=require('./docs/detections.json'); console.log(d._meta?.version)")
-            BRANDS=$(node -e "const d=require('./docs/detections.json'); console.log(d.brandEntries?.length)")
-            PATTERNS=$(node -e "const d=require('./docs/detections.json'); console.log(d.sourcePatterns?.length)")
+            VERSION=$(node -e "const d=require('./docs/detections.json'); console.log(d._meta?.version)" 2>/dev/null || echo "unknown")
+            BRANDS=$(node -e "const d=require('./docs/detections.json'); console.log(d.brandEntries?.length)" 2>/dev/null || echo "0")
+            PATTERNS=$(node -e "const d=require('./docs/detections.json'); console.log(d.sourcePatterns?.length)" 2>/dev/null || echo "0")
             git commit -m "chore: update detections.json v${VERSION} [${BRANDS} brands, ${PATTERNS} patterns]"
             git push
           fi
@@ -81,7 +93,7 @@ jobs:
             PATTERNS=$(node -e "const d=require('./docs/detections.json'); console.log(d.sourcePatterns?.length)")
             echo "✅ \`detections.json\` v${VERSION} — **${BRANDS} brands**, **${PATTERNS} patterns**" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "Served at: \`https://lumiosecurity.github.io/intel-feeds/detections.json\`" >> $GITHUB_STEP_SUMMARY
+            echo "Served at: \`https://lumiosecurity.github.io/virgil-intel-feeds/detections.json\`" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ detections.json not generated" >> $GITHUB_STEP_SUMMARY
           fi

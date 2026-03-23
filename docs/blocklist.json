@@ -1,0 +1,11 @@
+{
+  "version": "2026-03-23",
+  "generatedAt": "2026-03-23T05:47:32.964Z",
+  "domainCount": 0,
+  "criteria": {
+    "minReports": 3,
+    "minConfidence": 0.85,
+    "maxAgeDays": 30
+  },
+  "domains": []
+}
