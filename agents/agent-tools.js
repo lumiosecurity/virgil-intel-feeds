@@ -21,23 +21,17 @@ export const cfg = {
 };
 
 // ── D1 Query ──────────────────────────────────────────────────────────────────
-
 export function d1(sql) {
   const tmpFile = join(tmpdir(), `virgil-query-${Date.now()}.sql`);
   try {
     writeFileSync(tmpFile, sql.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim());
     const output = execSync(
-<<<<<<< Updated upstream
-      `wrangler d1 execute ${cfg.d1Database} --remote --command="${escaped}" --json`,
-      { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }
-=======
       `wrangler d1 execute ${cfg.d1Database} --remote --file="${tmpFile}" --json`,
       {
         encoding: 'utf8',
         stdio: ['pipe', 'pipe', 'pipe'],
         env: { ...process.env },
       }
->>>>>>> Stashed changes
     );
     const result = JSON.parse(output);
     return result?.[0]?.results || [];
