@@ -20,7 +20,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const FEEDS_DIR = join(__dirname, '../feeds');
 const COMPILED_PATH = join(FEEDS_DIR, 'compiled.json');
 
-const RAW_BASE = 'https://raw.githubusercontent.com/sublime-security/static-files/master';
+const RAW_BASE = 'https://raw.githubusercontent.com/sublime-security/static-files/main';
 
 // ── Feed definitions ──────────────────────────────────────────────────────────
 // Each entry describes one Sublime list file and how to parse + use it.
@@ -42,6 +42,13 @@ const FEEDS = [
     parser: 'lines',
     role:  'free_subdomain_hosts',  // new signal: brand on free subdomain host
     description: 'Sites allowing anyone to create subdomains and host arbitrary content',
+  },
+  {
+    name: 'self_service_creation_platforms',
+    file: 'self_service_creation_platform_domains.txt',
+    parser: 'lines',
+    role:  'free_subdomain_hosts',  // merges into same signal
+    description: 'Self-service website creation platforms where anyone can host content',
   },
   {
     name: 'free_file_hosts',
@@ -222,7 +229,10 @@ function compileFeeds(results) {
       sources: Object.values(all).map(f => f._meta?.source).filter(Boolean),
     },
     tldRisk,
-    freeSubdomainHosts: toSet(all, 'free_subdomain_hosts'),
+    freeSubdomainHosts: [
+      ...toSet(all, 'free_subdomain_hosts'),
+      ...toSet(all, 'self_service_creation_platforms'),
+    ].filter((v, i, a) => a.indexOf(v) === i), // deduplicate
     freeFileHosts:      toSet(all, 'free_file_hosts'),
     urlShorteners:      toSet(all, 'url_shorteners'),
     disposableEmail:    toSet(all, 'disposable_email_providers'),
