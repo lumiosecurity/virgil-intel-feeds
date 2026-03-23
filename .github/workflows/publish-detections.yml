@@ -31,7 +31,7 @@ jobs:
         with:
           repository: lumiosecurity/virgil-extension
           path: extension
-          # No token needed if extension repo is public
+          token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
