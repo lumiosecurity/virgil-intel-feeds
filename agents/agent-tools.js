@@ -21,19 +21,23 @@ export const cfg = {
 };
 
 // ── D1 Query ──────────────────────────────────────────────────────────────────
+
 export function d1(sql) {
   const tmpFile = join(tmpdir(), `virgil-query-${Date.now()}.sql`);
   try {
     writeFileSync(tmpFile, sql.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim());
-    const output = execSync(
-      `wrangler d1 execute ${cfg.d1Database} --remote --file="${tmpFile}" --json`,
+    const rawOutput = execSync(
+      `wrangler d1 execute ${cfg.d1Database} --remote --file="${tmpFile}" --json 2>/dev/null`,
       {
         encoding: 'utf8',
         stdio: ['pipe', 'pipe', 'pipe'],
         env: { ...process.env },
       }
     );
-    const result = JSON.parse(output);
+    // Strip any non-JSON lines (wrangler progress output) — find the JSON array
+    const jsonMatch = rawOutput.match(/(\[[\s\S]*\])/);
+    if (!jsonMatch) return [];
+    const result = JSON.parse(jsonMatch[1]);
     return result?.[0]?.results || [];
   } catch (e) {
     console.error('[D1] Query failed:', e.message.slice(0, 300));
