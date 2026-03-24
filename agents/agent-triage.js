@@ -20,7 +20,19 @@ async function main() {
 
   const labels = issue.labels.map(l => l.name);
   if (!labels.includes('user-feedback')) { console.log('Not a user-feedback issue — skipping'); process.exit(0); }
-  if (labels.includes('agent-triaged'))  { console.log('Already triaged — skipping'); process.exit(0); }
+
+  // Allow manual retriage via /retriage comment even if already triaged
+  const isRetriage = process.env.IS_RETRIAGE === 'true';
+  if (labels.includes('agent-triaged') && !isRetriage) {
+    console.log('Already triaged — skipping (use /retriage comment to force)');
+    process.exit(0);
+  }
+
+  // On retriage, remove the old agent-triaged label so the new result is clear
+  if (isRetriage && labels.includes('agent-triaged')) {
+    await github.removeLabel(REPO, ISSUE_NUMBER, 'agent-triaged').catch(() => {});
+    console.log('Removed old agent-triaged label for retriage');
+  }
 
   console.log(`Issue: "${issue.title}"`);
 
@@ -266,7 +278,7 @@ ${analysis}
 **Feed hits:** ${intel.feeds.hits}
 
 **Page indicators:**
-${pageContent?.indicators?.map(i => `- ${i}`).join('\n') || '(none)'}
+${pageIndicators.map(i => `- ${i}`).join('\n') || '(none)'}
 
 **Signals from issue:**
 ${signalsFromIssue.map(s => `- \`${s}\``).join('\n') || '(none)'}
