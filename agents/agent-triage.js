@@ -148,12 +148,6 @@ async function main() {
   // ── Build Claude prompt ──────────────────────────────────────────────────────
   console.log('Calling Claude for analysis...');
 
-  const systemPrompt = `You are Virgil's triage agent — a security analyst specialising in phishing detection. You investigate reported detections and produce actionable triage reports.
-
-CRITICAL: When analysing subdomain-based phishing (e.g. paypal-login.webflow.io, help--logie--kucuie.webflow.io), the FULL hostname is what matters — NOT the registered domain. A legitimate registered domain (webflow.io, github.io, netlify.app) hosting a phishing page is extremely common. Always analyse the full hostname and page content first.
-
-IMPORTANT: Many phishing pages are built with JavaScript frameworks (React, Webflow, etc.) and render content dynamically. If the HTML source is sparse (< 5KB) but a screenshot is provided, the screenshot is your PRIMARY evidence of what the page actually looks like and contains. Describe what you see in the screenshot in detail — login forms, brand logos, credential fields, urgency language, etc.`;
-
   const pageSection = hasPageContent
     ? `## Page content (captured by extension at report time)
 
@@ -187,57 +181,64 @@ ${liveFetch.html}
 `
     : '## Page content\nNot available — extension data absent and live fetch not attempted.\n';
 
+  const systemPrompt = `You are Virgil's triage agent — a security analyst specialising in phishing detection. You investigate reported pages and produce actionable triage reports.
+
+YOUR PRIMARY EVIDENCE IS THE PAGE CONTENT — not the domain name. Phishing pages are routinely hosted on legitimate platforms (webflow.io, github.io, netlify.app, weebly.com). The domain tells you almost nothing on its own. What matters is:
+
+1. What does the page LOOK LIKE? (screenshot — examine this first)
+2. What is the page ASKING FOR? (credential forms, password fields, wallet keys, personal info)
+3. What BRAND is being impersonated? (logos, copy, color scheme, page title)
+4. Where does submitted data GO? (form actions, JS fetch calls, external endpoints)
+5. What TECHNIQUES are being used? (obfuscation, gating, bot evasion, image-as-page)
+
+Domain analysis is secondary supporting context. Start with what you see.`;
+
   const userContent = `
 ## Triage Request
 
 **Full URL:** ${url || 'not provided'}
-**Full hostname:** \`${fullHostname}\`
-**Registered domain:** \`${registeredDomain}\`
 **Feedback type:** ${feedbackType}
-**Verdict shown:** ${verdictShown} (confidence: ${confidence || 'unknown'})
+**Verdict shown to user:** ${verdictShown} (confidence: ${confidence || 'unknown'})
 **Detected brand:** ${detectedBrand || 'none'}
 ${userComment ? `**User comment:** "${userComment}"` : ''}
 
-## Signals that fired on this page
-${signalsFromIssue.length > 0 ? signalsFromIssue.map(s => `- \`${s}\``).join('\n') : '- (none in issue body)'}
-
 ${pageSection}
 
-## Heuristic re-analysis of full URL
+## Signals that fired
+${signalsFromIssue.length > 0 ? signalsFromIssue.map(s => `- \`${s}\``).join('\n') : '- (none recorded)'}
+
+## Heuristic re-run on full URL
 ${fmtHeuristics(heuristics)}
 
-## External intelligence (queried for: ${fullHostname})
+## Domain intelligence (supporting context only)
+Hostname: \`${fullHostname}\` (registered: \`${registeredDomain}\`)
 ${fmtIntel(intel)}
 Safe Browsing: ${intel.gsb?.matched ? `⚠ MATCHED — ${intel.gsb.threatTypes?.join(', ')}` : intel.gsb ? 'Clean' : 'Not checked'}
 
-## Corpus history for ${registeredDomain}
-${signalRows.length > 0 ? signalRows.map(r => `- \`${r.type}\`: ${r.hits} hit(s), avg weight ${r.avg_weight?.toFixed(2)}`).join('\n') : '- No corpus signals'}
+## Corpus history
+${signalRows.length > 0 ? signalRows.map(r => `- \`${r.type}\`: ${r.hits} hit(s), avg weight ${r.avg_weight?.toFixed(2)}`).join('\n') : '- No prior reports'}
 
-${verdictRows.length > 0 ? `## Recent verdicts\n${verdictRows.map(v => `- ${v.risk_level} conf:${v.confidence?.toFixed(2)} brand:${v.detected_brand||'none'} pwd-form:${v.has_password_form?'YES':'no'}`).join('\n')}` : ''}
+${verdictRows.length > 0 ? `## Prior verdicts\n${verdictRows.map(v => `- ${v.risk_level} conf:${v.confidence?.toFixed(2)} brand:${v.detected_brand||'none'} pwd-form:${v.has_password_form?'YES':'no'}`).join('\n')}` : ''}
 
 ## Your task
 
-Analyse \`${fullHostname}\` — NOT just \`${registeredDomain}\`.
+Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
 
-For subdomain-based phishing on hosting platforms: the registered domain being legitimate means nothing if the subdomain impersonates a brand or the page harvests credentials. Use the live page content above as your primary evidence.
+1. **What is this page?** Describe what you see visually. What brand does it impersonate? What is it asking the user to do?
+2. **Is this phishing?** Based on the page content. Be direct.
+3. **Why did/didn't Virgil detect it?** Which signals fired or should have fired based on what you see?
+4. **Root cause** (if FP): Which specific signal(s) over-triggered?
+5. **Recommended action** — exactly ONE of:
+   - ADD_TO_SAFELIST — legitimate page, add domain to safe list
+   - ADD_TYPOSQUAT — confirmed phishing subdomain, add as detection rule
+   - ADJUST_WEIGHT — detected but wrong confidence, tune signal weights
+   - ADD_BRAND_ENTRY — impersonated brand is missing from detection rules
+   - ADD_SOURCE_PATTERN — specific page pattern should be added as a source rule
+   - NO_ACTION — detection was correct, close as intended
+   - NEEDS_MANUAL_REVIEW — genuinely ambiguous
+6. **Proposed rule change** (if applicable): Exact JSON in Virgil schema format
 
-Produce a triage report:
-1. **Assessment** (2-3 sentences): Is this a genuine FP/FN? Lead with the full URL analysis.
-2. **Hostname analysis**: Does \`${fullHostname}\` suggest impersonation? What does the subdomain pattern mean?
-3. **Page content analysis**: What does the live page content tell you? Are there credential forms, brand impersonation, exfil patterns?
-4. **Signal analysis**: Which signals fired and are they appropriate?
-5. **Evidence summary**: For and against the detection.
-6. **Root cause** (if FP): Which signal(s) over-triggered and why?
-7. **Recommended action** — exactly ONE of:
-   - ADD_TO_SAFELIST — legitimate site, add to safe list
-   - ADD_TYPOSQUAT — confirmed phishing, add hostname pattern as detection rule
-   - ADJUST_WEIGHT — correct detection but over-triggered
-   - ADD_BRAND_ENTRY — missing brand entry
-   - NO_ACTION — detection was correct
-   - NEEDS_MANUAL_REVIEW — ambiguous
-8. **Proposed rule change** (if applicable): Exact JSON for core-rules
-
-Be direct. Maintainers act on your recommendations.`;
+Be direct and specific. Focus on what the page does, not where it's hosted.`;
 
   if (screenshotUrl) {
     console.log('Passing screenshot to Claude:', screenshotUrl);
