@@ -326,7 +326,7 @@ export function fmtIntel(intel) {
 
 export function fmtHeuristics(result) {
   if (!result) return 'Could not parse URL.';
-  if (result.signals.length === 0) return `Score: 0.00 — no signals fired`;
+  if (result.signals.length === 0) return `Score: 0.00 — no URL-structure signals (expected if phishing relies on page content rather than suspicious URL patterns)`;
   const sigs = result.signals.map(s => `  - \`${s.type}\` (${s.severity}, +${s.weight}): ${s.desc}`).join('\n');
   return `Score: ${result.score.toFixed(2)}/1.00\n${sigs}`;
 }
