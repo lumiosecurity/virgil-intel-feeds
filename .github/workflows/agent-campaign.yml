@@ -34,7 +34,8 @@ jobs:
         env:
           ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
           GITHUB_TOKEN:         ${{ secrets.GITHUB_TOKEN }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN:  ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           ORG_NAME:             ${{ github.repository_owner }}
           LOOKBACK_DAYS:        ${{ github.event.inputs.lookback_days || '3' }}
           MIN_CLUSTER:          ${{ github.event.inputs.min_cluster || '3' }}
