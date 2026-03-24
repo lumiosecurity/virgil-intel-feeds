@@ -19,7 +19,10 @@ async function main() {
   if (!issue) { console.error('Issue not found'); process.exit(1); }
 
   const labels = issue.labels.map(l => l.name);
-  if (!labels.includes('user-feedback')) { console.log('Not a user-feedback issue — skipping'); process.exit(0); }
+  if (!labels.includes('user-feedback') && !labels.includes('rule-gap')) {
+    console.log('Not a user-feedback or rule-gap issue — skipping');
+    process.exit(0);
+  }
 
   // Allow manual retriage via /retriage comment even if already triaged
   const isRetriage = process.env.IS_RETRIAGE === 'true';
