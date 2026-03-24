@@ -5,7 +5,7 @@
 // Runs a full investigation on the FULL URL/hostname (not just registered domain)
 // and posts a structured analysis comment with a proposed resolution.
 
-import { cfg, d1, claude, github, getDomainIntel, analyzeUrl, fmtIntel, fmtHeuristics } from './agent-tools.js';
+import { cfg, d1, claude, github, getDomainIntel, analyzeUrl, fmtIntel, fmtHeuristics, extractRegisteredDomain } from './agent-tools.js';
 
 const ISSUE_NUMBER = parseInt(process.env.ISSUE_NUMBER || process.argv[2]);
 const REPO         = cfg.coreRulesRepo;
@@ -40,19 +40,40 @@ async function main() {
   console.log(`Issue: "${issue.title}"`);
 
   // ── Extract all fields from issue body ──────────────────────────────────────
-  const domainMatch   = issue.body?.match(/\| Domain \| `([^`]+)` \|/);
-  const hostnameMatch = issue.body?.match(/\| Full hostname \| `([^`]+)` \|/);
-  const urlMatch      = issue.body?.match(/\| Full URL \| `([^`]+)` \|/);
-  const typeMatch     = issue.body?.match(/\| Feedback type \| ([^\n|]+) \|/);
-  const verdictMatch  = issue.body?.match(/\| Verdict shown \| ([^\n|]+) \|/);
-  const brandMatch    = issue.body?.match(/\| Detected brand \| ([^\n|]+) \|/);
-  const confMatch     = issue.body?.match(/\| Confidence \| ([^\n|]+) \|/);
-  const commentMatch  = issue.body?.match(/## User comment\n> ([^\n]+)/);
+  const domainMatch    = issue.body?.match(/\| Domain \| `([^`]+)` \|/);
+  const hostnameMatch  = issue.body?.match(/\| Full hostname \| `([^`]+)` \|/);
+  const urlMatch       = issue.body?.match(/\| Full URL \| `([^`]+)` \|/);
+  const typeMatch      = issue.body?.match(/\| Feedback type \| ([^\n|]+) \|/);
+  const verdictMatch   = issue.body?.match(/\| Verdict shown \| ([^\n|]+) \|/) ||
+                         issue.body?.match(/\| Risk level \| ([^\n|]+) \|/);
+  const brandMatch     = issue.body?.match(/\| Detected brand \| ([^\n|]+) \|/) ||
+                         issue.body?.match(/\| Impersonated brand \| ([^\n|]+) \|/);
+  const confMatch      = issue.body?.match(/\| Confidence \| ([^\n|]+) \|/);
+  const commentMatch   = issue.body?.match(/## User comment\n> ([^\n]+)/);
   const screenshotMatch = issue.body?.match(/!\[Page screenshot\]\((https:\/\/[^\)]+)\)/);
+  // Rule-gap specific fields
+  const threatMatch    = issue.body?.match(/\| Primary threat \| ([^\n|]+) \|/);
 
-  const registeredDomain = domainMatch?.[1]?.trim();
+  // registeredDomain — try Domain field first, then derive from hostname/URL
+  let registeredDomain = domainMatch?.[1]?.trim();
+  if (!registeredDomain) {
+    const hn = hostnameMatch?.[1]?.trim() || '';
+    if (hn) registeredDomain = extractRegisteredDomain(hn);
+  }
+  if (!registeredDomain) {
+    try {
+      const u = urlMatch?.[1]?.trim();
+      if (u) registeredDomain = extractRegisteredDomain(new URL(u).hostname);
+    } catch {}
+  }
+  // Last resort — extract from issue title [RULE-GAP] hostname or [FN] hostname
+  if (!registeredDomain) {
+    const titleMatch = issue.title?.match(/\] ([a-z0-9.-]+\.[a-z]{2,})/i);
+    if (titleMatch) registeredDomain = extractRegisteredDomain(titleMatch[1]);
+  }
+
   const url              = urlMatch?.[1]?.trim();
-  const feedbackType     = typeMatch?.[1]?.trim();
+  const feedbackType     = typeMatch?.[1]?.trim() || (labels.includes('rule-gap') ? 'rule_gap' : 'unknown');
   const verdictShown     = verdictMatch?.[1]?.trim();
   const detectedBrand    = brandMatch?.[1]?.trim();
   const confidence       = confMatch?.[1]?.trim();
