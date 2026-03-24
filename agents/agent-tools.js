@@ -199,12 +199,28 @@ export async function checkSafeBrowsing(url) {
   } catch { return null; }
 }
 
+// ── Domain utilities ──────────────────────────────────────────────────────────
+
+const SECOND_LEVEL_TLDS = new Set([
+  'com.mx','com.au','com.br','com.ar','com.co','com.pe','com.ve',
+  'co.uk','org.uk','me.uk','net.uk','co.nz','co.za','co.in','co.jp',
+  'com.sg','com.hk','com.tw','com.cn','com.tr','com.sa',
+  'org.au','net.au','edu.au','gov.au',
+]);
+
+export function extractRegisteredDomain(hostname) {
+  if (!hostname) return '';
+  const parts = hostname.toLowerCase().split('.');
+  if (parts.length <= 2) return hostname.toLowerCase();
+  const lastTwo = parts.slice(-2).join('.');
+  if (SECOND_LEVEL_TLDS.has(lastTwo)) return parts.slice(-3).join('.');
+  return parts.slice(-2).join('.');
+}
+
 // ── Domain intelligence ────────────────────────────────────────────────────────
 
 export async function getDomainIntel(hostname) {
-  // Extract registered domain from full hostname for D1 queries
-  const parts = hostname.split('.');
-  const registeredDomain = parts.slice(-2).join('.');
+  const registeredDomain = extractRegisteredDomain(hostname);
 
   const [ct, gsb] = await Promise.allSettled([
     getCTAge(hostname),                          // CT on full hostname
@@ -244,8 +260,8 @@ export function analyzeUrl(url) {
     const hostname   = parsed.hostname.toLowerCase();
     const parts      = hostname.split('.');
     const tld        = '.' + parts[parts.length - 1];
-    const regDomain  = parts.slice(-2).join('.');
-    const subdomains = parts.slice(0, -2).join('.');
+    const regDomain  = extractRegisteredDomain(hostname);
+    const subdomains = parts.slice(0, parts.length - regDomain.split('.').length).join('.');
     const fullUrl    = url.toLowerCase();
     const signals    = [];
     let   score      = 0;
