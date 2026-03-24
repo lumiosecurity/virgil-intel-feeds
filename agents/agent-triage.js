@@ -138,7 +138,9 @@ async function main() {
 
   const systemPrompt = `You are Virgil's triage agent — a security analyst specialising in phishing detection. You investigate reported detections and produce actionable triage reports.
 
-CRITICAL: When analysing subdomain-based phishing (e.g. paypal-login.webflow.io, help--logie--kucuie.webflow.io), the FULL hostname is what matters — NOT the registered domain. A legitimate registered domain (webflow.io, github.io, netlify.app) hosting a phishing page is extremely common. Always analyse the full hostname and page content first.`;
+CRITICAL: When analysing subdomain-based phishing (e.g. paypal-login.webflow.io, help--logie--kucuie.webflow.io), the FULL hostname is what matters — NOT the registered domain. A legitimate registered domain (webflow.io, github.io, netlify.app) hosting a phishing page is extremely common. Always analyse the full hostname and page content first.
+
+IMPORTANT: Many phishing pages are built with JavaScript frameworks (React, Webflow, etc.) and render content dynamically. If the HTML source is sparse (< 5KB) but a screenshot is provided, the screenshot is your PRIMARY evidence of what the page actually looks like and contains. Describe what you see in the screenshot in detail — login forms, brand logos, credential fields, urgency language, etc.`;
 
   const pageSection = hasPageContent
     ? `## Page content (captured by extension at report time)
@@ -246,8 +248,8 @@ Be direct. Maintainers act on your recommendations.`;
 
 **Recommended action:** \`${action}\`
 **Analysed:** \`${fullHostname}\` (registered: \`${registeredDomain}\`)
-${pageContent && !pageContent.error ? `**Page content source:** ${hasPageContent ? '✓ captured by extension' : liveFetch ? '✓ live fetch' : '✗ unavailable'}
-${pageIndicators.length > 0 ? `**Phishkit indicators:** ${pageIndicators.join(', ')}` : ''}` : '**Page fetch:** ✗ unavailable'}
+**Page content source:** ${hasPageContent ? '✓ captured by extension' : liveFetch ? '✓ live fetch' : '✗ unavailable'}
+${pageIndicators.length > 0 ? `**Phishkit indicators:** ${pageIndicators.join(', ')}` : ''}
 
 ---
 
