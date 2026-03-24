@@ -258,18 +258,31 @@ ${verdictRows.length > 0 ? `## Prior verdicts\n${verdictRows.map(v => `- ${v.ris
 
 ## Your task
 
-${isRuleGap ? `This is a rule-gap issue. Claude already confirmed this is phishing at ${confidence || 'high'} confidence. Your job is NOT to re-evaluate whether it's phishing — it is. Your job is to identify what LOCAL RULE would catch this without Claude.
+${isRuleGap ? `This is a rule-gap issue. Claude already confirmed this is phishing at ${confidence || 'high'} confidence. Your job is NOT to re-evaluate whether it's phishing — it is. Your job is to propose the 3 best local rules that would catch this without Claude.
 
 1. **What is this page?** Describe what you see visually — brand, credential fields, impersonation technique.
-2. **Why did local heuristics miss it?** The score was only ${Math.round((parseFloat(confidence)||0)*100) || 'low'}% — which signals should have been higher weight or which signals are missing entirely?
-3. **What rule would close this gap?** Be specific — is it a brand entry, a typosquat pattern, a source pattern, or a URL structure rule?
-4. **Recommended action** — exactly ONE of:
-   - ADD_BRAND_ENTRY — brand being impersonated is missing or incomplete
-   - ADD_TYPOSQUAT — subdomain/domain pattern should be a detection rule
-   - ADD_SOURCE_PATTERN — page source JS/form pattern should be a detection rule
-   - ADJUST_WEIGHT — signals fired but weight was too low to matter
-   - NEEDS_MANUAL_REVIEW — genuinely unclear what rule would help
-5. **Proposed rule** (required): Exact JSON in Virgil schema format. Every rule-gap issue must have a proposed rule.` : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
+2. **Why did local heuristics miss it?** The heuristic score was low — which signals are missing or underweighted?
+3. **Top 3 proposed rules** — ranked by expected detection lift (Rule 1 = highest impact):
+
+For each rule provide:
+- **Rule type**: ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADJUST_WEIGHT
+- **Why it works**: one sentence on what this catches and why it's reliable
+- **Expected lift**: rough % of similar pages this would catch
+- **Rule JSON**: exact JSON in Virgil schema format, ready to commit
+
+Use these schemas:
+
+Brand entry:
+\`\`\`json
+{ "name": "brandname", "domains": ["brand.com"], "typos": ["brannd", "br4nd"], "vertical": "financial" }
+\`\`\`
+
+Source pattern:
+\`\`\`json
+{ "id": "pattern-id", "group": "phishkitSignatures", "description": "...", "severity": "high", "weight": 0.40, "source": "js", "patternString": "regex here", "patternFlags": "i" }
+\`\`\`
+
+4. **Recommended action** (primary rule type): ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADJUST_WEIGHT / NEEDS_MANUAL_REVIEW` : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
 
 1. **What is this page?** Describe what you see visually. What brand does it impersonate? What is it asking the user to do?
 2. **Is this phishing?** Based on the page content. Be direct.
@@ -290,7 +303,7 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
   if (screenshotUrl) {
     console.log('Passing screenshot to Claude:', screenshotUrl);
   }
-  const analysis = await claude(systemPrompt, userContent, 2000, screenshotUrl);
+  const analysis = await claude(systemPrompt, userContent, isRuleGap ? 3000 : 2000, screenshotUrl);
 
   const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|ADD_SOURCE_PATTERN|NO_ACTION|NEEDS_MANUAL_REVIEW/);
   const action = actionMatch2?.[0] || 'NEEDS_MANUAL_REVIEW';
