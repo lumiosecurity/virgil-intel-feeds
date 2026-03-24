@@ -231,7 +231,8 @@ ${pageSection}
 ## Signals that fired
 ${signalsFromIssue.length > 0 ? signalsFromIssue.map(s => `- \`${s}\``).join('\n') : '- (none recorded)'}
 
-## Heuristic re-run on full URL
+## URL-structure heuristics (URL only — no DOM data available to agent)
+Note: DOM-based signals (password fields, login UI, brand mentions in page source) are captured by the extension at browse time and shown in "Page content" above. This section only re-analyzes the URL string itself.
 ${fmtHeuristics(heuristics)}
 
 ## Domain intelligence (supporting context only)
