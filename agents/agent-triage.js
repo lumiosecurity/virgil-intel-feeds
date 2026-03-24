@@ -205,6 +205,8 @@ ${liveFetch.html}
 `
     : '## Page content\nNot available — extension data absent and live fetch not attempted.\n';
 
+  const isRuleGap = labels.includes('rule-gap');
+
   const systemPrompt = `You are Virgil's triage agent — a security analyst specialising in phishing detection. You investigate reported pages and produce actionable triage reports.
 
 YOUR PRIMARY EVIDENCE IS THE PAGE CONTENT — not the domain name. Phishing pages are routinely hosted on legitimate platforms (webflow.io, github.io, netlify.app, weebly.com). The domain tells you almost nothing on its own. What matters is:
@@ -215,7 +217,16 @@ YOUR PRIMARY EVIDENCE IS THE PAGE CONTENT — not the domain name. Phishing page
 4. Where does submitted data GO? (form actions, JS fetch calls, external endpoints)
 5. What TECHNIQUES are being used? (obfuscation, gating, bot evasion, image-as-page)
 
-Domain analysis is secondary supporting context. Start with what you see.`;
+Domain analysis is secondary supporting context. Start with what you see.
+
+${isRuleGap ? `CRITICAL — THIS IS A RULE-GAP ISSUE:
+Claude's AI analysis already confirmed this page is phishing at high confidence. The detection WORKED. This is NOT a false positive investigation.
+The heuristic signals listed in the issue fired but were too low-weight to trigger a warning on their own — that is WHY this is a rule gap.
+Your job is to identify WHAT SPECIFIC RULE would catch this page locally without needing Claude. Focus on:
+- What brand is being impersonated and is it missing from brand entries?
+- Is there a URL pattern, subdomain structure, or typosquat that should be a detection rule?
+- Is there a page source pattern (JS, form action, exfil endpoint) that's characteristic of this phishkit?
+Do NOT recommend NO_ACTION. Do NOT say "detection was correct" as a final answer — the detection worked but the RULE GAP still needs to be closed.` : ''}`;
 
   const userContent = `
 ## Triage Request
@@ -247,7 +258,18 @@ ${verdictRows.length > 0 ? `## Prior verdicts\n${verdictRows.map(v => `- ${v.ris
 
 ## Your task
 
-Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
+${isRuleGap ? `This is a rule-gap issue. Claude already confirmed this is phishing at ${confidence || 'high'} confidence. Your job is NOT to re-evaluate whether it's phishing — it is. Your job is to identify what LOCAL RULE would catch this without Claude.
+
+1. **What is this page?** Describe what you see visually — brand, credential fields, impersonation technique.
+2. **Why did local heuristics miss it?** The score was only ${Math.round((parseFloat(confidence)||0)*100) || 'low'}% — which signals should have been higher weight or which signals are missing entirely?
+3. **What rule would close this gap?** Be specific — is it a brand entry, a typosquat pattern, a source pattern, or a URL structure rule?
+4. **Recommended action** — exactly ONE of:
+   - ADD_BRAND_ENTRY — brand being impersonated is missing or incomplete
+   - ADD_TYPOSQUAT — subdomain/domain pattern should be a detection rule
+   - ADD_SOURCE_PATTERN — page source JS/form pattern should be a detection rule
+   - ADJUST_WEIGHT — signals fired but weight was too low to matter
+   - NEEDS_MANUAL_REVIEW — genuinely unclear what rule would help
+5. **Proposed rule** (required): Exact JSON in Virgil schema format. Every rule-gap issue must have a proposed rule.` : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
 
 1. **What is this page?** Describe what you see visually. What brand does it impersonate? What is it asking the user to do?
 2. **Is this phishing?** Based on the page content. Be direct.
@@ -261,7 +283,7 @@ Start by describing what you see on the page — use the screenshot and page con
    - ADD_SOURCE_PATTERN — specific page pattern should be added as a source rule
    - NO_ACTION — detection was correct, close as intended
    - NEEDS_MANUAL_REVIEW — genuinely ambiguous
-6. **Proposed rule change** (if applicable): Exact JSON in Virgil schema format
+6. **Proposed rule change** (if applicable): Exact JSON in Virgil schema format`}
 
 Be direct and specific. Focus on what the page does, not where it's hosted.`;
 
@@ -270,7 +292,7 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
   }
   const analysis = await claude(systemPrompt, userContent, 2000, screenshotUrl);
 
-  const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|NO_ACTION|NEEDS_MANUAL_REVIEW/);
+  const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|ADD_SOURCE_PATTERN|NO_ACTION|NEEDS_MANUAL_REVIEW/);
   const action = actionMatch2?.[0] || 'NEEDS_MANUAL_REVIEW';
 
   const actionLabel = {
@@ -278,6 +300,7 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
     ADD_TYPOSQUAT:       'confirmed-fn',
     ADJUST_WEIGHT:       'rule-updated',
     ADD_BRAND_ENTRY:     'rule-updated',
+    ADD_SOURCE_PATTERN:  'rule-updated',
     NO_ACTION:           'wont-fix',
     NEEDS_MANUAL_REVIEW: 'needs-triage',
   }[action] || 'needs-triage';
