@@ -283,24 +283,70 @@ ${isRuleGap ? `This is a rule-gap issue. Claude already confirmed this is phishi
 
 1. **What is this page?** Describe what you see visually — brand, credential fields, impersonation technique.
 2. **Why did local heuristics miss it?** The heuristic score was low — which signals are missing or underweighted?
-3. **Top 3 proposed rules** — ranked by expected detection lift (Rule 1 = highest impact):
+3. **Top 3 proposed rules** — ranked by expected detection lift. Format each rule as follows:
 
-For each rule provide:
-- **Rule type**: ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADJUST_WEIGHT
-- **Why it works**: one sentence on what this catches and why it's reliable
-- **Expected lift**: rough % of similar pages this would catch
-- **Rule JSON**: exact JSON in Virgil schema format, ready to commit
+---
+### Rule 1 — [RULE_TYPE] (expected lift: ~X%)
+**Why it works:** one sentence explanation
 
-Use these schemas:
+**Rule JSON:**
+\`\`\`json
+{
+  "multi-line",
+  "indented": "JSON here"
+}
+\`\`\`
+
+---
+### Rule 2 — [RULE_TYPE] (expected lift: ~X%)
+**Why it works:** one sentence explanation
+
+**Rule JSON:**
+\`\`\`json
+{
+  "multi-line",
+  "indented": "JSON here"
+}
+\`\`\`
+
+---
+### Rule 3 — [RULE_TYPE] (expected lift: ~X%)
+**Why it works:** one sentence explanation
+
+**Rule JSON:**
+\`\`\`json
+{
+  "multi-line",
+  "indented": "JSON here"
+}
+\`\`\`
+
+---
+
+Use these schemas (always write JSON as multi-line with 2-space indentation):
 
 Brand entry:
 \`\`\`json
-{ "name": "brandname", "domains": ["brand.com"], "typos": ["brannd", "br4nd"], "vertical": "financial" }
+{
+  "name": "brandname",
+  "domains": ["brand.com"],
+  "typos": ["brannd", "br4nd"],
+  "vertical": "financial"
+}
 \`\`\`
 
 Source pattern:
 \`\`\`json
-{ "id": "pattern-id", "group": "phishkitSignatures", "description": "...", "severity": "high", "weight": 0.40, "source": "js", "patternString": "regex here", "patternFlags": "i" }
+{
+  "id": "pattern-id",
+  "group": "phishkitSignatures",
+  "description": "...",
+  "severity": "high",
+  "weight": 0.40,
+  "source": "js",
+  "patternString": "regex here",
+  "patternFlags": "i"
+}
 \`\`\`
 
 4. **Recommended action** (primary rule type — NO_ACTION IS NOT VALID for rule-gap issues): ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADJUST_WEIGHT / NEEDS_MANUAL_REVIEW` : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
