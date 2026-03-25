@@ -38,6 +38,8 @@ async function main() {
   }
 
   console.log(`Issue: "${issue.title}"`);
+  console.log(`Labels: ${labels.join(', ')}`);
+  console.log(`isRuleGap: ${labels.includes('rule-gap')}`);
 
   // ── Extract all fields from issue body ──────────────────────────────────────
   const domainMatch    = issue.body?.match(/\| Domain \| `([^`]+)` \|/);
@@ -206,7 +208,20 @@ ${liveFetch.html}
 `
     : '## Page content\nNot available — extension data absent and live fetch not attempted.\n';
 
-  const isRuleGap = labels.includes('rule-gap');
+  // Extract verdict risk level from issue
+  const riskLevelMatch = issue.body?.match(/\| Risk level \| ([^\n|]+) \|/) ||
+                         issue.body?.match(/\| Verdict shown \| ([^\n|]+) \|/);
+  const verdictRiskLevel = riskLevelMatch?.[1]?.trim()?.toLowerCase() || '';
+
+  const confidenceValue = parseFloat(confidence) >= 1
+    ? parseFloat(confidence) / 100   // "90%" → 0.90
+    : parseFloat(confidence);        // "0.90" → 0.90
+
+  const isRuleGap = labels.includes('rule-gap')
+    || issue.title?.startsWith('[RULE-GAP]')
+    // High-confidence detection submitted via report button — still needs a rule
+    || (confidenceValue >= 0.75
+        && (verdictRiskLevel === 'dangerous' || verdictRiskLevel === 'suspicious'));
 
   const systemPrompt = `You are Virgil's triage agent — a security analyst specialising in phishing detection. You investigate reported pages and produce actionable triage reports.
 
@@ -283,7 +298,7 @@ Source pattern:
 { "id": "pattern-id", "group": "phishkitSignatures", "description": "...", "severity": "high", "weight": 0.40, "source": "js", "patternString": "regex here", "patternFlags": "i" }
 \`\`\`
 
-4. **Recommended action** (primary rule type): ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADJUST_WEIGHT / NEEDS_MANUAL_REVIEW` : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
+4. **Recommended action** (primary rule type — NO_ACTION IS NOT VALID for rule-gap issues): ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADJUST_WEIGHT / NEEDS_MANUAL_REVIEW` : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
 
 1. **What is this page?** Describe what you see visually. What brand does it impersonate? What is it asking the user to do?
 2. **Is this phishing?** Based on the page content. Be direct.
@@ -307,7 +322,13 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
   const analysis = await claude(systemPrompt, userContent, isRuleGap ? 3000 : 2000, screenshotUrl);
 
   const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|ADD_SOURCE_PATTERN|NO_ACTION|NEEDS_MANUAL_REVIEW/);
-  const action = actionMatch2?.[0] || 'NEEDS_MANUAL_REVIEW';
+  let action = actionMatch2?.[0] || 'NEEDS_MANUAL_REVIEW';
+
+  // NO_ACTION is never valid for rule-gap issues — the detection worked but the gap still needs closing
+  if (isRuleGap && action === 'NO_ACTION') {
+    action = 'NEEDS_MANUAL_REVIEW';
+    console.log('[Triage] Overrode NO_ACTION → NEEDS_MANUAL_REVIEW for rule-gap issue');
+  }
 
   const actionLabel = {
     ADD_TO_SAFELIST:     'confirmed-fp',
