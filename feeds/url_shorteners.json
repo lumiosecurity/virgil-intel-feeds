@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/url_shorteners.txt",
-    "syncedAt": "2026-03-25T06:01:51.621Z",
+    "syncedAt": "2026-03-25T18:11:47.722Z",
     "role": "url_shorteners",
     "description": "URL shorteners that can mask phishing destinations",
-    "count": 330
+    "count": 332
   },
   "entries": [
     "1in.me",
@@ -142,6 +142,7 @@
     "linkify.ru",
     "linkly.link",
     "linksrtnr.com",
+    "linkurl.pk",
     "liurl.cn",
     "ln-s.net",
     "ln-s.ru",
@@ -188,6 +189,7 @@
     "qlnk.net",
     "qr.fm",
     "qrco.de",
+    "qrsu.io",
     "qti.ai",
     "quip-art.com",
     "rb.gy",

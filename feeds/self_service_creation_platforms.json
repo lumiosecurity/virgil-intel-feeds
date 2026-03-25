@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/self_service_creation_platform_domains.txt",
-    "syncedAt": "2026-03-25T06:01:50.902Z",
+    "syncedAt": "2026-03-25T18:11:47.393Z",
     "role": "free_subdomain_hosts",
     "description": "Self-service website creation platforms where anyone can host content",
-    "count": 77
+    "count": 85
   },
   "entries": [
     "acrobat.adobe.com",
@@ -34,6 +34,7 @@
     "copyfol.io",
     "curipod.com",
     "doc.clickup.com",
+    "edgeone.app",
     "edgeone.dev",
     "elementor.cloud",
     "figma.com",
@@ -55,6 +56,7 @@
     "jotform.com",
     "landbot.site",
     "larksuite.com",
+    "lighthouse.storage",
     "lovable.app",
     "mixpanel.com",
     "mockflow.com",
@@ -76,13 +78,19 @@
     "systeme.io",
     "tana.pub",
     "tithelysetup.com",
+    "typedream.app",
     "typeform.com",
     "vercel.app",
     "view.genially.com",
+    "wasmer.app",
     "weavely.ai",
     "web.val.run",
     "webflow.io",
+    "wixstudio.com",
     "workflowy.com",
-    "wpdevcloud.com"
+    "wpdevcloud.com",
+    "wpenginepowered.com",
+    "yayforms.link",
+    "zapier.app"
   ]
 }

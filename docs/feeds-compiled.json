@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-25T06:01:57.781Z",
+    "compiledAt": "2026-03-25T18:11:58.905Z",
     "brandCount": 88,
     "signalCount": 1,
-    "patternCount": 95
+    "patternCount": 97
   },
   "brandEntries": [
     {
@@ -1222,7 +1222,12 @@
         "micosoft",
         "mircosoft",
         "microsofft",
-        "micr0soft"
+        "micr0soft",
+        "microsofy",
+        "microsoftaccount",
+        "ms-account",
+        "microsoft-login",
+        "resolve-issue"
       ],
       "vertical": "technology"
     },
@@ -2151,6 +2156,26 @@
       "patternFlags": "is"
     },
     {
+      "id": "microsoft-login-phishkit",
+      "group": "phishkitSignatures",
+      "description": "Microsoft login page impersonation patterns",
+      "severity": "high",
+      "weight": 0.6,
+      "source": "html",
+      "patternString": "Copyright.*Microsoft Corporation.*All rights reserved.*Sign in to your Microsoft account",
+      "patternFlags": "is"
+    },
+    {
+      "id": "microsoft-cdn-spoofing",
+      "group": "phishkitSignatures",
+      "description": "Fake Microsoft CDN prefetch patterns on non-Microsoft domains",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "html",
+      "patternString": "dns-prefetch.*logincdn\\.msftauth\\.net.*acctcdn\\.msauth\\.net",
+      "patternFlags": "is"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -2257,7 +2282,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-25T05:47:58.788Z",
+      "compiledAt": "2026-03-25T06:01:53.829Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
