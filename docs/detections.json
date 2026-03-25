@@ -1,8 +1,8 @@
 {
   "_meta": {
-    "version": "2026-03-25-03:45",
-    "generatedAt": "2026-03-25T03:45:07.101Z",
-    "brandCount": 2,
+    "version": "2026-03-25-03:54",
+    "generatedAt": "2026-03-25T03:54:52.612Z",
+    "brandCount": 59,
     "patternCount": 1
   },
   "brandEntries": [
@@ -16,6 +16,32 @@
         "examp1e",
         "exarnple",
         "example-secure"
+      ]
+    },
+    {
+      "name": "coinbase",
+      "vertical": "crypto",
+      "domains": [
+        "coinbase.com"
+      ],
+      "typos": [
+        "c0inbase",
+        "coinbas3",
+        "coinbase-pro",
+        "coinbase-wallet"
+      ]
+    },
+    {
+      "name": "binance",
+      "vertical": "crypto",
+      "domains": [
+        "binance.com"
+      ],
+      "typos": [
+        "binanse",
+        "binance-us",
+        "b1nance",
+        "binancee"
       ]
     },
     {
@@ -45,6 +71,709 @@
         "kuicoin",
         "kuccoin",
         "kucoln"
+      ]
+    },
+    {
+      "name": "bybit",
+      "vertical": "crypto",
+      "domains": [
+        "bybit.com"
+      ],
+      "typos": [
+        "byb1t",
+        "by-bit",
+        "bybitt",
+        "bybit-exchange"
+      ]
+    },
+    {
+      "name": "okx",
+      "vertical": "crypto",
+      "domains": [
+        "okx.com"
+      ],
+      "typos": [
+        "0kx",
+        "okx-exchange",
+        "okex"
+      ]
+    },
+    {
+      "name": "kraken",
+      "vertical": "crypto",
+      "domains": [
+        "kraken.com"
+      ],
+      "typos": [
+        "kraaken",
+        "kraken-exchange",
+        "krakken"
+      ]
+    },
+    {
+      "name": "metamask",
+      "vertical": "crypto",
+      "domains": [
+        "metamask.io"
+      ],
+      "typos": [
+        "metamask-io",
+        "metamask-wallet",
+        "meta-mask",
+        "metmask"
+      ]
+    },
+    {
+      "name": "ledger",
+      "vertical": "crypto",
+      "domains": [
+        "ledger.com"
+      ],
+      "typos": [
+        "ledger-live",
+        "ledgerwallet",
+        "my-ledger",
+        "ledger-nano"
+      ]
+    },
+    {
+      "name": "trezor",
+      "vertical": "crypto",
+      "domains": [
+        "trezor.io"
+      ],
+      "typos": [
+        "trezor-wallet",
+        "trez0r",
+        "tresor"
+      ]
+    },
+    {
+      "name": "opensea",
+      "vertical": "crypto",
+      "domains": [
+        "opensea.io"
+      ],
+      "typos": [
+        "open-sea",
+        "opensea-io",
+        "openseaa"
+      ]
+    },
+    {
+      "name": "uniswap",
+      "vertical": "crypto",
+      "domains": [
+        "uniswap.org"
+      ],
+      "typos": [
+        "uni-swap",
+        "uniswapp",
+        "uniswap-io"
+      ]
+    },
+    {
+      "name": "phantom",
+      "vertical": "crypto",
+      "domains": [
+        "phantom.app"
+      ],
+      "typos": [
+        "phantom-wallet",
+        "phantomapp",
+        "phantorn"
+      ]
+    },
+    {
+      "name": "exodus",
+      "vertical": "crypto",
+      "domains": [
+        "exodus.com"
+      ],
+      "typos": [
+        "exoduss",
+        "exodus-wallet",
+        "ex0dus"
+      ]
+    },
+    {
+      "name": "blockchain",
+      "vertical": "crypto",
+      "domains": [
+        "blockchain.com"
+      ],
+      "typos": [
+        "blockchian",
+        "blockchain-wallet",
+        "blockchain-info"
+      ]
+    },
+    {
+      "name": "etherscan",
+      "vertical": "crypto",
+      "domains": [
+        "etherscan.io"
+      ],
+      "typos": [
+        "ether-scan",
+        "etherscann",
+        "etherscan-io"
+      ]
+    },
+    {
+      "name": "amazon",
+      "vertical": "ecommerce",
+      "domains": [
+        "amazon.com",
+        "amazon.co.uk",
+        "amazon.de",
+        "amazonaws.com"
+      ],
+      "typos": [
+        "arnazon",
+        "amaz0n",
+        "amazonn",
+        "amazon-login",
+        "amzon"
+      ]
+    },
+    {
+      "name": "apple",
+      "vertical": "ecommerce",
+      "domains": [
+        "apple.com",
+        "icloud.com"
+      ],
+      "typos": [
+        "appl3",
+        "appie",
+        "apple-id",
+        "applesupport",
+        "icloud-apple"
+      ]
+    },
+    {
+      "name": "ebay",
+      "vertical": "ecommerce",
+      "domains": [
+        "ebay.com"
+      ],
+      "typos": [
+        "3bay",
+        "ebayy",
+        "ebay-login",
+        "e-bay"
+      ]
+    },
+    {
+      "name": "stripe",
+      "vertical": "ecommerce",
+      "domains": [
+        "stripe.com"
+      ],
+      "typos": [
+        "str1pe",
+        "stripee",
+        "stripe-payment"
+      ]
+    },
+    {
+      "name": "shopify",
+      "vertical": "ecommerce",
+      "domains": [
+        "shopify.com",
+        "myshopify.com"
+      ],
+      "typos": [
+        "sh0pify",
+        "shopifyy",
+        "shopify-admin"
+      ]
+    },
+    {
+      "name": "netflix",
+      "vertical": "ecommerce",
+      "domains": [
+        "netflix.com"
+      ],
+      "typos": [
+        "netfl1x",
+        "netflixx",
+        "netflix-login",
+        "net-flix"
+      ]
+    },
+    {
+      "name": "steam",
+      "vertical": "ecommerce",
+      "domains": [
+        "steampowered.com",
+        "steamcommunity.com"
+      ],
+      "typos": [
+        "ste4m",
+        "steamm",
+        "steam-login",
+        "steampowerd"
+      ]
+    },
+    {
+      "name": "walmart",
+      "vertical": "ecommerce",
+      "domains": [
+        "walmart.com"
+      ],
+      "typos": [
+        "wallmart",
+        "walmartt",
+        "walm4rt"
+      ]
+    },
+    {
+      "name": "fedex",
+      "vertical": "ecommerce",
+      "domains": [
+        "fedex.com"
+      ],
+      "typos": [
+        "fedex-tracking",
+        "fed-ex",
+        "fedexdelivery"
+      ]
+    },
+    {
+      "name": "ups",
+      "vertical": "ecommerce",
+      "domains": [
+        "ups.com"
+      ],
+      "typos": [
+        "ups-tracking",
+        "my-ups",
+        "upss"
+      ]
+    },
+    {
+      "name": "usps",
+      "vertical": "ecommerce",
+      "domains": [
+        "usps.com"
+      ],
+      "typos": [
+        "usps-tracking",
+        "usps-delivery",
+        "uspss"
+      ]
+    },
+    {
+      "name": "chase",
+      "vertical": "financial",
+      "domains": [
+        "chase.com"
+      ],
+      "typos": [
+        "chaase",
+        "chsse",
+        "chasee",
+        "chase-bank",
+        "mychase"
+      ]
+    },
+    {
+      "name": "wellsfargo",
+      "vertical": "financial",
+      "domains": [
+        "wellsfargo.com"
+      ],
+      "typos": [
+        "wellsfarg0",
+        "welsfargo",
+        "wfargo",
+        "wells-fargo"
+      ]
+    },
+    {
+      "name": "bankofamerica",
+      "vertical": "financial",
+      "domains": [
+        "bankofamerica.com"
+      ],
+      "typos": [
+        "bankofamerica",
+        "bankofamercia",
+        "bofa",
+        "bank0famerica"
+      ]
+    },
+    {
+      "name": "citibank",
+      "vertical": "financial",
+      "domains": [
+        "citibank.com",
+        "citi.com"
+      ],
+      "typos": [
+        "citybank",
+        "citibanc",
+        "citi-bank"
+      ]
+    },
+    {
+      "name": "capitalone",
+      "vertical": "financial",
+      "domains": [
+        "capitalone.com"
+      ],
+      "typos": [
+        "capital-one",
+        "cap1tal0ne",
+        "capitaione"
+      ]
+    },
+    {
+      "name": "usbank",
+      "vertical": "financial",
+      "domains": [
+        "usbank.com"
+      ],
+      "typos": [
+        "us-bank",
+        "usbankk",
+        "usbanc"
+      ]
+    },
+    {
+      "name": "schwab",
+      "vertical": "financial",
+      "domains": [
+        "schwab.com"
+      ],
+      "typos": [
+        "schwabb",
+        "charlesschwab",
+        "schwab-invest"
+      ]
+    },
+    {
+      "name": "fidelity",
+      "vertical": "financial",
+      "domains": [
+        "fidelity.com"
+      ],
+      "typos": [
+        "fideIity",
+        "fidelty",
+        "fidelity-investments"
+      ]
+    },
+    {
+      "name": "vanguard",
+      "vertical": "financial",
+      "domains": [
+        "vanguard.com"
+      ],
+      "typos": [
+        "vangaurd",
+        "vangard",
+        "vanguardinvestments"
+      ]
+    },
+    {
+      "name": "paypal",
+      "vertical": "financial",
+      "domains": [
+        "paypal.com"
+      ],
+      "typos": [
+        "paypa1",
+        "paypa-l",
+        "paypai",
+        "paypal-secure",
+        "pay-pal"
+      ]
+    },
+    {
+      "name": "venmo",
+      "vertical": "financial",
+      "domains": [
+        "venmo.com"
+      ],
+      "typos": [
+        "venm0",
+        "venmo-pay",
+        "venmoo"
+      ]
+    },
+    {
+      "name": "zelle",
+      "vertical": "financial",
+      "domains": [
+        "zellepay.com"
+      ],
+      "typos": [
+        "zelle-pay",
+        "zellle",
+        "zell-e"
+      ]
+    },
+    {
+      "name": "cashapp",
+      "vertical": "financial",
+      "domains": [
+        "cash.app"
+      ],
+      "typos": [
+        "cashapp",
+        "cash-app",
+        "squarecash"
+      ]
+    },
+    {
+      "name": "cloudflare",
+      "vertical": "general",
+      "domains": [
+        "cloudflare.com"
+      ],
+      "typos": [
+        "cloudfIare",
+        "cloudflare-login"
+      ]
+    },
+    {
+      "name": "docusign",
+      "vertical": "general",
+      "domains": [
+        "docusign.com",
+        "docusign.net"
+      ],
+      "typos": [
+        "docu-sign",
+        "docusiqn",
+        "docusigne"
+      ]
+    },
+    {
+      "name": "adobe",
+      "vertical": "general",
+      "domains": [
+        "adobe.com"
+      ],
+      "typos": [
+        "ad0be",
+        "adobee",
+        "adobe-login"
+      ]
+    },
+    {
+      "name": "dropbox",
+      "vertical": "general",
+      "domains": [
+        "dropbox.com"
+      ],
+      "typos": [
+        "dr0pbox",
+        "dropboxx",
+        "drop-box"
+      ]
+    },
+    {
+      "name": "linkedin",
+      "vertical": "general",
+      "domains": [
+        "linkedin.com"
+      ],
+      "typos": [
+        "linkedln",
+        "linke-din",
+        "linkediin"
+      ]
+    },
+    {
+      "name": "twitter",
+      "vertical": "general",
+      "domains": [
+        "twitter.com",
+        "x.com"
+      ],
+      "typos": [
+        "tw1tter",
+        "twltter",
+        "twitterr"
+      ]
+    },
+    {
+      "name": "facebook",
+      "vertical": "general",
+      "domains": [
+        "facebook.com",
+        "fb.com"
+      ],
+      "typos": [
+        "faceb00k",
+        "facebok",
+        "face-book"
+      ]
+    },
+    {
+      "name": "instagram",
+      "vertical": "general",
+      "domains": [
+        "instagram.com"
+      ],
+      "typos": [
+        "lnstagram",
+        "instagramm",
+        "instagrarn"
+      ]
+    },
+    {
+      "name": "yahoo",
+      "vertical": "general",
+      "domains": [
+        "yahoo.com"
+      ],
+      "typos": [
+        "yah00",
+        "yahooo",
+        "yahoo-login"
+      ]
+    },
+    {
+      "name": "microsoft",
+      "vertical": "sso",
+      "domains": [
+        "microsoft.com",
+        "microsoftonline.com",
+        "live.com",
+        "outlook.com",
+        "office.com",
+        "azure.com"
+      ],
+      "typos": [
+        "rnicros0ft",
+        "micros0ft",
+        "microsoft-login",
+        "microsofft",
+        "mlcrosoft",
+        "micorsoft"
+      ]
+    },
+    {
+      "name": "google",
+      "vertical": "sso",
+      "domains": [
+        "google.com",
+        "googleapis.com"
+      ],
+      "typos": [
+        "g00gle",
+        "gooogle",
+        "googie",
+        "google-signin",
+        "googl3"
+      ]
+    },
+    {
+      "name": "okta",
+      "vertical": "sso",
+      "domains": [
+        "okta.com",
+        "oktapreview.com"
+      ],
+      "typos": [
+        "okta-login",
+        "okta-sso",
+        "0kta",
+        "oktta"
+      ]
+    },
+    {
+      "name": "onelogin",
+      "vertical": "sso",
+      "domains": [
+        "onelogin.com"
+      ],
+      "typos": [
+        "one-login",
+        "oneloginapp",
+        "0nelogin"
+      ]
+    },
+    {
+      "name": "ping",
+      "vertical": "sso",
+      "domains": [
+        "pingidentity.com",
+        "pingone.com"
+      ],
+      "typos": [
+        "ping-identity",
+        "pinglD"
+      ]
+    },
+    {
+      "name": "duo",
+      "vertical": "sso",
+      "domains": [
+        "duo.com",
+        "duosecurity.com"
+      ],
+      "typos": [
+        "duo-security",
+        "duoo",
+        "duo-login"
+      ]
+    },
+    {
+      "name": "github",
+      "vertical": "sso",
+      "domains": [
+        "github.com",
+        "githubusercontent.com"
+      ],
+      "typos": [
+        "githubm",
+        "github-login",
+        "g1thub",
+        "gltHub"
+      ]
+    },
+    {
+      "name": "slack",
+      "vertical": "sso",
+      "domains": [
+        "slack.com"
+      ],
+      "typos": [
+        "s1ack",
+        "slackk",
+        "slack-login"
+      ]
+    },
+    {
+      "name": "zoom",
+      "vertical": "sso",
+      "domains": [
+        "zoom.us"
+      ],
+      "typos": [
+        "zoom-us",
+        "z0om",
+        "zoomus",
+        "zoom-login"
+      ]
+    },
+    {
+      "name": "salesforce",
+      "vertical": "sso",
+      "domains": [
+        "salesforce.com",
+        "force.com"
+      ],
+      "typos": [
+        "salesforces",
+        "salesfOrce",
+        "sales-force"
       ]
     }
   ],
