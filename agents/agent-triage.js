@@ -175,8 +175,9 @@ async function main() {
   const pageSection = hasPageContent
     ? `## Page content (captured by extension at report time)
 
-### Phishkit indicators
-${pageIndicators.length > 0 ? pageIndicators.map(i => `- ${i}`).join('\n') : '- None detected'}
+### Quick regex scan of page source
+Note: These are raw string matches from a lightweight inline scan — NOT weighted detection signals. They did not drive the heuristic score.
+${pageIndicators.length > 0 ? pageIndicators.map(i => `- \`${i}\``).join('\n') : '- None'}
 
 ### External scripts
 ${externalScriptUrls.length > 0 ? externalScriptUrls.map(u => `- \`${u}\``).join('\n') : '- None'}
@@ -318,12 +319,15 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
     NEEDS_MANUAL_REVIEW: 'needs-triage',
   }[action] || 'needs-triage';
 
+  const heuristicScore = parseFloat(confidence) || 0;
+  const heuristicPct = Math.round(heuristicScore * 100);
+
   const comment = `## 🤖 Agent Triage Report
 
 **Recommended action:** \`${action}\`
 **Analysed:** \`${fullHostname}\` (registered: \`${registeredDomain}\`)
 **Page content source:** ${hasPageContent ? '✓ captured by extension' : liveFetch ? '✓ live fetch' : '✗ unavailable'}
-${pageIndicators.length > 0 ? `**Phishkit indicators:** ${pageIndicators.join(', ')}` : ''}
+${isRuleGap ? `> ⚠️ **Rule gap** — AI detected at ${heuristicPct}% confidence. Heuristic score was **${heuristicPct}%** — local rules did NOT trigger a warning. Rules proposed below are what should be added.` : ''}
 
 ---
 
@@ -332,20 +336,20 @@ ${analysis}
 ---
 
 <details>
-<summary>Raw intelligence</summary>
+<summary>Raw intelligence (for reference only)</summary>
 
 **CT log:** ${intel.ct ? `${intel.ct.ageDays} days old (first seen ${new Date(intel.ct.firstSeenTs).toISOString().slice(0,10)})` : 'not found'}
 **Safe Browsing:** ${intel.gsb?.matched ? '⚠ MATCHED' : intel.gsb ? 'clean' : 'not checked'}
 **Corpus reports:** ${intel.corpus.reports} distinct installs
 **Feed hits:** ${intel.feeds.hits}
 
-**Page indicators:**
-${pageIndicators.map(i => `- ${i}`).join('\n') || '(none)'}
+**Quick regex scan of page source** (NOT weighted detection signals — these are raw string matches that did not drive the verdict):
+${pageIndicators.map(i => `- \`${i}\``).join('\n') || '- (none)'}
 
-**Signals from issue:**
-${signalsFromIssue.map(s => `- \`${s}\``).join('\n') || '(none)'}
+**Low-weight heuristic signals from issue** (combined score was ${heuristicPct}% — below detection threshold):
+${signalsFromIssue.map(s => `- \`${s}\``).join('\n') || '- (none)'}
 
-**Heuristic re-run:**
+**URL-only heuristic re-run:**
 \`\`\`
 ${fmtHeuristics(heuristics)}
 \`\`\`
