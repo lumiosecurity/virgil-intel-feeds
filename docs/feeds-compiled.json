@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-25T03:54:52.604Z",
-    "brandCount": 59,
+    "compiledAt": "2026-03-25T05:42:09.130Z",
+    "brandCount": 88,
     "signalCount": 1,
     "patternCount": 1
   },
@@ -18,6 +18,45 @@
         "example-secure"
       ],
       "note": "Why this brand is targeted / what impersonation technique is used"
+    },
+    {
+      "name": "zoho",
+      "domains": [
+        "zoho.com",
+        "zoho.eu",
+        "zoho.in",
+        "zoho.com.au"
+      ],
+      "typos": [
+        "z0ho",
+        "zoho0",
+        "zoh0",
+        "zoho-",
+        "zohoo",
+        "zooho",
+        "zho",
+        "zoho",
+        "zaho",
+        "zoho-mail"
+      ],
+      "vertical": "business"
+    },
+    {
+      "name": "dropbox",
+      "domains": [
+        "dropbox.com",
+        "dropboxusercontent.com"
+      ],
+      "typos": [
+        "dropb0x",
+        "dropbx",
+        "drapbox",
+        "dropbix",
+        "dr0pbox",
+        "dropboxx",
+        "drop-box"
+      ],
+      "vertical": "cloud_storage"
     },
     {
       "name": "coinbase",
@@ -42,7 +81,10 @@
         "binanse",
         "binance-us",
         "b1nance",
-        "binancee"
+        "binancee",
+        "binnance",
+        "binannce",
+        "bianance"
       ]
     },
     {
@@ -135,7 +177,11 @@
         "ledger-live",
         "ledgerwallet",
         "my-ledger",
-        "ledger-nano"
+        "ledger-nano",
+        "ledgre",
+        "ledgr",
+        "ledger-com",
+        "io--ledgre--com"
       ]
     },
     {
@@ -368,6 +414,88 @@
       ]
     },
     {
+      "name": "amazon-clone",
+      "domains": [
+        "amazon.com",
+        "amazon.in",
+        "amazon.co.uk"
+      ],
+      "typos": [
+        "amazon clone",
+        "amazone",
+        "amaz0n",
+        "amazom"
+      ],
+      "vertical": "ecommerce",
+      "brandPatterns": [
+        "amazon\\s+(clone|copy|replica|mirror)",
+        "(?:fake|replica)\\s+amazon"
+      ]
+    },
+    {
+      "name": "shopee",
+      "domains": [
+        "shopee.com",
+        "shopee.co.id",
+        "shopee.sg",
+        "shopee.ph",
+        "shopee.my",
+        "shopee.th",
+        "shopee.vn",
+        "shopee.tw"
+      ],
+      "typos": [
+        "shopee",
+        "shope",
+        "shopie",
+        "shoppee",
+        "sh0pee"
+      ],
+      "vertical": "ecommerce"
+    },
+    {
+      "name": "spotify",
+      "domains": [
+        "spotify.com",
+        "open.spotify.com"
+      ],
+      "typos": [
+        "spotif",
+        "spotiphy",
+        "spotfiy",
+        "spottify",
+        "spotiy"
+      ],
+      "vertical": "entertainment"
+    },
+    {
+      "name": "Spotify",
+      "domains": [
+        "spotify.com",
+        "open.spotify.com"
+      ],
+      "typos": [
+        "spottify",
+        "spotfy",
+        "spotifi",
+        "spotiffy"
+      ],
+      "vertical": "entertainment"
+    },
+    {
+      "name": "Netflix",
+      "domains": [
+        "netflix.com"
+      ],
+      "typos": [
+        "netflik",
+        "netflx",
+        "netflicks",
+        "netflix-clone"
+      ],
+      "vertical": "entertainment"
+    },
+    {
       "name": "chase",
       "vertical": "financial",
       "domains": [
@@ -531,6 +659,122 @@
       ]
     },
     {
+      "name": "DANA",
+      "domains": [
+        "dana.id"
+      ],
+      "typos": [
+        "d4na",
+        "danna",
+        "daana",
+        "dana-id",
+        "danaa",
+        "dana-",
+        "dann",
+        "paylter",
+        "danapay"
+      ],
+      "vertical": "financial"
+    },
+    {
+      "name": "pedagio-digital",
+      "domains": [
+        "pedagiodigital.com"
+      ],
+      "typos": [
+        "pedagiosflowdigitaiis",
+        "pedagio-digital",
+        "pedagiodigitais"
+      ],
+      "vertical": "financial"
+    },
+    {
+      "name": "motiva-toll",
+      "domains": [
+        "motiva.com.br"
+      ],
+      "typos": [
+        "motiva",
+        "motivaa"
+      ],
+      "vertical": "financial"
+    },
+    {
+      "name": "ndax",
+      "domains": [
+        "ndax.io"
+      ],
+      "typos": [
+        "ndaxlogus",
+        "ndaxlogin",
+        "ndax-login",
+        "ndaxlog",
+        "ndaxauth"
+      ],
+      "vertical": "financial"
+    },
+    {
+      "name": "css-insurance",
+      "domains": [
+        "css.ch",
+        "registrierung.css.ch"
+      ],
+      "typos": [
+        "myc55",
+        "mycss",
+        "c55"
+      ],
+      "vertical": "financial"
+    },
+    {
+      "name": "BET365",
+      "domains": [
+        "bet365.com"
+      ],
+      "typos": [
+        "bet356",
+        "bet365",
+        "bet36",
+        "bet3565",
+        "365bet"
+      ],
+      "vertical": "gambling"
+    },
+    {
+      "name": "bet365",
+      "domains": [
+        "bet365.com",
+        "bet365.es",
+        "bet365.it",
+        "bet365.dk"
+      ],
+      "typos": [
+        "bet356",
+        "bet365",
+        "be365",
+        "bet35",
+        "bet36",
+        "1111365"
+      ],
+      "vertical": "gambling"
+    },
+    {
+      "name": "discord",
+      "domains": [
+        "discord.com",
+        "discordapp.com"
+      ],
+      "typos": [
+        "discrod",
+        "discorrd",
+        "disccord",
+        "d1scord",
+        "discor",
+        "dicord"
+      ],
+      "vertical": "gaming"
+    },
+    {
       "name": "cloudflare",
       "vertical": "general",
       "domains": [
@@ -563,19 +807,17 @@
       "typos": [
         "ad0be",
         "adobee",
-        "adobe-login"
-      ]
-    },
-    {
-      "name": "dropbox",
-      "vertical": "general",
-      "domains": [
-        "dropbox.com"
-      ],
-      "typos": [
-        "dr0pbox",
-        "dropboxx",
-        "drop-box"
+        "adobe-login",
+        "adoobe",
+        "adob3",
+        "adobo",
+        "adobb",
+        "adobbe",
+        "addobe",
+        "adobepdf",
+        "adobe-pdf",
+        "abode",
+        "adb0e"
       ]
     },
     {
@@ -613,7 +855,9 @@
       "typos": [
         "faceb00k",
         "facebok",
-        "face-book"
+        "face-book",
+        "facbook",
+        "fecebook"
       ]
     },
     {
@@ -625,7 +869,14 @@
       "typos": [
         "lnstagram",
         "instagramm",
-        "instagrarn"
+        "instagrarn",
+        "instagam",
+        "instgram",
+        "insstagrram",
+        "instagrm",
+        "instqgram",
+        "1nstagram",
+        "instegram"
       ]
     },
     {
@@ -639,6 +890,182 @@
         "yahooo",
         "yahoo-login"
       ]
+    },
+    {
+      "name": "Internal Revenue Service",
+      "domains": [
+        "irs.gov"
+      ],
+      "typos": [
+        "lrs",
+        "irs-gov",
+        "irsservice",
+        "irs-service",
+        "taxirs",
+        "irs-tax"
+      ],
+      "vertical": "government"
+    },
+    {
+      "name": "California DMV",
+      "domains": [
+        "dmv.ca.gov"
+      ],
+      "typos": [
+        "ca-dmv",
+        "cadmv",
+        "dmvca"
+      ],
+      "vertical": "government",
+      "subdomainPatterns": [
+        "^ca\\.",
+        "^california\\."
+      ],
+      "pathPatterns": [
+        "/dmv",
+        "/california-dmv",
+        "/ca-dmv"
+      ]
+    },
+    {
+      "name": "mygov",
+      "domains": [
+        "my.gov.au",
+        "login.my.gov.au"
+      ],
+      "typos": [
+        "myg0v",
+        "mygøv",
+        "mygοv",
+        "my-gov",
+        "mygov"
+      ],
+      "vertical": "government"
+    },
+    {
+      "name": "The Courier Guy",
+      "domains": [
+        "thecourierguy.co.za"
+      ],
+      "typos": [
+        "courierguy",
+        "courier-guy",
+        "thecurierguy",
+        "courierguys"
+      ],
+      "vertical": "logistics"
+    },
+    {
+      "name": "whatsapp",
+      "domains": [
+        "whatsapp.com",
+        "web.whatsapp.com"
+      ],
+      "typos": [
+        "whatsaap",
+        "whatsap",
+        "whatssapp",
+        "whatsup",
+        "watsapp",
+        "whats-app"
+      ],
+      "vertical": "messaging"
+    },
+    {
+      "name": "microsoft-outlook",
+      "domains": [
+        "outlook.com",
+        "outlook.office.com",
+        "outlook.office365.com"
+      ],
+      "typos": [
+        "outlok",
+        "outl00k",
+        "0utlook",
+        "outlоok"
+      ],
+      "vertical": "productivity",
+      "visualMarkers": [
+        "Outlook Web App",
+        "background-color:#0072C6",
+        "Segoe UI WPC",
+        "Domain\\Username"
+      ],
+      "weight": 0.45
+    },
+    {
+      "name": "Microsoft Office",
+      "domains": [
+        "microsoft.com",
+        "office.com",
+        "office365.com",
+        "outlook.com"
+      ],
+      "typos": [
+        "microsft",
+        "mircosoft",
+        "micr0soft"
+      ],
+      "vertical": "productivity",
+      "keywords": [
+        "excel",
+        "word",
+        "powerpoint",
+        "document",
+        "scanneddoc"
+      ],
+      "documentAccess": true
+    },
+    {
+      "name": "meta-business",
+      "domains": [
+        "business.facebook.com",
+        "facebook.com/business",
+        "business.instagram.com"
+      ],
+      "typos": [
+        "agency-partner",
+        "business-partner",
+        "meta-partner",
+        "fb-business",
+        "facebook-business",
+        "meta-business"
+      ],
+      "vertical": "social-media-business"
+    },
+    {
+      "name": "meta",
+      "domains": [
+        "facebook.com",
+        "meta.com",
+        "instagram.com"
+      ],
+      "typos": [
+        "marketing-partner",
+        "member-invite",
+        "partner-invite",
+        "business-partner",
+        "meta-partner"
+      ],
+      "vertical": "social"
+    },
+    {
+      "name": "Meta",
+      "domains": [
+        "facebook.com",
+        "meta.com",
+        "instagram.com",
+        "whatsapp.com"
+      ],
+      "typos": [
+        "agency-partner-apply",
+        "business-partner-apply",
+        "creator-partner-apply",
+        "partner-application",
+        "business-application",
+        "meta-partner-apply"
+      ],
+      "vertical": "social"
     },
     {
       "name": "microsoft",
@@ -672,7 +1099,9 @@
         "gooogle",
         "googie",
         "google-signin",
-        "googl3"
+        "googl3",
+        "googel",
+        "goog1e"
       ]
     },
     {
@@ -777,6 +1206,86 @@
         "salesfOrce",
         "sales-force"
       ]
+    },
+    {
+      "name": "Microsoft",
+      "domains": [
+        "microsoft.com",
+        "live.com",
+        "outlook.com",
+        "office.com",
+        "microsoftonline.com"
+      ],
+      "typos": [
+        "microsooft",
+        "microsft",
+        "micosoft",
+        "mircosoft",
+        "microsofft",
+        "micr0soft"
+      ],
+      "vertical": "technology"
+    },
+    {
+      "name": "Microsoft OneDrive",
+      "domains": [
+        "onedrive.com",
+        "onedrive.live.com",
+        "1drv.ms"
+      ],
+      "typos": [
+        "one-drive",
+        "onedrive",
+        "0nedrive",
+        "onedrlve",
+        "onedrivе"
+      ],
+      "vertical": "technology"
+    },
+    {
+      "name": "Amazon Web Services",
+      "domains": [
+        "aws.amazon.com",
+        "signin.aws.amazon.com",
+        "console.aws.amazon.com"
+      ],
+      "typos": [
+        "amazonwebservices",
+        "amazon-web-services",
+        "awsservices",
+        "aws-amazon"
+      ],
+      "vertical": "technology"
+    },
+    {
+      "name": "att",
+      "domains": [
+        "att.com",
+        "wireless.att.com",
+        "my.att.com"
+      ],
+      "typos": [
+        "at&t",
+        "atnt",
+        "att-wireless",
+        "attnet"
+      ],
+      "vertical": "telecom"
+    },
+    {
+      "name": "BellSouth",
+      "domains": [
+        "bellsouth.net",
+        "bellsouth.com"
+      ],
+      "typos": [
+        "bellsouth",
+        "bellsouht",
+        "bellsout",
+        "belsouth",
+        "bellsouthe"
+      ],
+      "vertical": "telecommunications"
     }
   ],
   "signalFunctions": [
@@ -804,7 +1313,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-25T03:45:06.138Z",
+      "compiledAt": "2026-03-25T03:54:50.067Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
