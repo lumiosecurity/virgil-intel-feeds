@@ -1,16 +1,81 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-24T05:47:28.466Z",
-    "brandCount": 0,
-    "signalCount": 0,
-    "patternCount": 0
+    "compiledAt": "2026-03-25T03:45:07.090Z",
+    "brandCount": 2,
+    "signalCount": 1,
+    "patternCount": 1
   },
-  "brandEntries": [],
-  "signalFunctions": [],
-  "sourcePatterns": [],
+  "brandEntries": [
+    {
+      "name": "example-brand",
+      "vertical": "financial",
+      "domains": [
+        "example.com"
+      ],
+      "typos": [
+        "examp1e",
+        "exarnple",
+        "example-secure"
+      ],
+      "note": "Why this brand is targeted / what impersonation technique is used"
+    },
+    {
+      "name": "kucoin",
+      "vertical": "crypto",
+      "domains": [
+        "kucoin.com"
+      ],
+      "typos": [
+        "kucoinn",
+        "kiucoin",
+        "kucoine",
+        "kucion",
+        "kucin",
+        "kucoim",
+        "kucoun",
+        "kucoon",
+        "kucuie",
+        "kuc0in",
+        "kucoiin",
+        "ku-coin",
+        "kucoin-pro",
+        "kuc01n",
+        "kucoin-exchange",
+        "kucoin-login",
+        "kucoin-trade",
+        "kuicoin",
+        "kuccoin",
+        "kucoln"
+      ],
+      "note": "KuCoin is a top-5 crypto exchange by volume. Credential theft gives direct access to trading accounts and withdrawal functions."
+    }
+  ],
+  "signalFunctions": [
+    {
+      "id": "s-example-signal",
+      "description": "What this signal detects",
+      "severity": "high",
+      "weight": 0.35,
+      "code": "function s_example_signal(ctx) {\n  if (/example-pattern/i.test(ctx.fullUrl)) {\n    addSignal(ctx, 'example-signal', 'Description', 'high', 0.35);\n  }\n}",
+      "note": "Research rationale"
+    }
+  ],
+  "sourcePatterns": [
+    {
+      "id": "example-source-pattern",
+      "group": "phishkitSignatures",
+      "description": "What this pattern detects",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "example\\.pattern\\.here",
+      "patternFlags": "i",
+      "note": "Why this regex is distinctive and low false-positive"
+    }
+  ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-24T04:49:49.044Z",
+      "compiledAt": "2026-03-24T05:47:27.801Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

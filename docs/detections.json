@@ -1,11 +1,53 @@
 {
   "_meta": {
-    "version": "2026-03-24-05:47",
-    "generatedAt": "2026-03-24T05:47:28.476Z",
-    "brandCount": 0,
-    "patternCount": 0
+    "version": "2026-03-25-03:45",
+    "generatedAt": "2026-03-25T03:45:07.101Z",
+    "brandCount": 2,
+    "patternCount": 1
   },
-  "brandEntries": [],
+  "brandEntries": [
+    {
+      "name": "example-brand",
+      "vertical": "financial",
+      "domains": [
+        "example.com"
+      ],
+      "typos": [
+        "examp1e",
+        "exarnple",
+        "example-secure"
+      ]
+    },
+    {
+      "name": "kucoin",
+      "vertical": "crypto",
+      "domains": [
+        "kucoin.com"
+      ],
+      "typos": [
+        "kucoinn",
+        "kiucoin",
+        "kucoine",
+        "kucion",
+        "kucin",
+        "kucoim",
+        "kucoun",
+        "kucoon",
+        "kucuie",
+        "kuc0in",
+        "kucoiin",
+        "ku-coin",
+        "kucoin-pro",
+        "kuc01n",
+        "kucoin-exchange",
+        "kucoin-login",
+        "kucoin-trade",
+        "kuicoin",
+        "kuccoin",
+        "kucoln"
+      ]
+    }
+  ],
   "tldRisk": {
     ".ac.th": 0.2,
     ".accountants": 0.2,
@@ -1020,5 +1062,17 @@
     "your order with amazon",
     "your password has been compromised"
   ],
-  "sourcePatterns": []
+  "sourcePatterns": [
+    {
+      "id": "example-source-pattern",
+      "group": "phishkitSignatures",
+      "description": "What this pattern detects",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "example\\.pattern\\.here",
+      "patternFlags": "i",
+      "note": "Why this regex is distinctive and low false-positive"
+    }
+  ]
 }
