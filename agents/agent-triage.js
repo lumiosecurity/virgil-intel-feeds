@@ -213,9 +213,14 @@ ${liveFetch.html}
                          issue.body?.match(/\| Verdict shown \| ([^\n|]+) \|/);
   const verdictRiskLevel = riskLevelMatch?.[1]?.trim()?.toLowerCase() || '';
 
-  const confidenceValue = parseFloat(confidence) >= 1
-    ? parseFloat(confidence) / 100   // "90%" → 0.90
-    : parseFloat(confidence);        // "0.90" → 0.90
+  const confidenceValue = (() => {
+    const raw = parseFloat(confidence);
+    if (isNaN(raw)) return 0;
+    // "95%" parses as 95, "0.95" parses as 0.95
+    // Values > 1 are already percentages, divide by 100
+    // Exception: exactly 1.0 could mean 100% — treat > 1 as percentage format
+    return raw > 1 ? raw / 100 : raw;
+  })();
 
   const isRuleGap = labels.includes('rule-gap')
     || issue.title?.startsWith('[RULE-GAP]')
@@ -340,7 +345,7 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
     NEEDS_MANUAL_REVIEW: 'needs-triage',
   }[action] || 'needs-triage';
 
-  const heuristicScore = parseFloat(confidence) || 0;
+  const heuristicScore = confidenceValue;
   const heuristicPct = Math.round(heuristicScore * 100);
 
   const comment = `## 🤖 Agent Triage Report
