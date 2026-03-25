@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-25T05:48:03.976Z",
+    "compiledAt": "2026-03-25T06:01:57.781Z",
     "brandCount": 88,
     "signalCount": 1,
-    "patternCount": 1
+    "patternCount": 95
   },
   "brandEntries": [
     {
@@ -1309,11 +1309,955 @@
       "patternString": "example\\.pattern\\.here",
       "patternFlags": "i",
       "note": "Why this regex is distinctive and low false-positive"
+    },
+    {
+      "id": "spotify-impersonation-title",
+      "group": "brandImpersonation",
+      "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "title",
+      "patternString": "Spotify.*Web Player.*Music for everyone",
+      "patternFlags": "i"
+    },
+    {
+      "id": "spotify-login-ui-combo",
+      "group": "brandImpersonation",
+      "description": "Detects Spotify interface elements with login functionality on non-Spotify domains",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?=.*Your Library)(?=.*loginbtn|Log in)(?=.*Spotify)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "amazon-logo-hotlink",
+      "group": "brandImpersonation",
+      "description": "Amazon logo hotlinked from external source with Amazon branding",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "logos-world\\.net.*amazon.*logo.*amazon",
+      "patternFlags": "i"
+    },
+    {
+      "id": "amazon-nav-impersonation",
+      "group": "brandImpersonation",
+      "description": "Amazon-style navigation on non-Amazon domain",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?=.*amazon\\.(?:com|in))(?=.*Account.*Cart.*Orders)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "instagram-login-impersonation",
+      "group": "brandImpersonation",
+      "description": "Instagram login page impersonation indicators",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?=.*Instagram.*Login)(?=.*Log.*in.*with.*Facebook)(?=.*background-color.*#000)",
+      "patternFlags": "is"
+    },
+    {
+      "id": "spotify-title-offsite",
+      "group": "brandImpersonation",
+      "description": "Spotify branding in page title on non-Spotify domain",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "title",
+      "patternString": "spotify.*music.*player|spotify.*web.*player|spotify.*playlist",
+      "patternFlags": "i"
+    },
+    {
+      "id": "github-discord-clone",
+      "group": "brandImpersonation",
+      "description": "Discord branding on GitHub Pages hosting",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "github\\.io.*discord.*(?:logo|brand|#404EED|IMAGINE A PLACE)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "whatsapp-impersonation",
+      "group": "brandImpersonation",
+      "description": "Detects WhatsApp brand impersonation in page content",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "dom",
+      "patternString": "(whatsapp|wa\\.me|web\\.whatsapp).{0,50}(login|sign.?in|verify|auth|qr.?code)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "onedrive-fake-title",
+      "group": "brandImpersonation",
+      "description": "Detects fake OneDrive pages using incorrect title spacing",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "title",
+      "patternString": "^One Drive$",
+      "patternFlags": "i"
+    },
+    {
+      "id": "email-userid-label",
+      "group": "credentialHarvesting",
+      "description": "Email Address/User ID label pattern common in email phishing",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "Email Address/User ID[\\s\\S]*?<input[^>]*type=[\"'](?:text|email)[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "suspicious-subdomain-financial",
+      "group": "hostingPatterns",
+      "description": "Detects random subdomains on financial-sounding domains used for phishing",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "url",
+      "patternString": "^https?://[a-z0-9]{10,}\\.(bank|financial|secure|payment|trust)[a-z]*\\.(com|org|net)/",
+      "patternFlags": "i"
+    },
+    {
+      "id": "base64-html-password-obfuscation",
+      "group": "phishkitSignatures",
+      "description": "Base64 obfuscated HTML containing password input fields",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "atob\\([\"'][^\"']*cGFzc3dvcmQ[^\"']*[\"']\\)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "wetransfer-cdn-abuse",
+      "group": "phishkitSignatures",
+      "description": "Suspicious use of WeTransfer CDN resources on non-WeTransfer domains",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "prod-cdn\\.wetransfer\\.net.*(?:password|login|signin)",
+      "patternFlags": "is"
+    },
+    {
+      "id": "document-write-unescape-obfuscation",
+      "group": "phishkitSignatures",
+      "description": "JavaScript document.write with URL-encoded obfuscated content",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "document\\.write\\(unescape\\([\"'][%0-9A-Fa-f]{100,}",
+      "patternFlags": "i"
+    },
+    {
+      "id": "credential-handler-phishkit",
+      "group": "phishkitSignatures",
+      "description": "Detects phishkit credential collection handlers",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "function\\s+(username_handler|password_handler)\\s*\\(event\\)\\s*\\{[^}]*querySelectorAll.*input\\[type='hidden'\\]",
+      "patternFlags": "i"
+    },
+    {
+      "id": "file-verification-cred-phish",
+      "group": "phishkitSignatures",
+      "description": "Detects file verification credential phishing pages",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "File\\s+Verification.*(?:username|password).*login.*(?:email|address)",
+      "patternFlags": "is"
+    },
+    {
+      "id": "indonesian-lottery-scam",
+      "group": "phishkitSignatures",
+      "description": "Indonesian lottery/prize scam content pattern",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "text",
+      "patternString": "(?:KODE\\s+ID\\s+PEMENANG|pemenang\\s+yang\\s+beruntung.*hadiah|Galeri\\s+Pemenang\\s+Hadiah).*(?:shopee|SHOPEE)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "brand-numeric-blogspot",
+      "group": "phishkitSignatures",
+      "description": "Brand name with numeric suffix on blogspot",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "url",
+      "patternString": "(?:shopee|paypal|amazon|apple|microsoft|google)\\d{3,}\\.blogspot\\.com",
+      "patternFlags": "i"
+    },
+    {
+      "id": "emailjs-phishkit-exfil",
+      "group": "phishkitSignatures",
+      "description": "EmailJS credential exfiltration pattern",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "emailjs\\.send\\([\"'][^\"']+[\"'],\\s*[\"']template_[^\"']+[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "irs-tax-form-phishing",
+      "group": "phishkitSignatures",
+      "description": "IRS tax form phishing with SSN and Electronic Filing PIN fields",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "Internal Revenue Service.*Electronic Filing PIN.*Social Security Number.*Adjusted Gross Income",
+      "patternFlags": "is"
+    },
+    {
+      "id": "irs-efile-pin-structure",
+      "group": "phishkitSignatures",
+      "description": "IRS Electronic Filing PIN form with segmented SSN input pattern",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "Electronic Filing PIN.*first 3 digits.*middle 2 digits.*last 4 digits.*5-digit Electronic Filing PIN",
+      "patternFlags": "is"
+    },
+    {
+      "id": "html2canvas-heartbeat-monitoring",
+      "group": "phishkitSignatures",
+      "description": "Detects phishing pages using html2canvas for screenshot capture with heartbeat monitoring",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "html2canvas\\(document\\.body\\)[\\s\\S]*?ajax/heartbeat\\.php[\\s\\S]*?canvas\\.toDataURL\\(['\"](image/png|image/jpeg)['\"]\\)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "phish-flow-polling-panel",
+      "group": "phishkitSignatures",
+      "description": "Detects phishing pages using flow polling with panel_action redirects",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "ajax/flow\\.php[\\s\\S]*?panel_action[\\s\\S]*?final_redirect_url",
+      "patternFlags": "i"
+    },
+    {
+      "id": "spotify-dom-structure",
+      "group": "phishkitSignatures",
+      "description": "Spotify DOM structure with playlist cards and logo on non-Spotify domain",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "spotify.*playlist.*card.*data-songs.*logo\\.svg|logo\\.svg.*playlist.*spotify",
+      "patternFlags": "i"
+    },
+    {
+      "id": "binance-meta-impersonation",
+      "group": "phishkitSignatures",
+      "description": "Detects Binance brand impersonation via meta tags",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "public\\.bnbstatic\\.com.*ogImage\\.jpg|og:site_name.*Binance|twitter:site.*Binance",
+      "patternFlags": "i"
+    },
+    {
+      "id": "binance-title-crypto-keywords",
+      "group": "phishkitSignatures",
+      "description": "Detects Binance title with crypto keywords on suspicious domains",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "<title[^>]*>.*Binance.*</title>.*keywords.*(?:Bitcoin|Cryptocurrency|BTC|ETH|crypto)",
+      "patternFlags": "is"
+    },
+    {
+      "id": "ledger-image-redirect",
+      "group": "phishkitSignatures",
+      "description": "Ledger phishing with image redirect to external domain",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<a[^>]+href=[\"']https://(?!.*ledger\\.com)[^\"']+[\"'][^>]*>\\s*<img[^>]+src=[\"'][^\"']*ledger[^\"']*[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "ledger-external-redirect",
+      "group": "phishkitSignatures",
+      "description": "Ledger brand mention with redirect to suspicious external domain",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "ledger.*<a[^>]+href=[\"']https://(?!.*ledger)[a-z]+\\.(com|org|net|info)[^\"']*[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "telegram-bot-exfil-obfuscated",
+      "group": "phishkitSignatures",
+      "description": "Obfuscated Telegram bot API credential exfiltration",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "\\x68\\x74\\x74\\x70\\x73\\x3a\\x2f\\x2f\\x61\\x70\\x69\\x2e\\x74\\x65\\x6c\\x65\\x67\\x72\\x61\\x6d\\x2e\\x6f\\x72\\x67|api\\.telegram\\.org.*sendMessage.*chat_id",
+      "patternFlags": "i"
+    },
+    {
+      "id": "appsimulation-phishkit",
+      "group": "phishkitSignatures",
+      "description": "AppSimulation credential harvesting framework",
+      "severity": "high",
+      "weight": 0.65,
+      "source": "js",
+      "patternString": "appSimulation\\.(setSubmitStatus|setCredentialStatus)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "dana-unicode-impersonation",
+      "group": "phishkitSignatures",
+      "description": "DANA brand impersonation using stylized Unicode characters",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "title",
+      "patternString": "𝗗𝗔𝗡𝗔|𝗖𝘂𝘀𝘁𝗼𝗺𝗲𝗿\\s*𝗖𝗮𝗿𝗲",
+      "patternFlags": "i"
+    },
+    {
+      "id": "dana-customer-care-phish",
+      "group": "phishkitSignatures",
+      "description": "DANA customer care phishing page with credential harvesting",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "customer\\s*care\\s*dana.*login\\.php|dana.*customer.*care.*<form",
+      "patternFlags": "i"
+    },
+    {
+      "id": "gov-agency-impersonation",
+      "group": "phishkitSignatures",
+      "description": "Government agency impersonation via subdomain + path",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "url",
+      "patternString": "^(ca|ny|tx|fl)\\.[^.]+\\.[^.]+/.*(dmv|dps|revenue|tax)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "claim-brand-pattern",
+      "group": "phishkitSignatures",
+      "description": "Claim/reward pages impersonating financial brands",
+      "severity": "high",
+      "weight": 0.65,
+      "source": "url",
+      "patternString": "claim(dana|metamask|coinbase|trust|wallet)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "free-subdomain-brand",
+      "group": "phishkitSignatures",
+      "description": "Brand names on free subdomain services",
+      "severity": "medium",
+      "weight": 0.45,
+      "source": "url",
+      "patternString": "(dana|metamask|coinbase|trust|wallet).+\\.(my\\.id|netlify\\.app|vercel\\.app|github\\.io)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "sharepoint-sharing-validation-phish",
+      "group": "phishkitSignatures",
+      "description": "SharePoint sharing link validation phishing page",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<title>\\s*Sharing Link Validation\\s*</title>.*OneDrive.*Verify Your Identity",
+      "patternFlags": "is"
+    },
+    {
+      "id": "secure-link-identity-verification",
+      "group": "phishkitSignatures",
+      "description": "Secure link identity verification social engineering text",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "text",
+      "patternString": "sharing with a secure link which requires you to verify your identity.*Your email address is required",
+      "patternFlags": "is"
+    },
+    {
+      "id": "acdi-gcch-impersonation",
+      "group": "phishkitSignatures",
+      "description": "ACDI-GCCH privacy statement in Microsoft-branded page",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "text",
+      "patternString": "American Computer Development Inc-GCCH.*privacy statement.*Microsoft Terms of Use",
+      "patternFlags": "is"
+    },
+    {
+      "id": "brazilian-toll-phishkit",
+      "group": "phishkitSignatures",
+      "description": "Brazilian toll payment phishkit with jQuery credential harvesting",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "\\$\\.post\\(\\s*['\"]online\\.php['\"].*local:\\s*window\\.location\\.pathname",
+      "patternFlags": "i"
+    },
+    {
+      "id": "cybeready-phishkit",
+      "group": "phishkitSignatures",
+      "description": "CyberReady phishing kit infrastructure",
+      "severity": "high",
+      "weight": 0.75,
+      "source": "html",
+      "patternString": "lp\\.cybeready\\.net/Forms/",
+      "patternFlags": "i"
+    },
+    {
+      "id": "facebook-js-validator-phish",
+      "group": "phishkitSignatures",
+      "description": "Facebook phishing with JS validator evasion",
+      "severity": "high",
+      "weight": 0.65,
+      "source": "html",
+      "patternString": "onclick=\"return validator\\.validate\\(\\)\".*facebook",
+      "patternFlags": "is"
+    },
+    {
+      "id": "facebook-getcrrid-phish",
+      "group": "phishkitSignatures",
+      "description": "Facebook phishing with getcrrid tracking function",
+      "severity": "high",
+      "weight": 0.55,
+      "source": "html",
+      "patternString": "function getcrrid\\(\\).*Log in Facebook",
+      "patternFlags": "is"
+    },
+    {
+      "id": "google-phishkit-handlers",
+      "group": "phishkitSignatures",
+      "description": "Google phishkit credential collection handlers",
+      "severity": "high",
+      "weight": 0.7,
+      "source": "js",
+      "patternString": "function\\s+(username_handler|password_handler)\\(event\\)\\s*\\{[\\s\\S]*querySelectorAll.*input\\[type='hidden'\\]",
+      "patternFlags": "i"
+    },
+    {
+      "id": "pmeimg-google-assets",
+      "group": "phishkitSignatures",
+      "description": "PME image hosting with Google assets",
+      "severity": "high",
+      "weight": 0.6,
+      "source": "html",
+      "patternString": "images\\.pmeimg\\.com.*google-(logo|favicon|landing)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "microsoft-segoe-ui-impersonation",
+      "group": "phishkitSignatures",
+      "description": "Microsoft Segoe UI font family on non-Microsoft domain",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "font-family[^;]*[\"']Segoe UI Webfont[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "external-microsoft-favicon",
+      "group": "phishkitSignatures",
+      "description": "External Microsoft favicon reference on non-Microsoft domain",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "rel=[\"']shortcut icon[\"'][^>]*href=[\"']https?://(?!.*microsoft\\.com)[^\"']*microsoft[^\"']*\\.ico",
+      "patternFlags": "i"
+    },
+    {
+      "id": "phishkit-credential-handlers",
+      "group": "phishkitSignatures",
+      "description": "Detects JavaScript credential collection handlers common in phishing kits",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "function\\s+(username_handler|password_handler)\\s*\\([^)]*\\)\\s*\\{[^}]*querySelectorAll[^}]*input\\[type=['\"]hidden['\"]\\]",
+      "patternFlags": "i"
+    },
+    {
+      "id": "adobe-file-verification-phish",
+      "group": "phishkitSignatures",
+      "description": "Adobe PDF file verification phishing page",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "File\\s+Verification\\s+for\\s+Adobe\\s+PDF.*<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "is"
+    },
+    {
+      "id": "netflix-clone-pattern",
+      "group": "phishkitSignatures",
+      "description": "Netflix clone pages with email collection",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<title>.*Netflix\\s+Clone.*</title>.*<input[^>]+type=[\"']email[\"']",
+      "patternFlags": "is"
+    },
+    {
+      "id": "netflix-impersonation-email",
+      "group": "phishkitSignatures",
+      "description": "Netflix branding with email collection on non-Netflix domains",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "NETFLIX.*<form[^>]*>.*<input[^>]+type=[\"']email[\"']",
+      "patternFlags": "is"
+    },
+    {
+      "id": "dana-indonesian-phishkit",
+      "group": "phishkitSignatures",
+      "description": "Indonesian DANA phishing kit with customer care impersonation",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "Aktifkan\\s+DANA\\s+Paylater.*Putuskan\\s+DANA\\s+Paylater.*Pemulihan\\s+Akun",
+      "patternFlags": "i"
+    },
+    {
+      "id": "html-entity-brand-obfuscation",
+      "group": "phishkitSignatures",
+      "description": "HTML entity encoded brand names to evade detection",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "&#[0-9]+;&#[0-9]+;&#[0-9]+;[^<]*(?:bet365|paypal|amazon|microsoft|apple|google)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "gambling-gateway-redirect",
+      "group": "phishkitSignatures",
+      "description": "Gambling site gateway with randomized redirect domains",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "Math\\.floor\\(Math\\.random\\(\\)\\*len\\);.*txt\\[rnd\\].*\\.com",
+      "patternFlags": "s"
+    },
+    {
+      "id": "numbered-member-subdomain",
+      "group": "phishkitSignatures",
+      "description": "Numbered member/user subdomains on suspicious domains",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "url",
+      "patternString": "^(member|user|client|account)\\d+\\.",
+      "patternFlags": "i"
+    },
+    {
+      "id": "microsoft-login-impersonation",
+      "group": "phishkitSignatures",
+      "description": "Microsoft login page impersonation via Segoe UI font stack and Microsoft blue color",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "font-family:\\s*[\"']Segoe UI Webfont[\"'][^}]*color:\\s*#0067b8",
+      "patternFlags": "i"
+    },
+    {
+      "id": "getcrrid-phishkit",
+      "group": "phishkitSignatures",
+      "description": "Phishing kit using getcrrid() tracking function",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "function\\s+getcrrid\\(\\)\\s*\\{\\s*return\\s+['\"][a-f0-9]{32}['\"]",
+      "patternFlags": "i"
+    },
+    {
+      "id": "mygov-error-rfm10a",
+      "group": "phishkitSignatures",
+      "description": "myGov phishkit error message pattern",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "Error Your.*details are incorrect.*\\(RFM10A\\)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "mygov-security-questions",
+      "group": "phishkitSignatures",
+      "description": "myGov security questions phishing pattern",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "myGov.*Security Question.*What was the first single/album I bought",
+      "patternFlags": "i"
+    },
+    {
+      "id": "ndax-login-title-pattern",
+      "group": "phishkitSignatures",
+      "description": "NDAX login page title impersonation",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "title",
+      "patternString": "NDAX.*Login.*Crypto Trading Platform.*Canadians",
+      "patternFlags": "i"
+    },
+    {
+      "id": "owa-save-php-phishkit",
+      "group": "phishkitSignatures",
+      "description": "Microsoft OWA phishkit with save.php exfiltration",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "html",
+      "patternString": "action=[\"']save\\.php[\"'].*Outlook Web App",
+      "patternFlags": "is"
+    },
+    {
+      "id": "microsoft-visual-impersonation",
+      "group": "phishkitSignatures",
+      "description": "Microsoft visual branding impersonation markers",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "css",
+      "patternString": "background-color:#0072C6.*Segoe UI WPC.*password",
+      "patternFlags": "is"
+    },
+    {
+      "id": "ipfs-phishing-subdomain",
+      "group": "phishkitSignatures",
+      "description": "Long cryptographic subdomain on IPFS gateway indicating potential phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "url",
+      "patternString": "^[a-z0-9]{50,}\\.ipfs\\.",
+      "patternFlags": "i"
+    },
+    {
+      "id": "sa-courier-fee-scam",
+      "group": "phishkitSignatures",
+      "description": "South African courier delivery fee scam pattern with VAT calculation",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "text",
+      "patternString": "VAT 15\\s*%.*R\\s*\\d+\\.\\d{2}.*delivery.*fee",
+      "patternFlags": "is"
+    },
+    {
+      "id": "indonesian-urgency-klik",
+      "group": "phishkitSignatures",
+      "description": "Indonesian urgency phrase 'klik-sekarang' (click-now) in subdomain",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "url",
+      "patternString": "klik[\\-_]sekarang",
+      "patternFlags": "i"
+    },
+    {
+      "id": "suspicious-campaign-id-indonesia",
+      "group": "phishkitSignatures",
+      "description": "Suspicious campaign pattern on Indonesian domain",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "url",
+      "patternString": "newbrn\\d{4}\\.biz\\.id",
+      "patternFlags": "i"
+    },
+    {
+      "id": "onedrive-document-harvest",
+      "group": "phishkitSignatures",
+      "description": "Detects OneDrive document sharing phishing pages",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "PROTECTED DOCUMENT.*ENTER YOUR EMAIL TO DOWNLOAD",
+      "patternFlags": "is"
+    },
+    {
+      "id": "adobe-pdf-phishkit-handlers",
+      "group": "phishkitSignatures",
+      "description": "Adobe PDF phishkit credential collection handlers",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "js",
+      "patternString": "function\\s+(username_handler|password_handler)\\(event\\).*querySelectorAll.*input\\[type='hidden'\\]",
+      "patternFlags": "is"
+    },
+    {
+      "id": "adobe-pdf-fake-verification",
+      "group": "phishkitSignatures",
+      "description": "Fake Adobe PDF verification page with credential harvesting",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<title>Adobe-PDF\\s+Online</title>[\\s\\S]*?File\\s+Verification\\s+for\\s+Adobe\\s+PDF[\\s\\S]*?<form[^>]+action=\"/site/submit\"",
+      "patternFlags": "i"
+    },
+    {
+      "id": "generic-webmail-security-pressure",
+      "group": "phishkitSignatures",
+      "description": "Generic webmail security pressure messaging",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "text",
+      "patternString": "This is a very important security measure.*To protect your email account.*Your account may be restricted",
+      "patternFlags": "is"
+    },
+    {
+      "id": "generic-webmail-title-pattern",
+      "group": "phishkitSignatures",
+      "description": "Generic webmail title with credential form",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "<title>Webmail</title>.*<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "is"
+    },
+    {
+      "id": "external-favicon-phishkit",
+      "group": "phishkitSignatures",
+      "description": "External favicon from alphatrade-options domain",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "alphatrade-options\\.com/git/rand/favicon\\.png",
+      "patternFlags": "i"
+    },
+    {
+      "id": "telecom-promo-phish",
+      "group": "phishkitSignatures",
+      "description": "Detect telecom promotional phishing with reward card offers",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "text",
+      "patternString": "\\$\\d+.*reward card|bill credits.*\\$\\d+|unlimited plans.*\\d+%.*off|switcher offer.*\\$\\d+",
+      "patternFlags": "i"
+    },
+    {
+      "id": "css-phishkit-birthdate",
+      "group": "phishkitSignatures",
+      "description": "CSS Insurance phishkit with birth date harvesting",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "geburtsdatum.*send_date\\.php|myCSS.*Bestätigen Sie Ihre Identität.*Geburtsdatum",
+      "patternFlags": "i"
+    },
+    {
+      "id": "mycss-brand-impersonation",
+      "group": "phishkitSignatures",
+      "description": "myCSS branding on non-CSS domains with characteristic styling",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "myCSS.*--css-ui-color-darkblue.*#00327d|registrierung.*myCSS.*Identität",
+      "patternFlags": "i"
+    },
+    {
+      "id": "amazon-ui-phishkit",
+      "group": "phishkitSignatures",
+      "description": "Amazon UI framework on non-Amazon domain with auth forms",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "class=\"[^\"]*a-ws[^\"]*\".*auth-workflow.*signIn",
+      "patternFlags": "is"
+    },
+    {
+      "id": "gambling-numeric-redirect",
+      "group": "phishkitSignatures",
+      "description": "Gambling redirect pages with numeric domain patterns",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "1111365[a-z]{2}\\.com.*打开网站",
+      "patternFlags": "i"
+    },
+    {
+      "id": "fake-speed-test-gambling",
+      "group": "phishkitSignatures",
+      "description": "Fake speed testing interface for gambling site redirects",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<span class=\"ms\".*ms</span>.*打开网站",
+      "patternFlags": "i"
+    },
+    {
+      "id": "credential-collection-handlers",
+      "group": "phishkitSignatures",
+      "description": "Detects credential collection JavaScript handlers commonly used in phishing kits",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "function\\s+(username_handler|password_handler)\\s*\\([^)]*\\)\\s*\\{[^}]*querySelectorAll\\([^)]*\\[name=",
+      "patternFlags": "i"
+    },
+    {
+      "id": "base64-exfil-endpoint",
+      "group": "phishkitSignatures",
+      "description": "Base64 encoded URL in JavaScript credential exfiltration",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "atob\\(['\"][aHR0cHM6Ly8][^'\"]{20,}['\"]\\)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "document-password-gate",
+      "group": "phishkitSignatures",
+      "description": "Document access gating with password requirement",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(continue|view|access).{0,20}(document|file|doc).{0,50}(password|email.{0,20}password)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "zoho-impersonation-favicon",
+      "group": "phishkitSignatures",
+      "description": "ZOHO favicon with ZOHO branding on non-ZOHO domain",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "google\\.com/s2/favicons\\?domain=zoho\\.com.*?ZOHO",
+      "patternFlags": "is"
+    },
+    {
+      "id": "session-expired-urgency",
+      "group": "phishkitSignatures",
+      "description": "Session expired urgency messaging with login form",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "Previous session has expired.*?login to continue",
+      "patternFlags": "is"
+    },
+    {
+      "id": "zoho-favicon-phish",
+      "group": "phishkitSignatures",
+      "description": "ZOHO favicon with credential form (common phishkit pattern)",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "google\\.com/s2/favicons\\?domain=zoho\\.com.*?(?:password|email).*?form",
+      "patternFlags": "is"
+    },
+    {
+      "id": "fake-captcha-gate",
+      "group": "phishkitSignatures",
+      "description": "Fake bot verification gate with hidden credential form",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "I am not a robot.*?form-container.*?display:\\s*none.*?(?:password|email)",
+      "patternFlags": "is"
+    },
+    {
+      "id": "facebook-arabic-security-alert",
+      "group": "socialEngineering",
+      "description": "Arabic Facebook security alert phishing lure",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "text",
+      "patternString": "تنبيه أمني.*إدارة النظام.*تأكيد هويتك.*محتوى مقيد|security.*alert.*verify.*identity.*restricted",
+      "patternFlags": "i"
+    },
+    {
+      "id": "marketing-partner-combo",
+      "group": "socialEngineering",
+      "description": "Marketing partner invitation domains",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "url",
+      "patternString": "marketing.*partner.*invite|partner.*marketing.*invite",
+      "patternFlags": "i"
+    },
+    {
+      "id": "numeric-domain-pattern",
+      "group": "suspiciousDomains",
+      "description": "All-numeric domain pattern often used for phishing",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "domain",
+      "patternString": "^\\d+\\.(site|top|xyz|click)$",
+      "patternFlags": "i"
+    },
+    {
+      "id": "cn-domain-western-brand",
+      "group": "suspiciousHosting",
+      "description": "Western brand impersonation on Chinese domains",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "url",
+      "patternString": "^https?://[^/]*\\.cn/.*(whatsapp|facebook|google|apple|microsoft|amazon)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "discord-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Discord official page title on non-Discord domain",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "<title[^>]*>Discord \\| Your Place to Talk and Hang Out</title>",
+      "patternFlags": "i"
+    },
+    {
+      "id": "ndax-auth-typosquat",
+      "group": "typosquat",
+      "description": "NDAX authentication typosquat patterns",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "hostname",
+      "patternString": "(auth|login|secure)[.-]?ndax(log|login|auth)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "digital-mail-typosquat",
+      "group": "typosquatPatterns",
+      "description": "Detect digital mail service typosquats used for phishing hosting",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "url",
+      "patternString": "digital.*mail|mail.*digital|digitalmails?|maildigital",
+      "patternFlags": "i"
+    },
+    {
+      "id": "aws-subdomain-typosquat",
+      "group": "typosquatPatterns",
+      "description": "AWS brand in subdomain on non-Amazon domain",
+      "severity": "high",
+      "weight": 0.6,
+      "source": "url",
+      "patternString": "^amazonwebservices\\.",
+      "patternFlags": "i",
+      "excludeDomains": [
+        "amazon.com",
+        "aws.amazon.com"
+      ]
+    },
+    {
+      "id": "webflow-brand-typosquat",
+      "group": "typosquatPatterns",
+      "description": "Brand impersonation with signin/verifier keywords on Webflow",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "hostname",
+      "patternString": "^www-[a-z]+(verifier|signin|login|auth|secure)[a-z]*-com\\.webflow\\.io$",
+      "patternFlags": "i"
+    },
+    {
+      "id": "deep-subdomain-indonesia-business",
+      "group": "urlHeuristics",
+      "description": "Increase weight for deep subdomains on Indonesian business domains",
+      "severity": "low",
+      "weight": 0.25,
+      "source": "url",
+      "patternString": "^[^.]+\\.[^.]+\\.[^.]+\\.biz\\.id$",
+      "patternFlags": "i"
     }
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-25T05:42:03.894Z",
+      "compiledAt": "2026-03-25T05:47:58.788Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
