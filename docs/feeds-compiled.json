@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-25T18:11:58.905Z",
+    "compiledAt": "2026-03-26T06:16:52.177Z",
     "brandCount": 88,
     "signalCount": 1,
     "patternCount": 97
@@ -2282,7 +2282,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-25T06:01:53.829Z",
+      "compiledAt": "2026-03-25T18:11:50.774Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -2309,6 +2309,7 @@
       ".best": 0.2,
       ".bio": 0.2,
       ".biz": 0.2,
+      ".biz.id": 0.2,
       ".bond": 0.2,
       ".cam": 0.2,
       ".cc": 0.2,
@@ -2371,6 +2372,7 @@
       ".mom": 0.2,
       ".monster": 0.2,
       ".mov": 0.2,
+      ".my.id": 0.2,
       ".ne.jp": 0.2,
       ".net.ms": 0.2,
       ".nom.za": 0.2,
@@ -2417,6 +2419,7 @@
       ".vip": 0.2,
       ".vu": 0.2,
       ".wang": 0.2,
+      ".web.id": 0.2,
       ".website": 0.2,
       ".win": 0.2,
       ".work": 0.2,
@@ -2757,6 +2760,7 @@
       "copyfol.io",
       "curipod.com",
       "doc.clickup.com",
+      "edgeone.app",
       "edgeone.dev",
       "elementor.cloud",
       "figma.com",
@@ -2777,6 +2781,7 @@
       "jotform.com",
       "landbot.site",
       "larksuite.com",
+      "lighthouse.storage",
       "lovable.app",
       "mixpanel.com",
       "mockflow.com",
@@ -2795,11 +2800,17 @@
       "systeme.io",
       "tana.pub",
       "tithelysetup.com",
+      "typedream.app",
       "view.genially.com",
+      "wasmer.app",
       "weavely.ai",
       "web.val.run",
+      "wixstudio.com",
       "workflowy.com",
-      "wpdevcloud.com"
+      "wpdevcloud.com",
+      "wpenginepowered.com",
+      "yayforms.link",
+      "zapier.app"
     ],
     "freeFileHosts": [
       "0x0.st",
@@ -3117,6 +3128,7 @@
       "linkify.ru",
       "linkly.link",
       "linksrtnr.com",
+      "linkurl.pk",
       "liurl.cn",
       "ln-s.net",
       "ln-s.ru",
@@ -3163,6 +3175,7 @@
       "qlnk.net",
       "qr.fm",
       "qrco.de",
+      "qrsu.io",
       "qti.ai",
       "quip-art.com",
       "rb.gy",

@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-25T18:11:50.774Z",
+    "compiledAt": "2026-03-26T06:16:45.322Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -351,6 +351,7 @@
     "online.gp",
     "onlytap.io",
     "onrender.com",
+    "onthewifi.com",
     "oraclecloud.com",
     "pagecloud.com",
     "pages.dev",
@@ -651,6 +652,7 @@
     "onedrive.live.com",
     "onehub.com",
     "onenoteonlinesync.onenote.com",
+    "oortstorages.com",
     "padlet.com",
     "pastelink.net",
     "pcloud.com",
