@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-26T06:16:52.177Z",
-    "brandCount": 88,
+    "compiledAt": "2026-03-27T06:18:15.027Z",
+    "brandCount": 99,
     "signalCount": 1,
-    "patternCount": 97
+    "patternCount": 138
   },
   "brandEntries": [
     {
@@ -34,10 +34,12 @@
         "zoho-",
         "zohoo",
         "zooho",
-        "zho",
-        "zoho",
+        "zoho-mail",
+        "zohomail",
         "zaho",
-        "zoho-mail"
+        "zoho.co",
+        "zho",
+        "zoho"
       ],
       "vertical": "business"
     },
@@ -55,6 +57,21 @@
         "dr0pbox",
         "dropboxx",
         "drop-box"
+      ],
+      "vertical": "cloud_storage"
+    },
+    {
+      "name": "Dropbox",
+      "domains": [
+        "dropbox.com",
+        "dropboxusercontent.com"
+      ],
+      "typos": [
+        "dropb0x",
+        "droopbox",
+        "dropb0x",
+        "drophox",
+        "dropbax"
       ],
       "vertical": "cloud_storage"
     },
@@ -178,6 +195,10 @@
         "ledgerwallet",
         "my-ledger",
         "ledger-nano",
+        "lldger",
+        "ledgerlive",
+        "lledger",
+        "ledgerr",
         "ledgre",
         "ledgr",
         "ledger-com",
@@ -269,6 +290,54 @@
       ]
     },
     {
+      "name": "KuCoin",
+      "domains": [
+        "kucoin.com"
+      ],
+      "typos": [
+        "kuecoin",
+        "kucoin",
+        "kuccoin",
+        "kuccon",
+        "kucoin-",
+        "ku-coin",
+        "kucoinlogin",
+        "kucconloggn",
+        "kuco1n",
+        "kucoins",
+        "kucoin-login",
+        "kucoiereilgie"
+      ],
+      "vertical": "cryptocurrency"
+    },
+    {
+      "name": "Atomic Wallet",
+      "domains": [
+        "atomicwallet.io"
+      ],
+      "typos": [
+        "atoremwallet",
+        "atomicwalet",
+        "atomicwallets",
+        "atomikwallet"
+      ],
+      "vertical": "cryptocurrency"
+    },
+    {
+      "name": "netcoins",
+      "domains": [
+        "netcoins.ca",
+        "netcoins.com"
+      ],
+      "typos": [
+        "netkoins",
+        "netcoin",
+        "netcoins-app",
+        "netcoinslogin"
+      ],
+      "vertical": "cryptocurrency"
+    },
+    {
       "name": "amazon",
       "vertical": "ecommerce",
       "domains": [
@@ -282,7 +351,11 @@
         "amaz0n",
         "amazonn",
         "amazon-login",
-        "amzon"
+        "amzon",
+        "amazom",
+        "amazone",
+        "ammazon",
+        "amazon"
       ]
     },
     {
@@ -348,7 +421,11 @@
         "netfl1x",
         "netflixx",
         "netflix-login",
-        "net-flix"
+        "net-flix",
+        "netflik",
+        "netflx",
+        "netfix",
+        "neftlix"
       ]
     },
     {
@@ -727,6 +804,46 @@
       "vertical": "financial"
     },
     {
+      "name": "coinsquare",
+      "domains": [
+        "coinsquare.com"
+      ],
+      "typos": [
+        "coinsquarelogi",
+        "coinsquar",
+        "coinssquare",
+        "coinsquarre"
+      ],
+      "vertical": "financial"
+    },
+    {
+      "name": "iTrustCapital",
+      "domains": [
+        "itrustcapital.com"
+      ],
+      "typos": [
+        "itrustcaptal",
+        "itrust-capital",
+        "itrustcapitol",
+        "itrstcapital"
+      ],
+      "vertical": "financial"
+    },
+    {
+      "name": "scotiabank",
+      "domains": [
+        "scotiabank.com",
+        "scotiabank.ca"
+      ],
+      "typos": [
+        "scotiabnak",
+        "scotiabnk",
+        "scotia-bank",
+        "scotibank"
+      ],
+      "vertical": "financial"
+    },
+    {
       "name": "BET365",
       "domains": [
         "bet365.com"
@@ -817,7 +934,9 @@
         "adobepdf",
         "adobe-pdf",
         "abode",
-        "adb0e"
+        "adb0e",
+        "adone",
+        "adbe"
       ]
     },
     {
@@ -829,7 +948,9 @@
       "typos": [
         "linkedln",
         "linke-din",
-        "linkediin"
+        "linkediin",
+        "linkendin",
+        "linkdin"
       ]
     },
     {
@@ -857,7 +978,9 @@
         "facebok",
         "face-book",
         "facbook",
-        "fecebook"
+        "fecebook",
+        "faceboook",
+        "facebbok"
       ]
     },
     {
@@ -876,7 +999,9 @@
         "instagrm",
         "instqgram",
         "1nstagram",
-        "instegram"
+        "instegram",
+        "instagarm",
+        "instragram"
       ]
     },
     {
@@ -939,6 +1064,21 @@
         "mygοv",
         "my-gov",
         "mygov"
+      ],
+      "vertical": "government"
+    },
+    {
+      "name": "California Government",
+      "domains": [
+        "ca.gov",
+        "dmv.ca.gov"
+      ],
+      "typos": [
+        "ca.gov-",
+        "cagov",
+        "ca-gov",
+        "ca.gob",
+        "ca.giv"
       ],
       "vertical": "government"
     },
@@ -1064,6 +1204,20 @@
         "partner-application",
         "business-application",
         "meta-partner-apply"
+      ],
+      "vertical": "social"
+    },
+    {
+      "name": "Instagram",
+      "domains": [
+        "instagram.com",
+        "ig.me"
+      ],
+      "typos": [
+        "instgram",
+        "instaram",
+        "instragram",
+        "instagrm"
       ],
       "vertical": "social"
     },
@@ -1263,6 +1417,20 @@
       "vertical": "technology"
     },
     {
+      "name": "Adobe",
+      "domains": [
+        "adobe.com",
+        "acrobat.com"
+      ],
+      "typos": [
+        "adobbe",
+        "adob3",
+        "adobee",
+        "adoobe"
+      ],
+      "vertical": "technology"
+    },
+    {
       "name": "att",
       "domains": [
         "att.com",
@@ -1289,6 +1457,21 @@
         "bellsout",
         "belsouth",
         "bellsouthe"
+      ],
+      "vertical": "telecommunications"
+    },
+    {
+      "name": "bt",
+      "domains": [
+        "bt.com",
+        "btconnect.com",
+        "btinternet.com"
+      ],
+      "typos": [
+        "bt-group",
+        "btuk",
+        "mybt",
+        "bt-broadband"
       ],
       "vertical": "telecommunications"
     }
@@ -1406,6 +1589,36 @@
       "patternFlags": "i"
     },
     {
+      "id": "instagram-logo-credential-harvest",
+      "group": "brandImpersonation",
+      "description": "Instagram logo with credential fields on non-Instagram domain",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "instagram-logo\\.(png|jpg|svg).*<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "is"
+    },
+    {
+      "id": "instagram-credential-placeholder",
+      "group": "brandImpersonation",
+      "description": "Instagram-specific credential placeholder text",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "placeholder=[\"']Phone,\\s*username,\\s*or\\s*email[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "amazon-ui-impersonation",
+      "group": "brandImpersonation",
+      "description": "Amazon UI elements on non-Amazon domain",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "(?=.*nav-signin)(?=.*nav-cart)(?=.*search-input)(?=.*Hello, sign in)",
+      "patternFlags": "i"
+    },
+    {
       "id": "email-userid-label",
       "group": "credentialHarvesting",
       "description": "Email Address/User ID label pattern common in email phishing",
@@ -1458,11 +1671,11 @@
     {
       "id": "credential-handler-phishkit",
       "group": "phishkitSignatures",
-      "description": "Detects phishkit credential collection handlers",
+      "description": "Detects phishing kits using JS handlers to populate hidden credential fields",
       "severity": "high",
       "weight": 0.45,
       "source": "js",
-      "patternString": "function\\s+(username_handler|password_handler)\\s*\\(event\\)\\s*\\{[^}]*querySelectorAll.*input\\[type='hidden'\\]",
+      "patternString": "function\\s+(username_handler|password_handler)\\s*\\([^)]*\\)\\s*{[^}]*querySelectorAll\\s*\\([^)]*hidden[^)]*\\)",
       "patternFlags": "i"
     },
     {
@@ -1578,11 +1791,11 @@
     {
       "id": "ledger-image-redirect",
       "group": "phishkitSignatures",
-      "description": "Ledger phishing with image redirect to external domain",
+      "description": "Ledger-branded image redirecting to external credential harvesting site",
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "<a[^>]+href=[\"']https://(?!.*ledger\\.com)[^\"']+[\"'][^>]*>\\s*<img[^>]+src=[\"'][^\"']*ledger[^\"']*[\"']",
+      "patternString": "<a[^>]*href=[\"'][^\"']*(?!ledger\\.com|webflow\\.io)[^\"']+[\"'][^>]*>\\s*<img[^>]*(?:ledger|wallet)[^>]*>",
       "patternFlags": "i"
     },
     {
@@ -1608,9 +1821,9 @@
     {
       "id": "appsimulation-phishkit",
       "group": "phishkitSignatures",
-      "description": "AppSimulation credential harvesting framework",
+      "description": "AppSimulation phishkit framework detection",
       "severity": "high",
-      "weight": 0.65,
+      "weight": 0.45,
       "source": "js",
       "patternString": "appSimulation\\.(setSubmitStatus|setCredentialStatus)",
       "patternFlags": "i"
@@ -1708,9 +1921,9 @@
     {
       "id": "cybeready-phishkit",
       "group": "phishkitSignatures",
-      "description": "CyberReady phishing kit infrastructure",
+      "description": "CyberReady phishing simulation kit detection",
       "severity": "high",
-      "weight": 0.75,
+      "weight": 0.8,
       "source": "html",
       "patternString": "lp\\.cybeready\\.net/Forms/",
       "patternFlags": "i"
@@ -1978,12 +2191,12 @@
     {
       "id": "adobe-pdf-phishkit-handlers",
       "group": "phishkitSignatures",
-      "description": "Adobe PDF phishkit credential collection handlers",
+      "description": "Adobe PDF phishkit credential handlers",
       "severity": "high",
-      "weight": 0.5,
+      "weight": 0.45,
       "source": "js",
-      "patternString": "function\\s+(username_handler|password_handler)\\(event\\).*querySelectorAll.*input\\[type='hidden'\\]",
-      "patternFlags": "is"
+      "patternString": "function\\s+(username_handler|password_handler)\\s*\\(event\\)\\s*\\{[^}]*document\\.querySelectorAll\\(\"input\\[type='hidden'\\]",
+      "patternFlags": "i"
     },
     {
       "id": "adobe-pdf-fake-verification",
@@ -2148,11 +2361,11 @@
     {
       "id": "fake-captcha-gate",
       "group": "phishkitSignatures",
-      "description": "Fake bot verification gate with hidden credential form",
-      "severity": "medium",
-      "weight": 0.35,
+      "description": "Fake 'I am not a robot' verification screen used to gate credential forms",
+      "severity": "high",
+      "weight": 0.45,
       "source": "html",
-      "patternString": "I am not a robot.*?form-container.*?display:\\s*none.*?(?:password|email)",
+      "patternString": "I am not a robot.*verify.*human.*form-container.*display:\\s*none",
       "patternFlags": "is"
     },
     {
@@ -2173,6 +2386,346 @@
       "weight": 0.5,
       "source": "html",
       "patternString": "dns-prefetch.*logincdn\\.msftauth\\.net.*acctcdn\\.msauth\\.net",
+      "patternFlags": "is"
+    },
+    {
+      "id": "webmail-portal-phish",
+      "group": "phishkitSignatures",
+      "description": "Generic webmail portal login phishing page",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "text",
+      "patternString": "webmail\\s+portal\\s+login.{0,200}(sign\\s+in|continue|email|password)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "content-stuffing-ebay",
+      "group": "phishkitSignatures",
+      "description": "Login form hidden in eBay promotional content stuffing",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(login|sign\\s+in|webmail).{0,500}(AU\\s+\\$\\d+\\.\\d+.*OFF|Direct\\s+from\\s+\\w+.*Direct\\s+from\\s+\\w+){3,}",
+      "patternFlags": "i"
+    },
+    {
+      "id": "phish-privacy-policy",
+      "group": "phishkitSignatures",
+      "description": "Suspicious privacy policy language in credential collection context",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "text",
+      "patternString": "privacy\\s+policy.{0,100}(sole\\s+purpose|viewing\\s+this\\s+document|not\\s+be\\s+sold).{0,200}(login|sign\\s+in|email|password)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "coinsquare-login-image",
+      "group": "phishkitSignatures",
+      "description": "Coinsquare login image phishkit signature",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "Coinsquare%20login\\.png",
+      "patternFlags": "i"
+    },
+    {
+      "id": "webflow-crypto-auth-typosquat",
+      "group": "phishkitSignatures",
+      "description": "Webflow subdomain impersonating crypto brands with auth keywords",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "url",
+      "patternString": "^https?://[^/]*(?:auth|login|wallet|live)[^/]*(?:ledger|metamask|coinbase|binance)[^/]*\\.webflow\\.io",
+      "patternFlags": "i"
+    },
+    {
+      "id": "nim-cred-sim-classes",
+      "group": "phishkitSignatures",
+      "description": "NIM credential simulation CSS classes",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "nim_cred_sim_(table|pwd_input|next_btn|landing)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "webflow-external-redirect-brand",
+      "group": "phishkitSignatures",
+      "description": "Webflow page with external redirect containing brand references",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<a href=\"https?://(?!.*webflow\\.io).*\"[^>]*>\\s*<img[^>]*(?:kucoin|coinbase|binance|crypto)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "unicode-brand-substitution",
+      "group": "phishkitSignatures",
+      "description": "Unicode character substitution in well-known brand names",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:W𝗮llet|Wal1et|Wa11et|Wa1let)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "unicode-login-evasion",
+      "group": "phishkitSignatures",
+      "description": "Unicode character substitution in login-related titles",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "title",
+      "patternString": "Lo[ᘜ𝗀ɡ𝙜]in|[Ll]o[ᘜ𝗀ɡ𝙜]in|Login.*[®™©]",
+      "patternFlags": "i"
+    },
+    {
+      "id": "webflow-crypto-subdomain",
+      "group": "phishkitSignatures",
+      "description": "Webflow subdomain containing cryptocurrency exchange names",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "hostname",
+      "patternString": "^(kucoin|binance|coinbase|kraken|bitfinex|huobi)[a-z0-9]*\\.webflow\\.io$",
+      "patternFlags": "i"
+    },
+    {
+      "id": "causesconighty-redirect",
+      "group": "phishkitSignatures",
+      "description": "Redirect to causesconighty.com phishing infrastructure",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "href=\"https://causesconighty\\.com/[a-f0-9-]{36}\"",
+      "patternFlags": "i"
+    },
+    {
+      "id": "image-redirect-phish",
+      "group": "phishkitSignatures",
+      "description": "Image wrapped in external redirect link (common phishing pattern)",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<a href=\"https?://[^\"]+\\.[a-z]{2,}[^\"]*\"[^>]*class=\"[^\"]*w-inline-block[^\"]*\"[^>]*>\\s*<img",
+      "patternFlags": "i"
+    },
+    {
+      "id": "logo-redirect-only",
+      "group": "phishkitSignatures",
+      "description": "Page containing only brand logo with external redirect",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "<body><a href=\"https://[^\"]+\"><img[^>]+alt=\"\"[^>]*></a><script",
+      "patternFlags": "i"
+    },
+    {
+      "id": "webflow-brand-redirect",
+      "group": "phishkitSignatures",
+      "description": "Webflow page with brand name in subdomain redirecting to suspicious domain",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "data-wf-domain=\"[a-z]+(login|app|cdn)[^\"]*webflow\\.io\"[\\s\\S]*href=\"https?://[^\"]*(?<!webflow\\.io|github\\.io|netlify\\.app)[^\"]*\"",
+      "patternFlags": "i"
+    },
+    {
+      "id": "netcoins-typosquat-redirect",
+      "group": "phishkitSignatures",
+      "description": "Redirect to netkoims typosquatted domain",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "html",
+      "patternString": "href=\"[^\"]*netkoims\\.[^\"]*\"",
+      "patternFlags": "i"
+    },
+    {
+      "id": "google-favicon-hidden-form",
+      "group": "phishkitSignatures",
+      "description": "Google favicon fetching combined with initially hidden credential forms",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "google\\.com/s2/favicons\\?domain=.*form-container.*display:\\s*none",
+      "patternFlags": "is"
+    },
+    {
+      "id": "fake-browser-verification",
+      "group": "phishkitSignatures",
+      "description": "Fake browser verification with credential form",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "Checking your browser before accessing.{0,200}(password|email).{0,500}(form|input)",
+      "patternFlags": "is"
+    },
+    {
+      "id": "google-favicon-phish",
+      "group": "phishkitSignatures",
+      "description": "Google favicon fetch with credential form impersonation",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "google\\.com/s2/favicons\\?domain=.{0,100}(password|login).{0,200}form",
+      "patternFlags": "is"
+    },
+    {
+      "id": "pdf-verification-phish",
+      "group": "phishkitSignatures",
+      "description": "Detects fake PDF verification pages requesting credentials",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "text",
+      "patternString": "(file\\s+verification|protected\\s+file|secure\\s+document|pdf\\s+online).*(?:login|username|password|email\\s+address).*(?:rightful\\s+recipient|unauthorized\\s+access)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "scotiabank-phishkit-assets",
+      "group": "phishkitSignatures",
+      "description": "Scotiabank phishing kit with characteristic asset references",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "/images/(scotiabank-logo\\.svg|scotia-large\\.png|favicon-scotia\\.ico)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "facebook-css-vars",
+      "group": "phishkitSignatures",
+      "description": "Facebook phishing kit using authentic CSS variables",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "--fds-(blue|gray|white)-(\\d+|alpha-\\d+):",
+      "patternFlags": "gi"
+    },
+    {
+      "id": "facebook-cdn-refs",
+      "group": "phishkitSignatures",
+      "description": "References to Facebook CDN in non-Facebook domains",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "static\\.xx\\.fbcdn\\.net",
+      "patternFlags": "i"
+    },
+    {
+      "id": "human-verification-gate",
+      "group": "phishkitSignatures",
+      "description": "Hidden human verification div used by government impersonation phishkits",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<div id=\"human-verification-required\"[^>]*style=\"display:\\s*none",
+      "patternFlags": "i"
+    },
+    {
+      "id": "amazon-india-redirect-phish",
+      "group": "phishkitSignatures",
+      "description": "Fake Amazon India redirect message",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "You are on amazon\\.com.*Click here to go to amazon\\.in",
+      "patternFlags": "i"
+    },
+    {
+      "id": "getcrrid-function",
+      "group": "phishkitSignatures",
+      "description": "Credential harvesting function signature",
+      "severity": "medium",
+      "weight": 0.5,
+      "source": "js",
+      "patternString": "function\\s+getcrrid\\(\\)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "bt-ee-transition-phish",
+      "group": "phishkitSignatures",
+      "description": "BT to EE transition phishing campaign signature",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "text",
+      "patternString": "BT\\s+BROADBAND\\s+IS\\s+BECOMING\\s+EE.*Click\\s+Here\\s+To\\s+Update",
+      "patternFlags": "i"
+    },
+    {
+      "id": "french-php-handler",
+      "group": "phishkitSignatures",
+      "description": "French PHP credential harvesting form handlers",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "action=[\"'].*(?:traitement|treatment|process)\\.(php|asp)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "instagram-mixed-branding",
+      "group": "phishkitSignatures",
+      "description": "Instagram branding with non-Instagram organization names",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "instagram.*organisation|organisation.*instagram",
+      "patternFlags": "i"
+    },
+    {
+      "id": "adobe-pdf-credential-harvest",
+      "group": "phishkitSignatures",
+      "description": "Adobe PDF impersonation with credential harvesting",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "Adobe[\\-\\s]?PDF[\\s\\S]*?File\\s+Verification[\\s\\S]*?input[^>]*type=[\"']password[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "adobe-pdf-verification-form",
+      "group": "phishkitSignatures",
+      "description": "Adobe PDF file verification phishkit form pattern",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "File Verification for Adobe PDF.*<input[^>]*name=[\"']username[\"'][^>]*>.*<input[^>]*name=[\"']pass_entered[\"']",
+      "patternFlags": "is"
+    },
+    {
+      "id": "bot-verification-gate",
+      "group": "phishkitSignatures",
+      "description": "Bot verification checkbox gating credential forms",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "I am not a robot[^>]*checkbox.*form.*password",
+      "patternFlags": "is"
+    },
+    {
+      "id": "expired-session-login",
+      "group": "phishkitSignatures",
+      "description": "Expired session credential collection pattern",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "Previous session has expired.*login to continue.*password",
+      "patternFlags": "is"
+    },
+    {
+      "id": "netflix-spanish-slogan",
+      "group": "phishkitSignatures",
+      "description": "Netflix Spanish slogan phishing pattern",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "Películas y series ilimitadas y mucho más.*Disfruta donde quieras.*Cancela cuando quieras",
+      "patternFlags": "is"
+    },
+    {
+      "id": "netflix-spanish-login-kit",
+      "group": "phishkitSignatures",
+      "description": "Netflix Spanish login phishing kit pattern",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<title>Netflix</title>.*Iniciar sesion.*Suscribirse",
       "patternFlags": "is"
     },
     {
@@ -2216,6 +2769,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "godaddy-sites-random-subdomain",
+      "group": "suspiciousHosting",
+      "description": "Random subdomain on GoDaddy website builder indicating potential phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "url",
+      "patternString": "^https?://site-[a-z0-9]{8,12}\\.godaddysites\\.com",
+      "patternFlags": "i"
+    },
+    {
       "id": "discord-title-impersonation",
       "group": "titleImpersonation",
       "description": "Discord official page title on non-Discord domain",
@@ -2233,6 +2796,16 @@
       "weight": 0.45,
       "source": "hostname",
       "patternString": "(auth|login|secure)[.-]?ndax(log|login|auth)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "itrustcapital-typosquat",
+      "group": "typosquatDetection",
+      "description": "iTrustCapital typosquat - missing 'i' in 'capital'",
+      "severity": "high",
+      "weight": 0.7,
+      "source": "domain",
+      "patternString": "itrustcaptal",
       "patternFlags": "i"
     },
     {
@@ -2270,6 +2843,24 @@
       "patternFlags": "i"
     },
     {
+      "id": "scotiabank-subdomain-typosquat",
+      "group": "typosquatPatterns",
+      "description": "Scotiabank subdomain impersonation patterns",
+      "severity": "medium",
+      "weight": 0.35,
+      "patternString": "^(sb|scotia|scotiabank)[-_](invoice|statement|bill|pay|account|login|secure)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "gov-domain-appendage",
+      "group": "typosquatPatterns",
+      "description": "Government domain with appended characters",
+      "severity": "high",
+      "weight": 0.5,
+      "patternString": "\\b[a-z]{2,}\\.gov-[a-z0-9]{2,}\\.(info|org|com|net)\\b",
+      "patternFlags": "i"
+    },
+    {
       "id": "deep-subdomain-indonesia-business",
       "group": "urlHeuristics",
       "description": "Increase weight for deep subdomains on Indonesian business domains",
@@ -2282,7 +2873,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-25T18:11:50.774Z",
+      "compiledAt": "2026-03-26T06:16:45.322Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -2633,6 +3224,7 @@
       "online.gp",
       "onlytap.io",
       "onrender.com",
+      "onthewifi.com",
       "oraclecloud.com",
       "pagecloud.com",
       "pages.dev",
@@ -2933,6 +3525,7 @@
       "onedrive.live.com",
       "onehub.com",
       "onenoteonlinesync.onenote.com",
+      "oortstorages.com",
       "padlet.com",
       "pastelink.net",
       "pcloud.com",
