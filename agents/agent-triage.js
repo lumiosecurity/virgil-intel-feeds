@@ -334,6 +334,8 @@ Brand entry:
   "vertical": "financial"
 }
 \`\`\`
+IMPORTANT — name must be lowercase alphanumeric only (no spaces, no capitals, no special chars). e.g. "paypal" not "PayPal", "kucoin" not "KuCoin".
+Valid verticals (use ONLY these exact strings): "financial" | "crypto" | "sso" | "ecommerce" | "general" | "business" | "cloud_storage" | "entertainment" | "gambling" | "gaming" | "government" | "logistics" | "messaging" | "productivity" | "social" | "technology" | "telecom"
 
 Source pattern:
 \`\`\`json
@@ -348,6 +350,12 @@ Source pattern:
   "patternFlags": "i"
 }
 \`\`\`
+IMPORTANT — use ONLY these exact values:
+- id: lowercase alphanumeric with hyphens only (e.g. "telegram-exfil-pattern")
+- group: "phishkitSignatures" | "cdnGating" | "captchaGating" | "botEvasion" | "obfuscation" | "brandImpersonation" | "credentialHarvesting" | "socialEngineering" | "titleImpersonation" | "typosquatPatterns" | "urlHeuristics"
+- source: "html" | "js" | "both" (NOT "url", "title", "dom", "text", "hostname" — those are invalid)
+- weight: number between 0.05 and 0.50
+- severity: "high" | "medium" | "low"
 
 4. **Recommended action** (primary rule type — NO_ACTION IS NOT VALID for rule-gap issues): ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADJUST_WEIGHT / NEEDS_MANUAL_REVIEW` : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
 
