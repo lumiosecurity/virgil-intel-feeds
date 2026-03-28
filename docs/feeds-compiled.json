@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-28T05:43:47.823Z",
-    "brandCount": 99,
+    "compiledAt": "2026-03-28T22:32:04.415Z",
+    "brandCount": 90,
     "signalCount": 1,
     "patternCount": 138
   },
@@ -37,7 +37,6 @@
         "zoho-mail",
         "zohomail",
         "zaho",
-        "zoho.co",
         "zho",
         "zoho"
       ],
@@ -54,24 +53,12 @@
         "dropbx",
         "drapbox",
         "dropbix",
+        "droopbox",
+        "drophox",
+        "dropbax",
         "dr0pbox",
         "dropboxx",
         "drop-box"
-      ],
-      "vertical": "cloud_storage"
-    },
-    {
-      "name": "Dropbox",
-      "domains": [
-        "dropbox.com",
-        "dropboxusercontent.com"
-      ],
-      "typos": [
-        "dropb0x",
-        "droopbox",
-        "dropb0x",
-        "drophox",
-        "dropbax"
       ],
       "vertical": "cloud_storage"
     },
@@ -130,7 +117,16 @@
         "kucoin-trade",
         "kuicoin",
         "kuccoin",
-        "kucoln"
+        "kucoln",
+        "kuecoin",
+        "kucoin",
+        "kuccon",
+        "kucoin-",
+        "kucoinlogin",
+        "kucconloggn",
+        "kuco1n",
+        "kucoins",
+        "kucoiereilgie"
       ],
       "note": "KuCoin is a top-5 crypto exchange. Credential theft gives direct access to trading accounts and withdrawal functions."
     },
@@ -290,28 +286,7 @@
       ]
     },
     {
-      "name": "KuCoin",
-      "domains": [
-        "kucoin.com"
-      ],
-      "typos": [
-        "kuecoin",
-        "kucoin",
-        "kuccoin",
-        "kuccon",
-        "kucoin-",
-        "ku-coin",
-        "kucoinlogin",
-        "kucconloggn",
-        "kuco1n",
-        "kucoins",
-        "kucoin-login",
-        "kucoiereilgie"
-      ],
-      "vertical": "cryptocurrency"
-    },
-    {
-      "name": "Atomic Wallet",
+      "name": "atomicwallet",
       "domains": [
         "atomicwallet.io"
       ],
@@ -321,7 +296,7 @@
         "atomicwallets",
         "atomikwallet"
       ],
-      "vertical": "cryptocurrency"
+      "vertical": "general"
     },
     {
       "name": "netcoins",
@@ -335,7 +310,7 @@
         "netcoins-app",
         "netcoinslogin"
       ],
-      "vertical": "cryptocurrency"
+      "vertical": "general"
     },
     {
       "name": "amazon",
@@ -424,6 +399,8 @@
         "net-flix",
         "netflik",
         "netflx",
+        "netflicks",
+        "netflix-clone",
         "netfix",
         "neftlix"
       ]
@@ -498,7 +475,6 @@
         "amazon.co.uk"
       ],
       "typos": [
-        "amazon clone",
         "amazone",
         "amaz0n",
         "amazom"
@@ -541,34 +517,10 @@
         "spotiphy",
         "spotfiy",
         "spottify",
-        "spotiy"
-      ],
-      "vertical": "entertainment"
-    },
-    {
-      "name": "Spotify",
-      "domains": [
-        "spotify.com",
-        "open.spotify.com"
-      ],
-      "typos": [
-        "spottify",
+        "spotiy",
         "spotfy",
         "spotifi",
         "spotiffy"
-      ],
-      "vertical": "entertainment"
-    },
-    {
-      "name": "Netflix",
-      "domains": [
-        "netflix.com"
-      ],
-      "typos": [
-        "netflik",
-        "netflx",
-        "netflicks",
-        "netflix-clone"
       ],
       "vertical": "entertainment"
     },
@@ -736,7 +688,7 @@
       ]
     },
     {
-      "name": "DANA",
+      "name": "dana",
       "domains": [
         "dana.id"
       ],
@@ -817,7 +769,7 @@
       "vertical": "financial"
     },
     {
-      "name": "iTrustCapital",
+      "name": "itrustcapital",
       "domains": [
         "itrustcapital.com"
       ],
@@ -844,7 +796,7 @@
       "vertical": "financial"
     },
     {
-      "name": "BET365",
+      "name": "bet365",
       "domains": [
         "bet365.com"
       ],
@@ -853,24 +805,9 @@
         "bet365",
         "bet36",
         "bet3565",
-        "365bet"
-      ],
-      "vertical": "gambling"
-    },
-    {
-      "name": "bet365",
-      "domains": [
-        "bet365.com",
-        "bet365.es",
-        "bet365.it",
-        "bet365.dk"
-      ],
-      "typos": [
-        "bet356",
-        "bet365",
+        "365bet",
         "be365",
         "bet35",
-        "bet36",
         "1111365"
       ],
       "vertical": "gambling"
@@ -1001,7 +938,8 @@
         "1nstagram",
         "instegram",
         "instagarm",
-        "instragram"
+        "instragram",
+        "instaram"
       ]
     },
     {
@@ -1017,7 +955,7 @@
       ]
     },
     {
-      "name": "Internal Revenue Service",
+      "name": "internalrevenueservice",
       "domains": [
         "irs.gov"
       ],
@@ -1032,7 +970,7 @@
       "vertical": "government"
     },
     {
-      "name": "California DMV",
+      "name": "californiadmv",
       "domains": [
         "dmv.ca.gov"
       ],
@@ -1060,30 +998,25 @@
       ],
       "typos": [
         "myg0v",
-        "mygøv",
-        "mygοv",
         "my-gov",
         "mygov"
       ],
       "vertical": "government"
     },
     {
-      "name": "California Government",
+      "name": "californiagovernment",
       "domains": [
         "ca.gov",
         "dmv.ca.gov"
       ],
       "typos": [
-        "ca.gov-",
         "cagov",
-        "ca-gov",
-        "ca.gob",
-        "ca.giv"
+        "ca-gov"
       ],
       "vertical": "government"
     },
     {
-      "name": "The Courier Guy",
+      "name": "thecourierguy",
       "domains": [
         "thecourierguy.co.za"
       ],
@@ -1121,8 +1054,7 @@
       "typos": [
         "outlok",
         "outl00k",
-        "0utlook",
-        "outlоok"
+        "0utlook"
       ],
       "vertical": "productivity",
       "visualMarkers": [
@@ -1134,7 +1066,7 @@
       "weight": 0.45
     },
     {
-      "name": "Microsoft Office",
+      "name": "microsoftoffice",
       "domains": [
         "microsoft.com",
         "office.com",
@@ -1171,7 +1103,7 @@
         "facebook-business",
         "meta-business"
       ],
-      "vertical": "social-media-business"
+      "vertical": "social"
     },
     {
       "name": "meta",
@@ -1185,39 +1117,13 @@
         "member-invite",
         "partner-invite",
         "business-partner",
-        "meta-partner"
-      ],
-      "vertical": "social"
-    },
-    {
-      "name": "Meta",
-      "domains": [
-        "facebook.com",
-        "meta.com",
-        "instagram.com",
-        "whatsapp.com"
-      ],
-      "typos": [
+        "meta-partner",
         "agency-partner-apply",
         "business-partner-apply",
         "creator-partner-apply",
         "partner-application",
         "business-application",
         "meta-partner-apply"
-      ],
-      "vertical": "social"
-    },
-    {
-      "name": "Instagram",
-      "domains": [
-        "instagram.com",
-        "ig.me"
-      ],
-      "typos": [
-        "instgram",
-        "instaram",
-        "instragram",
-        "instagrm"
       ],
       "vertical": "social"
     },
@@ -1238,7 +1144,16 @@
         "microsoft-login",
         "microsofft",
         "mlcrosoft",
-        "micorsoft"
+        "micorsoft",
+        "microsooft",
+        "microsft",
+        "micosoft",
+        "mircosoft",
+        "micr0soft",
+        "microsofy",
+        "microsoftaccount",
+        "ms-account",
+        "resolve-issue"
       ]
     },
     {
@@ -1362,31 +1277,7 @@
       ]
     },
     {
-      "name": "Microsoft",
-      "domains": [
-        "microsoft.com",
-        "live.com",
-        "outlook.com",
-        "office.com",
-        "microsoftonline.com"
-      ],
-      "typos": [
-        "microsooft",
-        "microsft",
-        "micosoft",
-        "mircosoft",
-        "microsofft",
-        "micr0soft",
-        "microsofy",
-        "microsoftaccount",
-        "ms-account",
-        "microsoft-login",
-        "resolve-issue"
-      ],
-      "vertical": "technology"
-    },
-    {
-      "name": "Microsoft OneDrive",
+      "name": "microsoftonedrive",
       "domains": [
         "onedrive.com",
         "onedrive.live.com",
@@ -1396,13 +1287,12 @@
         "one-drive",
         "onedrive",
         "0nedrive",
-        "onedrlve",
-        "onedrivе"
+        "onedrlve"
       ],
       "vertical": "technology"
     },
     {
-      "name": "Amazon Web Services",
+      "name": "amazonwebservices",
       "domains": [
         "aws.amazon.com",
         "signin.aws.amazon.com",
@@ -1417,20 +1307,6 @@
       "vertical": "technology"
     },
     {
-      "name": "Adobe",
-      "domains": [
-        "adobe.com",
-        "acrobat.com"
-      ],
-      "typos": [
-        "adobbe",
-        "adob3",
-        "adobee",
-        "adoobe"
-      ],
-      "vertical": "technology"
-    },
-    {
       "name": "att",
       "domains": [
         "att.com",
@@ -1438,7 +1314,6 @@
         "my.att.com"
       ],
       "typos": [
-        "at&t",
         "atnt",
         "att-wireless",
         "attnet"
@@ -1446,7 +1321,7 @@
       "vertical": "telecom"
     },
     {
-      "name": "BellSouth",
+      "name": "bellsouth",
       "domains": [
         "bellsouth.net",
         "bellsouth.com"
@@ -1504,7 +1379,7 @@
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
       "severity": "high",
       "weight": 0.45,
-      "source": "title",
+      "source": "html",
       "patternString": "Spotify.*Web Player.*Music for everyone",
       "patternFlags": "i"
     },
@@ -1554,7 +1429,7 @@
       "description": "Spotify branding in page title on non-Spotify domain",
       "severity": "high",
       "weight": 0.45,
-      "source": "title",
+      "source": "html",
       "patternString": "spotify.*music.*player|spotify.*web.*player|spotify.*playlist",
       "patternFlags": "i"
     },
@@ -1574,7 +1449,7 @@
       "description": "Detects WhatsApp brand impersonation in page content",
       "severity": "high",
       "weight": 0.35,
-      "source": "dom",
+      "source": "html",
       "patternString": "(whatsapp|wa\\.me|web\\.whatsapp).{0,50}(login|sign.?in|verify|auth|qr.?code)",
       "patternFlags": "i"
     },
@@ -1584,7 +1459,7 @@
       "description": "Detects fake OneDrive pages using incorrect title spacing",
       "severity": "high",
       "weight": 0.45,
-      "source": "title",
+      "source": "html",
       "patternString": "^One Drive$",
       "patternFlags": "i"
     },
@@ -1634,7 +1509,7 @@
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
       "severity": "medium",
       "weight": 0.3,
-      "source": "url",
+      "source": "both",
       "patternString": "^https?://[a-z0-9]{10,}\\.(bank|financial|secure|payment|trust)[a-z]*\\.(com|org|net)/",
       "patternFlags": "i"
     },
@@ -1694,7 +1569,7 @@
       "description": "Indonesian lottery/prize scam content pattern",
       "severity": "high",
       "weight": 0.45,
-      "source": "text",
+      "source": "html",
       "patternString": "(?:KODE\\s+ID\\s+PEMENANG|pemenang\\s+yang\\s+beruntung.*hadiah|Galeri\\s+Pemenang\\s+Hadiah).*(?:shopee|SHOPEE)",
       "patternFlags": "i"
     },
@@ -1704,7 +1579,7 @@
       "description": "Brand name with numeric suffix on blogspot",
       "severity": "medium",
       "weight": 0.35,
-      "source": "url",
+      "source": "both",
       "patternString": "(?:shopee|paypal|amazon|apple|microsoft|google)\\d{3,}\\.blogspot\\.com",
       "patternFlags": "i"
     },
@@ -1834,7 +1709,7 @@
       "description": "DANA brand impersonation using stylized Unicode characters",
       "severity": "high",
       "weight": 0.45,
-      "source": "title",
+      "source": "html",
       "patternString": "𝗗𝗔𝗡𝗔|𝗖𝘂𝘀𝘁𝗼𝗺𝗲𝗿\\s*𝗖𝗮𝗿𝗲",
       "patternFlags": "i"
     },
@@ -1854,7 +1729,7 @@
       "description": "Government agency impersonation via subdomain + path",
       "severity": "medium",
       "weight": 0.35,
-      "source": "url",
+      "source": "both",
       "patternString": "^(ca|ny|tx|fl)\\.[^.]+\\.[^.]+/.*(dmv|dps|revenue|tax)",
       "patternFlags": "i"
     },
@@ -1863,8 +1738,8 @@
       "group": "phishkitSignatures",
       "description": "Claim/reward pages impersonating financial brands",
       "severity": "high",
-      "weight": 0.65,
-      "source": "url",
+      "weight": 0.5,
+      "source": "both",
       "patternString": "claim(dana|metamask|coinbase|trust|wallet)",
       "patternFlags": "i"
     },
@@ -1874,7 +1749,7 @@
       "description": "Brand names on free subdomain services",
       "severity": "medium",
       "weight": 0.45,
-      "source": "url",
+      "source": "both",
       "patternString": "(dana|metamask|coinbase|trust|wallet).+\\.(my\\.id|netlify\\.app|vercel\\.app|github\\.io)",
       "patternFlags": "i"
     },
@@ -1894,7 +1769,7 @@
       "description": "Secure link identity verification social engineering text",
       "severity": "medium",
       "weight": 0.35,
-      "source": "text",
+      "source": "html",
       "patternString": "sharing with a secure link which requires you to verify your identity.*Your email address is required",
       "patternFlags": "is"
     },
@@ -1904,7 +1779,7 @@
       "description": "ACDI-GCCH privacy statement in Microsoft-branded page",
       "severity": "medium",
       "weight": 0.3,
-      "source": "text",
+      "source": "html",
       "patternString": "American Computer Development Inc-GCCH.*privacy statement.*Microsoft Terms of Use",
       "patternFlags": "is"
     },
@@ -1923,7 +1798,7 @@
       "group": "phishkitSignatures",
       "description": "CyberReady phishing simulation kit detection",
       "severity": "high",
-      "weight": 0.8,
+      "weight": 0.5,
       "source": "html",
       "patternString": "lp\\.cybeready\\.net/Forms/",
       "patternFlags": "i"
@@ -1933,7 +1808,7 @@
       "group": "phishkitSignatures",
       "description": "Facebook phishing with JS validator evasion",
       "severity": "high",
-      "weight": 0.65,
+      "weight": 0.5,
       "source": "html",
       "patternString": "onclick=\"return validator\\.validate\\(\\)\".*facebook",
       "patternFlags": "is"
@@ -1943,7 +1818,7 @@
       "group": "phishkitSignatures",
       "description": "Facebook phishing with getcrrid tracking function",
       "severity": "high",
-      "weight": 0.55,
+      "weight": 0.5,
       "source": "html",
       "patternString": "function getcrrid\\(\\).*Log in Facebook",
       "patternFlags": "is"
@@ -1953,7 +1828,7 @@
       "group": "phishkitSignatures",
       "description": "Google phishkit credential collection handlers",
       "severity": "high",
-      "weight": 0.7,
+      "weight": 0.5,
       "source": "js",
       "patternString": "function\\s+(username_handler|password_handler)\\(event\\)\\s*\\{[\\s\\S]*querySelectorAll.*input\\[type='hidden'\\]",
       "patternFlags": "i"
@@ -1963,7 +1838,7 @@
       "group": "phishkitSignatures",
       "description": "PME image hosting with Google assets",
       "severity": "high",
-      "weight": 0.6,
+      "weight": 0.5,
       "source": "html",
       "patternString": "images\\.pmeimg\\.com.*google-(logo|favicon|landing)",
       "patternFlags": "i"
@@ -2064,7 +1939,7 @@
       "description": "Numbered member/user subdomains on suspicious domains",
       "severity": "medium",
       "weight": 0.35,
-      "source": "url",
+      "source": "both",
       "patternString": "^(member|user|client|account)\\d+\\.",
       "patternFlags": "i"
     },
@@ -2114,7 +1989,7 @@
       "description": "NDAX login page title impersonation",
       "severity": "medium",
       "weight": 0.3,
-      "source": "title",
+      "source": "html",
       "patternString": "NDAX.*Login.*Crypto Trading Platform.*Canadians",
       "patternFlags": "i"
     },
@@ -2134,7 +2009,7 @@
       "description": "Microsoft visual branding impersonation markers",
       "severity": "high",
       "weight": 0.4,
-      "source": "css",
+      "source": "html",
       "patternString": "background-color:#0072C6.*Segoe UI WPC.*password",
       "patternFlags": "is"
     },
@@ -2144,7 +2019,7 @@
       "description": "Long cryptographic subdomain on IPFS gateway indicating potential phishing",
       "severity": "medium",
       "weight": 0.25,
-      "source": "url",
+      "source": "both",
       "patternString": "^[a-z0-9]{50,}\\.ipfs\\.",
       "patternFlags": "i"
     },
@@ -2154,7 +2029,7 @@
       "description": "South African courier delivery fee scam pattern with VAT calculation",
       "severity": "high",
       "weight": 0.35,
-      "source": "text",
+      "source": "html",
       "patternString": "VAT 15\\s*%.*R\\s*\\d+\\.\\d{2}.*delivery.*fee",
       "patternFlags": "is"
     },
@@ -2164,7 +2039,7 @@
       "description": "Indonesian urgency phrase 'klik-sekarang' (click-now) in subdomain",
       "severity": "medium",
       "weight": 0.25,
-      "source": "url",
+      "source": "both",
       "patternString": "klik[\\-_]sekarang",
       "patternFlags": "i"
     },
@@ -2174,7 +2049,7 @@
       "description": "Suspicious campaign pattern on Indonesian domain",
       "severity": "medium",
       "weight": 0.2,
-      "source": "url",
+      "source": "both",
       "patternString": "newbrn\\d{4}\\.biz\\.id",
       "patternFlags": "i"
     },
@@ -2214,7 +2089,7 @@
       "description": "Generic webmail security pressure messaging",
       "severity": "high",
       "weight": 0.35,
-      "source": "text",
+      "source": "html",
       "patternString": "This is a very important security measure.*To protect your email account.*Your account may be restricted",
       "patternFlags": "is"
     },
@@ -2244,7 +2119,7 @@
       "description": "Detect telecom promotional phishing with reward card offers",
       "severity": "high",
       "weight": 0.45,
-      "source": "text",
+      "source": "html",
       "patternString": "\\$\\d+.*reward card|bill credits.*\\$\\d+|unlimited plans.*\\d+%.*off|switcher offer.*\\$\\d+",
       "patternFlags": "i"
     },
@@ -2373,7 +2248,7 @@
       "group": "phishkitSignatures",
       "description": "Microsoft login page impersonation patterns",
       "severity": "high",
-      "weight": 0.6,
+      "weight": 0.5,
       "source": "html",
       "patternString": "Copyright.*Microsoft Corporation.*All rights reserved.*Sign in to your Microsoft account",
       "patternFlags": "is"
@@ -2394,7 +2269,7 @@
       "description": "Generic webmail portal login phishing page",
       "severity": "high",
       "weight": 0.45,
-      "source": "text",
+      "source": "html",
       "patternString": "webmail\\s+portal\\s+login.{0,200}(sign\\s+in|continue|email|password)",
       "patternFlags": "i"
     },
@@ -2414,7 +2289,7 @@
       "description": "Suspicious privacy policy language in credential collection context",
       "severity": "medium",
       "weight": 0.3,
-      "source": "text",
+      "source": "html",
       "patternString": "privacy\\s+policy.{0,100}(sole\\s+purpose|viewing\\s+this\\s+document|not\\s+be\\s+sold).{0,200}(login|sign\\s+in|email|password)",
       "patternFlags": "i"
     },
@@ -2434,7 +2309,7 @@
       "description": "Webflow subdomain impersonating crypto brands with auth keywords",
       "severity": "medium",
       "weight": 0.35,
-      "source": "url",
+      "source": "both",
       "patternString": "^https?://[^/]*(?:auth|login|wallet|live)[^/]*(?:ledger|metamask|coinbase|binance)[^/]*\\.webflow\\.io",
       "patternFlags": "i"
     },
@@ -2474,7 +2349,7 @@
       "description": "Unicode character substitution in login-related titles",
       "severity": "high",
       "weight": 0.35,
-      "source": "title",
+      "source": "html",
       "patternString": "Lo[ᘜ𝗀ɡ𝙜]in|[Ll]o[ᘜ𝗀ɡ𝙜]in|Login.*[®™©]",
       "patternFlags": "i"
     },
@@ -2484,7 +2359,7 @@
       "description": "Webflow subdomain containing cryptocurrency exchange names",
       "severity": "medium",
       "weight": 0.25,
-      "source": "hostname",
+      "source": "both",
       "patternString": "^(kucoin|binance|coinbase|kraken|bitfinex|huobi)[a-z0-9]*\\.webflow\\.io$",
       "patternFlags": "i"
     },
@@ -2574,7 +2449,7 @@
       "description": "Detects fake PDF verification pages requesting credentials",
       "severity": "medium",
       "weight": 0.35,
-      "source": "text",
+      "source": "html",
       "patternString": "(file\\s+verification|protected\\s+file|secure\\s+document|pdf\\s+online).*(?:login|username|password|email\\s+address).*(?:rightful\\s+recipient|unauthorized\\s+access)",
       "patternFlags": "i"
     },
@@ -2644,7 +2519,7 @@
       "description": "BT to EE transition phishing campaign signature",
       "severity": "high",
       "weight": 0.35,
-      "source": "text",
+      "source": "html",
       "patternString": "BT\\s+BROADBAND\\s+IS\\s+BECOMING\\s+EE.*Click\\s+Here\\s+To\\s+Update",
       "patternFlags": "i"
     },
@@ -2734,7 +2609,7 @@
       "description": "Arabic Facebook security alert phishing lure",
       "severity": "medium",
       "weight": 0.35,
-      "source": "text",
+      "source": "html",
       "patternString": "تنبيه أمني.*إدارة النظام.*تأكيد هويتك.*محتوى مقيد|security.*alert.*verify.*identity.*restricted",
       "patternFlags": "i"
     },
@@ -2744,7 +2619,7 @@
       "description": "Marketing partner invitation domains",
       "severity": "medium",
       "weight": 0.25,
-      "source": "url",
+      "source": "both",
       "patternString": "marketing.*partner.*invite|partner.*marketing.*invite",
       "patternFlags": "i"
     },
@@ -2754,7 +2629,7 @@
       "description": "All-numeric domain pattern often used for phishing",
       "severity": "medium",
       "weight": 0.35,
-      "source": "domain",
+      "source": "both",
       "patternString": "^\\d+\\.(site|top|xyz|click)$",
       "patternFlags": "i"
     },
@@ -2764,7 +2639,7 @@
       "description": "Western brand impersonation on Chinese domains",
       "severity": "medium",
       "weight": 0.25,
-      "source": "url",
+      "source": "both",
       "patternString": "^https?://[^/]*\\.cn/.*(whatsapp|facebook|google|apple|microsoft|amazon)",
       "patternFlags": "i"
     },
@@ -2774,7 +2649,7 @@
       "description": "Random subdomain on GoDaddy website builder indicating potential phishing",
       "severity": "medium",
       "weight": 0.25,
-      "source": "url",
+      "source": "both",
       "patternString": "^https?://site-[a-z0-9]{8,12}\\.godaddysites\\.com",
       "patternFlags": "i"
     },
@@ -2794,17 +2669,17 @@
       "description": "NDAX authentication typosquat patterns",
       "severity": "high",
       "weight": 0.45,
-      "source": "hostname",
+      "source": "both",
       "patternString": "(auth|login|secure)[.-]?ndax(log|login|auth)",
       "patternFlags": "i"
     },
     {
       "id": "itrustcapital-typosquat",
-      "group": "typosquatDetection",
+      "group": "typosquatPatterns",
       "description": "iTrustCapital typosquat - missing 'i' in 'capital'",
       "severity": "high",
-      "weight": 0.7,
-      "source": "domain",
+      "weight": 0.5,
+      "source": "both",
       "patternString": "itrustcaptal",
       "patternFlags": "i"
     },
@@ -2814,7 +2689,7 @@
       "description": "Detect digital mail service typosquats used for phishing hosting",
       "severity": "medium",
       "weight": 0.35,
-      "source": "url",
+      "source": "both",
       "patternString": "digital.*mail|mail.*digital|digitalmails?|maildigital",
       "patternFlags": "i"
     },
@@ -2823,8 +2698,8 @@
       "group": "typosquatPatterns",
       "description": "AWS brand in subdomain on non-Amazon domain",
       "severity": "high",
-      "weight": 0.6,
-      "source": "url",
+      "weight": 0.5,
+      "source": "both",
       "patternString": "^amazonwebservices\\.",
       "patternFlags": "i",
       "excludeDomains": [
@@ -2838,7 +2713,7 @@
       "description": "Brand impersonation with signin/verifier keywords on Webflow",
       "severity": "high",
       "weight": 0.45,
-      "source": "hostname",
+      "source": "both",
       "patternString": "^www-[a-z]+(verifier|signin|login|auth|secure)[a-z]*-com\\.webflow\\.io$",
       "patternFlags": "i"
     },
@@ -2849,7 +2724,8 @@
       "severity": "medium",
       "weight": 0.35,
       "patternString": "^(sb|scotia|scotiabank)[-_](invoice|statement|bill|pay|account|login|secure)",
-      "patternFlags": "i"
+      "patternFlags": "i",
+      "source": "both"
     },
     {
       "id": "gov-domain-appendage",
@@ -2858,7 +2734,8 @@
       "severity": "high",
       "weight": 0.5,
       "patternString": "\\b[a-z]{2,}\\.gov-[a-z0-9]{2,}\\.(info|org|com|net)\\b",
-      "patternFlags": "i"
+      "patternFlags": "i",
+      "source": "both"
     },
     {
       "id": "deep-subdomain-indonesia-business",
@@ -2866,14 +2743,14 @@
       "description": "Increase weight for deep subdomains on Indonesian business domains",
       "severity": "low",
       "weight": 0.25,
-      "source": "url",
+      "source": "both",
       "patternString": "^[^.]+\\.[^.]+\\.[^.]+\\.biz\\.id$",
       "patternFlags": "i"
     }
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-27T06:18:10.737Z",
+      "compiledAt": "2026-03-28T05:43:43.782Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
