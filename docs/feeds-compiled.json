@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-29T06:15:54.424Z",
-    "brandCount": 90,
+    "compiledAt": "2026-03-29T19:51:17.183Z",
+    "brandCount": 94,
     "signalCount": 1,
-    "patternCount": 138
+    "patternCount": 183
   },
   "brandEntries": [
     {
@@ -38,7 +38,21 @@
         "zohomail",
         "zaho",
         "zho",
+        "zooh",
         "zoho"
+      ],
+      "vertical": "business"
+    },
+    {
+      "name": "networksolutions",
+      "domains": [
+        "networksolutionsemail.com",
+        "networksolutions.com"
+      ],
+      "typos": [
+        "networksoltuions",
+        "networksoluton",
+        "networksoluions"
       ],
       "vertical": "business"
     },
@@ -118,8 +132,14 @@
         "kuicoin",
         "kuccoin",
         "kucoln",
-        "kuecoin",
+        "kukoin",
         "kucoin",
+        "kuciin",
+        "kucpoin",
+        "kucoi",
+        "kucooin",
+        "kukcoin",
+        "kuecoin",
         "kuccon",
         "kucoin-",
         "kucoinlogin",
@@ -286,31 +306,101 @@
       ]
     },
     {
-      "name": "atomicwallet",
-      "domains": [
-        "atomicwallet.io"
-      ],
-      "typos": [
-        "atoremwallet",
-        "atomicwalet",
-        "atomicwallets",
-        "atomikwallet"
-      ],
-      "vertical": "general"
-    },
-    {
       "name": "netcoins",
       "domains": [
         "netcoins.ca",
         "netcoins.com"
       ],
       "typos": [
-        "netkoins",
+        "neetcoins",
         "netcoin",
         "netcoins-app",
+        "netcoins-auth",
+        "netkoins",
         "netcoinslogin"
       ],
-      "vertical": "general"
+      "vertical": "crypto"
+    },
+    {
+      "name": "atomicwallet",
+      "domains": [
+        "atomicwallet.io"
+      ],
+      "typos": [
+        "atomicwllet",
+        "atomicwallett",
+        "atomcwallet",
+        "atomiwallet",
+        "atoremwallet",
+        "atomicwalet",
+        "atomicwallets",
+        "atomikwallet"
+      ],
+      "vertical": "crypto"
+    },
+    {
+      "name": "gemini",
+      "domains": [
+        "gemini.com"
+      ],
+      "typos": [
+        "gemini",
+        "geminii",
+        "gemin1",
+        "gem1ni",
+        "gemeni",
+        "gemimi",
+        "gemiini",
+        "gemnii",
+        "gemni",
+        "geminibalance"
+      ],
+      "vertical": "crypto"
+    },
+    {
+      "name": "bitmart",
+      "domains": [
+        "bitmart.com"
+      ],
+      "typos": [
+        "bitmmart",
+        "bitmaart",
+        "bittmart",
+        "bitmart1",
+        "bitmartexchange",
+        "bitmartlogin",
+        "bitmartapp"
+      ],
+      "vertical": "crypto"
+    },
+    {
+      "name": "coinsquare",
+      "domains": [
+        "coinsquare.com"
+      ],
+      "typos": [
+        "coinnsquare",
+        "coinsqware",
+        "coinssquare",
+        "coinnsqqware",
+        "coinsquarelogi",
+        "coinsquar",
+        "coinsquarre"
+      ],
+      "vertical": "crypto"
+    },
+    {
+      "name": "trustwallet",
+      "domains": [
+        "trustwallet.com"
+      ],
+      "typos": [
+        "trustwalet",
+        "trust-wallet",
+        "trustapp",
+        "trustwalet"
+      ],
+      "vertical": "crypto"
     },
     {
       "name": "amazon",
@@ -401,6 +491,8 @@
         "netflx",
         "netflicks",
         "netflix-clone",
+        "netflex",
+        "neflix",
         "netfix",
         "neftlix"
       ]
@@ -648,7 +740,11 @@
         "paypa-l",
         "paypai",
         "paypal-secure",
-        "pay-pal"
+        "pay-pal",
+        "paypal-merchant",
+        "paypal-business",
+        "paypal-verification",
+        "paypal-account"
       ]
     },
     {
@@ -756,19 +852,6 @@
       "vertical": "financial"
     },
     {
-      "name": "coinsquare",
-      "domains": [
-        "coinsquare.com"
-      ],
-      "typos": [
-        "coinsquarelogi",
-        "coinsquar",
-        "coinssquare",
-        "coinsquarre"
-      ],
-      "vertical": "financial"
-    },
-    {
       "name": "itrustcapital",
       "domains": [
         "itrustcapital.com"
@@ -807,6 +890,8 @@
         "bet3565",
         "365bet",
         "be365",
+        "bet355",
+        "bet365s",
         "bet35",
         "1111365"
       ],
@@ -862,13 +947,17 @@
         "ad0be",
         "adobee",
         "adobe-login",
+        "adobefiles",
+        "adobepdf",
+        "adobereader",
+        "adobeviewer",
+        "adobedocs",
         "adoobe",
         "adob3",
         "adobo",
         "adobb",
         "adobbe",
         "addobe",
-        "adobepdf",
         "adobe-pdf",
         "abode",
         "adb0e",
@@ -939,6 +1028,11 @@
         "instegram",
         "instagarm",
         "instragram",
+        "instagrem",
+        "instaqram",
+        "instagran",
+        "intagram",
+        "insta-gram",
         "instaram"
       ]
     },
@@ -1040,7 +1134,11 @@
         "whatssapp",
         "whatsup",
         "watsapp",
-        "whats-app"
+        "whats-app",
+        "whastapp",
+        "whatsappa",
+        "whatsappp",
+        "whatsapp"
       ],
       "vertical": "messaging"
     },
@@ -1145,11 +1243,13 @@
         "microsofft",
         "mlcrosoft",
         "micorsoft",
-        "microsooft",
         "microsft",
+        "micrsoft",
+        "microsot",
+        "micr0soft",
+        "microsooft",
         "micosoft",
         "mircosoft",
-        "micr0soft",
         "microsofy",
         "microsoftaccount",
         "ms-account",
@@ -1169,6 +1269,7 @@
         "googie",
         "google-signin",
         "googl3",
+        "googIe",
         "googel",
         "goog1e"
       ]
@@ -1316,7 +1417,10 @@
       "typos": [
         "atnt",
         "att-wireless",
-        "attnet"
+        "attnet",
+        "at&t",
+        "at-t",
+        "attt"
       ],
       "vertical": "telecom"
     },
@@ -1372,6 +1476,16 @@
       "patternString": "example\\.pattern\\.here",
       "patternFlags": "i",
       "note": "Why this regex is distinctive and low false-positive"
+    },
+    {
+      "id": "mobile-redirect-phishing-pattern",
+      "group": "botEvasion",
+      "description": "Mobile detection with dynamic subdomain redirect pattern",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "window\\.location\\.host\\.replace\\([\"']www[\"'],\\s*[\"']m[\"']\\)|window\\.location\\.href\\s*=\\s*[\"']\\/\\/m\\.[\"']\\s*\\+\\s*window\\.location\\.host",
+      "patternFlags": "i"
     },
     {
       "id": "spotify-impersonation-title",
@@ -1494,6 +1608,226 @@
       "patternFlags": "i"
     },
     {
+      "id": "sign-dollar-substitution",
+      "group": "brandImpersonation",
+      "description": "Dollar sign substitution in sign-in text",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<title>[^>]*Sign\\$\\s*In[^<]*</title>",
+      "patternFlags": "i"
+    },
+    {
+      "id": "favicon-brand-impersonation",
+      "group": "brandImpersonation",
+      "description": "Dynamic favicon loading with brand text and hidden form",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "domain-favicon.*google\\.com/s2/favicons.*domain-name.*form-container.*display:\\s*none",
+      "patternFlags": "is"
+    },
+    {
+      "id": "networksolutions-webmail-reference",
+      "group": "brandImpersonation",
+      "description": "Detects pages referencing Network Solutions webmail infrastructure from external domains",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "webmail-oxcs\\.networksolutionsemail\\.com",
+      "patternFlags": "i"
+    },
+    {
+      "id": "chinese-verification-balance",
+      "group": "brandImpersonation",
+      "description": "Chinese verification page with brand balance display",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "验证页面[^<>]*-\\s*\\w+\\s+Balance",
+      "patternFlags": "i"
+    },
+    {
+      "id": "google-cdn-external-host",
+      "group": "brandImpersonation",
+      "description": "Google branding assets on non-Google domain",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "src=[\"']https://(?:www\\.google\\.com|ssl\\.gstatic\\.com)/.*?(?:logo|branding)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "chinese-crypto-balance-title",
+      "group": "brandImpersonation",
+      "description": "Chinese crypto exchange balance verification page pattern",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "验证页面\\s*-\\s*\\w+\\s+Balance",
+      "patternFlags": "i"
+    },
+    {
+      "id": "instagram-logo-gradient-pattern",
+      "group": "brandImpersonation",
+      "description": "Instagram logo SVG with characteristic gradient pattern",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "instagramGradient.*stop-color:#FED373.*stop-color:#F15245.*stop-color:#D92E7F",
+      "patternFlags": "i"
+    },
+    {
+      "id": "instagram-portuguese-phishing",
+      "group": "brandImpersonation",
+      "description": "Instagram phishing with Portuguese localization",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?=.*(?:entrar|esqueceu.*senha))(?=.*(?:instagram|insta))(?=.*(?:password|senha))",
+      "patternFlags": "i"
+    },
+    {
+      "id": "microsoft-signin-redirect-pattern",
+      "group": "brandImpersonation",
+      "description": "Microsoft sign-in redirect phishing pattern with identity verification language",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "microsoft.{0,50}sign-in.{0,50}redirect.{0,100}(verifying|identity|security.check)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "microsoft-cdn-impersonation",
+      "group": "brandImpersonation",
+      "description": "Microsoft logincdn assets loaded on non-Microsoft domains",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "logincdn\\.msauth\\.net",
+      "patternFlags": "i"
+    },
+    {
+      "id": "webflow-crypto-login-guide",
+      "group": "brandImpersonation",
+      "description": "Detects webflow-hosted crypto login instruction pages",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "webflow\\.io.*(?:login.*password|crypto.*exchange).*login.*button",
+      "patternFlags": "i"
+    },
+    {
+      "id": "netflix-phishing-indicators",
+      "group": "brandImpersonation",
+      "description": "Detects Netflix credential harvesting pages with pricing and membership language",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "(?=.*netflix)(?=.*(?:₹149|membership|restart.*membership|get.*started|unlimited.*movies))",
+      "patternFlags": "i"
+    },
+    {
+      "id": "gemini-chinese-impersonation",
+      "group": "brandImpersonation",
+      "description": "Detects Chinese-language Gemini balance/verification pages",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "验证页面.*Gemini\\s+Balance|Gemini\\s+Balance.*登录",
+      "patternFlags": "i"
+    },
+    {
+      "id": "brand-login-redirect-pattern",
+      "group": "brandImpersonation",
+      "description": "Detects pages with brand login claims that redirect externally",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<title>[^<]*(?:login|access)[^<]*</title>[\\s\\S]*href=\"https://(?!(?:webflow\\.io|github\\.io|netlify\\.app))",
+      "patternFlags": "i"
+    },
+    {
+      "id": "adobe-malware-impersonation",
+      "group": "brandImpersonation",
+      "description": "Adobe PDF Reader impersonation with malware download",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "(?=.*(?:adobe|acrobat|pdf.reader))(?=.*(?:\\.msi|install|download))(?=.*(?:secured.pdf|pdf.viewer|reader.software))",
+      "patternFlags": "i"
+    },
+    {
+      "id": "paypal-russia-kyb-phish",
+      "group": "brandImpersonation",
+      "description": "PayPal Russia KYB phishing campaign",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "PayPal.*Russia.*KYB|Russia.*KYB.*PayPal",
+      "patternFlags": "i"
+    },
+    {
+      "id": "coinsquare-char-substitution",
+      "group": "brandImpersonation",
+      "description": "Detects Coinsquare impersonation using character substitution",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "çoinsquare.*account.*login|coinsquare.*çonfidence",
+      "patternFlags": "i"
+    },
+    {
+      "id": "att-iphone-promo-impersonation",
+      "group": "brandImpersonation",
+      "description": "AT&T iPhone promotional email impersonation with trade-in offers",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "AT&T.*iPhone\\s+1[7-9].*Pro.*trade-in.*bill\\s+credits",
+      "patternFlags": "i"
+    },
+    {
+      "id": "trustwallet-interface-pattern",
+      "group": "brandImpersonation",
+      "description": "Trust Wallet interface impersonation with wallet import/recovery options",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "Trust Wallet.*(?:Create a new wallet|Import or recover wallet).*(?:Secret Phrase|seed phrase)",
+      "patternFlags": "is"
+    },
+    {
+      "id": "trustwallet-welcome-pattern",
+      "group": "brandImpersonation",
+      "description": "Trust Wallet extension welcome screen impersonation",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "Welcome to the Trust Wallet Extension.*multi-chain wallet trusted by millions",
+      "patternFlags": "is"
+    },
+    {
+      "id": "whatsapp-chinese-download-impersonation",
+      "group": "brandImpersonation",
+      "description": "Chinese WhatsApp download impersonation sites",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "whatsapp.*中文版.*下载|whatsapp.*chinese.*download.*中文|whatsapp.*pc.*中文版",
+      "patternFlags": "i"
+    },
+    {
+      "id": "fake-captcha-gating",
+      "group": "captchaGating",
+      "description": "Fake reCAPTCHA-style verification hiding login form",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "I am not a robot.*checkbox.*verify.*human.*display:\\s*none",
+      "patternFlags": "is"
+    },
+    {
       "id": "email-userid-label",
       "group": "credentialHarvesting",
       "description": "Email Address/User ID label pattern common in email phishing",
@@ -1501,6 +1835,36 @@
       "weight": 0.35,
       "source": "html",
       "patternString": "Email Address/User ID[\\s\\S]*?<input[^>]*type=[\"'](?:text|email)[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "formspree-credential-exfil",
+      "group": "credentialHarvesting",
+      "description": "Form submission to formspree.io with password field",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "action=[\"']https://formspree\\.io/f/[a-zA-Z0-9]+[\"'][^>]*>.*?<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "is"
+    },
+    {
+      "id": "netflix-logo-credential-harvest",
+      "group": "credentialHarvesting",
+      "description": "Detects Netflix logo usage with email collection forms",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "(?=.*netflix.*logo)(?=.*email.*(?:address|membership|account))(?=.*(?:get.*started|sign.*up|create))",
+      "patternFlags": "i"
+    },
+    {
+      "id": "fake-paypal-openid-endpoint",
+      "group": "credentialHarvesting",
+      "description": "Fake PayPal OpenID Connect login endpoint",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "action=[\"']/micrositeportal/openid_connect_login",
       "patternFlags": "i"
     },
     {
@@ -1512,6 +1876,26 @@
       "source": "both",
       "patternString": "^https?://[a-z0-9]{10,}\\.(bank|financial|secure|payment|trust)[a-z]*\\.(com|org|net)/",
       "patternFlags": "i"
+    },
+    {
+      "id": "unicode-brand-obfuscation",
+      "group": "obfuscation",
+      "description": "Unicode character substitution in brand names and login text",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "[𝑺𝗴𝒏𝐋🅞𝒈𝐈𝙣𝒊𝒈𝙣𝗴𝐋𝙣]|[ōōīî].*[𝑺𝗴𝒏].*[𝐋🅞𝒈]",
+      "patternFlags": "i"
+    },
+    {
+      "id": "external-asset-loader-obfuscation",
+      "group": "obfuscation",
+      "description": "Page loads CSS/JS assets from external domain while showing loading screen",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<div[^>]*loader[^>]*>.*?</div>.*?<script[^>]*src=[\"']https?://(?!(?:www\\.)?[^/]+\\.(?:com|net|org|io|app|co|ly|me|tv|info|biz)/)[^\"']*[\"']",
+      "patternFlags": "is"
     },
     {
       "id": "base64-html-password-obfuscation",
@@ -2604,6 +2988,96 @@
       "patternFlags": "is"
     },
     {
+      "id": "atomic-wallet-image-redirect",
+      "group": "phishkitSignatures",
+      "description": "Atomic Wallet interface as clickable image redirecting to external domain",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<a href=\"https://[^\"]+\\.com/[^\"]+\" class=\"w-inline-block\"><img[^>]+Atomic[^>]+Wallet[^>]*>",
+      "patternFlags": "i"
+    },
+    {
+      "id": "page-hijack-external-redirect",
+      "group": "phishkitSignatures",
+      "description": "Entire page wrapped in external redirect link",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "<a\\s+href=\"https?://[^\"]+\"\\s+class=\"w-inline-block\"><img[^>]*>.*<h1>",
+      "patternFlags": "s"
+    },
+    {
+      "id": "mixed-webmail-resources",
+      "group": "phishkitSignatures",
+      "description": "Detects pages loading webmail assets from multiple suspicious external sources",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "jdmediax\\.com.*networksolu",
+      "patternFlags": "i"
+    },
+    {
+      "id": "glass-card-phishkit",
+      "group": "phishkitSignatures",
+      "description": "Glass-card styling phishkit with backdrop-filter",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "class=[\"']glass-card[\"'][^>]*background:\\s*rgba\\(255,\\s*255,\\s*255,\\s*0\\.9[0-9]\\)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "snaily-phishkit-signature",
+      "group": "phishkitSignatures",
+      "description": "Snaily phishkit author attribution signature",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "©\\s*by\\s*snaily\\s*\\|\\s*GitHub",
+      "patternFlags": "i"
+    },
+    {
+      "id": "crypto-shortener-redirect",
+      "group": "phishkitSignatures",
+      "description": "Detects crypto exchange content with shortened URL redirects",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "href=\"https://gtly\\.to/[^\"]+\".*(?:login|exchange|crypto|wallet)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "telegram-bot-exfil",
+      "group": "phishkitSignatures",
+      "description": "Detects Telegram bot credential exfiltration",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "telegram.*bot.*token|api\\.telegram\\.org/bot|sendMessage.*chat_id",
+      "patternFlags": "i"
+    },
+    {
+      "id": "external-redirect-phishing",
+      "group": "phishkitSignatures",
+      "description": "Detects suspicious external redirects from brand impersonation pages",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "href=\"https://[a-z0-9]+\\.(com|net|org)/[a-f0-9-]{30,}\"",
+      "patternFlags": "i"
+    },
+    {
+      "id": "crypto-login-external-redirect",
+      "group": "phishkitSignatures",
+      "description": "Detects crypto login pages with suspicious external redirects",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "href=\"https://[^\"]+\\.com/[a-f0-9-]{36}\".*account.*login",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -2621,6 +3095,36 @@
       "weight": 0.25,
       "source": "both",
       "patternString": "marketing.*partner.*invite|partner.*marketing.*invite",
+      "patternFlags": "i"
+    },
+    {
+      "id": "wallet-interface-image-phish",
+      "group": "socialEngineering",
+      "description": "Full wallet interface presented as single clickable image",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<a href=\"[^\"]+\" class=\"w-inline-block\"><img[^>]+(?:wallet|exchange)[^>]*sizes=\"\\(max-width:[^\"]+\\) 100vw",
+      "patternFlags": "i"
+    },
+    {
+      "id": "full-page-redirect-wrapper",
+      "group": "socialEngineering",
+      "description": "Entire page wrapped in single external redirect link",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<a[^>]+href=[\"']https?://[^\"']+[\"'][^>]*class=[\"']w-inline-block[\"'][^>]*>.*<img[^>]+alt=[\"'][\"'][^>]*>.*</a>",
+      "patternFlags": "is"
+    },
+    {
+      "id": "msi-malware-distribution",
+      "group": "socialEngineering",
+      "description": "Malicious MSI installer distribution with OS restriction",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "(?=.*\\.msi)(?=.*(?:windows.computer.required|windows.desktop.only))(?=.*(?:download|install|launch))",
       "patternFlags": "i"
     },
     {
@@ -2738,6 +3242,46 @@
       "source": "both"
     },
     {
+      "id": "sso-eng-typosquat-pattern",
+      "group": "typosquatPatterns",
+      "description": "SSO engineering subdomain typosquat pattern",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "sso-eng-[a-z]+-com-[a-z]+-auth\\.",
+      "patternFlags": "i"
+    },
+    {
+      "id": "clone-login-instagram-pattern",
+      "group": "typosquatPatterns",
+      "description": "Instagram clone login patterns on hosting platforms",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?=.*clone.*login.*insta)(?=.*(?:vercel|netlify|github\\.io|webflow))",
+      "patternFlags": "i"
+    },
+    {
+      "id": "digitalmaillane-subdomain-pattern",
+      "group": "typosquatPatterns",
+      "description": "Single character subdomains on digitalmaillane.com domain",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "https?://[a-z]\\.digitalmaillane\\.com",
+      "patternFlags": "i"
+    },
+    {
+      "id": "whatsapp-extra-char-typosquat",
+      "group": "typosquatPatterns",
+      "description": "WhatsApp typosquats with extra repeated characters",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "whats?app+a|whas+tapp|whatss?app+",
+      "patternFlags": "i"
+    },
+    {
       "id": "deep-subdomain-indonesia-business",
       "group": "urlHeuristics",
       "description": "Increase weight for deep subdomains on Indonesian business domains",
@@ -2746,11 +3290,21 @@
       "source": "both",
       "patternString": "^[^.]+\\.[^.]+\\.[^.]+\\.biz\\.id$",
       "patternFlags": "i"
+    },
+    {
+      "id": "suspicious-redirect-domain",
+      "group": "urlHeuristics",
+      "description": "Redirect to suspicious domain with UUID parameters",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "href=[\"']https?://[a-z]+conighty\\.com/[a-f0-9-]{36}[\"']",
+      "patternFlags": "i"
     }
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-28T22:31:54.244Z",
+      "compiledAt": "2026-03-29T06:15:46.190Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
