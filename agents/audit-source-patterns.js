@@ -170,7 +170,7 @@ async function main() {
     console.log(`  Batch ${Math.floor(i / 10) + 1}/${Math.ceil(flagged.length / 10)} done`);
   }
 
-  // ── Create GitHub issue ───────────────────────────────────────────────────────
+  // ── Create GitHub issues — one per file to stay under 65k char limit ────────
 
   const byFile = {};
   for (const f of flagged) {
@@ -178,52 +178,81 @@ async function main() {
     byFile[f.file].push(f);
   }
 
-  const autoFixSection = autoFixed.length > 0
-    ? `**Auto-fixed ${autoFixed.length} weight issue(s) already committed.**\n`
-    : '';
-
-  const findingsSection = Object.entries(byFile).map(([file, patterns]) =>
-    `### \`rules/source/${file}\`\n` +
-    patterns.map(p =>
-      `- **\`${p.id}\`** (weight: ${p.weight})\n` +
-      p.issues.map(i => `  - ${i}`).join('\n')
-    ).join('\n')
-  ).join('\n\n');
-
-  const body = [
-    '## Source Pattern Quality Audit',
-    '',
-    `Found **${flagged.length}** pattern(s) needing review across ${Object.keys(byFile).length} file(s).`,
-    autoFixSection,
-    '---',
-    '',
-    '## Opus Review',
-    '',
-    opusReviews.join('\n\n---\n\n'),
-    '',
-    '---',
-    '',
-    '## Automated findings',
-    '',
-    findingsSection,
-    '',
-    '---',
-    `*Generated at ${new Date().toISOString()}*`,
-  ].join('\n');
+  // Map Opus review text back to files by scanning for file names
+  const reviewsByFile = {};
+  for (const [file, patterns] of Object.entries(byFile)) {
+    const baseName = file.replace('.json', '');
+    reviewsByFile[file] = opusReviews
+      .map(r => {
+        // Extract sections mentioning this file's pattern IDs
+        const patIds = patterns.map(p => p.id);
+        const lines = r.split('\n');
+        const relevant = [];
+        let capturing = false;
+        for (const line of lines) {
+          if (patIds.some(id => line.includes(id))) capturing = true;
+          if (capturing) {
+            relevant.push(line);
+            // Stop at next pattern heading
+            if (relevant.length > 1 && line.startsWith('###') && !patIds.some(id => line.includes(id))) break;
+          }
+        }
+        return relevant.join('\n').trim();
+      })
+      .filter(Boolean)
+      .join('\n\n');
+  }
 
   if (DRY_RUN) {
-    console.log('\n--- DRY RUN: issue body ---');
-    console.log(body.slice(0, 2000));
+    console.log('\n--- DRY RUN ---');
+    console.log(`Would create ${Object.keys(byFile).length} issues`);
     return;
   }
 
-  await github.createIssue(REPO, {
-    title: `[AUDIT] Source pattern quality review — ${flagged.length} issue(s)`,
-    body,
-    labels: ['needs-review'],
-  });
+  let issuesCreated = 0;
+  for (const [file, patterns] of Object.entries(byFile)) {
+    const opusSection = reviewsByFile[file]
+      ? `## Opus Review\n\n${reviewsByFile[file].slice(0, 20000)}\n\n---\n\n`
+      : '';
 
-  console.log('\nAudit issue created');
+    const findingsSection = patterns.map(p =>
+      `- **\`${p.id}\`** (weight: ${p.weight})\n` +
+      p.issues.map(i => `  - ${i}`).join('\n')
+    ).join('\n');
+
+    const body = [
+      `## Source Pattern Audit — \`rules/source/${file}\``,
+      '',
+      `Found **${patterns.length}** pattern(s) needing review.`,
+      autoFixed.filter(f => f.file === file).length > 0
+        ? `Auto-fixed ${autoFixed.filter(f => f.file === file).length} weight issue(s) already committed.`
+        : '',
+      '',
+      '---',
+      '',
+      opusSection,
+      '## Automated findings',
+      '',
+      findingsSection,
+      '',
+      '---',
+      `*Generated at ${new Date().toISOString()}*`,
+    ].filter(s => s !== null && s !== undefined).join('\n').slice(0, 65000);
+
+    await github.createIssue(
+      REPO,
+      `[AUDIT] ${file} — ${patterns.length} pattern issue(s)`,
+      body,
+      ['needs-review']
+    );
+    issuesCreated++;
+    console.log(`  Created issue for ${file}`);
+
+    // Rate limit
+    await new Promise(r => setTimeout(r, 500));
+  }
+
+  console.log(`\nCreated ${issuesCreated} audit issue(s)`);
 }
 
 main().catch(e => { console.error('Fatal:', e); process.exit(1); });
