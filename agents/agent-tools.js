@@ -134,6 +134,7 @@ async function gh(method, path, body = null) {
 
 export const github = {
   getIssue:       (repo, n)         => gh('GET',   `/repos/${cfg.orgName}/${repo}/issues/${n}`),
+  getIssueComments: (repo, n)       => gh('GET',   `/repos/${cfg.orgName}/${repo}/issues/${n}/comments?per_page=100`),
   commentOnIssue: (repo, n, body)   => gh('POST',  `/repos/${cfg.orgName}/${repo}/issues/${n}/comments`, { body }),
   closeIssue:     (repo, n, reason) => gh('PATCH', `/repos/${cfg.orgName}/${repo}/issues/${n}`, { state: 'closed', state_reason: reason || 'completed' }),
   addLabel:       (repo, n, labels) => gh('POST',  `/repos/${cfg.orgName}/${repo}/issues/${n}/labels`, { labels }),
