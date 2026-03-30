@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-30-05:57",
-    "generatedAt": "2026-03-30T05:57:43.599Z",
+    "version": "2026-03-30-05:59",
+    "generatedAt": "2026-03-30T05:59:15.546Z",
     "brandCount": 102,
-    "patternCount": 221
+    "patternCount": 224
   },
   "brandEntries": [
     {
@@ -3162,6 +3162,17 @@
       "note": ""
     },
     {
+      "id": "sharepoint-subdomain-impersonation",
+      "group": "brandImpersonation",
+      "description": "Detects 'sharepoint' keyword in subdomain on non-Microsoft hosting domains — common in credential phishing campaigns",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "sharepoint",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -3312,6 +3323,17 @@
       "weight": 0.35,
       "source": "html",
       "patternString": "[𝑺𝗦𝒮][^<]{0,5}[𝒊𝗶𝙞ⅰ][^<]{0,5}[𝗴𝒈𝙜][^<]{0,5}[𝒏𝗻𝙣]|[𝐋𝗟𝙇][^<]{0,5}[🅞ⓞ𝗼𝒐][^<]{0,5}[𝒈𝗴𝙜][^<]{0,5}[𝐈𝗜𝙄ⅰ][^<]{0,5}[𝙣𝗻𝒏]",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "encrypted-payload-empty-div-inject",
+      "group": "obfuscation",
+      "description": "Detects phishing pages that use an empty container div with a large encrypted/base64 payload in JS for runtime rendering — common in Cloudflare Workers phishkits",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<div\\s+id=[\"'][a-z]{1,3}[\"']>\\s*</div>\\s*<script>[\\s\\S]*?var\\s+[a-z]\\s*=\\s*[\"'][A-Za-z0-9+/=]{500,}",
       "patternFlags": "i",
       "note": ""
     },
@@ -4599,6 +4621,17 @@
       "weight": 0.4,
       "source": "js",
       "patternString": "function\\s+getcrrid\\s*\\(\\s*\\)\\s*\\{\\s*return\\s+['\"][0-9a-f]{20,}['\"]",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "large-encoded-blob-minimal-dom",
+      "group": "phishkitSignatures",
+      "description": "Detects pages with minimal DOM and a large base64/encrypted blob in JS — signature of encrypted phishkit delivery (Cloudflare Workers, etc.)",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "<body>\\s*<div[^>]*>\\s*</div>\\s*<script>\\s*async\\s+function\\s+\\w+\\(\\)\\s*\\{[\\s\\S]*?[\"'][A-Za-z0-9+/]{200,}",
       "patternFlags": "i",
       "note": ""
     },
