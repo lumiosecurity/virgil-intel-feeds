@@ -8,7 +8,7 @@
 // Trigger: GitHub Actions cron (nightly 03:00 UTC)
 // Output:  GitHub issue per discovered campaign in core-rules repo
 
-import { cfg, d1, claude, github, getCTAge } from './agent-tools.js';
+import { cfg, d1, d1raw, claude, github, getCTAge } from './agent-tools.js';
 
 const LOOKBACK_DAYS = parseInt(process.env.LOOKBACK_DAYS || '3');
 const MIN_CLUSTER   = parseInt(process.env.MIN_CLUSTER   || '3');  // min domains per campaign
@@ -21,7 +21,7 @@ async function main() {
   // ── Load recent dangerous verdicts with signal profiles ────────────────────
   console.log('Loading recent corpus...');
 
-  const verdicts = d1(`
+  const verdicts = d1raw(`
     SELECT
       v.id, v.registered_domain, v.tld, v.detected_brand, v.detected_vertical,
       v.confidence, v.has_password_form, v.has_sensitive_form,
@@ -48,7 +48,7 @@ async function main() {
   console.log(`Loaded ${verdicts.length} verdicts`);
 
   // Also load ingested feed data for the same period
-  const ingested = d1(`
+  const ingested = d1raw(`
     SELECT
       iu.registered_domain, iu.tld, iu.detected_brand, iu.risk_score,
       GROUP_CONCAT(is2.type) as signal_types

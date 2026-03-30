@@ -66,7 +66,7 @@ async function main() {
   ]);
 
   // Corpus reports for this domain
-  const corpusReports = d1(`
+  const corpusReports = d1`
     SELECT
       COUNT(DISTINCT install_id) as distinct_installs,
       COUNT(*) as total_verdicts,
@@ -74,21 +74,21 @@ async function main() {
       MAX(created_at) as last_seen,
       GROUP_CONCAT(DISTINCT risk_level) as risk_levels
     FROM verdicts
-    WHERE registered_domain = '${domain.replace(/'/g,"''")}'
-  `);
+    WHERE registered_domain = ${domain}
+  `;
 
   const report = corpusReports[0] || {};
 
   // Check if domain is actually in the blocklist
-  const blocklistRows = d1(`
+  const blocklistRows = d1`
     SELECT registered_domain, COUNT(DISTINCT install_id) as reports,
            AVG(confidence) as avg_conf
     FROM verdicts
-    WHERE registered_domain = '${domain.replace(/'/g,"''")}'
+    WHERE registered_domain = ${domain}
       AND risk_level = 'dangerous'
       AND created_at >= datetime('now', '-30 days')
     GROUP BY registered_domain
-  `);
+  `;
 
   const inBlocklistCriteria = blocklistRows.length > 0;
 

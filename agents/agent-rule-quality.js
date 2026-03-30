@@ -149,33 +149,24 @@ async function analyzeRule(filename, rule) {
   for (const entry of brandEntries) {
     const allTerms = [...(entry.typos || []), ...(entry.domains || [])];
 
-    const corpusHits = d1(`
-      SELECT registered_domain, COUNT(DISTINCT install_id) as reports, MAX(confidence) as max_conf
-      FROM verdicts
-      WHERE risk_level = 'dangerous'
-        AND (${allTerms.map(t => `registered_domain LIKE '%${t.replace(/'/g,"''")}%'`).join(' OR ')})
-      GROUP BY registered_domain
-      ORDER BY reports DESC
-      LIMIT 20
-    `);
+    const corpusHits = _queryTermsLike(allTerms, 'verdicts', 'registered_domain', 'risk_level', 'dangerous', 20);
+    const fpCheck    = _queryTermsLike(allTerms, 'verdicts', 'registered_domain', 'risk_level', 'safe', 10);
 
-    const fpCheck = d1(`
-      SELECT registered_domain, COUNT(DISTINCT install_id) as reports
-      FROM verdicts
-      WHERE risk_level = 'safe'
-        AND (${allTerms.map(t => `registered_domain LIKE '%${t.replace(/'/g,"''")}%'`).join(' OR ')})
-      GROUP BY registered_domain
-      LIMIT 10
-    `);
-
-    const feedHits = d1(`
-      SELECT registered_domain, COUNT(*) as hits
-      FROM ingested_urls
-      WHERE risk_score >= 0.6
-        AND (${allTerms.map(t => `registered_domain LIKE '%${t.replace(/'/g,"''")}%'`).join(' OR ')})
-      GROUP BY registered_domain
-      LIMIT 20
-    `);
+    // Feed hits — separate table, different column filter
+    const feedHits = [];
+    for (const term of allTerms.slice(0, 20)) {
+      const rows = d1`
+        SELECT registered_domain, COUNT(*) as hits
+        FROM ingested_urls
+        WHERE risk_score >= 0.6
+          AND registered_domain LIKE ${'%' + term + '%'}
+        GROUP BY registered_domain
+        LIMIT 20
+      `;
+      for (const r of rows) {
+        if (!feedHits.find(f => f.registered_domain === r.registered_domain)) feedHits.push(r);
+      }
+    }
 
     summary_lines.push(`**Brand: ${entry.name}** — ${entry.typos?.length || 0} typosquats`);
     summary_lines.push(`- Corpus phishing hits: ${corpusHits.length} domains (${corpusHits.reduce((s,r)=>s+r.reports,0)} reports total)`);
@@ -199,12 +190,12 @@ async function analyzeRule(filename, rule) {
     try { new RegExp(pat.patternString, pat.patternFlags || ''); compiles = true; }
     catch {}
 
-    const patternHits = d1(`
+    const patternHits = d1`
       SELECT signal_id, COUNT(*) as hits
       FROM phishkit_signals
-      WHERE signal_id = '${pat.id.replace(/'/g,"''")}'
+      WHERE signal_id = ${pat.id}
       GROUP BY signal_id
-    `);
+    `;
 
     summary_lines.push(`**Pattern: ${pat.id}** — ${compiles ? '✅ compiles' : '❌ compile error'}, corpus matches: ${patternHits[0]?.hits || 0}`);
     corpusDetail += `#### Pattern: ${pat.id}\n- Compiles: ${compiles ? 'yes' : 'NO — SYNTAX ERROR'}\n- Corpus hits: ${patternHits[0]?.hits || 0}\n`;
@@ -215,6 +206,29 @@ async function analyzeRule(filename, rule) {
     summary: summary_lines.join('\n'),
     corpusDetail,
   };
+}
+
+// Safe LIKE query helper — queries each term individually to avoid SQL injection
+// from untrusted terms parsed from GitHub issue/PR content.
+// table/column/filterCol are hardcoded at call sites — not user input.
+function _queryTermsLike(terms, table, column, filterCol, filterVal, limit) {
+  const allResults = new Map();
+  for (const term of terms.slice(0, 20)) {
+    const pattern = '%' + term + '%';
+    const rows = d1`
+      SELECT registered_domain, COUNT(DISTINCT install_id) as reports, MAX(confidence) as max_conf
+      FROM verdicts
+      WHERE risk_level = ${filterVal}
+        AND registered_domain LIKE ${pattern}
+      GROUP BY registered_domain
+      ORDER BY reports DESC
+      LIMIT ${limit}
+    `;
+    for (const r of rows) {
+      if (!allResults.has(r.registered_domain)) allResults.set(r.registered_domain, r);
+    }
+  }
+  return [...allResults.values()].sort((a, b) => (b.reports || 0) - (a.reports || 0)).slice(0, limit);
 }
 
 main().catch(e => { console.error('Fatal:', e); process.exit(1); });

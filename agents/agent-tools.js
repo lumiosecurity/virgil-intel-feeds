@@ -21,11 +21,32 @@ export const cfg = {
 };
 
 // ── D1 Query ──────────────────────────────────────────────────────────────────
+//
+// Use parameterized queries to prevent SQL injection:
+//   d1`SELECT * FROM verdicts WHERE registered_domain = ${domain}`
+//
+// For static SQL without user-controlled values, use d1raw():
+//   d1raw('SELECT COUNT(*) as cnt FROM verdicts')
 
-export function d1(sql) {
+export function d1(strings, ...values) {
+  // Tagged template literal: strings are the static parts, values are interpolations
+  let sql = strings[0];
+  for (let i = 0; i < values.length; i++) {
+    sql += '?' + strings[i + 1];
+  }
+  return _executeD1(sql, values);
+}
+
+export function d1raw(sql) {
+  return _executeD1(sql, []);
+}
+
+function _executeD1(sql, params) {
+  const cleanSql = sql.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
   const tmpFile = join(tmpdir(), `virgil-query-${Date.now()}.sql`);
   try {
-    writeFileSync(tmpFile, sql.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim());
+    const finalSql = _interpolateSafe(cleanSql, params);
+    writeFileSync(tmpFile, finalSql);
     const rawOutput = execSync(
       `wrangler d1 execute ${cfg.d1Database} --remote --file="${tmpFile}" --json 2>/dev/null`,
       {
@@ -45,6 +66,31 @@ export function d1(sql) {
   } finally {
     try { unlinkSync(tmpFile); } catch {}
   }
+}
+
+function _interpolateSafe(sql, params) {
+  if (params.length === 0) return sql;
+  let paramIndex = 0;
+  return sql.replace(/\?/g, () => {
+    if (paramIndex >= params.length) {
+      throw new Error('D1 query has more ? placeholders than parameters');
+    }
+    return _escapeSqlValue(params[paramIndex++]);
+  });
+}
+
+function _escapeSqlValue(val) {
+  if (val === null || val === undefined) return 'NULL';
+  if (typeof val === 'number') {
+    if (!Number.isFinite(val)) throw new Error(`D1: non-finite number in query: ${val}`);
+    return String(val);
+  }
+  if (typeof val === 'boolean') return val ? '1' : '0';
+  if (typeof val === 'string') {
+    if (val.includes('\0')) throw new Error('D1: null byte in query parameter');
+    return `'${val.replace(/'/g, "''")}'`;
+  }
+  throw new Error(`D1: unsupported parameter type: ${typeof val}`);
 }
 
 // ── Claude API ─────────────────────────────────────────────────────────────────
@@ -202,21 +248,49 @@ export async function checkSafeBrowsing(url) {
 }
 
 // ── Domain utilities ──────────────────────────────────────────────────────────
+// Canonical registered domain extraction — matches the extension's
+// src/background/registered-domain.js (agents run in Node, not the extension)
 
 const SECOND_LEVEL_TLDS = new Set([
   'com.mx','com.au','com.br','com.ar','com.co','com.pe','com.ve',
-  'co.uk','org.uk','me.uk','net.uk','co.nz','co.za','co.in','co.jp',
-  'com.sg','com.hk','com.tw','com.cn','com.tr','com.sa',
-  'org.au','net.au','edu.au','gov.au',
+  'co.uk','org.uk','me.uk','net.uk','ac.uk','gov.uk','sch.uk','nhs.uk',
+  'co.nz','org.nz','net.nz','govt.nz','ac.nz',
+  'co.za','org.za','net.za','gov.za','ac.za',
+  'co.jp','or.jp','ne.jp','ac.jp','go.jp','ed.jp',
+  'co.in','org.in','net.in','gen.in','firm.in','ind.in',
+  'co.kr','or.kr','ne.kr','re.kr','pe.kr',
+  'com.sg','org.sg','edu.sg','gov.sg',
+  'com.hk','org.hk','edu.hk','gov.hk',
+  'com.tw','org.tw','edu.tw','gov.tw',
+  'com.cn','org.cn','net.cn','edu.cn','gov.cn',
+  'com.ph','org.ph','edu.ph','gov.ph',
+  'com.my','org.my','edu.my','gov.my',
+  'co.th','or.th','ac.th','go.th','in.th',
+  'co.id','or.id','ac.id','go.id','web.id','biz.id',
+  'com.vn','org.vn','edu.vn','gov.vn',
+  'com.pk','org.pk','edu.pk','gov.pk',
+  'com.bd','org.bd','edu.bd','gov.bd',
+  'com.tr','org.tr','edu.tr','gov.tr',
+  'com.sa','org.sa','edu.sa','gov.sa',
+  'com.eg','org.eg','edu.eg','gov.eg',
+  'com.ng','org.ng','edu.ng','gov.ng',
+  'co.ke','or.ke','ac.ke','go.ke',
+  'co.tz','or.tz','ac.tz','go.tz',
+  'com.ua','org.ua','edu.ua','gov.ua','net.ua',
+  'co.il','org.il','ac.il','gov.il','net.il',
+  'org.au','net.au','edu.au','gov.au','id.au',
 ]);
 
 export function extractRegisteredDomain(hostname) {
   if (!hostname) return '';
-  const parts = hostname.toLowerCase().split('.');
-  if (parts.length <= 2) return hostname.toLowerCase();
+  hostname = hostname.toLowerCase().split(':')[0].replace(/\.+$/, '');
+  if (/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(hostname)) return hostname;
+  hostname = hostname.replace(/^www\./, '');
+  const parts = hostname.split('.');
+  if (parts.length <= 2) return hostname;
   const lastTwo = parts.slice(-2).join('.');
-  if (SECOND_LEVEL_TLDS.has(lastTwo)) return parts.slice(-3).join('.');
-  return parts.slice(-2).join('.');
+  if (SECOND_LEVEL_TLDS.has(lastTwo) && parts.length >= 3) return parts.slice(-3).join('.');
+  return lastTwo;
 }
 
 // ── Domain intelligence ────────────────────────────────────────────────────────
@@ -229,20 +303,20 @@ export async function getDomainIntel(hostname) {
     checkSafeBrowsing(`https://${hostname}`),    // GSB on full hostname
   ]);
 
-  // Corpus queries use registered_domain column
-  const corpusRows = d1(`
+  // Corpus queries use registered_domain column — parameterized
+  const corpusRows = d1`
     SELECT COUNT(DISTINCT install_id) as reports, AVG(confidence) as avg_conf,
            MAX(risk_level) as max_risk
     FROM verdicts
-    WHERE registered_domain = '${registeredDomain.replace(/'/g,"''")}' AND risk_level != 'safe'
-  `);
+    WHERE registered_domain = ${registeredDomain} AND risk_level != 'safe'
+  `;
 
-  const feedRows = d1(`
+  const feedRows = d1`
     SELECT COUNT(*) as hits, AVG(risk_score) as avg_score,
            GROUP_CONCAT(DISTINCT feed_source) as feeds
     FROM ingested_urls
-    WHERE registered_domain = '${registeredDomain.replace(/'/g,"''")}' AND risk_score >= 0.5
-  `);
+    WHERE registered_domain = ${registeredDomain} AND risk_score >= 0.5
+  `;
 
   return {
     hostname,

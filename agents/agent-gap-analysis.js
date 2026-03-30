@@ -8,7 +8,7 @@
 // Trigger: GitHub Actions cron (Sundays 04:00 UTC)
 // Output:  GitHub issue in core-rules repo with gap analysis + proposals
 
-import { cfg, d1, claude, github, analyzeUrl } from './agent-tools.js';
+import { cfg, d1, d1raw, claude, github, analyzeUrl } from './agent-tools.js';
 
 const LOOKBACK_DAYS = parseInt(process.env.LOOKBACK_DAYS || '14');
 const DRY_RUN       = process.argv.includes('--dry-run');
@@ -21,7 +21,7 @@ async function main() {
   console.log('Loading FN feedback...');
 
   // FN feedback from feedback_stats (aggregated from extension)
-  const fnStats = d1(`
+  const fnStats = d1raw(`
     SELECT stats_json, created_at
     FROM feedback_stats
     WHERE created_at >= datetime('now', '-${LOOKBACK_DAYS} days')
@@ -45,7 +45,7 @@ async function main() {
   // These are pages that triggered heuristics but not strongly enough to flag —
   // the most actionable gap source
 
-  const almostCaught = d1(`
+  const almostCaught = d1raw(`
     SELECT
       v.registered_domain, v.tld, v.detected_brand,
       COUNT(DISTINCT v.install_id) as install_count,
@@ -69,7 +69,7 @@ async function main() {
 
   // ── Find signals that rarely fire alone but often appear with others ────────
   // Signals with weak standalone weight but strong correlation with phishing
-  const signalCorrelation = d1(`
+  const signalCorrelation = d1raw(`
     SELECT
       s.type as signal_type,
       COUNT(CASE WHEN v.risk_level = 'dangerous' THEN 1 END) as phish_hits,
@@ -87,7 +87,7 @@ async function main() {
   `);
 
   // ── Find uncovered brands (target in domain but no brand entry matches) ────
-  const uncoveredBrands = d1(`
+  const uncoveredBrands = d1raw(`
     SELECT
       v.registered_domain,
       COUNT(DISTINCT v.install_id) as reports,
@@ -106,7 +106,7 @@ async function main() {
   console.log(`Uncovered brand domains: ${uncoveredBrands.length}`);
 
   // ── TLD coverage gap ────────────────────────────────────────────────────────
-  const tldGaps = d1(`
+  const tldGaps = d1raw(`
     SELECT
       v.tld,
       COUNT(CASE WHEN v.risk_level = 'dangerous' THEN 1 END) as phish_count,

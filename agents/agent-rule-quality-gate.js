@@ -128,14 +128,18 @@ async function main() {
 
       // 3. Check corpus for phishing hits
       try {
-        const hits = await d1(`
-          SELECT registered_domain, COUNT(DISTINCT install_id) as reports
-          FROM verdicts
-          WHERE risk_level IN ('dangerous','suspicious')
-            AND registered_domain IN (${rule.typos.slice(0,20).map(t => `'${t.replace(/'/g,"''")}'`).join(',')})
-          GROUP BY registered_domain LIMIT 10
-        `);
-        eval_.corpusHits = hits.reduce((s, r) => s + r.reports, 0);
+        let corpusTotal = 0;
+        for (const typo of rule.typos.slice(0, 20)) {
+          const rows = d1`
+            SELECT registered_domain, COUNT(DISTINCT install_id) as reports
+            FROM verdicts
+            WHERE risk_level IN ('dangerous','suspicious')
+              AND registered_domain = ${typo}
+            GROUP BY registered_domain LIMIT 1
+          `;
+          corpusTotal += rows.reduce((s, r) => s + r.reports, 0);
+        }
+        eval_.corpusHits = corpusTotal;
       } catch {}
 
       // 4. Too narrow — only 1-2 typos and no corpus hits
@@ -145,15 +149,15 @@ async function main() {
 
       // 5. Duplicate — brand name already in existing rules
       try {
-        const existing = await d1(`
+        const existing = d1`
           SELECT detected_brand FROM verdicts
-          WHERE detected_brand = '${rule.name.replace(/'/g,"''")}' LIMIT 1
-        `);
+          WHERE detected_brand = ${rule.name} LIMIT 1
+        `;
         // Only warn if it's in verdicts but NOT as a phishing hit — suggests it's already covered
-        const phishHits = await d1(`
+        const phishHits = d1`
           SELECT COUNT(*) as hits FROM verdicts
-          WHERE detected_brand = '${rule.name.replace(/'/g,"''")}' AND risk_level IN ('dangerous','suspicious') LIMIT 1
-        `);
+          WHERE detected_brand = ${rule.name} AND risk_level IN ('dangerous','suspicious') LIMIT 1
+        `;
         if (existing.length > 0 && phishHits[0]?.hits > 10) {
           eval_.warnings.push(`Brand "${rule.name}" already has ${phishHits[0].hits} phishing verdicts in corpus — may duplicate existing coverage`);
         }
@@ -242,7 +246,7 @@ async function main() {
 
         // 6. Duplicate check
         try {
-          const existing = await d1(`SELECT signal_id FROM phishkit_signals WHERE signal_id = '${rule.id.replace(/'/g,"''")}' LIMIT 1`);
+          const existing = d1`SELECT signal_id FROM phishkit_signals WHERE signal_id = ${rule.id} LIMIT 1`;
           if (existing.length > 0) eval_.warnings.push(`Pattern ID "${rule.id}" already exists in corpus — may be a duplicate`);
         } catch {}
 
@@ -253,7 +257,7 @@ async function main() {
 
         // 8. Corpus hits
         try {
-          const hits = await d1(`SELECT COUNT(*) as hits FROM phishkit_signals WHERE signal_id = '${rule.id.replace(/'/g,"''")}' LIMIT 1`);
+          const hits = d1`SELECT COUNT(*) as hits FROM phishkit_signals WHERE signal_id = ${rule.id} LIMIT 1`;
           eval_.corpusHits = hits[0]?.hits || 0;
         } catch {}
       }

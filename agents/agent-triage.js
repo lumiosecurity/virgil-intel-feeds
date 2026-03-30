@@ -156,20 +156,20 @@ async function main() {
   ]);
 
   // ── Corpus signals ───────────────────────────────────────────────────────────
-  const signalRows = d1(`
+  const signalRows = d1`
     SELECT s.type, COUNT(*) as hits, AVG(s.weight) as avg_weight
     FROM signals s JOIN verdicts v ON s.verdict_id = v.id
-    WHERE v.registered_domain = '${registeredDomain.replace(/'/g,"''")}'
+    WHERE v.registered_domain = ${registeredDomain}
     GROUP BY s.type ORDER BY hits DESC LIMIT 15
-  `);
+  `;
 
-  const verdictRows = d1(`
+  const verdictRows = d1`
     SELECT risk_level, confidence, detected_brand, has_password_form,
            external_form_submit, phishkit_signal_count, created_at
     FROM verdicts
-    WHERE registered_domain = '${registeredDomain.replace(/'/g,"''")}'
+    WHERE registered_domain = ${registeredDomain}
     ORDER BY created_at DESC LIMIT 5
-  `);
+  `;
 
   // ── Build Claude prompt ──────────────────────────────────────────────────────
   console.log('Calling Claude for analysis...');
