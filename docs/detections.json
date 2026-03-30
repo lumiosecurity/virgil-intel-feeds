@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-30-06:21",
-    "generatedAt": "2026-03-30T06:21:27.415Z",
-    "brandCount": 104,
-    "patternCount": 249
+    "version": "2026-03-30-06:24",
+    "generatedAt": "2026-03-30T06:24:01.972Z",
+    "brandCount": 105,
+    "patternCount": 257
   },
   "brandEntries": [
     {
@@ -76,6 +76,19 @@
         "docussign",
         "docu-sign",
         "docusigne"
+      ]
+    },
+    {
+      "name": "millerhull",
+      "vertical": "business",
+      "domains": [
+        "millerhull.com"
+      ],
+      "typos": [
+        "millerhul",
+        "milerhull",
+        "millerhullpartnership",
+        "themillerhull"
       ]
     },
     {
@@ -2761,6 +2774,17 @@
       "note": ""
     },
     {
+      "id": "hidden-iframe-cf-challenge-gating",
+      "group": "botEvasion",
+      "description": "Detects hidden 1x1 iframe dynamically loading Cloudflare challenge-platform scripts as bot evasion gating",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "visibility['\"]?\\s*[:=]\\s*['\"]?hidden.*cdn-cgi/challenge-platform/scripts",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -3311,6 +3335,17 @@
       "note": ""
     },
     {
+      "id": "ms-oauth-params-nonms-domain",
+      "group": "brandImpersonation",
+      "description": "Microsoft OAuth parameters (client_id, redirect_uri to office.com, OfficeHome scope) embedded in URL or page source served from non-Microsoft domain",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "both",
+      "patternString": "redirect_uri=https?%3A%2F%2F[^&]*office\\.com.*OfficeHome",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -3538,6 +3573,28 @@
       "weight": 0.45,
       "source": "js",
       "patternString": "var\\s+\\w+\\s*=\\s*\"[A-Za-z0-9+/=]{100,}\"[\\s\\S]{0,500}atob\\([\\s\\S]{0,1000}document\\.write\\(",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "script-placeholder-docwrite",
+      "group": "obfuscation",
+      "description": "Obfuscated page using __SCRIPT_PLACEHOLDER__ tokens replaced at runtime before document.write, characteristic of credential phishing kits",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "__SCRIPT_PLACEHOLDER_\\d+__.*document\\.write\\(decoded\\)",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "b64-splice-docwrite-obfuscation",
+      "group": "obfuscation",
+      "description": "Detects base64 decode + character splice deobfuscation followed by document.write, common in phishing loaders",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "var\\s+\\w+\\s*=\\s*\"[A-Za-z0-9+/=]{20,}\";.*\\.splice\\(\\w+,\\s*1\\).*atob\\(.*document\\.write\\(",
       "patternFlags": "i",
       "note": ""
     },
@@ -4906,6 +4963,39 @@
       "note": ""
     },
     {
+      "id": "b64-charmap-docwrite-phishkit",
+      "group": "phishkitSignatures",
+      "description": "Phishkit that base64-encodes HTML, uses character insertion map for evasion, and renders via document.write with placeholder substitution",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "var\\s+d\\s*=\\s*\"[A-Za-z0-9+/=]{50,}\"\\s*;\\s*var\\s+m\\s*=\\s*\"[A-Za-z0-9+/=]+\"\\s*;\\s*var\\s+ph\\s*=",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "b64-docwrite-placeholder-phishkit",
+      "group": "phishkitSignatures",
+      "description": "Detects phishkit that base64-decodes HTML with character-position manipulation and placeholder script injection via document.write",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "atob\\([^)]+\\).*__SCRIPT_PLACEHOLDER_.*document\\.write\\(",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "google-sites-embedded-files",
+      "group": "phishkitSignatures",
+      "description": "Detects Google Sites pages using 'Embedded Files' content delivery — a common phishing technique where malicious documents are embedded on trusted Google Sites pages",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "sites\\.google\\.com.*Embedded\\s+Files",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -5430,6 +5520,17 @@
       "weight": 0.3,
       "source": "html",
       "patternString": "constantcontactpages\\.com\\/(cu|su|sv)\\/",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "google-sites-suspicious-path-domain",
+      "group": "urlHeuristics",
+      "description": "Detects Google Sites pages where the URL path contains a third-party domain (attacker's Workspace domain) — indicates abuse of Google Sites for brand impersonation",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "sites\\.google\\.com/[a-z0-9-]+\\.[a-z]{2,}/",
       "patternFlags": "i",
       "note": ""
     }
