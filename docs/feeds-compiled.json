@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T15:25:53.234Z",
+    "compiledAt": "2026-03-30T15:37:20.943Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 276
+    "patternCount": 279
   },
   "brandEntries": [
     {
@@ -2384,6 +2384,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "microsoft-login-font-fingerprint",
+      "group": "brandImpersonation",
+      "description": "Detects Microsoft login page clone via distinctive Segoe UI font-face declaration with unique fallback chain including Segoe Xbox Symbol, Mongolian Baiti, MV Boli",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "Segoe UI Webfont.*Segoe Xbox Symbol.*Mongolian Baiti.*MV Boli",
+      "patternFlags": "i"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -4214,6 +4224,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "microsoft-account-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Detects pages with Microsoft account sign-in title hosted on non-Microsoft domains",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<title>\\s*Sign in to your Microsoft account\\s*</title>",
+      "patternFlags": "i"
+    },
+    {
       "id": "ndax-auth-typosquat",
       "group": "typosquat",
       "description": "NDAX authentication typosquat patterns",
@@ -4526,11 +4546,21 @@
       "source": "html",
       "patternString": "[A-Za-z0-9+/]{20,}={0,2}",
       "patternFlags": "i"
+    },
+    {
+      "id": "login-keyword-cloud-tld-random-path",
+      "group": "urlHeuristics",
+      "description": "Detects domains combining login/service keywords on .cloud TLD with randomized short path identifiers typical of phishing campaign infrastructure",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "loginservice\\.cloud|signin-?service\\.cloud|login-?service\\.cloud|account-?service\\.cloud",
+      "patternFlags": "i"
     }
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-30T15:13:10.183Z",
+      "compiledAt": "2026-03-30T15:25:52.734Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
