@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T06:24:01.960Z",
+    "compiledAt": "2026-03-30T06:25:56.253Z",
     "brandCount": 105,
     "signalCount": 1,
-    "patternCount": 257
+    "patternCount": 262
   },
   "brandEntries": [
     {
@@ -1393,7 +1393,16 @@
       "typos": [
         "microsft",
         "mircosoft",
-        "micr0soft"
+        "micr0soft",
+        "offlce",
+        "0ffice",
+        "offce",
+        "offfice",
+        "officce",
+        "0fflce",
+        "timesheet-office",
+        "timesheetoffice",
+        "timesheetofflce"
       ],
       "vertical": "productivity",
       "keywords": [
@@ -2301,6 +2310,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "mediawiki-config-on-non-wiki-domain",
+      "group": "brandImpersonation",
+      "description": "Detects cloned Wikipedia/MediaWiki pages served from non-Wikimedia domains, commonly used as cloaking layers in phishing",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "wgCanonicalNamespace|wgPageName.*Main_Page|RLCONF.*wgRequestId|enwikimwclientpreferences",
+      "patternFlags": "i"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -2448,6 +2467,16 @@
       "weight": 0.45,
       "source": "js",
       "patternString": "preventDefault\\(\\)[\\s\\S]{0,500}FormData[\\s\\S]{0,500}fetch\\(form\\.action",
+      "patternFlags": "i"
+    },
+    {
+      "id": "campaign-key-plus-username-param",
+      "group": "credentialHarvesting",
+      "description": "Detects URL patterns with campaign tracking key and username/email parameter, typical of gated phishing kits",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "\\/(common|verify|auth|login|secure|account)\\?.*key=[a-z0-9]{6,}.*username=|username=.*key=[a-z0-9]{6,}",
       "patternFlags": "i"
     },
     {
@@ -4165,6 +4194,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "office-typosquat-offlce-hostname",
+      "group": "typosquatPatterns",
+      "description": "Hostname contains 'offlce' — a typosquat of 'office' replacing 'i' with 'l', commonly used in Microsoft credential phishing",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "offlce",
+      "patternFlags": "i"
+    },
+    {
       "id": "deep-subdomain-indonesia-business",
       "group": "urlHeuristics",
       "description": "Increase weight for deep subdomains on Indonesian business domains",
@@ -4292,6 +4331,26 @@
       "weight": 0.35,
       "source": "html",
       "patternString": "sites\\.google\\.com/[a-z0-9-]+\\.[a-z]{2,}/",
+      "patternFlags": "i"
+    },
+    {
+      "id": "base64-email-in-url-param",
+      "group": "urlHeuristics",
+      "description": "Detects base64-encoded email addresses in URL query parameters, common in targeted phishing campaigns",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "[?&](username|email|user|id|token|key|uid|account)=[A-Za-z0-9+/]{20,}={0,2}(?:&|$)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "base64-email-in-path",
+      "group": "urlHeuristics",
+      "description": "URL path contains a base64-encoded string that likely encodes an email address (contains @ when decoded), indicating per-victim phishing targeting",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "[A-Za-z0-9+/]{20,}={0,2}",
       "patternFlags": "i"
     }
   ],
