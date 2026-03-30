@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T15:24:24.003Z",
+    "compiledAt": "2026-03-30T15:25:10.821Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 272
+    "patternCount": 274
   },
   "brandEntries": [
     {
@@ -498,7 +498,8 @@
         "amazonwebservices",
         "anazon",
         "amazn",
-        "amazzon"
+        "amazzon",
+        "arnazonwebservices"
       ]
     },
     {
@@ -3952,6 +3953,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "amazon-signin-phishkit-aui",
+      "group": "phishkitSignatures",
+      "description": "Detects cloned Amazon sign-in pages using Amazon AUI auth framework class names with signIn form outside amazon.com domains",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "auth-validate-form[\\s\\S]{0,2000}form[\\s\\S]{0,200}name=[\"']signIn[\"'][\\s\\S]{0,2000}auth-pagelet-container",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4079,6 +4090,16 @@
       "weight": 0.3,
       "source": "html",
       "patternString": "(\\?|&)(id[-_]?\\d{6,}[/&]meeting|meeting[-_]?id=\\d{6,}|ref=[A-Z]{2}\\d{2,}[A-Z]{2})",
+      "patternFlags": "i"
+    },
+    {
+      "id": "security-urgency-domain-pattern",
+      "group": "socialEngineering",
+      "description": "Detects domains using security-urgency keywords (unauthorised, alert, verification, suspended) combined with brand names in subdomain",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "https?://[a-z0-9.-]*(?:amazon|paypal|microsoft|google|apple|netflix)[a-z0-9.-]*\\.(?:security|secure|verify|account|alert)[\\-]?(?:unauthori[sz]ed|alert|verif(?:y|ication)|suspend|locked|blocked|request|update|confirm)",
       "patternFlags": "i"
     },
     {
@@ -4488,7 +4509,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-30T15:23:15.294Z",
+      "compiledAt": "2026-03-30T15:24:22.707Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
