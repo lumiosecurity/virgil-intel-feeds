@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T05:20:04.295Z",
+    "compiledAt": "2026-03-30T05:57:43.590Z",
     "brandCount": 102,
     "signalCount": 1,
-    "patternCount": 218
+    "patternCount": 221
   },
   "brandEntries": [
     {
@@ -2107,6 +2107,26 @@
       "patternFlags": "i"
     },
     {
+      "id": "microsoft-convergedsignin-pageid",
+      "group": "brandImpersonation",
+      "description": "Detects Microsoft ConvergedSignIn PageID meta tag copied from real login page onto non-Microsoft domains",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<meta[^>]+content=[\"']ConvergedSignIn[\"'][^>]*name=[\"']PageID[\"']|<meta[^>]+name=[\"']PageID[\"'][^>]*content=[\"']ConvergedSignIn[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "microsoft-favicon-thirdparty-exfil",
+      "group": "brandImpersonation",
+      "description": "Detects Microsoft favicon loaded from non-Microsoft third-party domains, indicating a cloned login page",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "rel=[\"'](?:shortcut )?icon[\"'][^>]+href=[\"']https?://(?!(?:[\\w.-]*\\.)?microsoft\\.com)[\\w.-]+/[^\"']*microsoft[_-]?favicon",
+      "patternFlags": "i"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -3407,6 +3427,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "phishkit-crrid-tracker",
+      "group": "phishkitSignatures",
+      "description": "Detects getcrrid() function used by phishkits to track victim sessions with hex campaign IDs",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "function\\s+getcrrid\\s*\\(\\s*\\)\\s*\\{\\s*return\\s+['\"][0-9a-f]{20,}['\"]",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -3833,7 +3863,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-30T04:18:14.306Z",
+      "compiledAt": "2026-03-30T05:20:03.175Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

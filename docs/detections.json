@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-30-05:20",
-    "generatedAt": "2026-03-30T05:20:04.305Z",
+    "version": "2026-03-30-05:57",
+    "generatedAt": "2026-03-30T05:57:43.599Z",
     "brandCount": 102,
-    "patternCount": 218
+    "patternCount": 221
   },
   "brandEntries": [
     {
@@ -3140,6 +3140,28 @@
       "note": ""
     },
     {
+      "id": "microsoft-convergedsignin-pageid",
+      "group": "brandImpersonation",
+      "description": "Detects Microsoft ConvergedSignIn PageID meta tag copied from real login page onto non-Microsoft domains",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<meta[^>]+content=[\"']ConvergedSignIn[\"'][^>]*name=[\"']PageID[\"']|<meta[^>]+name=[\"']PageID[\"'][^>]*content=[\"']ConvergedSignIn[\"']",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "microsoft-favicon-thirdparty-exfil",
+      "group": "brandImpersonation",
+      "description": "Detects Microsoft favicon loaded from non-Microsoft third-party domains, indicating a cloned login page",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "rel=[\"'](?:shortcut )?icon[\"'][^>]+href=[\"']https?://(?!(?:[\\w.-]*\\.)?microsoft\\.com)[\\w.-]+/[^\"']*microsoft[_-]?favicon",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -4566,6 +4588,17 @@
       "weight": 0.45,
       "source": "html",
       "patternString": "auth-validate-form.*auth-(?:workflow|pagelet-container)|AuthenticationPortalAssets",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "phishkit-crrid-tracker",
+      "group": "phishkitSignatures",
+      "description": "Detects getcrrid() function used by phishkits to track victim sessions with hex campaign IDs",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "function\\s+getcrrid\\s*\\(\\s*\\)\\s*\\{\\s*return\\s+['\"][0-9a-f]{20,}['\"]",
       "patternFlags": "i",
       "note": ""
     },
