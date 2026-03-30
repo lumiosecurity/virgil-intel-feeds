@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T05:59:15.534Z",
+    "compiledAt": "2026-03-30T06:07:16.435Z",
     "brandCount": 102,
     "signalCount": 1,
-    "patternCount": 224
+    "patternCount": 230
   },
   "brandEntries": [
     {
@@ -1667,6 +1667,36 @@
       "patternFlags": "i"
     },
     {
+      "id": "ipinfo-bot-evasion-redirect",
+      "group": "botEvasion",
+      "description": "Fetches ipinfo.io to fingerprint visitor IP/org and conditionally redirects bots/scanners — classic phishkit bot evasion",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "ipinfo\\.io\\/json.*\\.org.*location\\.replace",
+      "patternFlags": "i"
+    },
+    {
+      "id": "reversed-string-isp-blocklist",
+      "group": "botEvasion",
+      "description": "Reversed strings used to build ISP/org blocklist for bot evasion — matches split().reverse().join() pattern checking against org names",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "split\\([\"'][\"']\\)\\.reverse\\(\\)\\.join\\([\"'][\"']\\)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "bot-detect-webdriver-phantom",
+      "group": "botEvasion",
+      "description": "Detects bot evasion checking navigator.webdriver combined with PhantomJS indicators (callPhantom, _phantom, phantom)",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "navigator\\.webdriver.*(?:callPhantom|_phantom|window\\.phantom)",
+      "patternFlags": "i"
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -2167,6 +2197,26 @@
       "patternFlags": "is"
     },
     {
+      "id": "fake-cloudflare-interstitial",
+      "group": "captchaGating",
+      "description": "Detects fake Cloudflare-style 'Just a moment...' interstitial with spinner animation but no real Cloudflare challenge JS",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<title>\\s*Just a moment[.…]*\\s*</title>(?!.*challenges\\.cloudflare\\.com)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "cookie-gate-reload-phishkit",
+      "group": "cdnGating",
+      "description": "Detects phishkit gate pattern: sets a cookie with timestamp then reloads page to pass server-side check",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "document\\.cookie\\s*=\\s*[\"'][^\"']*[\"']\\s*\\+\\s*Date\\.now\\(\\).*?location\\.reload\\(\\)",
+      "patternFlags": "i"
+    },
+    {
       "id": "email-userid-label",
       "group": "credentialHarvesting",
       "description": "Email Address/User ID label pattern common in email phishing",
@@ -2284,6 +2334,16 @@
       "weight": 0.45,
       "source": "html",
       "patternString": "<div\\s+id=[\"'][a-z]{1,3}[\"']>\\s*</div>\\s*<script>[\\s\\S]*?var\\s+[a-z]\\s*=\\s*[\"'][A-Za-z0-9+/=]{500,}",
+      "patternFlags": "i"
+    },
+    {
+      "id": "obfuscated-form-autosubmit",
+      "group": "obfuscation",
+      "description": "Form auto-submitted via string manipulation to obfuscate the .submit() call — phishkit anti-detection technique",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "SUBMIT(?:FORM)?[\"']\\s*\\.\\s*substring\\s*\\(",
       "patternFlags": "i"
     },
     {
@@ -3893,7 +3953,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-30T05:57:42.474Z",
+      "compiledAt": "2026-03-30T05:59:14.926Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
