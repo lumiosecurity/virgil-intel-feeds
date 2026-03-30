@@ -20,7 +20,7 @@
 //
 // OpenPhish requires no key.
 
-import { createHmac }      from 'crypto';
+import { createHash, createHmac }      from 'crypto';
 import { createBunzip2 }   from 'node:zlib';
 import { pipeline }        from 'node:stream/promises';
 import { Writable }        from 'node:stream';
@@ -398,7 +398,6 @@ function shannonEntropy(str) {
 }
 
 function sha256Sync(str) {
-  const { createHash } = await import('crypto').catch(() => ({ createHash: () => ({ update: ()=>({digest:()=>'0'.repeat(64)}) }) }));
   return createHash('sha256').update(str).digest('hex');
 }
 
