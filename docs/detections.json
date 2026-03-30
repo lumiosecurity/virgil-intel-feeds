@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-30-15:23",
-    "generatedAt": "2026-03-30T15:23:16.506Z",
+    "version": "2026-03-30-15:24",
+    "generatedAt": "2026-03-30T15:24:24.012Z",
     "brandCount": 106,
-    "patternCount": 270
+    "patternCount": 272
   },
   "brandEntries": [
     {
@@ -108,10 +108,18 @@
         "dropbx",
         "drapbox",
         "dropbix",
+        "drpbx",
+        "drobox",
+        "dr0pbox",
+        "drobpox",
+        "dropbocks",
+        "droppbox",
+        "dropboxs",
+        "drpbox",
+        "drpbxlgn",
         "droopbox",
         "drophox",
         "dropbax",
-        "dr0pbox",
         "dropboxx",
         "drop-box"
       ]
@@ -3610,6 +3618,17 @@
       "note": ""
     },
     {
+      "id": "keystroke-click-tracking-counters",
+      "group": "credentialHarvesting",
+      "description": "Detects phishing pages that track keystrokes, clicks, and time-on-page via inline counters — characteristic of phishing simulations and credential harvesting kits",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "(keystrokes|clicks\\s*tracked|time\\s*on\\s*page).*?(keystrokes|clicks\\s*tracked|time\\s*on\\s*page)",
+      "patternFlags": "is",
+      "note": ""
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -5366,6 +5385,17 @@
       "weight": 0.4,
       "source": "html",
       "patternString": "<title>[^<]*cloudflare\\s+chall[ae]nge[^<]*<\\/title>",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "dropbox-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Detects pages using Dropbox sign-in page title patterns with credential fields, indicating brand impersonation when served from non-Dropbox domains",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<title>\\s*Dropbox\\s*[-–—]\\s*Sign\\s*in\\s*</title>",
       "patternFlags": "i",
       "note": ""
     },

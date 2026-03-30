@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T15:23:16.495Z",
+    "compiledAt": "2026-03-30T15:24:24.003Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 270
+    "patternCount": 272
   },
   "brandEntries": [
     {
@@ -108,10 +108,18 @@
         "dropbx",
         "drapbox",
         "dropbix",
+        "drpbx",
+        "drobox",
+        "dr0pbox",
+        "drobpox",
+        "dropbocks",
+        "droppbox",
+        "dropboxs",
+        "drpbox",
+        "drpbxlgn",
         "droopbox",
         "drophox",
         "dropbax",
-        "dr0pbox",
         "dropboxx",
         "drop-box"
       ],
@@ -2544,6 +2552,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "keystroke-click-tracking-counters",
+      "group": "credentialHarvesting",
+      "description": "Detects phishing pages that track keystrokes, clicks, and time-on-page via inline counters — characteristic of phishing simulations and credential harvesting kits",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "(keystrokes|clicks\\s*tracked|time\\s*on\\s*page).*?(keystrokes|clicks\\s*tracked|time\\s*on\\s*page)",
+      "patternFlags": "is"
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -4144,6 +4162,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "dropbox-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Detects pages using Dropbox sign-in page title patterns with credential fields, indicating brand impersonation when served from non-Dropbox domains",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<title>\\s*Dropbox\\s*[-–—]\\s*Sign\\s*in\\s*</title>",
+      "patternFlags": "i"
+    },
+    {
       "id": "ndax-auth-typosquat",
       "group": "typosquat",
       "description": "NDAX authentication typosquat patterns",
@@ -4460,7 +4488,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-30T15:21:14.085Z",
+      "compiledAt": "2026-03-30T15:23:15.294Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
