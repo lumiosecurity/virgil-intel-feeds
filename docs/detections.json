@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-30-15:13",
-    "generatedAt": "2026-03-30T15:13:11.060Z",
+    "version": "2026-03-30-15:21",
+    "generatedAt": "2026-03-30T15:21:14.892Z",
     "brandCount": 106,
-    "patternCount": 265
+    "patternCount": 268
   },
   "brandEntries": [
     {
@@ -1171,7 +1171,9 @@
         "facbook",
         "fecebook",
         "faceboook",
-        "facebbok"
+        "facebbok",
+        "facebock",
+        "faccebook"
       ]
     },
     {
@@ -3405,6 +3407,17 @@
       "note": ""
     },
     {
+      "id": "facebook-login-prompt-offsite",
+      "group": "brandImpersonation",
+      "description": "Facebook login prompt text on non-Facebook domain — classic phishkit copy",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "log\\s*in\\s*to\\s*use\\s*your\\s*facebook\\s*account",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -5073,6 +5086,28 @@
       "weight": 0.4,
       "source": "html",
       "patternString": "sites\\.google\\.com.*Embedded\\s+Files",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "skript-login-php-exfil",
+      "group": "phishkitSignatures",
+      "description": "Form action pointing to skript_login.php — known credential harvester script from Eastern European phishkits",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "action\\s*=\\s*[\"']skript_login\\.php[\"']",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "facebook-phishkit-local-assets",
+      "group": "phishkitSignatures",
+      "description": "Local fb/ directory assets (head.png, login_btn.png) — signature of classic Facebook phishing kit",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "(?:url|src)\\s*[=(]\\s*[\"']?fb/(?:head|login_btn)\\.png",
       "patternFlags": "i",
       "note": ""
     },

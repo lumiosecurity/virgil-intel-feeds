@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T15:13:11.050Z",
+    "compiledAt": "2026-03-30T15:21:14.881Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 265
+    "patternCount": 268
   },
   "brandEntries": [
     {
@@ -1177,7 +1177,9 @@
         "facbook",
         "fecebook",
         "faceboook",
-        "facebbok"
+        "facebbok",
+        "facebock",
+        "faccebook"
       ]
     },
     {
@@ -2354,6 +2356,16 @@
       "weight": 0.4,
       "source": "html",
       "patternString": "<img[^>]*src=\"[^\"]*office[_-]?365[^\"]*\\.(png|jpg|svg|webp)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "facebook-login-prompt-offsite",
+      "group": "brandImpersonation",
+      "description": "Facebook login prompt text on non-Facebook domain — classic phishkit copy",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "log\\s*in\\s*to\\s*use\\s*your\\s*facebook\\s*account",
       "patternFlags": "i"
     },
     {
@@ -3877,6 +3889,26 @@
       "patternFlags": "i"
     },
     {
+      "id": "skript-login-php-exfil",
+      "group": "phishkitSignatures",
+      "description": "Form action pointing to skript_login.php — known credential harvester script from Eastern European phishkits",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "action\\s*=\\s*[\"']skript_login\\.php[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "facebook-phishkit-local-assets",
+      "group": "phishkitSignatures",
+      "description": "Local fb/ directory assets (head.png, login_btn.png) — signature of classic Facebook phishing kit",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "(?:url|src)\\s*[=(]\\s*[\"']?fb/(?:head|login_btn)\\.png",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4403,7 +4435,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-30T10:44:29.193Z",
+      "compiledAt": "2026-03-30T15:13:10.183Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
