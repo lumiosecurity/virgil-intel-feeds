@@ -50,8 +50,9 @@ export function d1(sql) {
 // ── Claude API ─────────────────────────────────────────────────────────────────
 // All agent Claude calls go here — consistent model, temperature, token budget
 
-export async function claude(systemPrompt, userContent, maxTokens = 2000, imageUrl = null) {
+export async function claude(systemPrompt, userContent, maxTokens = 2000, imageUrl = null, model = null) {
   if (!cfg.anthropicKey) throw new Error('ANTHROPIC_API_KEY not set');
+  const useModel = model || cfg.model;
 
   // Build message content — optionally prepend screenshot
   let messageContent;
@@ -90,7 +91,7 @@ export async function claude(systemPrompt, userContent, maxTokens = 2000, imageU
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model:      cfg.model,
+      model:      useModel,
       max_tokens: maxTokens,
       system:     systemPrompt,
       messages:   [{ role: 'user', content: messageContent }],
