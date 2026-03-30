@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-30-06:07",
-    "generatedAt": "2026-03-30T06:07:16.445Z",
+    "version": "2026-03-30-06:09",
+    "generatedAt": "2026-03-30T06:09:00.706Z",
     "brandCount": 102,
-    "patternCount": 230
+    "patternCount": 234
   },
   "brandEntries": [
     {
@@ -2689,6 +2689,17 @@
       "note": ""
     },
     {
+      "id": "bot-evasion-webdriver-phantom",
+      "group": "botEvasion",
+      "description": "Detects bot evasion checks for navigator.webdriver, callPhantom, or _phantom — common phishkit anti-analysis technique",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "navigator\\.webdriver\\s*\\|\\|\\s*window\\.(callPhantom|_phantom|phantom)",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -3206,6 +3217,17 @@
       "note": ""
     },
     {
+      "id": "google-favicon-api-brand-impersonation",
+      "group": "brandImpersonation",
+      "description": "Detects use of Google's favicon service to display a brand icon on a non-brand domain, common in generic phishkits",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "google\\.com/s2/favicons\\?domain=(?!{{currentDomain}})[a-z0-9.-]+\\.(com|net|org|io)",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -3246,6 +3268,17 @@
       "weight": 0.35,
       "source": "html",
       "patternString": "<title>\\s*Just a moment[.…]*\\s*</title>(?!.*challenges\\.cloudflare\\.com)",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "fake-captcha-gate-hidden-form",
+      "group": "captchaGating",
+      "description": "Detects fake browser-check verification screen with checkbox that gates a hidden credential form, common in phishkits",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:checking your browser|verify.{0,30}human).{0,500}(?:#main-content|form-container).{0,100}display:\\s*none",
       "patternFlags": "i",
       "note": ""
     },
@@ -4698,6 +4731,17 @@
       "weight": 0.4,
       "source": "html",
       "patternString": "<body>\\s*<div[^>]*>\\s*</div>\\s*<script>\\s*async\\s+function\\s+\\w+\\(\\)\\s*\\{[\\s\\S]*?[\"'][A-Za-z0-9+/]{200,}",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "cookie-gate-reload-pattern",
+      "group": "phishkitSignatures",
+      "description": "Detects phishkit gate pattern: sets a session cookie then calls location.reload() to pass server-side validation",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "document\\.cookie\\s*=\\s*[\"'][^\"']*[\"'].*?window\\.location\\.reload\\(\\)",
       "patternFlags": "i",
       "note": ""
     },
