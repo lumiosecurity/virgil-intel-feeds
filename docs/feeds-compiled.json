@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T15:21:14.881Z",
+    "compiledAt": "2026-03-30T15:23:16.495Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 268
+    "patternCount": 270
   },
   "brandEntries": [
     {
@@ -55,7 +55,12 @@
       "typos": [
         "networksoltuions",
         "networksoluton",
-        "networksoluions"
+        "networksoluions",
+        "networksolut1ons",
+        "networksolutons",
+        "netsolutions",
+        "networksolutionsemai",
+        "networksolusions"
       ],
       "vertical": "business"
     },
@@ -2619,6 +2624,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "atob-document-write-obfuscation",
+      "group": "obfuscation",
+      "description": "Detects pages where entire content is base64-decoded and written to DOM via document.write(unescape(atob())) — common phishkit obfuscation",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "document\\[?['\"]write['\"]\\]?\\s*\\(\\s*(unescape\\s*\\(\\s*)?atob\\s*\\(",
+      "patternFlags": "i"
+    },
+    {
       "id": "base64-html-password-obfuscation",
       "group": "phishkitSignatures",
       "description": "Base64 obfuscated HTML containing password input fields",
@@ -3909,6 +3924,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "telegram-bot-exfil-token",
+      "group": "phishkitSignatures",
+      "description": "Detects Telegram Bot API token in page source, used for credential exfiltration to Telegram chats",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "telegramBotToken|api\\.telegram\\.org\\/bot\\d{5,}:[A-Za-z0-9_-]{30,}",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4435,7 +4460,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-30T15:13:10.183Z",
+      "compiledAt": "2026-03-30T15:21:14.085Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

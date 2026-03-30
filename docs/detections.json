@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-30-15:21",
-    "generatedAt": "2026-03-30T15:21:14.892Z",
+    "version": "2026-03-30-15:23",
+    "generatedAt": "2026-03-30T15:23:16.506Z",
     "brandCount": 106,
-    "patternCount": 268
+    "patternCount": 270
   },
   "brandEntries": [
     {
@@ -55,7 +55,12 @@
       "typos": [
         "networksoltuions",
         "networksoluton",
-        "networksoluions"
+        "networksoluions",
+        "networksolut1ons",
+        "networksolutons",
+        "netsolutions",
+        "networksolutionsemai",
+        "networksolusions"
       ]
     },
     {
@@ -3693,6 +3698,17 @@
       "note": ""
     },
     {
+      "id": "atob-document-write-obfuscation",
+      "group": "obfuscation",
+      "description": "Detects pages where entire content is base64-decoded and written to DOM via document.write(unescape(atob())) — common phishkit obfuscation",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "document\\[?['\"]write['\"]\\]?\\s*\\(\\s*(unescape\\s*\\(\\s*)?atob\\s*\\(",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "base64-html-password-obfuscation",
       "group": "phishkitSignatures",
       "description": "Base64 obfuscated HTML containing password input fields",
@@ -5108,6 +5124,17 @@
       "weight": 0.4,
       "source": "html",
       "patternString": "(?:url|src)\\s*[=(]\\s*[\"']?fb/(?:head|login_btn)\\.png",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "telegram-bot-exfil-token",
+      "group": "phishkitSignatures",
+      "description": "Detects Telegram Bot API token in page source, used for credential exfiltration to Telegram chats",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "telegramBotToken|api\\.telegram\\.org\\/bot\\d{5,}:[A-Za-z0-9_-]{30,}",
       "patternFlags": "i",
       "note": ""
     },
