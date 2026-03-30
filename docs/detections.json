@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-30-06:16",
-    "generatedAt": "2026-03-30T06:16:02.369Z",
+    "version": "2026-03-30-06:21",
+    "generatedAt": "2026-03-30T06:21:27.415Z",
     "brandCount": 104,
-    "patternCount": 244
+    "patternCount": 249
   },
   "brandEntries": [
     {
@@ -56,6 +56,26 @@
         "networksoltuions",
         "networksoluton",
         "networksoluions"
+      ]
+    },
+    {
+      "name": "docusign",
+      "vertical": "business",
+      "domains": [
+        "docusign.com",
+        "docusign.net",
+        "docusign.app"
+      ],
+      "typos": [
+        "docusiqn",
+        "doccusign",
+        "docusigm",
+        "d0cusign",
+        "docuslgn",
+        "documsign",
+        "docussign",
+        "docu-sign",
+        "docusigne"
       ]
     },
     {
@@ -1067,19 +1087,6 @@
         "cloudflaire",
         "cloudflar",
         "cIoudflare"
-      ]
-    },
-    {
-      "name": "docusign",
-      "vertical": "general",
-      "domains": [
-        "docusign.com",
-        "docusign.net"
-      ],
-      "typos": [
-        "docu-sign",
-        "docusiqn",
-        "docusigne"
       ]
     },
     {
@@ -3282,6 +3289,28 @@
       "note": ""
     },
     {
+      "id": "docusign-brand-impersonation-html",
+      "group": "brandImpersonation",
+      "description": "DocuSign branding detected on non-DocuSign domain indicating impersonation",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "(docusign[\\s_-]*(logo|sign|review|document)|Please\\s+review\\s+and\\s+sign|powered\\s+by\\s+docusign|Complete\\s+with\\s+DocuSign)",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "ms-oauth-params-in-base64-url",
+      "group": "brandImpersonation",
+      "description": "Detects base64-encoded Microsoft OAuth parameters (client_id, redirect_uri=office.com) embedded in query strings, characteristic of Microsoft credential phishing",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "Y2xpZW50X2lk|cmVkaXJlY3RfdXJp[A-Za-z0-9+/=]*b2ZmaWNlLmNvbQ",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -3498,6 +3527,17 @@
       "weight": 0.35,
       "source": "html",
       "patternString": "\\.[a-zA-Z]{10,}_[a-zA-Z]{8,}\\s*\\{\\s*display:\\s*none\\s*!important",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "base64-document-write-obfuscation",
+      "group": "obfuscation",
+      "description": "Detects phishkits that base64-encode entire page HTML, apply character-position obfuscation, then document.write the decoded result",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "var\\s+\\w+\\s*=\\s*\"[A-Za-z0-9+/=]{100,}\"[\\s\\S]{0,500}atob\\([\\s\\S]{0,1000}document\\.write\\(",
       "patternFlags": "i",
       "note": ""
     },
@@ -4855,6 +4895,17 @@
       "note": ""
     },
     {
+      "id": "script-placeholder-reconstruction",
+      "group": "phishkitSignatures",
+      "description": "Detects phishkits using placeholder strings to reconstruct script tags after base64 decoding, evading static HTML analysis",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "__SCRIPT_PLACEHOLDER_\\d+__",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -5368,6 +5419,17 @@
       "weight": 0.45,
       "source": "html",
       "patternString": "(adidas|nike|puma|zara|gucci|amazon|walmart|target|costco|apple|google|meta|microsoft)[-_]?(job|jobs|career|careers|hiring|recruit|hr|employment|apply|onboarding|work)",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "constantcontact-landing-page-abuse",
+      "group": "urlHeuristics",
+      "description": "Constant Contact landing page URL pattern commonly abused for phishing",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "constantcontactpages\\.com\\/(cu|su|sv)\\/",
       "patternFlags": "i",
       "note": ""
     }
