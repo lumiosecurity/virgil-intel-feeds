@@ -378,7 +378,7 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
   if (screenshotUrl) {
     console.log('Passing screenshot to Claude:', screenshotUrl);
   }
-  const analysis = await claude(systemPrompt, userContent, isRuleGap ? 3000 : 2000, screenshotUrl);
+  const analysis = await claude(systemPrompt, userContent, isRuleGap ? 3000 : 2000, screenshotUrl, isRuleGap ? 'claude-opus-4-6' : null);
 
   const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|ADD_SOURCE_PATTERN|NO_ACTION|NEEDS_MANUAL_REVIEW/);
   let action = actionMatch2?.[0] || 'NEEDS_MANUAL_REVIEW';
