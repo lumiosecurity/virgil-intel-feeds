@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T07:12:40.967Z",
-    "brandCount": 105,
+    "compiledAt": "2026-03-30T15:13:11.050Z",
+    "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 262
+    "patternCount": 265
   },
   "brandEntries": [
     {
@@ -1415,6 +1415,23 @@
       "documentAccess": true
     },
     {
+      "name": "office365",
+      "domains": [
+        "office.com",
+        "office365.com",
+        "microsoft365.com",
+        "login.microsoftonline.com"
+      ],
+      "typos": [
+        "0ffice365",
+        "offic3365",
+        "office365",
+        "ofice365",
+        "officce365"
+      ],
+      "vertical": "productivity"
+    },
+    {
       "name": "meta-business",
       "domains": [
         "business.facebook.com",
@@ -2320,6 +2337,26 @@
       "patternFlags": "i"
     },
     {
+      "id": "office365-subdomain-impersonation",
+      "group": "brandImpersonation",
+      "description": "Detects 'office365' keyword appearing in webflow domain attribute or page source on non-Microsoft domains, indicating brand impersonation",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "data-wf-domain=\"[^\"]*office365[^\"]*\\.webflow\\.io\"",
+      "patternFlags": "i"
+    },
+    {
+      "id": "office365-logo-credential-form",
+      "group": "brandImpersonation",
+      "description": "Detects Office 365 logo image reference (office-365 or office365 in image filename) in page source, commonly used in O365 phishing kits on free hosting",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "<img[^>]*src=\"[^\"]*office[_-]?365[^\"]*\\.(png|jpg|svg|webp)",
+      "patternFlags": "i"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -2477,6 +2514,16 @@
       "weight": 0.35,
       "source": "html",
       "patternString": "\\/(common|verify|auth|login|secure|account)\\?.*key=[a-z0-9]{6,}.*username=|username=.*key=[a-z0-9]{6,}",
+      "patternFlags": "i"
+    },
+    {
+      "id": "plaintext-password-field",
+      "group": "credentialHarvesting",
+      "description": "Detects input fields with password-related placeholder or label but type='text' instead of type='password', a common phishkit trait",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "placeholder=\"[^\"]*(?:passwor[dt]|kennwort|contraseña|mot de passe)[^\"]*\"[^>]*type=\"text\"",
       "patternFlags": "i"
     },
     {
@@ -4356,7 +4403,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-30T06:35:41.179Z",
+      "compiledAt": "2026-03-30T10:44:29.193Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
