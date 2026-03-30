@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-30-15:37",
-    "generatedAt": "2026-03-30T15:37:20.954Z",
+    "version": "2026-03-30-15:44",
+    "generatedAt": "2026-03-30T15:44:00.867Z",
     "brandCount": 106,
-    "patternCount": 279
+    "patternCount": 281
   },
   "brandEntries": [
     {
@@ -79,6 +79,11 @@
         "docuslgn",
         "documsign",
         "docussign",
+        "docusing",
+        "docusgn",
+        "docusgin",
+        "docusign-login",
+        "docusign-verify",
         "docu-sign",
         "docusigne"
       ]
@@ -5204,6 +5209,17 @@
       "note": ""
     },
     {
+      "id": "docusign-ink-css-namespace",
+      "group": "phishkitSignatures",
+      "description": "Detects DocuSign ink- design system CSS classes used in phishing clones (ink-authentication, ink-auth-main, ink-primary-button)",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "ink-auth(?:entication|-main)|ink-primary-button|ink-form-unit",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -5464,6 +5480,17 @@
       "weight": 0.45,
       "source": "html",
       "patternString": "<title>\\s*Sign in to your Microsoft account\\s*</title>",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "docusign-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Detects DocuSign login page title impersonation pattern in HTML title or visible text",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "<title>[^<]*DocuSign\\s+Login[^<]*</title>",
       "patternFlags": "i",
       "note": ""
     },

@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T15:37:20.943Z",
+    "compiledAt": "2026-03-30T15:44:00.856Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 279
+    "patternCount": 281
   },
   "brandEntries": [
     {
@@ -79,6 +79,11 @@
         "docuslgn",
         "documsign",
         "docussign",
+        "docusing",
+        "docusgn",
+        "docusgin",
+        "docusign-login",
+        "docusign-verify",
         "docu-sign",
         "docusigne"
       ],
@@ -3994,6 +3999,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "docusign-ink-css-namespace",
+      "group": "phishkitSignatures",
+      "description": "Detects DocuSign ink- design system CSS classes used in phishing clones (ink-authentication, ink-auth-main, ink-primary-button)",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "ink-auth(?:entication|-main)|ink-primary-button|ink-form-unit",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4231,6 +4246,16 @@
       "weight": 0.45,
       "source": "html",
       "patternString": "<title>\\s*Sign in to your Microsoft account\\s*</title>",
+      "patternFlags": "i"
+    },
+    {
+      "id": "docusign-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Detects DocuSign login page title impersonation pattern in HTML title or visible text",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "<title>[^<]*DocuSign\\s+Login[^<]*</title>",
       "patternFlags": "i"
     },
     {
@@ -4560,7 +4585,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-30T15:25:52.734Z",
+      "compiledAt": "2026-03-30T15:37:20.204Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
