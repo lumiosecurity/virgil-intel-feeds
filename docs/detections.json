@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-30-06:10",
-    "generatedAt": "2026-03-30T06:10:06.309Z",
+    "version": "2026-03-30-06:14",
+    "generatedAt": "2026-03-30T06:14:13.927Z",
     "brandCount": 103,
-    "patternCount": 236
+    "patternCount": 242
   },
   "brandEntries": [
     {
@@ -1033,7 +1033,11 @@
       ],
       "typos": [
         "cloudfIare",
-        "cloudflare-login"
+        "cloudflare-login",
+        "cloudflair",
+        "cloudflaire",
+        "cloudflar",
+        "cIoudflare"
       ]
     },
     {
@@ -3458,6 +3462,17 @@
       "note": ""
     },
     {
+      "id": "css-interleave-obfuscation-decoys",
+      "group": "obfuscation",
+      "description": "Detects pages with multiple randomized CSS class names using display:none to implement character-interleaving obfuscation, common in Cloudflare impersonation phishkits",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "\\.[a-zA-Z]{10,}_[a-zA-Z]{8,}\\s*\\{\\s*display:\\s*none\\s*!important",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "base64-html-password-obfuscation",
       "group": "phishkitSignatures",
       "description": "Base64 obfuscated HTML containing password input fields",
@@ -4778,6 +4793,39 @@
       "note": ""
     },
     {
+      "id": "fake-cloudflare-turnstile-mock",
+      "group": "phishkitSignatures",
+      "description": "Detects fake/mock Cloudflare Turnstile CAPTCHA widget used as phishing gate page",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "cf-turnstile-mock|turnstile[_-]?mock|mock[_-]?turnstile",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "b64-param-microsoft-login-redirect",
+      "group": "phishkitSignatures",
+      "description": "Query parameter contains base64 string starting with Microsoft login URL (aHR0cHM6Ly9sb2dpbi5taWNyb3NvZnQ) — phishkit redirecting through compromised site",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "both",
+      "patternString": "[?&][a-z0-9_]+=aHR0cHM6Ly9sb2dpbi5taWNyb3NvZnQ",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "sso-reload-with-b64-payload",
+      "group": "phishkitSignatures",
+      "description": "URL contains sso_reload=true alongside a large base64-encoded query parameter on a non-Microsoft domain — phishkit simulating SSO flow",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "both",
+      "patternString": "sso_reload=true.*[?&][a-z0-9_]+=aHR0cH|[?&][a-z0-9_]+=aHR0cH.*sso_reload=true",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4983,6 +5031,17 @@
       "weight": 0.4,
       "source": "html",
       "patternString": "<title>Sign in to your Microsoft account</title>[\\s\\S]{0,5000}type=[\"']password[\"']",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "cloudflare-challenge-title-typo",
+      "group": "titleImpersonation",
+      "description": "Detects Cloudflare challenge impersonation pages with common misspelling 'Challange' in title or body",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "<title>[^<]*cloudflare\\s+chall[ae]nge[^<]*<\\/title>",
       "patternFlags": "i",
       "note": ""
     },
@@ -5247,6 +5306,17 @@
       "weight": 0.45,
       "source": "html",
       "patternString": "[?&](d|brand|b|org|bank|target|client|service)=(swedbank|nordea|seb|handelsbanken|danske|paypal|chase|wells[\\s_-]?fargo|citi|hsbc|barclays|revolut)",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "b64-microsoft-oauth-in-query",
+      "group": "urlHeuristics",
+      "description": "Base64-encoded Microsoft OAuth URL found in query parameter — characteristic of phishkits that proxy Microsoft login flows through compromised domains",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "both",
+      "patternString": "bG9naW4ubWljcm9zb2Z0b25saW5lLmNvbS9jb21tb24vb2F1dGgy|login\\.microsoftonline\\.com[/\\\\]common[/\\\\]oauth2",
       "patternFlags": "i",
       "note": ""
     }
