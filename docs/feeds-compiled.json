@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T06:09:00.696Z",
-    "brandCount": 102,
+    "compiledAt": "2026-03-30T06:10:06.297Z",
+    "brandCount": 103,
     "signalCount": 1,
-    "patternCount": 234
+    "patternCount": 236
   },
   "brandEntries": [
     {
@@ -965,6 +965,27 @@
         "arvretfsv",
         "arvret",
         "arvst"
+      ],
+      "vertical": "financial"
+    },
+    {
+      "name": "swedbank",
+      "domains": [
+        "swedbank.se",
+        "swedbank.lt",
+        "swedbank.lv",
+        "swedbank.ee",
+        "swedbank.com"
+      ],
+      "typos": [
+        "sweedbank",
+        "swedbenk",
+        "swedbnk",
+        "swedbamk",
+        "svvedbank",
+        "swedbaank",
+        "swebank",
+        "swdbank"
       ],
       "vertical": "financial"
     },
@@ -3567,6 +3588,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "phishkit-pages-directory-brand-param",
+      "group": "phishkitSignatures",
+      "description": "Generic phishkit hosted under /pages/ directory with brand-selector query parameter",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "\\/pages\\/\\?[a-z]=[a-zA-Z]{3,20}",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -3988,6 +4019,16 @@
       "weight": 0.4,
       "source": "html",
       "patternString": "[a-z0-9]{6,}[-.](?:sharepoint|onedrive|1drv|outlook|microsoft|office365)\\.",
+      "patternFlags": "i"
+    },
+    {
+      "id": "query-param-brand-selector",
+      "group": "urlHeuristics",
+      "description": "URL query parameter selects brand name for phishkit template rendering (e.g. ?d=swedbank, ?brand=paypal)",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "[?&](d|brand|b|org|bank|target|client|service)=(swedbank|nordea|seb|handelsbanken|danske|paypal|chase|wells[\\s_-]?fargo|citi|hsbc|barclays|revolut)",
       "patternFlags": "i"
     }
   ],
