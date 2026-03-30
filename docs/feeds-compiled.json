@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T15:25:10.821Z",
+    "compiledAt": "2026-03-30T15:25:53.234Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 274
+    "patternCount": 276
   },
   "brandEntries": [
     {
@@ -1147,7 +1147,8 @@
         "abode",
         "adb0e",
         "adone",
-        "adbe"
+        "adbe",
+        "adope"
       ]
     },
     {
@@ -2563,6 +2564,16 @@
       "patternFlags": "is"
     },
     {
+      "id": "hidden-field-credential-relay",
+      "group": "credentialHarvesting",
+      "description": "Detects JS pattern that copies visible input values into hidden form fields for exfiltration, commonly used in phishkits to decouple display from submission",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "querySelectorAll\\([\"']input\\[type=['\"]?hidden['\"]?\\]\\[name=['\"]?(?:username|password|pass_entered|email)",
+      "patternFlags": "i"
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -3963,6 +3974,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "pmeimg-phishkit-cdn",
+      "group": "phishkitSignatures",
+      "description": "Detects phishing pages loading assets from pmeimg.com CDN, associated with credential harvesting phishkits impersonating Adobe and other brands",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "images\\.pmeimg\\.com/system/content_(?:files|images)/uploads/",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4509,7 +4530,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-30T15:24:22.707Z",
+      "compiledAt": "2026-03-30T15:13:10.183Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
