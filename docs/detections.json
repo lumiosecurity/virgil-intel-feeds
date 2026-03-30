@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-30-04:18",
-    "generatedAt": "2026-03-30T04:18:14.899Z",
+    "version": "2026-03-30-05:20",
+    "generatedAt": "2026-03-30T05:20:04.305Z",
     "brandCount": 102,
-    "patternCount": 216
+    "patternCount": 218
   },
   "brandEntries": [
     {
@@ -446,7 +446,11 @@
         "amazom",
         "amazone",
         "ammazon",
-        "amazon"
+        "amazon",
+        "amazonwebservices",
+        "anazon",
+        "amazn",
+        "amazzon"
       ]
     },
     {
@@ -4555,6 +4559,17 @@
       "note": ""
     },
     {
+      "id": "amazon-auth-portal-clone",
+      "group": "phishkitSignatures",
+      "description": "Detects cloned Amazon authentication portal by matching Amazon-specific auth CSS classes and asset references",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "auth-validate-form.*auth-(?:workflow|pagelet-container)|AuthenticationPortalAssets",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4672,6 +4687,17 @@
       "weight": 0.35,
       "source": "html",
       "patternString": "(login|sign\\s*in)\\s+(stands as|serves as)\\s+(a\\s+)?(robust|secure|reliable)?\\s*(gateway|point of entry|portal)",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "fear-urgency-domain-in-html",
+      "group": "socialEngineering",
+      "description": "Detects fear/urgency keywords in the page hostname pattern commonly used in phishing domains (security-unauthorised, unauthorized-access, etc.)",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "security-(?:un)?authoris?ed|unauthori[sz]ed-(?:access|request|login)|security-(?:alert|warning|verification|suspended)",
       "patternFlags": "i",
       "note": ""
     },
