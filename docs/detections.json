@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-30-06:14",
-    "generatedAt": "2026-03-30T06:14:13.927Z",
-    "brandCount": 103,
-    "patternCount": 242
+    "version": "2026-03-30-06:16",
+    "generatedAt": "2026-03-30T06:16:02.369Z",
+    "brandCount": 104,
+    "patternCount": 244
   },
   "brandEntries": [
     {
@@ -622,6 +622,35 @@
         "shopie",
         "shoppee",
         "sh0pee"
+      ]
+    },
+    {
+      "name": "adidas",
+      "vertical": "ecommerce",
+      "domains": [
+        "adidas.com",
+        "adidas.co.uk",
+        "adidas.de",
+        "careers.adidas-group.com"
+      ],
+      "typos": [
+        "adldas",
+        "addidas",
+        "adiddas",
+        "adiidas",
+        "adidass",
+        "ad1das",
+        "adidas-job",
+        "adidas-jobs",
+        "adidas-career",
+        "adidas-careers",
+        "adidas-hiring",
+        "adidas-recruit",
+        "adidas-hr",
+        "adidas-apply",
+        "adidas-work",
+        "adidas-employment",
+        "adidas-onboarding"
       ]
     },
     {
@@ -4958,6 +4987,17 @@
       "note": ""
     },
     {
+      "id": "fake-meeting-ref-parameter",
+      "group": "socialEngineering",
+      "description": "Detects fake meeting/interview reference IDs in URL parameters embedded in page source, common in job scam phishkits",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(\\?|&)(id[-_]?\\d{6,}[/&]meeting|meeting[-_]?id=\\d{6,}|ref=[A-Z]{2}\\d{2,}[A-Z]{2})",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -5317,6 +5357,17 @@
       "weight": 0.45,
       "source": "both",
       "patternString": "bG9naW4ubWljcm9zb2Z0b25saW5lLmNvbS9jb21tb24vb2F1dGgy|login\\.microsoftonline\\.com[/\\\\]common[/\\\\]oauth2",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "id": "brand-job-scam-url-pattern",
+      "group": "urlHeuristics",
+      "description": "Detects domains using brand-job/career/hiring pattern with fake meeting or reference IDs commonly used in employment scam phishkits",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "(adidas|nike|puma|zara|gucci|amazon|walmart|target|costco|apple|google|meta|microsoft)[-_]?(job|jobs|career|careers|hiring|recruit|hr|employment|apply|onboarding|work)",
       "patternFlags": "i",
       "note": ""
     }
