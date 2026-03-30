@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T03:56:15.804Z",
+    "compiledAt": "2026-03-30T04:00:29.845Z",
     "brandCount": 102,
     "signalCount": 1,
     "patternCount": 213
@@ -1143,7 +1143,9 @@
     },
     {
       "name": "webmail",
-      "domains": [],
+      "domains": [
+        "webmail.com"
+      ],
       "typos": [
         "webmail",
         "web-mail",
@@ -3777,7 +3779,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-30T03:52:14.363Z",
+      "compiledAt": "2026-03-30T03:56:14.356Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-03-30-03:56",
-    "generatedAt": "2026-03-30T03:56:15.814Z",
+    "version": "2026-03-30-04:00",
+    "generatedAt": "2026-03-30T04:00:29.857Z",
     "brandCount": 102,
     "patternCount": 213
   },
@@ -1138,7 +1138,9 @@
     {
       "name": "webmail",
       "vertical": "general",
-      "domains": [],
+      "domains": [
+        "webmail.com"
+      ],
       "typos": [
         "webmail",
         "web-mail",
