@@ -1,9 +1,8 @@
 name: Publish Detection Config
 
 on:
-  # Trigger when core-rules or community rules repos push to main
-  # Set up as a repository_dispatch event from those repos, OR
-  # run on a schedule as a fallback
+  repository_dispatch:
+    types: [rules-updated]   # Fired by virgil-core-rules and virgil-rules on push to main
   schedule:
     - cron: '0 2 * * *'    # Daily at 02:00 UTC — catches any rule changes
   workflow_dispatch:         # Manual trigger
@@ -31,6 +30,20 @@ jobs:
         with:
           repository: lumiosecurity/virgil-extension
           path: extension
+          token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+
+      - name: Checkout virgil-core-rules (for rule files)
+        uses: actions/checkout@v4
+        with:
+          repository: lumiosecurity/virgil-core-rules
+          path: virgil-core-rules
+          token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+
+      - name: Checkout virgil-rules (for community rule files)
+        uses: actions/checkout@v4
+        with:
+          repository: lumiosecurity/virgil-rules
+          path: virgil-rules
           token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
 
       - name: Setup Node
