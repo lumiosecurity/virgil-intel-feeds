@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T04:00:29.845Z",
+    "compiledAt": "2026-03-30T04:18:14.886Z",
     "brandCount": 102,
     "signalCount": 1,
-    "patternCount": 213
+    "patternCount": 216
   },
   "brandEntries": [
     {
@@ -2213,6 +2213,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "form-intercept-fetch-exfil",
+      "group": "credentialHarvesting",
+      "description": "Detects phishkit pattern that intercepts form submit with preventDefault, then exfiltrates via fetch() before redirecting to form action URL",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "preventDefault\\(\\)[\\s\\S]{0,500}FormData[\\s\\S]{0,500}fetch\\(form\\.action",
+      "patternFlags": "i"
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -3373,6 +3383,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "phishkit-user-time-tracker",
+      "group": "phishkitSignatures",
+      "description": "Detects UserTimeTracker class paired with timeme.js, a visitor analytics module bundled with credential-harvesting phishkits",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "UserTimeTracker[\\s\\S]{0,200}track\\([\"'][^\"']+\\.html[\"']\\)",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -3541,6 +3561,16 @@
       "source": "html",
       "patternString": "<title>[^<]*[\\u{1D400}-\\u{1D7FF}\\u00F1\\u00E9\\u00ED\\u00E8\\u0435\\u043E\\u0430][^<]*(login|sign.?in|verify|wallet|account)",
       "patternFlags": "iu"
+    },
+    {
+      "id": "microsoft-login-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Detects exact Microsoft sign-in page title combined with password input and form action, indicating credential phishing clone",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "<title>Sign in to your Microsoft account</title>[\\s\\S]{0,5000}type=[\"']password[\"']",
+      "patternFlags": "i"
     },
     {
       "id": "ndax-auth-typosquat",
@@ -3779,7 +3809,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-30T03:56:14.356Z",
+      "compiledAt": "2026-03-30T04:00:29.235Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
