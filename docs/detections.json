@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:15",
-    "generatedAt": "2026-03-31T20:15:35.435Z",
+    "version": "2026-03-31-20:16",
+    "generatedAt": "2026-03-31T20:16:30.088Z",
     "brandCount": 106,
     "patternCount": 284
   },
@@ -13816,7 +13816,7 @@
       "severity": "medium",
       "weight": 0.3,
       "source": "both",
-      "patternString": "^https?://[a-z0-9]{8,}\\.(bank|financial|secure|payment|trust|verify|account)[a-z]*\\.(com|org|net|info|xyz|top)/",
+      "patternString": "^https?://[a-z0-9]{12,}\\.(?:bank|financial|secure|payment|trust|verify|account)(?:bank|pay|login|verify|secure|online)?\\.(?:xyz|top|info|online|site|click|live|icu)/",
       "patternFlags": "i",
       "note": ""
     },

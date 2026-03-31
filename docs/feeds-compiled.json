@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T20:15:35.423Z",
+    "compiledAt": "2026-03-31T20:16:30.076Z",
     "brandCount": 106,
     "signalCount": 1,
     "patternCount": 284,
@@ -2646,7 +2646,7 @@
       "severity": "medium",
       "weight": 0.3,
       "source": "both",
-      "patternString": "^https?://[a-z0-9]{8,}\\.(bank|financial|secure|payment|trust|verify|account)[a-z]*\\.(com|org|net|info|xyz|top)/",
+      "patternString": "^https?://[a-z0-9]{12,}\\.(?:bank|financial|secure|payment|trust|verify|account)(?:bank|pay|login|verify|secure|online)?\\.(?:xyz|top|info|online|site|click|live|icu)/",
       "patternFlags": "i"
     },
     {
@@ -4647,7 +4647,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T20:11:29.207Z",
+      "compiledAt": "2026-03-31T20:15:32.916Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
