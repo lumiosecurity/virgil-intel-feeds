@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:23",
-    "generatedAt": "2026-03-31T20:23:48.788Z",
+    "version": "2026-03-31-20:30",
+    "generatedAt": "2026-03-31T20:30:12.206Z",
     "brandCount": 106,
-    "patternCount": 283
+    "patternCount": 281
   },
   "brandEntries": [
     {
@@ -13048,7 +13048,7 @@
       "severity": "medium",
       "weight": 0.3,
       "source": "html",
-      "patternString": "google\\.com/s2/favicons.{0,500}form[^>]*>.{0,500}display:\\s*none",
+      "patternString": "google\\.com/s2/favicons[\\s\\S]{0,500}form[^>]*>[\\s\\S]{0,500}display:\\s*none",
       "patternFlags": "is",
       "note": ""
     },
@@ -13096,7 +13096,7 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "instagramGradient.*stop-color:#FED373.*stop-color:#F15245.*stop-color:#D92E7F",
+      "patternString": "instagramGradient[^<]{0,2000}stop-color:#FED373[^<]{0,2000}stop-color:#F15245[^<]{0,2000}stop-color:#D92E7F",
       "patternFlags": "i",
       "note": ""
     },
@@ -13108,7 +13108,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "(?=.*(?:entrar|esqueceu[\\s\\S]{0,10}senha))(?=.*instagram)(?=.*<form[\\s\\S]{0,500}(?:type=.password|senha))",
+      "patternString": "(?:entrar|esqueceu[\\s\\S]{0,10}senha)[\\s\\S]{0,5000}instagram[\\s\\S]{0,5000}<form[^>]{0,500}(?:type=[\"']?password|senha)",
       "patternFlags": "i",
       "note": ""
     },
@@ -13120,7 +13120,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "microsoft.{0,50}sign-in.{0,50}redirect.{0,100}(verifying|identity|security.check)",
+      "patternString": "microsoft[^<]{0,50}sign-in[^<]{0,50}redirect[^<]{0,100}(?:verifying|identity|security.check)",
       "patternFlags": "i",
       "note": ""
     },
@@ -13144,7 +13144,7 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "patternString": "(?=.*webflow\\.io)(?=.*(?:crypto.*exchange|wallet.*login))(?=.*(?:password|seed.phrase|private.key))",
+      "patternString": "webflow\\.io[\\s\\S]{0,5000}(?:crypto[\\s\\S]{0,200}exchange|wallet[\\s\\S]{0,200}login)[\\s\\S]{0,5000}(?:password|seed[\\s\\S]{0,20}phrase|private[\\s\\S]{0,10}key)",
       "patternFlags": "i",
       "note": ""
     },
@@ -13156,7 +13156,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "(?=.*netflix)(?=.*(?:restart.*membership|get.*started|unlimited.*movies))(?=.*(?:type=.password|sign.?in|credential|billing.*(?:update|verify)))",
+      "patternString": "netflix[\\s\\S]{0,3000}(?:restart[\\s\\S]{0,100}membership|get[\\s\\S]{0,100}started|unlimited[\\s\\S]{0,100}movies)[\\s\\S]{0,3000}(?:type=[\"']?password|sign.?in|credential|billing[\\s\\S]{0,50}(?:update|verify))",
       "patternFlags": "i",
       "note": ""
     },
@@ -13168,7 +13168,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "验证页面.*Gemini\\s+Balance|Gemini\\s+Balance.*登录",
+      "patternString": "验证页面[\\s\\S]{0,2000}Gemini\\s+Balance|Gemini\\s+Balance[\\s\\S]{0,2000}登录",
       "patternFlags": "i",
       "note": ""
     },
@@ -13180,19 +13180,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "(?=.*(?:adobe|acrobat|pdf.reader))(?=.*(?:\\.msi|install|download))(?=.*(?:secured.pdf|pdf.viewer|reader.software))",
-      "patternFlags": "i",
-      "note": ""
-    },
-    {
-      "domHashes": [],
-      "id": "paypal-russia-kyb-phish",
-      "group": "brandImpersonation",
-      "description": "PayPal Russia KYB phishing campaign",
-      "severity": "high",
-      "weight": 0.45,
-      "source": "html",
-      "patternString": "PayPal.*Russia.*KYB|Russia.*KYB.*PayPal",
+      "patternString": "(?:adobe|acrobat|pdf[\\s\\S]{0,10}reader)[\\s\\S]{0,3000}(?:\\.msi|install|download)[\\s\\S]{0,3000}(?:secured[\\s\\S]{0,20}pdf|pdf[\\s\\S]{0,20}viewer|reader[\\s\\S]{0,20}software)",
       "patternFlags": "i",
       "note": ""
     },
@@ -13204,7 +13192,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "çoinsquare.*account.*login|coinsquare.*çonfidence",
+      "patternString": "çoinsquare[^<]{0,500}(?:account|login)|coinsquare[^<]{0,500}çonfidence",
       "patternFlags": "i",
       "note": ""
     },
@@ -13216,7 +13204,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "AT&T.*iPhone\\s+1[7-9].*Pro.*trade-in.*bill\\s+credits",
+      "patternString": "AT&T[^<]{0,200}iPhone\\s+1[7-9][^<]{0,200}Pro[^<]{0,200}trade-in[^<]{0,200}bill\\s+credits",
       "patternFlags": "i",
       "note": ""
     },
@@ -13228,7 +13216,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "Trust Wallet.*(?:Create a new wallet|Import or recover wallet).*(?:Secret Phrase|seed phrase)",
+      "patternString": "Trust Wallet[\\s\\S]{0,2000}(?:Create a new wallet|Import or recover wallet)[\\s\\S]{0,2000}(?:Secret Phrase|seed phrase)",
       "patternFlags": "is",
       "note": ""
     },
@@ -13240,7 +13228,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "Welcome to the Trust Wallet Extension.*multi-chain wallet trusted by millions",
+      "patternString": "Welcome to the Trust Wallet Extension[\\s\\S]{0,500}multi-chain wallet trusted by millions",
       "patternFlags": "is",
       "note": ""
     },
@@ -13252,7 +13240,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "whatsapp.*中文版.*下载|whatsapp.*chinese.*download.*中文|whatsapp.*pc.*中文版",
+      "patternString": "whatsapp[^<]{0,300}中文版[^<]{0,300}下载|whatsapp[^<]{0,300}chinese[^<]{0,300}download[^<]{0,300}中文|whatsapp[^<]{0,300}pc[^<]{0,300}中文版",
       "patternFlags": "i",
       "note": ""
     },
@@ -13264,7 +13252,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "<title>\\s*Webmail\\s*</title>.*background-color:\\s*#eeeeee.*font-family:\\s*Helvetica\\s+Neue.*<input[^>]*type=[\"']password[\"']",
+      "patternString": "<title>[\\s\\S]{0,20}Webmail[\\s\\S]{0,20}</title>[\\s\\S]{0,3000}background-color:\\s*#eeeeee[\\s\\S]{0,3000}font-family:\\s*Helvetica\\s+Neue[\\s\\S]{0,3000}<input[^>]*type=[\"']password[\"']",
       "patternFlags": "is",
       "note": ""
     },
@@ -13276,7 +13264,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "Ledger\\.com/Start[®©™]+.*Official.*Gateway.*Secure.*Crypto",
+      "patternString": "Ledger\\.com/Start[®©™]+[^<]{0,300}Official[^<]{0,300}Gateway[^<]{0,300}Secure[^<]{0,300}Crypto",
       "patternFlags": "i",
       "note": ""
     },
@@ -13288,7 +13276,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "滙豐銀行.*個人網上理財.*#db0011.*action=.*\\.php",
+      "patternString": "滙豐銀行[\\s\\S]{0,2000}個人網上理財[\\s\\S]{0,2000}#db0011[\\s\\S]{0,1000}action=[^\"'\\s]{0,200}\\.php",
       "patternFlags": "i",
       "note": ""
     },
@@ -13300,7 +13288,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "bet365365\\.(com|app|tw|asia).*输入域名前请加入https://.*资金损失",
+      "patternString": "bet365365\\.(?:com|app|tw|asia)[^<]{0,500}输入域名前请加入https://[^<]{0,500}资金损失",
       "patternFlags": "i",
       "note": ""
     },
@@ -13312,7 +13300,7 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "patternString": "(女优厅|太阳厅|台湾厅|赌神厅|性感厅).*电子游戏.*彩票游戏.*棋牌游戏",
+      "patternString": "(?:女优厅|太阳厅|台湾厅|赌神厅|性感厅)[\\s\\S]{0,2000}电子游戏[\\s\\S]{0,2000}彩票游戏[\\s\\S]{0,2000}棋牌游戏",
       "patternFlags": "i",
       "note": ""
     },
@@ -13324,19 +13312,7 @@
       "severity": "low",
       "weight": 0.05,
       "source": "js",
-      "patternString": "\"iErrorCode\":\\d+.*aadcdn\\.msauth\\.net.*ConvergedError",
-      "patternFlags": "i",
-      "note": ""
-    },
-    {
-      "domHashes": [],
-      "id": "microsoft-ciam-self-reference",
-      "group": "brandImpersonation",
-      "description": "Page config references urlAcmaServerPath on ciamlogin.com matching the serving domain, indicating legitimate Microsoft CIAM infrastructure",
-      "severity": "low",
-      "weight": 0.05,
-      "source": "js",
-      "patternString": "\"urlAcmaServerPath\":\"https://[a-z0-9-]+\\.ciamlogin\\.com\"",
+      "patternString": "\"iErrorCode\":\\d+[\\s\\S]{0,3000}aadcdn\\.msauth\\.net[\\s\\S]{0,3000}ConvergedError",
       "patternFlags": "i",
       "note": ""
     },
@@ -13348,7 +13324,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "application/ld\\+json[^>]*>[^<]*parentOrganization[^<]*(?:Bank of Montreal|BMO|Chase|Wells Fargo|TD Bank|RBC|Scotiabank|CIBC)",
+      "patternString": "application/ld\\+json[^>]*>[^<]{0,500}parentOrganization[^<]{0,200}(?:Bank of Montreal|BMO|Chase|Wells Fargo|TD Bank|RBC|Scotiabank|CIBC)",
       "patternFlags": "i",
       "note": ""
     },
@@ -13360,7 +13336,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "(exodus|metamask|trezor|ledger|phantom|coinbase|trustwallet|atomic)[\\s\\S]{0,5}(®|\\(R\\))?\\s*(login|signin|sign[\\-\\s]in|wallet\\s*connect)",
+      "patternString": "(?:exodus|metamask|trezor|ledger|phantom|coinbase|trustwallet|atomic)[^<]{0,80}(?:login|signin|sign[\\-\\s]in|wallet[\\s_-]*connect)",
       "patternFlags": "i",
       "note": ""
     },
@@ -13372,7 +13348,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "Go Daddy Website Builder[^\"]*\"[\\s\\S]*?(licensed[\\s\\S]{0,30}trust company|bank exams|cybersecurity audits|regulated exchange)",
+      "patternString": "Go Daddy Website Builder[^\"]{0,200}\"[\\s\\S]{0,2000}(?:licensed[\\s\\S]{0,30}trust company|bank exams|cybersecurity audits|regulated exchange)",
       "patternFlags": "i",
       "note": ""
     },
@@ -13408,7 +13384,7 @@
       "severity": "high",
       "weight": 0.5,
       "source": "html",
-      "patternString": "1drv[a-z0-9._-]*sharepoint|sharepoint[a-z0-9._-]*1drv",
+      "patternString": "1drv[a-z0-9._-]{0,60}sharepoint|sharepoint[a-z0-9._-]{0,60}1drv",
       "patternFlags": "i",
       "note": ""
     },
@@ -13432,7 +13408,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "rel=[\"'](?:shortcut )?icon[\"'][^>]+href=[\"']https?://(?!(?:[\\w.-]*\\.)?microsoft\\.com)[\\w.-]+/[^\"']*microsoft[_-]?favicon",
+      "patternString": "rel=[\"'](?:shortcut )?icon[\"'][^>]{0,200}href=[\"']https?://(?!(?:[\\w.-]*\\.)?microsoft\\.com)[\\w.-]{1,100}/[^\"']{0,200}microsoft[_-]?favicon",
       "patternFlags": "i",
       "note": ""
     },
@@ -13468,7 +13444,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "(docusign[\\s_-]*(logo|sign|review|document)|Please\\s+review\\s+and\\s+sign|powered\\s+by\\s+docusign|Complete\\s+with\\s+DocuSign)",
+      "patternString": "(?:docusign[\\s_-]*(?:logo|sign|review|document)|Complete\\s+with\\s+DocuSign)",
       "patternFlags": "i",
       "note": ""
     },
@@ -13480,7 +13456,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "js",
-      "patternString": "Y2xpZW50X2lk|cmVkaXJlY3RfdXJp[A-Za-z0-9+/=]*b2ZmaWNlLmNvbQ",
+      "patternString": "Y2xpZW50X2lk[A-Za-z0-9+/=]{0,500}cmVkaXJlY3RfdXJp|cmVkaXJlY3RfdXJp[A-Za-z0-9+/=]{0,500}b2ZmaWNlLmNvbQ",
       "patternFlags": "i",
       "note": ""
     },
@@ -13492,7 +13468,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "both",
-      "patternString": "redirect_uri=https?%3A%2F%2F[^&]*office\\.com.*OfficeHome",
+      "patternString": "redirect_uri=https?%3A%2F%2F[^&]{0,200}office\\.com[^&]{0,500}OfficeHome",
       "patternFlags": "i",
       "note": ""
     },
@@ -13504,7 +13480,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "js",
-      "patternString": "wgCanonicalNamespace|wgPageName.*Main_Page|RLCONF.*wgRequestId|enwikimwclientpreferences",
+      "patternString": "wgCanonicalNamespace|wgPageName[^\"'\\s]{0,200}Main_Page|RLCONF[^;]{0,500}wgRequestId|enwikimwclientpreferences",
       "patternFlags": "i",
       "note": ""
     },
