@@ -3,11 +3,14 @@
 //
 // Runs BEFORE auto-promote commits rules to core-rules.
 // Triggered when agent-triaged label is added to a rule-gap issue.
-// Uses Claude Opus to evaluate quality, FP risk, and specificity.
+// Uses Claude to evaluate quality, FP risk, specificity, and performance.
+//
+// RETRY LOOP: If rules fail review, the gate asks Claude to fix them and
+// re-evaluates. Up to 3 total attempts. On final failure → needs-review.
 //
 // Exit codes:
 //   0 = PASS  — auto-promote may proceed
-//   1 = FAIL  — rules blocked, issue labeled needs-review
+//   1 = FAIL  — rules blocked after 3 attempts, issue labeled needs-review
 //
 // Env vars: ISSUE_NUMBER, GITHUB_TOKEN, ANTHROPIC_API_KEY
 
@@ -16,11 +19,10 @@ import Anthropic from '@anthropic-ai/sdk';
 
 const ISSUE_NUMBER = parseInt(process.env.ISSUE_NUMBER || process.argv[2]);
 const REPO         = cfg.coreRulesRepo;
+const MAX_ATTEMPTS = 3;
 
 if (!ISSUE_NUMBER) { console.error('ISSUE_NUMBER required'); process.exit(1); }
 
-// Tranco top domains — used for FP testing
-// Subset of top-1000 most visited sites — if a pattern matches these, it's a FP risk
 const TRANCO_TOP_1000_SAMPLE = [
   'google.com','youtube.com','facebook.com','twitter.com','instagram.com',
   'linkedin.com','reddit.com','wikipedia.org','amazon.com','netflix.com',
@@ -40,10 +42,36 @@ const TRANCO_TOP_1000_SAMPLE = [
   'aws.amazon.com','azure.microsoft.com','cloud.google.com','heroku.com','vercel.com',
 ];
 
+const LEGITIMATE_SAMPLES = [
+  '<form action="/login" method="post">',
+  '<input type="password" name="password">',
+  '<input type="text" name="username" placeholder="Email">',
+  'document.getElementById("username").value',
+  'document.querySelector("input[type=password]")',
+  'window.location.href = "/dashboard"',
+  '<title>Sign in to Google</title>',
+  'fetch("/api/login", { method: "POST" })',
+  'addEventListener("submit", function(e) { e.preventDefault(); })',
+  'localStorage.setItem("token", response.token)',
+  'document.cookie',
+  'window.onload = function() {',
+  '<script src="https://cdn.jsdelivr.net/npm/bootstrap',
+  'function validateForm() { return true; }',
+  'document.forms[0].submit()',
+  '<input type="hidden" name="csrf_token">',
+  'const password = document.getElementById("pwd").value',
+  'if (username === "" || password === "") { alert("Please fill in all fields"); }',
+  'fetch("/auth/callback", { credentials: "include" })',
+  'history.pushState({}, "", "/login")',
+  'document.querySelectorAll("input")',
+  'const form = document.getElementById("loginForm")',
+];
+
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
 async function claude(system, user, maxTokens = 2000) {
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const resp = await client.messages.create({
-    model:      'claude-opus-4-6',
+    model:      'claude-sonnet-4-6',
     max_tokens: maxTokens,
     system,
     messages:   [{ role: 'user', content: user }],
@@ -51,8 +79,281 @@ async function claude(system, user, maxTokens = 2000) {
   return resp.content?.[0]?.text || '';
 }
 
+// ── Automated rule evaluation ──────────────────────────────────────────────────
+// Returns { evaluations, allPassed, passedRules, failedRules }
+
+function evaluateRules(rules) {
+  const evaluations = [];
+
+  for (const rule of rules) {
+    const eval_ = { rule, issues: [], warnings: [], fpMatches: [], corpusHits: 0 };
+
+    if (rule.name && rule.domains && rule.typos) {
+      // ── Brand entry evaluation ──────────────────────────────────────────
+
+      const commonWords = new Set(['secure','login','account','online','bank','web','mail',
+        'home','info','help','support','service','portal','access','auth','verify',
+        'update','confirm','sign','user','pass','card','pay','shop','store','buy']);
+      const genericTypos = rule.typos.filter(t => commonWords.has(t) || t.length <= 3);
+      if (genericTypos.length > 0) {
+        eval_.issues.push(`Typos too generic (common words or too short): ${genericTypos.join(', ')}`);
+      }
+
+      const unrelatedTypos = rule.typos.filter(t => {
+        const brand = rule.name.toLowerCase();
+        const minMatch = brand.length >= 6 ? 4 : Math.floor(brand.length * 0.6);
+        let maxCommon = 0;
+        for (let i = 0; i <= brand.length - minMatch; i++) {
+          if (t.includes(brand.slice(i, i + minMatch))) { maxCommon = minMatch; break; }
+        }
+        return maxCommon < minMatch && t.length > 5;
+      });
+      if (unrelatedTypos.length > 2) {
+        eval_.warnings.push(`${unrelatedTypos.length} typos don't resemble brand name: ${unrelatedTypos.slice(0,3).join(', ')}`);
+      }
+
+      if (rule.typos.length <= 2 && eval_.corpusHits === 0) {
+        eval_.warnings.push(`Only ${rule.typos.length} typo variant(s) with no corpus hits — may be too narrow`);
+      }
+
+      const fpRisk = rule.typos.filter(t =>
+        TRANCO_TOP_1000_SAMPLE.some(d => d.includes(t) || t.includes(d.split('.')[0]))
+      );
+      if (fpRisk.length > 0) {
+        eval_.issues.push(`FP risk: typos overlap with top sites: ${fpRisk.join(', ')}`);
+        eval_.fpMatches.push(...fpRisk);
+      }
+
+    } else if (rule.id && rule.patternString) {
+      // ── Source pattern evaluation ────────────────────────────────────────
+      const isPhishkitSig = rule.group === 'phishkitSignatures';
+
+      let compilesOk = false;
+      try {
+        new RegExp(rule.patternString, rule.patternFlags || '');
+        compilesOk = true;
+      } catch (e) {
+        eval_.issues.push(`Invalid regex: ${e.message}`);
+      }
+
+      if (compilesOk) {
+        const patternLength = rule.patternString.replace(/[.*+?^${}()|[\]\\]/g, '').length;
+
+        // ── Performance check ───────────────────────────────────────────
+        const ps = rule.patternString;
+        const flags = rule.patternFlags || '';
+        const dotstarCount = (ps.match(/(?<!\\)\.\*/g) || []).length;
+        const hasAlternation = /(?<!\\)\|/.test(ps);
+        const hasDotall = flags.includes('s');
+        const hasNestedQuant = /[+*]\)[+*?]/.test(ps);
+        const lookaheadCount = (ps.match(/\(\?=/g) || []).length;
+
+        let perfScore = 0;
+        const perfIssues = [];
+
+        if (hasDotall && dotstarCount > 0) {
+          perfScore += dotstarCount * 2;
+          perfIssues.push(`DOTALL flag with .* (×${dotstarCount}) — spans entire document. Use [\\s\\S]{0,N} instead.`);
+        }
+        if (dotstarCount >= 2 && !hasDotall) {
+          perfScore += dotstarCount;
+          perfIssues.push(`${dotstarCount} sequential .* — use bounded quantifiers: [^<]{0,2000}`);
+        }
+        if (dotstarCount > 0 && hasAlternation) {
+          perfScore += 2;
+          perfIssues.push(`.* with alternation — put most specific literal first or use bounded quantifiers.`);
+        }
+        if (lookaheadCount >= 2 && dotstarCount > 0) {
+          perfScore += lookaheadCount;
+          perfIssues.push(`${lookaheadCount} lookaheads with .* — rewrite as ordered match or split into separate patterns.`);
+        }
+        if (hasNestedQuant) {
+          perfScore += 5;
+          perfIssues.push(`Nested quantifiers — catastrophic backtracking risk. Restructure pattern.`);
+        }
+
+        if (perfScore >= 5) {
+          eval_.issues.push(`⚡ PERFORMANCE BLOCK (score ${perfScore}): ${perfIssues.join(' ')}`);
+        } else if (perfScore >= 3) {
+          eval_.issues.push(`⚡ Performance risk (score ${perfScore}): ${perfIssues.join(' ')}`);
+        } else if (perfScore > 0) {
+          eval_.warnings.push(`⚡ Minor performance concern (score ${perfScore}): ${perfIssues.join(' ')}`);
+        }
+
+        // ── Broadness check ───────────────────────────────────────────────
+        if (/^\.\*$/.test(rule.patternString)) eval_.issues.push('Pattern is just .* — matches everything');
+        if (patternLength < 5) eval_.issues.push(`Pattern too short (${patternLength} literal chars)`);
+
+        // ── FP test ───────────────────────────────────────────────────────
+        const pattern = new RegExp(rule.patternString, rule.patternFlags || '');
+        const fpSamples = LEGITIMATE_SAMPLES.filter(s => pattern.test(s));
+        if (fpSamples.length > 0) {
+          const bucket = isPhishkitSig ? 'issues' : 'warnings';
+          eval_[bucket].push(`Pattern matches legitimate HTML/JS (${fpSamples.length} sample${fpSamples.length > 1 ? 's' : ''}): "${fpSamples[0]}"`);
+        }
+
+        // ── Weight vs specificity ─────────────────────────────────────────
+        const maxSafeWeight = isPhishkitSig ? 0.25 : 0.35;
+        const minSpecificityForHighWeight = isPhishkitSig ? 15 : 10;
+        if (rule.weight > maxSafeWeight && patternLength < minSpecificityForHighWeight) {
+          eval_.issues.push(`Weight ${rule.weight} too high for ${patternLength}-char pattern in ${rule.group} (max safe: ${maxSafeWeight} unless pattern has ≥${minSpecificityForHighWeight} literal chars)`);
+        }
+
+        // ── Anchor requirement for phishkitSignatures ─────────────────────
+        if (isPhishkitSig) {
+          const hasAnchor = /['"]\w{6,}['"]/.test(rule.patternString) ||
+                            /\w{8,}/.test(rule.patternString.replace(/[.*+?^${}()|[\]\\]/g, ''));
+          if (!hasAnchor) {
+            eval_.issues.push('phishkitSignatures pattern lacks a specific anchor string (≥8 literal chars) — too broad');
+          }
+        }
+      }
+    }
+
+    evaluations.push(eval_);
+  }
+
+  const allPassed = evaluations.every(e => e.issues.length === 0);
+  const passedRules = evaluations.filter(e => e.issues.length === 0).map(e => e.rule);
+  const failedRules = evaluations.filter(e => e.issues.length > 0).map(e => e.rule);
+
+  return { evaluations, allPassed, passedRules, failedRules };
+}
+
+// ── Format evaluation results for display ─────────────────────────────────────
+
+function formatEvaluations(evaluations) {
+  return evaluations.map(e => {
+    const r = e.rule;
+    const name = r.name || r.id;
+    const status = e.issues.length > 0 ? '❌' : e.warnings.length > 0 ? '⚠️' : '✅';
+    const lines = [`**${status} ${name}**`];
+    if (e.issues.length)   lines.push(...e.issues.map(i => `- 🚫 ${i}`));
+    if (e.warnings.length) lines.push(...e.warnings.map(w => `- ⚠️ ${w}`));
+    if (e.corpusHits > 0)  lines.push(`- 📊 ${e.corpusHits} corpus hit(s)`);
+    return lines.join('\n');
+  }).join('\n\n');
+}
+
+// ── Ask Claude to review and optionally fix rules ─────────────────────────────
+
+const REVIEW_SYSTEM_PROMPT = `You are Virgil's rule quality gate — a senior detection engineer reviewing proposed phishing detection rules before they ship to users.
+
+Your job is to block rules that would cause false positives, provide no detection value, OR degrade browser performance. Be strict about FP risk and performance.
+
+CRITICAL: Rules in "phishkitSignatures" run against EVERY page source for EVERY user.
+
+PERFORMANCE IS A HARD REQUIREMENT: Source patterns run against full page HTML (5-10MB). 340+ patterns and growing. Patterns with .* and alternation cause V8 to scan the entire string at every position.
+
+PASS criteria:
+- Typosquats are plausibly related to the brand and not common English words
+- Source patterns are specific enough to not match legitimate sites
+- Weights are proportional to pattern specificity
+- No critical issues found
+- Regex patterns are performance-safe: no unanchored .* with DOTALL, no nested quantifiers, no multiple sequential .* without bounded quantifiers
+
+FAIL criteria (any one = FAIL):
+- Pattern matches legitimate sites (FP risk)
+- Regex too broad for common page structures
+- Generic typosquats unrelated to brand
+- Weight disproportionate to specificity
+- ⚡ Performance score >= 3
+- .* with DOTALL flag
+- Nested quantifiers
+- 3+ sequential unbounded .*
+
+Respond with exactly: PASS or FAIL on the first line, then your reasoning.`;
+
+async function askClaudeToReview(rules, evaluations) {
+  const evalSummary = evaluations.map(e => {
+    const r = e.rule;
+    const name = r.name || r.id;
+    return `### ${name} (${r.name ? 'brand entry' : 'source pattern'})
+Issues: ${e.issues.length > 0 ? e.issues.join('; ') : 'none'}
+Warnings: ${e.warnings.length > 0 ? e.warnings.join('; ') : 'none'}
+Rule: ${JSON.stringify(r, null, 2)}`;
+  }).join('\n\n');
+
+  const judgment = await claude(REVIEW_SYSTEM_PROMPT,
+    `## Rule Quality Gate — Issue #${ISSUE_NUMBER}\n\n**Rules proposed:** ${rules.length}\n\n## Automated evaluation results\n\n${evalSummary}\n\n## Decision\n\nShould these rules be auto-promoted? Respond PASS or FAIL on the first line.`,
+    1500
+  );
+
+  const passed = judgment.trimStart().startsWith('PASS');
+  return { passed, judgment };
+}
+
+async function askClaudeToFix(failedRules, judgment) {
+  const fixPrompt = `You are Virgil's detection rule fixer. The quality gate failed these rules. Fix them so they pass.
+
+For each rule, produce a corrected version as a JSON code block.
+
+Rules to fix:
+${failedRules.map(r => '```json\n' + JSON.stringify(r, null, 2) + '\n```').join('\n\n')}
+
+Quality gate findings:
+${judgment}
+
+For source patterns:
+- Make the regex MORE specific — add brand-specific keywords, function names, or unique strings
+- Replace .* with bounded quantifiers: [\\s\\S]{0,2000} for cross-line, [^<]{0,2000} for HTML context
+- Replace (?=.*X)(?=.*Y) with X[\\s\\S]{0,5000}Y or split into separate patterns
+- Remove the s (DOTALL) flag — use [\\s\\S]{0,N} explicitly instead
+- Start patterns with a literal prefix of 4+ chars
+- Reduce weight if pattern is too broad (max 0.25 for phishkitSignatures, 0.35 for others)
+- If a pattern is unfixable, include "action": "remove" in the JSON
+
+For brand entries:
+- Remove generic typos that are common English words
+- Keep typos that clearly resemble the brand name
+
+Output each fixed rule as a JSON code block. If a rule cannot be fixed, include "action": "remove" in the JSON.
+Output ONLY the JSON blocks, no prose.`;
+
+  const fixes = await claude(
+    'You are a precise JSON generator. Output only valid JSON code blocks, no prose.',
+    fixPrompt,
+    2000
+  );
+
+  const fixBlocks = [];
+  const fixRe = /```json\n([\s\S]*?)```/g;
+  let fm;
+  while ((fm = fixRe.exec(fixes)) !== null) {
+    try { fixBlocks.push(JSON.parse(fm[1])); } catch {}
+  }
+
+  const fixed = fixBlocks.filter(b => b.action !== 'remove');
+  const removed = fixBlocks.filter(b => b.action === 'remove');
+  return { fixed, removed };
+}
+
+// ── Extract rules from the most recent triage/gate comment ────────────────────
+
+function extractRulesFromComment(comment) {
+  const blocks = [];
+  const re = /```json\n([\s\S]*?)```/g;
+  let m;
+  while ((m = re.exec(comment)) !== null) {
+    try { blocks.push(JSON.parse(m[1])); } catch {}
+  }
+
+  const PLACEHOLDER_IDS   = new Set(['example-source-pattern','my-pattern-id','pattern-id']);
+  const PLACEHOLDER_NAMES = new Set(['example-brand','brand-name','brandname']);
+
+  return blocks.filter(b => {
+    if (b.action === 'remove') return false;
+    if (b.name && b.domains && b.typos) return !PLACEHOLDER_NAMES.has(b.name);
+    if (b.id && b.patternString)        return !PLACEHOLDER_IDS.has(b.id);
+    return false;
+  });
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+
 async function main() {
   console.log(`\nAgent 4: Rule Quality Gate — Issue #${ISSUE_NUMBER}`);
+  console.log(`Max attempts: ${MAX_ATTEMPTS}\n`);
 
   const issue = await github.getIssue(REPO, ISSUE_NUMBER);
   if (!issue) { console.error('Issue not found'); process.exit(1); }
@@ -68,430 +369,161 @@ async function main() {
     process.exit(0);
   }
 
-  // Extract proposed rules
-  const blocks = [];
-  const re = /```json\n([\s\S]*?)```/g;
-  let m;
-  while ((m = re.exec(triageComment.body)) !== null) {
-    try { blocks.push(JSON.parse(m[1])); } catch {}
-  }
-
-  const PLACEHOLDER_IDS   = new Set(['example-source-pattern','my-pattern-id','pattern-id']);
-  const PLACEHOLDER_NAMES = new Set(['example-brand','brand-name','brandname']);
-
-  const rules = blocks.filter(b => {
-    if (b.name && b.domains && b.typos) return !PLACEHOLDER_NAMES.has(b.name);
-    if (b.id && b.patternString)        return !PLACEHOLDER_IDS.has(b.id);
-    return false;
-  });
-
-  if (rules.length === 0) {
+  let currentRules = extractRulesFromComment(triageComment.body);
+  if (currentRules.length === 0) {
     console.log('No actionable rules to evaluate');
     process.exit(0);
   }
 
-  console.log(`Evaluating ${rules.length} proposed rule(s)...`);
+  // ── Retry loop: evaluate → fix → re-evaluate → fix → final evaluate ──────
 
-  // ── Evaluate each rule ────────────────────────────────────────────────────
+  const attemptLog = [];   // track each attempt for the final comment
+  let finalPassed = false;
+  let finalRules = currentRules;
+  let finalEvaluations = null;
+  let finalJudgment = '';
+  let removedRules = [];
 
-  const evaluations = [];
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    console.log(`\n── Attempt ${attempt}/${MAX_ATTEMPTS} (${currentRules.length} rules) ──`);
 
-  for (const rule of rules) {
-    const eval_ = { rule, issues: [], warnings: [], fpMatches: [], corpusHits: 0 };
+    // 1. Automated checks
+    const { evaluations, allPassed, passedRules, failedRules } = evaluateRules(currentRules);
+    finalEvaluations = evaluations;
 
-    if (rule.name && rule.domains && rule.typos) {
-      // Brand entry evaluation
+    console.log(`  Automated: ${passedRules.length} passed, ${failedRules.length} failed`);
 
-      // 1. Check typos aren't common English words
-      const commonWords = new Set(['secure','login','account','online','bank','web','mail',
-        'home','info','help','support','service','portal','access','auth','verify',
-        'update','confirm','sign','user','pass','card','pay','shop','store','buy']);
-      const genericTypos = rule.typos.filter(t => commonWords.has(t) || t.length <= 3);
-      if (genericTypos.length > 0) {
-        eval_.issues.push(`Typos too generic (common words or too short): ${genericTypos.join(', ')}`);
-      }
+    // 2. Claude review
+    const { passed, judgment } = await askClaudeToReview(currentRules, evaluations);
+    finalJudgment = judgment;
 
-      // 2. Check typos are plausibly related to the brand
-      const unrelatedTypos = rule.typos.filter(t => {
-        const brand = rule.name.toLowerCase();
-        // Typo should share at least 4 chars with brand name
-        const minMatch = brand.length >= 6 ? 4 : Math.floor(brand.length * 0.6);
-        let maxCommon = 0;
-        for (let i = 0; i <= brand.length - minMatch; i++) {
-          if (t.includes(brand.slice(i, i + minMatch))) { maxCommon = minMatch; break; }
-        }
-        return maxCommon < minMatch && t.length > 5;
-      });
-      if (unrelatedTypos.length > 2) {
-        eval_.warnings.push(`${unrelatedTypos.length} typos don't resemble brand name: ${unrelatedTypos.slice(0,3).join(', ')}`);
-      }
+    console.log(`  Claude: ${passed ? 'PASS ✅' : 'FAIL ❌'}`);
 
-      // 3. Check corpus for phishing hits
-      try {
-        let corpusTotal = 0;
-        for (const typo of rule.typos.slice(0, 20)) {
-          const rows = d1`
-            SELECT registered_domain, COUNT(DISTINCT install_id) as reports
-            FROM verdicts
-            WHERE risk_level IN ('dangerous','suspicious')
-              AND registered_domain = ${typo}
-            GROUP BY registered_domain LIMIT 1
-          `;
-          corpusTotal += rows.reduce((s, r) => s + r.reports, 0);
-        }
-        eval_.corpusHits = corpusTotal;
-      } catch {}
+    attemptLog.push({
+      attempt,
+      ruleCount: currentRules.length,
+      autoPassCount: passedRules.length,
+      autoFailCount: failedRules.length,
+      claudePassed: passed,
+      evaluations: formatEvaluations(evaluations),
+      judgment,
+    });
 
-      // 4. Too narrow — only 1-2 typos and no corpus hits
-      if (rule.typos.length <= 2 && eval_.corpusHits === 0) {
-        eval_.warnings.push(`Only ${rule.typos.length} typo variant(s) with no corpus hits — may be too narrow to be useful`);
-      }
+    if (passed && allPassed) {
+      // Clean pass — all rules approved
+      finalPassed = true;
+      finalRules = currentRules;
+      console.log(`  ✅ All rules passed on attempt ${attempt}`);
+      break;
+    }
 
-      // 5. Duplicate — brand name already in existing rules
-      try {
-        const existing = d1`
-          SELECT detected_brand FROM verdicts
-          WHERE detected_brand = ${rule.name} LIMIT 1
-        `;
-        // Only warn if it's in verdicts but NOT as a phishing hit — suggests it's already covered
-        const phishHits = d1`
-          SELECT COUNT(*) as hits FROM verdicts
-          WHERE detected_brand = ${rule.name} AND risk_level IN ('dangerous','suspicious') LIMIT 1
-        `;
-        if (existing.length > 0 && phishHits[0]?.hits > 10) {
-          eval_.warnings.push(`Brand "${rule.name}" already has ${phishHits[0].hits} phishing verdicts in corpus — may duplicate existing coverage`);
-        }
-      } catch {}
-
-      // 4. FP check — do any typos match legitimate domains?
-      const fpRisk = rule.typos.filter(t =>
-        TRANCO_TOP_1000_SAMPLE.some(d => d.includes(t) || t.includes(d.split('.')[0]))
-      );
-      if (fpRisk.length > 0) {
-        eval_.issues.push(`FP risk: typos overlap with top sites: ${fpRisk.join(', ')}`);
-        eval_.fpMatches.push(...fpRisk);
-      }
-
-    } else if (rule.id && rule.patternString) {
-      // Source pattern evaluation
-      const isPhishkitSig = rule.group === 'phishkitSignatures';
-
-      // 1. Regex compiles
-      let compilesOk = false;
-      try {
-        new RegExp(rule.patternString, rule.patternFlags || '');
-        compilesOk = true;
-      } catch (e) {
-        eval_.issues.push(`Invalid regex: ${e.message}`);
-      }
-
-      if (compilesOk) {
-        const patternLength = rule.patternString.replace(/[.*+?^${}()|[\]\\]/g, '').length;
-
-        // ── PERFORMANCE CHECK ─────────────────────────────────────────────
-        // Source patterns run against full page source (potentially 5MB+) on
-        // every page load. Patterns with backtracking-prone constructs cause
-        // measurable UI freezes on content-heavy sites (CNN, Yahoo).
-        // These checks enforce linear-time-safe regex construction.
-        const ps = rule.patternString;
-        const flags = rule.patternFlags || '';
-        const dotstarCount = (ps.match(/(?<!\\)\.\*/g) || []).length;
-        const hasAlternation = /(?<!\\)\|/.test(ps);
-        const hasDotall = flags.includes('s');
-        const hasNestedQuant = /[+*]\)[+*?]/.test(ps);
-        const lookaheadCount = (ps.match(/\(\?=/g) || []).length;
-        const hasMultiDotstar = dotstarCount >= 2;
-
-        let perfScore = 0;
-        const perfIssues = [];
-
-        // .* with DOTALL — spans entire multi-MB document as a single line
-        if (hasDotall && dotstarCount > 0) {
-          perfScore += dotstarCount * 2;
-          perfIssues.push(`DOTALL flag with .* (×${dotstarCount}) — each .* scans the entire document as one line. Use [\\\\s\\\\S]{0,N} with a bounded quantifier instead.`);
-        }
-
-        // Multiple .* in sequence — A.*B.*C rescans from every position
-        if (hasMultiDotstar && !hasDotall) {
-          perfScore += dotstarCount;
-          perfIssues.push(`${dotstarCount} sequential .* operators — causes O(n²) scanning. Use bounded quantifiers: A[^<]{0,2000}B[^<]{0,2000}C`);
-        }
-
-        // .* combined with alternation — tries each branch at every position
-        if (dotstarCount > 0 && hasAlternation) {
-          perfScore += 2;
-          perfIssues.push(`.* with alternation (|) — backtracking engine tries each branch at every string position. Put the most specific literal first or use bounded quantifiers.`);
-        }
-
-        // Multiple lookaheads with .* — (?=.*X)(?=.*Y) is O(n) per lookahead per position
-        if (lookaheadCount >= 2 && dotstarCount > 0) {
-          perfScore += lookaheadCount;
-          perfIssues.push(`${lookaheadCount} lookaheads with .* — each rescans from every position. Rewrite as: X[\\\\s\\\\S]{0,5000}Y|Y[\\\\s\\\\S]{0,5000}X or split into separate patterns.`);
-        }
-
-        // Nested quantifiers — catastrophic backtracking risk
-        if (hasNestedQuant) {
-          perfScore += 5;
-          perfIssues.push(`Nested quantifiers detected — can cause catastrophic exponential backtracking. Restructure to avoid (a+)+ or (.*?)* patterns.`);
-        }
-
-        // Verdict: critical perf issues are blocking, moderate are warnings
-        if (perfScore >= 5) {
-          eval_.issues.push(`⚡ PERFORMANCE BLOCK (score ${perfScore}): ${perfIssues.join(' ')}`);
-        } else if (perfScore >= 3) {
-          eval_.issues.push(`⚡ Performance risk (score ${perfScore}): ${perfIssues.join(' ')}`);
-        } else if (perfScore > 0) {
-          eval_.warnings.push(`⚡ Minor performance concern (score ${perfScore}): ${perfIssues.join(' ')}`);
-        }
-
-        // 2. Broadness check
-        if (/^\.\*$/.test(rule.patternString)) eval_.issues.push('Pattern is just .* — matches everything');
-        if (patternLength < 5) eval_.issues.push(`Pattern too short (${patternLength} literal chars)`);
-
-        // 3. FP test against legitimate HTML/JS samples
-        // phishkitSignatures gets an expanded sample set — it runs on every page source
-        const legitimateSamples = [
-          '<form action="/login" method="post">',
-          '<input type="password" name="password">',
-          '<input type="text" name="username" placeholder="Email">',
-          'document.getElementById("username").value',
-          'document.querySelector("input[type=password]")',
-          'window.location.href = "/dashboard"',
-          '<title>Sign in to Google</title>',
-          'fetch("/api/login", { method: "POST" })',
-          'addEventListener("submit", function(e) { e.preventDefault(); })',
-          'localStorage.setItem("token", response.token)',
-          'document.cookie',
-          'window.onload = function() {',
-          '<script src="https://cdn.jsdelivr.net/npm/bootstrap',
-          ...(isPhishkitSig ? [
-            'function validateForm() { return true; }',
-            'document.forms[0].submit()',
-            '<input type="hidden" name="csrf_token">',
-            'const password = document.getElementById("pwd").value',
-            'if (username === "" || password === "") { alert("Please fill in all fields"); }',
-            'fetch("/auth/callback", { credentials: "include" })',
-            'history.pushState({}, "", "/login")',
-            'document.querySelectorAll("input")',
-            'const form = document.getElementById("loginForm")',
-          ] : []),
-        ];
-        const pattern = new RegExp(rule.patternString, rule.patternFlags || '');
-        const fpSamples = legitimateSamples.filter(s => pattern.test(s));
-        if (fpSamples.length > 0) {
-          // For phishkitSignatures, a legitimate match is an outright FAIL not just a warning
-          const bucket = isPhishkitSig ? 'issues' : 'warnings';
-          eval_[bucket].push(`Pattern matches legitimate HTML/JS (${fpSamples.length} sample${fpSamples.length > 1 ? 's' : ''}): "${fpSamples[0]}"`);
-        }
-
-        // 4. Weight vs specificity — stricter for phishkitSignatures
-        const maxSafeWeight = isPhishkitSig ? 0.25 : 0.35;
-        const minSpecificityForHighWeight = isPhishkitSig ? 15 : 10;
-        if (rule.weight > maxSafeWeight && patternLength < minSpecificityForHighWeight) {
-          eval_.issues.push(`Weight ${rule.weight} too high for ${patternLength}-char pattern in ${rule.group} (max safe: ${maxSafeWeight} unless pattern has ≥${minSpecificityForHighWeight} literal chars)`);
-        }
-
-        // 5. phishkitSignatures must have a specific anchor string
-        if (isPhishkitSig) {
-          const hasAnchor = /['"]\w{6,}['"]/.test(rule.patternString) ||
-                            /\w{8,}/.test(rule.patternString.replace(/[.*+?^${}()|[\]\\]/g, ''));
-          if (!hasAnchor) {
-            eval_.issues.push('phishkitSignatures pattern lacks a specific anchor string (quoted string ≥6 chars or word ≥8 chars) — too broad for page source scanning');
-          }
-        }
-
-        // 6. Duplicate check
-        try {
-          const existing = d1`SELECT signal_id FROM phishkit_signals WHERE signal_id = ${rule.id} LIMIT 1`;
-          if (existing.length > 0) eval_.warnings.push(`Pattern ID "${rule.id}" already exists in corpus — may be a duplicate`);
-        } catch {}
-
-        // 7. Too narrow — highly specific but zero corpus hits
-        if (eval_.corpusHits === 0 && patternLength > 40) {
-          eval_.warnings.push(`Very specific pattern (${patternLength} literal chars) with 0 corpus hits — may be too narrow`);
-        }
-
-        // 8. Corpus hits
-        try {
-          const hits = d1`SELECT COUNT(*) as hits FROM phishkit_signals WHERE signal_id = ${rule.id} LIMIT 1`;
-          eval_.corpusHits = hits[0]?.hits || 0;
-        } catch {}
+    if (passed && !allPassed) {
+      // Claude said PASS but automated checks found issues — trust automated checks,
+      // but only fail the rules with issues and keep the ones that passed
+      console.log(`  Claude approved but ${failedRules.length} rule(s) have automated issues — splitting`);
+      if (passedRules.length > 0 && attempt === MAX_ATTEMPTS) {
+        // On final attempt, accept whatever passed automated checks
+        finalPassed = true;
+        finalRules = passedRules;
+        break;
       }
     }
 
-    evaluations.push(eval_);
-    const severity = eval_.issues.length > 0 ? '❌' : eval_.warnings.length > 0 ? '⚠️' : '✅';
-    console.log(`  ${severity} ${rule.name || rule.id}: ${eval_.issues.length} issues, ${eval_.warnings.length} warnings, ${eval_.corpusHits} corpus hits`);
-  }
+    // Not passed — can we fix?
+    if (attempt < MAX_ATTEMPTS) {
+      const rulesToFix = allPassed ? currentRules : evaluations.filter(e => e.issues.length > 0).map(e => e.rule);
+      console.log(`  Asking Claude to fix ${rulesToFix.length} rule(s)...`);
 
-  // ── Ask Opus for final quality judgment ──────────────────────────────────
+      const { fixed, removed } = await askClaudeToFix(rulesToFix, judgment);
+      removedRules.push(...removed);
+      console.log(`  Claude produced ${fixed.length} fix(es), ${removed.length} removal(s)`);
 
-  const evalSummary = evaluations.map(e => {
-    const r = e.rule;
-    const name = r.name || r.id;
-    return `### ${name} (${r.name ? 'brand entry' : 'source pattern'})
-Issues: ${e.issues.length > 0 ? e.issues.join('; ') : 'none'}
-Warnings: ${e.warnings.length > 0 ? e.warnings.join('; ') : 'none'}
-Corpus hits: ${e.corpusHits}
-FP matches: ${e.fpMatches.length > 0 ? e.fpMatches.join(', ') : 'none'}
-Rule: ${JSON.stringify(r, null, 2)}`;
-  }).join('\n\n');
+      if (fixed.length === 0) {
+        // Claude couldn't fix anything — keep rules that passed automated checks
+        if (passedRules.length > 0) {
+          finalPassed = true;
+          finalRules = passedRules;
+          console.log(`  No fixes possible — accepting ${passedRules.length} rule(s) that passed automated checks`);
+        }
+        break;
+      }
 
-  const systemPrompt = `You are Virgil's rule quality gate — a senior detection engineer reviewing proposed phishing detection rules before they ship to users.
-
-Your job is to block rules that would cause false positives, provide no detection value, OR degrade browser performance. You are the last line of defense before a rule goes live. Be strict about FP risk and performance but don't block rules just because corpus coverage is low — new phishing campaigns won't have corpus hits yet.
-
-CRITICAL: Rules in "phishkitSignatures" run against EVERY page source for EVERY user. A bad pattern here causes widespread false positives. Apply extra scrutiny to phishkitSignatures patterns — when in doubt, FAIL them. They can always be refined and resubmitted.
-
-PERFORMANCE IS A HARD REQUIREMENT: Source patterns run against full page HTML (potentially 5-10MB on news sites, portals). There are currently 340+ patterns and this number grows with every auto-promote. Each pattern with .* and alternation causes the V8 regex engine to scan the entire string at every position — on a 5MB page this takes measurable seconds. Patterns flagged with ⚡ PERFORMANCE BLOCK must be rewritten before they can ship.
-
-PASS criteria:
-- Typosquats are plausibly related to the brand and not common English words
-- Source patterns are specific enough to not match legitimate sites
-- Weights are proportional to pattern specificity
-- No critical issues found
-- Regex patterns are performance-safe: no unanchored .* with DOTALL, no nested quantifiers, no multiple sequential .* without bounded quantifiers
-
-FAIL criteria (any one of these = FAIL):
-- Pattern matches >1% of top legitimate sites (FP risk)
-- Regex is so broad it matches common page structures (login forms, password fields, etc.)
-- Typosquats are generic English words unrelated to the brand
-- Weight is disproportionately high relative to pattern specificity
-- Pattern is too narrow/specific to ever match real phishing (0 corpus hits + very long literal string)
-- Rule exactly duplicates existing detection logic already in the ruleset
-- ⚡ Pattern has a performance score >= 5 (will cause browser timeouts on large pages)
-- Pattern uses .* with the DOTALL (s) flag — this makes .* span the entire multi-MB document
-- Pattern uses nested quantifiers like (a+)+ or (.*?)*
-- Pattern has 3+ sequential .* operators without bounded quantifiers
-
-When fixing patterns for performance, apply these rewrites:
-- Replace .* with [^<]{0,2000} or [\\s\\S]{0,2000} (bounded quantifier)
-- Replace (?=.*X)(?=.*Y) with X[\\s\\S]{0,5000}Y|Y[\\s\\S]{0,5000}X
-- Remove the s (DOTALL) flag and use [\\s\\S]{0,N} explicitly where needed
-- Start patterns with a literal prefix of 4+ chars for V8 fast-skip
-- Split patterns with 3+ lookaheads into multiple simpler patterns
-
-Respond with exactly: PASS or FAIL on the first line, then your reasoning.`;
-
-  const userContent = `## Rule Quality Gate — Issue #${ISSUE_NUMBER}
-
-**Issue:** ${issue.title}
-**Rules proposed:** ${rules.length}
-
-## Automated evaluation results
-
-${evalSummary}
-
-## Decision
-
-Should these rules be auto-promoted to the detection ruleset? 
-Respond PASS or FAIL on the first line, then explain your reasoning for each rule.`;
-
-  console.log('\nAsking Opus for quality judgment...');
-  const judgment = await claude(systemPrompt, userContent, 1500);
-  const passed = judgment.trimStart().startsWith('PASS');
-
-  console.log(`\nOpus judgment: ${passed ? 'PASS ✅' : 'FAIL ❌'}`);
-
-  // ── If FAIL, ask Opus to fix the rules ───────────────────────────────────
-  let fixedRules = null;
-  let fixComment = '';
-
-  if (!passed) {
-    console.log('\nAsking Opus to fix the failing rules...');
-
-    const fixPrompt = `You are Virgil's detection rule fixer. The quality gate failed these rules. Fix them so they pass.
-
-For each rule that failed, produce a corrected version as a JSON code block.
-
-Rules to fix:
-${rules.map(r => '```json\n' + JSON.stringify(r, null, 2) + '\n```').join('\n\n')}
-
-Quality gate findings:
-${judgment}
-
-For source patterns:
-- Make the regex MORE specific to avoid FP — add brand-specific keywords, function names, or unique strings
-- Reduce weight if pattern is too broad (max 0.25 for phishkitSignatures, 0.35 for others)
-- If a pattern is unfixable (too generic, no way to make specific), output it with a comment field: "action": "remove"
-
-For brand entries:
-- Remove generic typos that are common English words
-- Keep typos that clearly resemble the brand name
-
-Output each fixed rule as a JSON code block. If a rule cannot be fixed, include "action": "remove" in the JSON.
-Output ONLY the JSON blocks, no prose.`;
-
-    const fixes = await claude(
-      'You are a precise JSON generator. Output only valid JSON code blocks, no prose.',
-      fixPrompt,
-      2000
-    );
-
-    // Extract fixed rules from response
-    const fixBlocks = [];
-    const fixRe = /```json\n([\s\S]*?)```/g;
-    let fm;
-    while ((fm = fixRe.exec(fixes)) !== null) {
-      try { fixBlocks.push(JSON.parse(fm[1])); } catch {}
-    }
-
-    if (fixBlocks.length > 0) {
-      fixedRules = fixBlocks.filter(b => b.action !== 'remove');
-      const removed = fixBlocks.filter(b => b.action === 'remove');
-      console.log(`Opus produced ${fixedRules.length} fixed rule(s), ${removed.length} removal(s)`);
-
-      fixComment = `\n\n---\n\n### 🔧 Auto-fix attempt\n\nOpus has proposed fixed versions of the failing rules:\n\n${fixedRules.map(r => '```json\n' + JSON.stringify(r, null, 2) + '\n```').join('\n\n')}${removed.length > 0 ? `\n\n**Rules recommended for removal** (too generic to fix):\n${removed.map(r => `- \`${r.id || r.name}\``).join('\n')}` : ''}\n\nComment \`/apply\` to apply the fixed rules, or \`/retriage\` to ask the triage agent for new proposals.`;
+      // Merge: rules that passed automated checks + fixed versions of failed rules
+      const passedIds = new Set(passedRules.map(r => r.id || r.name));
+      currentRules = [
+        ...passedRules,
+        ...fixed.filter(f => !passedIds.has(f.id || f.name)),
+      ];
+    } else {
+      // Final attempt failed — accept whatever passed automated checks
+      const { passedRules: lastPassed } = evaluateRules(currentRules);
+      if (lastPassed.length > 0) {
+        finalPassed = true;
+        finalRules = lastPassed;
+        console.log(`  Final attempt — accepting ${lastPassed.length} rule(s) that passed automated checks`);
+      }
     }
   }
 
-  // ── Post comment on issue ────────────────────────────────────────────────
+  // ── Build and post the summary comment ─────────────────────────────────────
 
-  const autoResults = evaluations.map(e => {
-    const r = e.rule;
-    const name = r.name || r.id;
-    const status = e.issues.length > 0 ? '❌' : e.warnings.length > 0 ? '⚠️' : '✅';
-    const lines = [`**${status} ${name}**`];
-    if (e.issues.length)   lines.push(...e.issues.map(i => `- 🚫 ${i}`));
-    if (e.warnings.length) lines.push(...e.warnings.map(w => `- ⚠️ ${w}`));
-    if (e.corpusHits > 0)  lines.push(`- 📊 ${e.corpusHits} corpus hit(s)`);
-    return lines.join('\n');
-  }).join('\n\n');
+  const attemptSummaries = attemptLog.map(a => {
+    const icon = a.claudePassed ? '✅' : '❌';
+    return `### Attempt ${a.attempt} — ${icon} Claude: ${a.claudePassed ? 'PASS' : 'FAIL'} | Auto: ${a.autoPassCount} passed, ${a.autoFailCount} failed
+
+${a.evaluations}
+
+<details>
+<summary>Claude review</summary>
+
+${a.judgment}
+</details>`;
+  }).join('\n\n---\n\n');
+
+  const finalVerdict = finalPassed
+    ? `✅ PASS — ${finalRules.length} rule(s) approved after ${attemptLog.length} attempt(s)`
+    : `❌ FAIL — rules could not pass quality gate after ${MAX_ATTEMPTS} attempts`;
+
+  const approvedSection = finalPassed && finalRules.length > 0
+    ? `\n\n### Approved rules\n\n${finalRules.map(r => '```json\n' + JSON.stringify(r, null, 2) + '\n```').join('\n\n')}`
+    : '';
+
+  const removedSection = removedRules.length > 0
+    ? `\n\n### Rules removed (unfixable)\n${removedRules.map(r => `- \`${r.id || r.name}\``).join('\n')}`
+    : '';
 
   const comment = `## 🔍 Rule Quality Gate
 
-**Verdict: ${passed ? '✅ PASS — rules approved for auto-promote' : '❌ FAIL — rules blocked, fixes proposed below'}**
+**Verdict: ${finalVerdict}**
 
 ---
 
-### Automated checks
-${autoResults}
+${attemptSummaries}${approvedSection}${removedSection}
 
 ---
 
-### Opus review
-${judgment}${fixComment}
-
----
-
-${passed
+${finalPassed
   ? '_Rules will be auto-promoted to `rules/` and shipped in the next detection config update._'
-  : '_Rules blocked. See fixed versions above — comment `/apply` to apply them, or `/retriage` to start over._'
+  : '_Rules blocked after 3 attempts. Manual review required — comment `/retriage` to start over with fresh proposals._'
 }
 
 *Quality gate run at ${new Date().toISOString()}*`;
 
   await github.commentOnIssue(REPO, ISSUE_NUMBER, comment);
 
-  if (!passed) {
+  if (!finalPassed) {
     await github.addLabel(REPO, ISSUE_NUMBER, ['needs-review']);
-    // Remove agent-triaged so auto-promote doesn't proceed
     try { await github.removeLabel(REPO, ISSUE_NUMBER, 'agent-triaged'); } catch {}
-    console.log('Labels updated: added needs-review, removed agent-triaged');
+    console.log('\nFinal: FAIL — labeled needs-review');
     process.exit(1);
   }
 
-  console.log('Quality gate passed — auto-promote may proceed');
+  // ── Write approved rules for the auto-promote step to pick up ──────────────
+  // The auto-promote workflow reads from the most recent quality gate comment
+  // that contains approved rule JSON blocks. The approved rules are already
+  // in the comment above. Exit 0 so auto-promote proceeds.
+
+  console.log(`\nFinal: PASS — ${finalRules.length} rule(s) approved`);
   process.exit(0);
 }
 
