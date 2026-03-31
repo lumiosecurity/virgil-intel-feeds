@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T20:49:52.209Z",
+    "compiledAt": "2026-03-31T20:51:28.205Z",
     "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 279,
+    "patternCount": 280,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2237,11 +2237,11 @@
     {
       "id": "microsoft-ciam-legitimate-infra",
       "group": "brandImpersonation",
-      "description": "Detects legitimate Microsoft CIAM/Entra ID infrastructure markers (ConvergedError page with AADSTS codes and msauth CDN references) to reduce false positives",
+      "description": "Legitimate Microsoft CIAM infrastructure markers — reduces false positive score (safe signal)",
       "severity": "low",
       "weight": 0.05,
       "source": "js",
-      "patternString": "\"iErrorCode\":\\d+[\\s\\S]{0,3000}aadcdn\\.msauth\\.net[\\s\\S]{0,3000}ConvergedError",
+      "patternString": "urlAcmaServerPath[\"']:\\s*[\"']https://[a-z0-9]+\\.ciamlogin\\.com[\"'][^}]{0,500}aadcdn\\.msauth\\.net",
       "patternFlags": "i"
     },
     {
@@ -2433,6 +2433,16 @@
       "source": "html",
       "patternString": "Sign in.*Microsoft account.*(?:Enter.*email|Enter password|Forgot my password)",
       "patternFlags": "is"
+    },
+    {
+      "id": "microsoft-auth-cdn-preconnect-safe",
+      "group": "brandImpersonation",
+      "description": "Microsoft auth page with legitimate CDN preconnect to msauth.net — safe signal reducing FP",
+      "severity": "low",
+      "weight": 0.05,
+      "source": "html",
+      "patternString": "rel=[\"']preconnect[\"'][^>]{0,100}aadcdn\\.msauth\\.net[^>]*crossorigin",
+      "patternFlags": "i"
     },
     {
       "id": "fake-captcha-gating",
@@ -4612,7 +4622,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T20:44:57.210Z",
+      "compiledAt": "2026-03-31T20:49:50.870Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
