@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/url_shorteners.txt",
-    "syncedAt": "2026-03-30T15:43:57.646Z",
+    "syncedAt": "2026-03-31T01:02:04.950Z",
     "role": "url_shorteners",
     "description": "URL shorteners that can mask phishing destinations",
-    "count": 332
+    "count": 334
   },
   "entries": [
     "1in.me",
@@ -115,6 +115,7 @@
     "ibit.ly",
     "icanhaz.com",
     "idek.net",
+    "inlnk.co",
     "inreply.to",
     "ionos.ly",
     "is.gd",
@@ -149,6 +150,7 @@
     "ln.run",
     "lnk.gd",
     "lnk.in",
+    "lnk.ink",
     "lnk.sk",
     "lnkd.in",
     "loopt.us",

@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-30T15:43:59.904Z",
+    "compiledAt": "2026-03-31T01:02:07.771Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -471,6 +471,7 @@
     "breely.com",
     "buildin.ai",
     "canva.com",
+    "cloudclusters.net",
     "cloudworkstations.dev",
     "coda.io",
     "cognito.com",
@@ -515,11 +516,13 @@
     "scribehow.com",
     "seesaw.me",
     "soloist.ai",
+    "studio.site",
     "surveymonkey.com",
     "systeme.io",
     "tana.pub",
     "tithelysetup.com",
     "typedream.app",
+    "upresenter.ai",
     "view.genially.com",
     "wasmer.app",
     "weavely.ai",
@@ -529,7 +532,8 @@
     "wpdevcloud.com",
     "wpenginepowered.com",
     "yayforms.link",
-    "zapier.app"
+    "zapier.app",
+    "zeabur.app"
   ],
   "freeFileHosts": [
     "0x0.st",
@@ -622,6 +626,7 @@
     "hidrive.ionos.com",
     "hightail.com",
     "icedrive.net",
+    "iceiy.com",
     "idrive.com",
     "indd.adobe.com",
     "issuu.com",
@@ -821,6 +826,7 @@
     "ibit.ly",
     "icanhaz.com",
     "idek.net",
+    "inlnk.co",
     "inreply.to",
     "ionos.ly",
     "is.gd",
@@ -855,6 +861,7 @@
     "ln.run",
     "lnk.gd",
     "lnk.in",
+    "lnk.ink",
     "lnk.sk",
     "lnkd.in",
     "loopt.us",

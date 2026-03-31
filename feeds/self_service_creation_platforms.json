@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/self_service_creation_platform_domains.txt",
-    "syncedAt": "2026-03-30T15:43:57.496Z",
+    "syncedAt": "2026-03-31T01:02:04.763Z",
     "role": "free_subdomain_hosts",
     "description": "Self-service website creation platforms where anyone can host content",
-    "count": 85
+    "count": 89
   },
   "entries": [
     "acrobat.adobe.com",
@@ -26,6 +26,7 @@
     "breely.com",
     "buildin.ai",
     "canva.com",
+    "cloudclusters.net",
     "cloudworkstations.dev",
     "coda.io",
     "cognito.com",
@@ -74,12 +75,14 @@
     "scribehow.com",
     "seesaw.me",
     "soloist.ai",
+    "studio.site",
     "surveymonkey.com",
     "systeme.io",
     "tana.pub",
     "tithelysetup.com",
     "typedream.app",
     "typeform.com",
+    "upresenter.ai",
     "vercel.app",
     "view.genially.com",
     "wasmer.app",
@@ -91,6 +94,7 @@
     "wpdevcloud.com",
     "wpenginepowered.com",
     "yayforms.link",
-    "zapier.app"
+    "zapier.app",
+    "zeabur.app"
   ]
 }

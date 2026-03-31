@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-03-30-15:44",
-    "generatedAt": "2026-03-30T15:44:00.867Z",
+    "version": "2026-03-31-01:02",
+    "generatedAt": "2026-03-31T01:02:08.645Z",
     "brandCount": 106,
     "patternCount": 281
   },
@@ -2756,6 +2756,7 @@
   ],
   "sourcePatterns": [
     {
+      "domHashes": [],
       "id": "example-source-pattern",
       "group": "phishkitSignatures",
       "description": "What this pattern detects",
@@ -2767,6 +2768,7 @@
       "note": "Why this regex is distinctive and low false-positive"
     },
     {
+      "domHashes": [],
       "id": "mobile-redirect-phishing-pattern",
       "group": "botEvasion",
       "description": "Mobile detection with dynamic subdomain redirect pattern",
@@ -2778,6 +2780,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "ipinfo-bot-evasion-redirect",
       "group": "botEvasion",
       "description": "Fetches ipinfo.io to fingerprint visitor IP/org and conditionally redirects bots/scanners — classic phishkit bot evasion",
@@ -2789,6 +2792,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "reversed-string-isp-blocklist",
       "group": "botEvasion",
       "description": "Reversed strings used to build ISP/org blocklist for bot evasion — matches split().reverse().join() pattern checking against org names",
@@ -2800,6 +2804,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "bot-detect-webdriver-phantom",
       "group": "botEvasion",
       "description": "Detects bot evasion checking navigator.webdriver combined with PhantomJS indicators (callPhantom, _phantom, phantom)",
@@ -2811,6 +2816,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "bot-evasion-webdriver-phantom",
       "group": "botEvasion",
       "description": "Detects bot evasion checks for navigator.webdriver, callPhantom, or _phantom — common phishkit anti-analysis technique",
@@ -2822,6 +2828,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "hidden-iframe-cf-challenge-gating",
       "group": "botEvasion",
       "description": "Detects hidden 1x1 iframe dynamically loading Cloudflare challenge-platform scripts as bot evasion gating",
@@ -2833,6 +2840,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -2844,6 +2852,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "spotify-login-ui-combo",
       "group": "brandImpersonation",
       "description": "Detects Spotify interface elements with login functionality on non-Spotify domains",
@@ -2855,6 +2864,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "amazon-logo-hotlink",
       "group": "brandImpersonation",
       "description": "Amazon logo hotlinked from external source with Amazon branding",
@@ -2866,6 +2876,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "amazon-nav-impersonation",
       "group": "brandImpersonation",
       "description": "Amazon-style navigation on non-Amazon domain",
@@ -2877,6 +2888,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "instagram-login-impersonation",
       "group": "brandImpersonation",
       "description": "Instagram login page impersonation indicators",
@@ -2888,6 +2900,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "spotify-title-offsite",
       "group": "brandImpersonation",
       "description": "Spotify branding in page title on non-Spotify domain",
@@ -2899,6 +2912,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "github-discord-clone",
       "group": "brandImpersonation",
       "description": "Discord branding on GitHub Pages hosting",
@@ -2910,6 +2924,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "whatsapp-impersonation",
       "group": "brandImpersonation",
       "description": "Detects WhatsApp brand impersonation in page content",
@@ -2921,6 +2936,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "onedrive-fake-title",
       "group": "brandImpersonation",
       "description": "Detects fake OneDrive pages using incorrect title spacing",
@@ -2932,6 +2948,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "instagram-logo-credential-harvest",
       "group": "brandImpersonation",
       "description": "Instagram logo with credential fields on non-Instagram domain",
@@ -2943,6 +2960,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "instagram-credential-placeholder",
       "group": "brandImpersonation",
       "description": "Instagram-specific credential placeholder text",
@@ -2954,6 +2972,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "amazon-ui-impersonation",
       "group": "brandImpersonation",
       "description": "Amazon UI elements on non-Amazon domain",
@@ -2965,6 +2984,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "sign-dollar-substitution",
       "group": "brandImpersonation",
       "description": "Dollar sign substitution in sign-in text",
@@ -2976,6 +2996,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "favicon-brand-impersonation",
       "group": "brandImpersonation",
       "description": "Dynamic favicon loading with brand text and hidden form",
@@ -2987,6 +3008,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "networksolutions-webmail-reference",
       "group": "brandImpersonation",
       "description": "Detects pages referencing Network Solutions webmail infrastructure from external domains",
@@ -2998,6 +3020,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "chinese-verification-balance",
       "group": "brandImpersonation",
       "description": "Chinese verification page with brand balance display",
@@ -3009,6 +3032,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "chinese-crypto-balance-title",
       "group": "brandImpersonation",
       "description": "Chinese crypto exchange balance verification page pattern",
@@ -3020,6 +3044,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "instagram-logo-gradient-pattern",
       "group": "brandImpersonation",
       "description": "Instagram logo SVG with characteristic gradient pattern",
@@ -3031,6 +3056,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "instagram-portuguese-phishing",
       "group": "brandImpersonation",
       "description": "Instagram phishing with Portuguese localization",
@@ -3042,6 +3068,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-signin-redirect-pattern",
       "group": "brandImpersonation",
       "description": "Microsoft sign-in redirect phishing pattern with identity verification language",
@@ -3053,6 +3080,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-cdn-impersonation",
       "group": "brandImpersonation",
       "description": "Microsoft logincdn assets loaded on non-Microsoft domains",
@@ -3064,6 +3092,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "webflow-crypto-login-guide",
       "group": "brandImpersonation",
       "description": "Detects webflow-hosted crypto login instruction pages",
@@ -3075,6 +3104,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "netflix-phishing-indicators",
       "group": "brandImpersonation",
       "description": "Detects Netflix credential harvesting pages with pricing and membership language",
@@ -3086,6 +3116,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "gemini-chinese-impersonation",
       "group": "brandImpersonation",
       "description": "Detects Chinese-language Gemini balance/verification pages",
@@ -3097,6 +3128,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "adobe-malware-impersonation",
       "group": "brandImpersonation",
       "description": "Adobe PDF Reader impersonation with malware download",
@@ -3108,6 +3140,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "paypal-russia-kyb-phish",
       "group": "brandImpersonation",
       "description": "PayPal Russia KYB phishing campaign",
@@ -3119,6 +3152,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "coinsquare-char-substitution",
       "group": "brandImpersonation",
       "description": "Detects Coinsquare impersonation using character substitution",
@@ -3130,6 +3164,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "att-iphone-promo-impersonation",
       "group": "brandImpersonation",
       "description": "AT&T iPhone promotional email impersonation with trade-in offers",
@@ -3141,6 +3176,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "trustwallet-interface-pattern",
       "group": "brandImpersonation",
       "description": "Trust Wallet interface impersonation with wallet import/recovery options",
@@ -3152,6 +3188,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "trustwallet-welcome-pattern",
       "group": "brandImpersonation",
       "description": "Trust Wallet extension welcome screen impersonation",
@@ -3163,6 +3200,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "whatsapp-chinese-download-impersonation",
       "group": "brandImpersonation",
       "description": "Chinese WhatsApp download impersonation sites",
@@ -3174,6 +3212,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "generic-webmail-phishkit",
       "group": "brandImpersonation",
       "description": "Generic webmail phishing template with characteristic styling",
@@ -3185,6 +3224,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "ledger-start-impersonation",
       "group": "brandImpersonation",
       "description": "Ledger.com/Start page impersonation pattern",
@@ -3196,6 +3236,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "hsbc-chinese-branding",
       "group": "brandImpersonation",
       "description": "HSBC Chinese branding with credential harvesting form",
@@ -3207,6 +3248,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "bet365-fake-domains-pattern",
       "group": "brandImpersonation",
       "description": "Detects fake bet365 promotional content with fraudulent domain references",
@@ -3218,6 +3260,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "chinese-gambling-impersonation",
       "group": "brandImpersonation",
       "description": "Detects Chinese gambling phishkit content patterns",
@@ -3229,6 +3272,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-ciam-legitimate-infra",
       "group": "brandImpersonation",
       "description": "Detects legitimate Microsoft CIAM/Entra ID infrastructure markers (ConvergedError page with AADSTS codes and msauth CDN references) to reduce false positives",
@@ -3240,6 +3284,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-ciam-self-reference",
       "group": "brandImpersonation",
       "description": "Page config references urlAcmaServerPath on ciamlogin.com matching the serving domain, indicating legitimate Microsoft CIAM infrastructure",
@@ -3251,6 +3296,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "structured-data-bank-impersonation",
       "group": "brandImpersonation",
       "description": "Detects ld+json structured data claiming parentOrganization of a known bank (Bank of Montreal, Chase, etc.) — strong signal of SEO-poisoning phish when domain does not match the claimed organization",
@@ -3262,6 +3308,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "gitbook-crypto-login-impersonation",
       "group": "brandImpersonation",
       "description": "Detects crypto brand login impersonation pages hosted on GitBook using trademark symbol and login keyword pattern",
@@ -3273,6 +3320,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "godaddy-builder-crypto-impersonation",
       "group": "brandImpersonation",
       "description": "Detects GoDaddy Website Builder pages impersonating crypto exchanges by matching the generator tag alongside meta descriptions referencing trust company, bank exams, or licensed exchange language",
@@ -3284,6 +3332,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-copyright-impersonation",
       "group": "brandImpersonation",
       "description": "Microsoft Corporation copyright notice in page source, indicative of Microsoft brand impersonation on non-Microsoft domains",
@@ -3295,6 +3344,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "google-favicon-proxy-impersonation",
       "group": "brandImpersonation",
       "description": "Detects use of Google favicon proxy to dynamically fetch brand icons, common in generic phishkits",
@@ -3306,6 +3356,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "onedrive-sharepoint-hostname-combo",
       "group": "brandImpersonation",
       "description": "Detects 1drv and sharepoint appearing together in hostname — classic OneDrive/SharePoint phishing subdomain pattern",
@@ -3317,6 +3368,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-convergedsignin-pageid",
       "group": "brandImpersonation",
       "description": "Detects Microsoft ConvergedSignIn PageID meta tag copied from real login page onto non-Microsoft domains",
@@ -3328,6 +3380,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-favicon-thirdparty-exfil",
       "group": "brandImpersonation",
       "description": "Detects Microsoft favicon loaded from non-Microsoft third-party domains, indicating a cloned login page",
@@ -3339,6 +3392,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "sharepoint-subdomain-impersonation",
       "group": "brandImpersonation",
       "description": "Detects 'sharepoint' keyword in subdomain on non-Microsoft hosting domains — common in credential phishing campaigns",
@@ -3350,6 +3404,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "google-favicon-api-brand-impersonation",
       "group": "brandImpersonation",
       "description": "Detects use of Google's favicon service to display a brand icon on a non-brand domain, common in generic phishkits",
@@ -3361,6 +3416,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "docusign-brand-impersonation-html",
       "group": "brandImpersonation",
       "description": "DocuSign branding detected on non-DocuSign domain indicating impersonation",
@@ -3372,6 +3428,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "ms-oauth-params-in-base64-url",
       "group": "brandImpersonation",
       "description": "Detects base64-encoded Microsoft OAuth parameters (client_id, redirect_uri=office.com) embedded in query strings, characteristic of Microsoft credential phishing",
@@ -3383,6 +3440,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "ms-oauth-params-nonms-domain",
       "group": "brandImpersonation",
       "description": "Microsoft OAuth parameters (client_id, redirect_uri to office.com, OfficeHome scope) embedded in URL or page source served from non-Microsoft domain",
@@ -3394,6 +3452,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "mediawiki-config-on-non-wiki-domain",
       "group": "brandImpersonation",
       "description": "Detects cloned Wikipedia/MediaWiki pages served from non-Wikimedia domains, commonly used as cloaking layers in phishing",
@@ -3405,6 +3464,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "office365-subdomain-impersonation",
       "group": "brandImpersonation",
       "description": "Detects 'office365' keyword appearing in webflow domain attribute or page source on non-Microsoft domains, indicating brand impersonation",
@@ -3416,6 +3476,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "office365-logo-credential-form",
       "group": "brandImpersonation",
       "description": "Detects Office 365 logo image reference (office-365 or office365 in image filename) in page source, commonly used in O365 phishing kits on free hosting",
@@ -3427,6 +3488,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "facebook-login-prompt-offsite",
       "group": "brandImpersonation",
       "description": "Facebook login prompt text on non-Facebook domain — classic phishkit copy",
@@ -3438,6 +3500,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-login-font-fingerprint",
       "group": "brandImpersonation",
       "description": "Detects Microsoft login page clone via distinctive Segoe UI font-face declaration with unique fallback chain including Segoe Xbox Symbol, Mongolian Baiti, MV Boli",
@@ -3449,6 +3512,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -3460,6 +3524,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "captcha-gating-pattern",
       "group": "captchaGating",
       "description": "Fake captcha checkbox verification commonly used in phishing pages",
@@ -3471,6 +3536,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "fake-captcha-gate-with-hidden-form",
       "group": "captchaGating",
       "description": "Detects fake CAPTCHA/bot-check interstitial hiding a login form, common in credential phishing kits",
@@ -3482,6 +3548,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "fake-cloudflare-interstitial",
       "group": "captchaGating",
       "description": "Detects fake Cloudflare-style 'Just a moment...' interstitial with spinner animation but no real Cloudflare challenge JS",
@@ -3493,6 +3560,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "fake-captcha-gate-hidden-form",
       "group": "captchaGating",
       "description": "Detects fake browser-check verification screen with checkbox that gates a hidden credential form, common in phishkits",
@@ -3504,6 +3572,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "cookie-gate-reload-phishkit",
       "group": "cdnGating",
       "description": "Detects phishkit gate pattern: sets a cookie with timestamp then reloads page to pass server-side check",
@@ -3515,6 +3584,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "email-userid-label",
       "group": "credentialHarvesting",
       "description": "Email Address/User ID label pattern common in email phishing",
@@ -3526,6 +3596,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "formspree-credential-exfil",
       "group": "credentialHarvesting",
       "description": "Form submission to formspree.io with password field",
@@ -3537,6 +3608,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "netflix-logo-credential-harvest",
       "group": "credentialHarvesting",
       "description": "Detects Netflix logo usage with email collection forms",
@@ -3548,6 +3620,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "fake-paypal-openid-endpoint",
       "group": "credentialHarvesting",
       "description": "Fake PayPal OpenID Connect login endpoint",
@@ -3559,6 +3632,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "login-up-php-pattern",
       "group": "credentialHarvesting",
       "description": "login_up.php filename - phishkit credential harvesting pattern",
@@ -3570,6 +3644,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "hsbc-phishing-form-action",
       "group": "credentialHarvesting",
       "description": "HSBC login form submitting to suspicious PHP endpoint",
@@ -3581,6 +3656,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "gov-impersonation-payment-path",
       "group": "credentialHarvesting",
       "description": "URL contains government agency keyword in hostname with payment-related path on non-.gov domain",
@@ -3592,6 +3668,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "office365-credential-harvest",
       "group": "credentialHarvesting",
       "description": "Page references Office 365 and contains a password input field, strong indicator of O365 credential phishing",
@@ -3603,6 +3680,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "form-intercept-fetch-exfil",
       "group": "credentialHarvesting",
       "description": "Detects phishkit pattern that intercepts form submit with preventDefault, then exfiltrates via fetch() before redirecting to form action URL",
@@ -3614,6 +3692,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "campaign-key-plus-username-param",
       "group": "credentialHarvesting",
       "description": "Detects URL patterns with campaign tracking key and username/email parameter, typical of gated phishing kits",
@@ -3625,6 +3704,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "plaintext-password-field",
       "group": "credentialHarvesting",
       "description": "Detects input fields with password-related placeholder or label but type='text' instead of type='password', a common phishkit trait",
@@ -3636,6 +3716,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "keystroke-click-tracking-counters",
       "group": "credentialHarvesting",
       "description": "Detects phishing pages that track keystrokes, clicks, and time-on-page via inline counters — characteristic of phishing simulations and credential harvesting kits",
@@ -3647,6 +3728,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "hidden-field-credential-relay",
       "group": "credentialHarvesting",
       "description": "Detects JS pattern that copies visible input values into hidden form fields for exfiltration, commonly used in phishkits to decouple display from submission",
@@ -3658,6 +3740,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -3669,6 +3752,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "unicode-brand-obfuscation",
       "group": "obfuscation",
       "description": "Unicode character substitution in brand names and login text",
@@ -3680,6 +3764,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "encrypted-payload-empty-div-inject",
       "group": "obfuscation",
       "description": "Detects phishing pages that use an empty container div with a large encrypted/base64 payload in JS for runtime rendering — common in Cloudflare Workers phishkits",
@@ -3691,6 +3776,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "obfuscated-form-autosubmit",
       "group": "obfuscation",
       "description": "Form auto-submitted via string manipulation to obfuscate the .submit() call — phishkit anti-detection technique",
@@ -3702,6 +3788,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "css-interleave-obfuscation-decoys",
       "group": "obfuscation",
       "description": "Detects pages with multiple randomized CSS class names using display:none to implement character-interleaving obfuscation, common in Cloudflare impersonation phishkits",
@@ -3713,6 +3800,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "base64-document-write-obfuscation",
       "group": "obfuscation",
       "description": "Detects phishkits that base64-encode entire page HTML, apply character-position obfuscation, then document.write the decoded result",
@@ -3724,6 +3812,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "script-placeholder-docwrite",
       "group": "obfuscation",
       "description": "Obfuscated page using __SCRIPT_PLACEHOLDER__ tokens replaced at runtime before document.write, characteristic of credential phishing kits",
@@ -3735,6 +3824,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "b64-splice-docwrite-obfuscation",
       "group": "obfuscation",
       "description": "Detects base64 decode + character splice deobfuscation followed by document.write, common in phishing loaders",
@@ -3746,6 +3836,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "atob-document-write-obfuscation",
       "group": "obfuscation",
       "description": "Detects pages where entire content is base64-decoded and written to DOM via document.write(unescape(atob())) — common phishkit obfuscation",
@@ -3757,6 +3848,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "base64-html-password-obfuscation",
       "group": "phishkitSignatures",
       "description": "Base64 obfuscated HTML containing password input fields",
@@ -3768,6 +3860,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "wetransfer-cdn-abuse",
       "group": "phishkitSignatures",
       "description": "Suspicious use of WeTransfer CDN resources on non-WeTransfer domains",
@@ -3779,6 +3872,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "document-write-unescape-obfuscation",
       "group": "phishkitSignatures",
       "description": "JavaScript document.write with URL-encoded obfuscated content",
@@ -3790,6 +3884,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "credential-handler-phishkit",
       "group": "phishkitSignatures",
       "description": "Detects phishing kits using JS handlers to populate hidden credential fields",
@@ -3801,6 +3896,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "file-verification-cred-phish",
       "group": "phishkitSignatures",
       "description": "Detects file verification credential phishing pages",
@@ -3812,6 +3908,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "indonesian-lottery-scam",
       "group": "phishkitSignatures",
       "description": "Indonesian lottery/prize scam content pattern",
@@ -3823,6 +3920,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "brand-numeric-blogspot",
       "group": "phishkitSignatures",
       "description": "Brand name with numeric suffix on blogspot",
@@ -3834,6 +3932,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "emailjs-phishkit-exfil",
       "group": "phishkitSignatures",
       "description": "EmailJS credential exfiltration pattern",
@@ -3845,6 +3944,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "irs-tax-form-phishing",
       "group": "phishkitSignatures",
       "description": "IRS tax form phishing with SSN and Electronic Filing PIN fields",
@@ -3856,6 +3956,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "irs-efile-pin-structure",
       "group": "phishkitSignatures",
       "description": "IRS Electronic Filing PIN form with segmented SSN input pattern",
@@ -3867,6 +3968,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "html2canvas-heartbeat-monitoring",
       "group": "phishkitSignatures",
       "description": "Detects phishing pages using html2canvas for screenshot capture with heartbeat monitoring",
@@ -3878,6 +3980,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "phish-flow-polling-panel",
       "group": "phishkitSignatures",
       "description": "Detects phishing pages using flow polling with panel_action redirects",
@@ -3889,6 +3992,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "spotify-dom-structure",
       "group": "phishkitSignatures",
       "description": "Spotify DOM structure with playlist cards and logo on non-Spotify domain",
@@ -3900,6 +4004,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "binance-meta-impersonation",
       "group": "phishkitSignatures",
       "description": "Detects Binance brand impersonation via meta tags",
@@ -3911,6 +4016,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "binance-title-crypto-keywords",
       "group": "phishkitSignatures",
       "description": "Detects Binance title with crypto keywords on suspicious domains",
@@ -3922,6 +4028,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "ledger-image-redirect",
       "group": "phishkitSignatures",
       "description": "Ledger-branded image redirecting to external credential harvesting site",
@@ -3933,6 +4040,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "telegram-bot-exfil-obfuscated",
       "group": "phishkitSignatures",
       "description": "Obfuscated Telegram bot API credential exfiltration",
@@ -3944,6 +4052,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "appsimulation-phishkit",
       "group": "phishkitSignatures",
       "description": "AppSimulation phishkit framework detection",
@@ -3955,6 +4064,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "dana-unicode-impersonation",
       "group": "phishkitSignatures",
       "description": "DANA brand impersonation using stylized Unicode characters",
@@ -3966,6 +4076,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "dana-customer-care-phish",
       "group": "phishkitSignatures",
       "description": "DANA customer care phishing page with credential harvesting",
@@ -3977,6 +4088,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "gov-agency-impersonation",
       "group": "phishkitSignatures",
       "description": "Government agency impersonation via subdomain + path",
@@ -3988,6 +4100,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "claim-brand-pattern",
       "group": "phishkitSignatures",
       "description": "Claim/reward pages impersonating financial brands",
@@ -3999,6 +4112,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "free-subdomain-brand",
       "group": "phishkitSignatures",
       "description": "Brand names on free subdomain services",
@@ -4010,6 +4124,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "sharepoint-sharing-validation-phish",
       "group": "phishkitSignatures",
       "description": "SharePoint sharing link validation phishing page",
@@ -4021,6 +4136,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "secure-link-identity-verification",
       "group": "phishkitSignatures",
       "description": "Secure link identity verification social engineering text",
@@ -4032,6 +4148,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "acdi-gcch-impersonation",
       "group": "phishkitSignatures",
       "description": "ACDI-GCCH privacy statement in Microsoft-branded page",
@@ -4043,6 +4160,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "brazilian-toll-phishkit",
       "group": "phishkitSignatures",
       "description": "Brazilian toll payment phishkit with jQuery credential harvesting",
@@ -4054,6 +4172,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "cybeready-phishkit",
       "group": "phishkitSignatures",
       "description": "CyberReady phishing simulation kit detection",
@@ -4065,6 +4184,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "facebook-js-validator-phish",
       "group": "phishkitSignatures",
       "description": "Facebook phishing with JS validator evasion",
@@ -4076,6 +4196,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "facebook-getcrrid-phish",
       "group": "phishkitSignatures",
       "description": "Facebook phishing with getcrrid tracking function",
@@ -4087,6 +4208,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "google-phishkit-handlers",
       "group": "phishkitSignatures",
       "description": "Google phishkit credential collection handlers",
@@ -4098,6 +4220,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "pmeimg-google-assets",
       "group": "phishkitSignatures",
       "description": "PME image hosting with Google assets",
@@ -4109,6 +4232,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "external-microsoft-favicon",
       "group": "phishkitSignatures",
       "description": "External Microsoft favicon reference on non-Microsoft domain",
@@ -4120,6 +4244,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "phishkit-credential-handlers",
       "group": "phishkitSignatures",
       "description": "Detects JavaScript credential collection handlers common in phishing kits",
@@ -4131,6 +4256,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "adobe-file-verification-phish",
       "group": "phishkitSignatures",
       "description": "Adobe PDF file verification phishing page",
@@ -4142,6 +4268,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "netflix-impersonation-email",
       "group": "phishkitSignatures",
       "description": "Netflix branding with email collection on non-Netflix domains",
@@ -4153,6 +4280,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "dana-indonesian-phishkit",
       "group": "phishkitSignatures",
       "description": "Indonesian DANA phishing kit with customer care impersonation",
@@ -4164,6 +4292,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "html-entity-brand-obfuscation",
       "group": "phishkitSignatures",
       "description": "HTML entity encoded brand names to evade detection",
@@ -4175,6 +4304,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "gambling-gateway-redirect",
       "group": "phishkitSignatures",
       "description": "Gambling site gateway with randomized redirect domains",
@@ -4186,6 +4316,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "numbered-member-subdomain",
       "group": "phishkitSignatures",
       "description": "Numbered member/user subdomains on suspicious domains",
@@ -4197,6 +4328,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-login-impersonation",
       "group": "phishkitSignatures",
       "description": "Microsoft login page impersonation via Segoe UI font stack and Microsoft blue color",
@@ -4208,6 +4340,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "getcrrid-phishkit",
       "group": "phishkitSignatures",
       "description": "Phishing kit using getcrrid() tracking function",
@@ -4219,6 +4352,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "mygov-error-rfm10a",
       "group": "phishkitSignatures",
       "description": "myGov phishkit error message pattern",
@@ -4230,6 +4364,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "mygov-security-questions",
       "group": "phishkitSignatures",
       "description": "myGov security questions phishing pattern",
@@ -4241,6 +4376,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "ndax-login-title-pattern",
       "group": "phishkitSignatures",
       "description": "NDAX login page title impersonation",
@@ -4252,6 +4388,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "owa-save-php-phishkit",
       "group": "phishkitSignatures",
       "description": "Microsoft OWA phishkit with save.php exfiltration",
@@ -4263,6 +4400,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-visual-impersonation",
       "group": "phishkitSignatures",
       "description": "Microsoft visual branding impersonation markers",
@@ -4274,6 +4412,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "ipfs-phishing-subdomain",
       "group": "phishkitSignatures",
       "description": "Long cryptographic subdomain on IPFS gateway indicating potential phishing",
@@ -4285,6 +4424,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "sa-courier-fee-scam",
       "group": "phishkitSignatures",
       "description": "South African courier delivery fee scam pattern with VAT calculation",
@@ -4296,6 +4436,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "indonesian-urgency-klik",
       "group": "phishkitSignatures",
       "description": "Indonesian urgency phrase 'klik-sekarang' (click-now) in subdomain",
@@ -4307,6 +4448,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "suspicious-campaign-id-indonesia",
       "group": "phishkitSignatures",
       "description": "Suspicious campaign pattern on Indonesian domain",
@@ -4318,6 +4460,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "onedrive-document-harvest",
       "group": "phishkitSignatures",
       "description": "Detects OneDrive document sharing phishing pages",
@@ -4329,6 +4472,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "adobe-pdf-phishkit-handlers",
       "group": "phishkitSignatures",
       "description": "Adobe PDF phishkit credential handlers",
@@ -4340,6 +4484,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "adobe-pdf-fake-verification",
       "group": "phishkitSignatures",
       "description": "Fake Adobe PDF verification page with credential harvesting",
@@ -4351,6 +4496,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "generic-webmail-security-pressure",
       "group": "phishkitSignatures",
       "description": "Generic webmail security pressure messaging",
@@ -4362,6 +4508,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "generic-webmail-title-pattern",
       "group": "phishkitSignatures",
       "description": "Generic webmail title with credential form",
@@ -4373,6 +4520,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "external-favicon-phishkit",
       "group": "phishkitSignatures",
       "description": "External favicon from alphatrade-options domain",
@@ -4384,6 +4532,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "css-phishkit-birthdate",
       "group": "phishkitSignatures",
       "description": "CSS Insurance phishkit with birth date harvesting",
@@ -4395,6 +4544,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "mycss-brand-impersonation",
       "group": "phishkitSignatures",
       "description": "myCSS branding on non-CSS domains with characteristic styling",
@@ -4406,6 +4556,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "amazon-ui-phishkit",
       "group": "phishkitSignatures",
       "description": "Amazon UI framework on non-Amazon domain with auth forms",
@@ -4417,6 +4568,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "gambling-numeric-redirect",
       "group": "phishkitSignatures",
       "description": "Gambling redirect pages with numeric domain patterns",
@@ -4428,6 +4580,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "fake-speed-test-gambling",
       "group": "phishkitSignatures",
       "description": "Fake speed testing interface for gambling site redirects",
@@ -4439,6 +4592,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "credential-collection-handlers",
       "group": "phishkitSignatures",
       "description": "Detects credential collection JavaScript handlers commonly used in phishing kits",
@@ -4450,6 +4604,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "base64-exfil-endpoint",
       "group": "phishkitSignatures",
       "description": "Base64 encoded URL in JavaScript credential exfiltration",
@@ -4461,6 +4616,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "document-password-gate",
       "group": "phishkitSignatures",
       "description": "Document access gating with password requirement",
@@ -4472,6 +4628,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "zoho-impersonation-favicon",
       "group": "phishkitSignatures",
       "description": "ZOHO favicon with ZOHO branding on non-ZOHO domain",
@@ -4483,6 +4640,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "session-expired-urgency",
       "group": "phishkitSignatures",
       "description": "Session expired urgency messaging with login form",
@@ -4494,6 +4652,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "zoho-favicon-phish",
       "group": "phishkitSignatures",
       "description": "ZOHO favicon with credential form (common phishkit pattern)",
@@ -4505,6 +4664,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "fake-captcha-gate",
       "group": "phishkitSignatures",
       "description": "Fake 'I am not a robot' verification screen used to gate credential forms",
@@ -4516,6 +4676,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-login-phishkit",
       "group": "phishkitSignatures",
       "description": "Microsoft login page impersonation patterns",
@@ -4527,6 +4688,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-cdn-spoofing",
       "group": "phishkitSignatures",
       "description": "Fake Microsoft CDN prefetch patterns on non-Microsoft domains",
@@ -4538,6 +4700,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "webmail-portal-phish",
       "group": "phishkitSignatures",
       "description": "Generic webmail portal login phishing page",
@@ -4549,6 +4712,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "content-stuffing-ebay",
       "group": "phishkitSignatures",
       "description": "Login form hidden in eBay promotional content stuffing",
@@ -4560,6 +4724,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "coinsquare-login-image",
       "group": "phishkitSignatures",
       "description": "Coinsquare login image phishkit signature",
@@ -4571,6 +4736,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "webflow-crypto-auth-typosquat",
       "group": "phishkitSignatures",
       "description": "Webflow subdomain impersonating crypto brands with auth keywords",
@@ -4582,6 +4748,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "nim-cred-sim-classes",
       "group": "phishkitSignatures",
       "description": "NIM credential simulation CSS classes",
@@ -4593,6 +4760,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "webflow-external-redirect-brand",
       "group": "phishkitSignatures",
       "description": "Webflow page with external redirect containing brand references",
@@ -4604,6 +4772,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "unicode-brand-substitution",
       "group": "phishkitSignatures",
       "description": "Unicode character substitution in well-known brand names",
@@ -4615,6 +4784,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "unicode-login-evasion",
       "group": "phishkitSignatures",
       "description": "Unicode character substitution in login-related titles",
@@ -4626,6 +4796,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "webflow-crypto-subdomain",
       "group": "phishkitSignatures",
       "description": "Webflow subdomain containing cryptocurrency exchange names",
@@ -4637,6 +4808,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "causesconighty-redirect",
       "group": "phishkitSignatures",
       "description": "Redirect to causesconighty.com phishing infrastructure",
@@ -4648,6 +4820,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "image-redirect-phish",
       "group": "phishkitSignatures",
       "description": "Image wrapped in external redirect link (common phishing pattern)",
@@ -4659,6 +4832,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "logo-redirect-only",
       "group": "phishkitSignatures",
       "description": "Page containing only brand logo with external redirect",
@@ -4670,6 +4844,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "webflow-brand-redirect",
       "group": "phishkitSignatures",
       "description": "Webflow page with brand name in subdomain redirecting to suspicious domain",
@@ -4681,6 +4856,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "netcoins-typosquat-redirect",
       "group": "phishkitSignatures",
       "description": "Redirect to netkoims typosquatted domain",
@@ -4692,6 +4868,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "google-favicon-hidden-form",
       "group": "phishkitSignatures",
       "description": "Google favicon fetching combined with initially hidden credential forms",
@@ -4703,6 +4880,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "fake-browser-verification",
       "group": "phishkitSignatures",
       "description": "Fake browser verification with credential form",
@@ -4714,6 +4892,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "google-favicon-phish",
       "group": "phishkitSignatures",
       "description": "Google favicon fetch with credential form impersonation",
@@ -4725,6 +4904,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "pdf-verification-phish",
       "group": "phishkitSignatures",
       "description": "Detects fake PDF verification pages requesting credentials",
@@ -4736,6 +4916,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "scotiabank-phishkit-assets",
       "group": "phishkitSignatures",
       "description": "Scotiabank phishing kit with characteristic asset references",
@@ -4747,6 +4928,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "facebook-css-vars",
       "group": "phishkitSignatures",
       "description": "Facebook phishing kit using authentic CSS variables",
@@ -4758,6 +4940,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "facebook-cdn-refs",
       "group": "phishkitSignatures",
       "description": "References to Facebook CDN in non-Facebook domains",
@@ -4769,6 +4952,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "human-verification-gate",
       "group": "phishkitSignatures",
       "description": "Hidden human verification div used by government impersonation phishkits",
@@ -4780,6 +4964,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "amazon-india-redirect-phish",
       "group": "phishkitSignatures",
       "description": "Fake Amazon India redirect message",
@@ -4791,6 +4976,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "getcrrid-function",
       "group": "phishkitSignatures",
       "description": "Credential harvesting function signature",
@@ -4802,6 +4988,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "bt-ee-transition-phish",
       "group": "phishkitSignatures",
       "description": "BT to EE transition phishing campaign signature",
@@ -4813,6 +5000,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "french-php-handler",
       "group": "phishkitSignatures",
       "description": "French PHP credential harvesting form handlers",
@@ -4824,6 +5012,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "instagram-mixed-branding",
       "group": "phishkitSignatures",
       "description": "Instagram branding with non-Instagram organization names",
@@ -4835,6 +5024,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "adobe-pdf-credential-harvest",
       "group": "phishkitSignatures",
       "description": "Adobe PDF impersonation with credential harvesting",
@@ -4846,6 +5036,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "adobe-pdf-verification-form",
       "group": "phishkitSignatures",
       "description": "Adobe PDF file verification phishkit form pattern",
@@ -4857,6 +5048,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "bot-verification-gate",
       "group": "phishkitSignatures",
       "description": "Bot verification checkbox gating credential forms",
@@ -4868,6 +5060,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "expired-session-login",
       "group": "phishkitSignatures",
       "description": "Expired session credential collection pattern",
@@ -4879,6 +5072,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "netflix-spanish-slogan",
       "group": "phishkitSignatures",
       "description": "Netflix Spanish slogan phishing pattern",
@@ -4890,6 +5084,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "netflix-spanish-login-kit",
       "group": "phishkitSignatures",
       "description": "Netflix Spanish login phishing kit pattern",
@@ -4901,6 +5096,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "atomic-wallet-image-redirect",
       "group": "phishkitSignatures",
       "description": "Atomic Wallet interface as clickable image redirecting to external domain",
@@ -4912,6 +5108,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "page-hijack-external-redirect",
       "group": "phishkitSignatures",
       "description": "Entire page wrapped in external redirect link",
@@ -4923,6 +5120,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "mixed-webmail-resources",
       "group": "phishkitSignatures",
       "description": "Detects pages loading webmail assets from multiple suspicious external sources",
@@ -4934,6 +5132,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "glass-card-phishkit",
       "group": "phishkitSignatures",
       "description": "Glass-card styling phishkit with backdrop-filter",
@@ -4945,6 +5144,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "snaily-phishkit-signature",
       "group": "phishkitSignatures",
       "description": "Snaily phishkit author attribution signature",
@@ -4956,6 +5156,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "crypto-shortener-redirect",
       "group": "phishkitSignatures",
       "description": "Detects crypto exchange content with shortened URL redirects",
@@ -4967,6 +5168,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "telegram-bot-exfil",
       "group": "phishkitSignatures",
       "description": "Detects Telegram bot credential exfiltration",
@@ -4978,6 +5180,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "external-redirect-phishing",
       "group": "phishkitSignatures",
       "description": "Detects suspicious external redirects from brand impersonation pages",
@@ -4989,6 +5192,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "crypto-login-external-redirect",
       "group": "phishkitSignatures",
       "description": "Detects crypto login pages with suspicious external redirects",
@@ -5000,6 +5204,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "whatsapp-vue-phishkit",
       "group": "phishkitSignatures",
       "description": "WhatsApp phishkit using Vue.js templates",
@@ -5011,6 +5216,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "phishkit-user-time-tracker",
       "group": "phishkitSignatures",
       "description": "Detects UserTimeTracker class paired with timeme.js, a visitor analytics module bundled with credential-harvesting phishkits",
@@ -5022,6 +5228,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "amazon-auth-portal-clone",
       "group": "phishkitSignatures",
       "description": "Detects cloned Amazon authentication portal by matching Amazon-specific auth CSS classes and asset references",
@@ -5033,6 +5240,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "phishkit-crrid-tracker",
       "group": "phishkitSignatures",
       "description": "Detects getcrrid() function used by phishkits to track victim sessions with hex campaign IDs",
@@ -5044,6 +5252,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "large-encoded-blob-minimal-dom",
       "group": "phishkitSignatures",
       "description": "Detects pages with minimal DOM and a large base64/encrypted blob in JS — signature of encrypted phishkit delivery (Cloudflare Workers, etc.)",
@@ -5055,6 +5264,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "cookie-gate-reload-pattern",
       "group": "phishkitSignatures",
       "description": "Detects phishkit gate pattern: sets a session cookie then calls location.reload() to pass server-side validation",
@@ -5066,6 +5276,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "phishkit-pages-directory-brand-param",
       "group": "phishkitSignatures",
       "description": "Generic phishkit hosted under /pages/ directory with brand-selector query parameter",
@@ -5077,6 +5288,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "fake-cloudflare-turnstile-mock",
       "group": "phishkitSignatures",
       "description": "Detects fake/mock Cloudflare Turnstile CAPTCHA widget used as phishing gate page",
@@ -5088,6 +5300,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "b64-param-microsoft-login-redirect",
       "group": "phishkitSignatures",
       "description": "Query parameter contains base64 string starting with Microsoft login URL (aHR0cHM6Ly9sb2dpbi5taWNyb3NvZnQ) — phishkit redirecting through compromised site",
@@ -5099,6 +5312,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "sso-reload-with-b64-payload",
       "group": "phishkitSignatures",
       "description": "URL contains sso_reload=true alongside a large base64-encoded query parameter on a non-Microsoft domain — phishkit simulating SSO flow",
@@ -5110,6 +5324,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "script-placeholder-reconstruction",
       "group": "phishkitSignatures",
       "description": "Detects phishkits using placeholder strings to reconstruct script tags after base64 decoding, evading static HTML analysis",
@@ -5121,6 +5336,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "b64-charmap-docwrite-phishkit",
       "group": "phishkitSignatures",
       "description": "Phishkit that base64-encodes HTML, uses character insertion map for evasion, and renders via document.write with placeholder substitution",
@@ -5132,6 +5348,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "b64-docwrite-placeholder-phishkit",
       "group": "phishkitSignatures",
       "description": "Detects phishkit that base64-decodes HTML with character-position manipulation and placeholder script injection via document.write",
@@ -5143,6 +5360,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "google-sites-embedded-files",
       "group": "phishkitSignatures",
       "description": "Detects Google Sites pages using 'Embedded Files' content delivery — a common phishing technique where malicious documents are embedded on trusted Google Sites pages",
@@ -5154,6 +5372,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "skript-login-php-exfil",
       "group": "phishkitSignatures",
       "description": "Form action pointing to skript_login.php — known credential harvester script from Eastern European phishkits",
@@ -5165,6 +5384,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "facebook-phishkit-local-assets",
       "group": "phishkitSignatures",
       "description": "Local fb/ directory assets (head.png, login_btn.png) — signature of classic Facebook phishing kit",
@@ -5176,6 +5396,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "telegram-bot-exfil-token",
       "group": "phishkitSignatures",
       "description": "Detects Telegram Bot API token in page source, used for credential exfiltration to Telegram chats",
@@ -5187,6 +5408,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "amazon-signin-phishkit-aui",
       "group": "phishkitSignatures",
       "description": "Detects cloned Amazon sign-in pages using Amazon AUI auth framework class names with signIn form outside amazon.com domains",
@@ -5198,6 +5420,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "pmeimg-phishkit-cdn",
       "group": "phishkitSignatures",
       "description": "Detects phishing pages loading assets from pmeimg.com CDN, associated with credential harvesting phishkits impersonating Adobe and other brands",
@@ -5209,6 +5432,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "docusign-ink-css-namespace",
       "group": "phishkitSignatures",
       "description": "Detects DocuSign ink- design system CSS classes used in phishing clones (ink-authentication, ink-auth-main, ink-primary-button)",
@@ -5220,6 +5444,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -5231,6 +5456,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "wallet-interface-image-phish",
       "group": "socialEngineering",
       "description": "Full wallet interface presented as single clickable image",
@@ -5242,6 +5468,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "full-page-redirect-wrapper",
       "group": "socialEngineering",
       "description": "Entire page wrapped in single external redirect link",
@@ -5253,6 +5480,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "msi-malware-distribution",
       "group": "socialEngineering",
       "description": "Malicious MSI installer distribution with OS restriction",
@@ -5264,6 +5492,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "whatsapp-security-center-chinese",
       "group": "socialEngineering",
       "description": "WhatsApp security center phishing in Chinese",
@@ -5275,6 +5504,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "session-expired-phishing",
       "group": "socialEngineering",
       "description": "Session expiry social engineering combined with credential harvesting",
@@ -5286,6 +5516,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "apple-support-vishing-alert",
       "group": "socialEngineering",
       "description": "Fake Apple transaction alert urging user to call a phone number — tech support scam pattern",
@@ -5297,6 +5528,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "apple-vishing-modal-callnow",
       "group": "socialEngineering",
       "description": "Modal with pulse animation and call-now button pattern used in Apple tech support scams",
@@ -5308,6 +5540,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "apple-tech-support-scam-phone",
       "group": "socialEngineering",
       "description": "Detects Apple impersonation pages with fake transaction alerts urging victims to call a phone number",
@@ -5319,6 +5552,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "generic-fake-transaction-call-scam",
       "group": "socialEngineering",
       "description": "Detects fake transaction alert pages that urge users to call a phone number to prevent unauthorized activity",
@@ -5330,6 +5564,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "crypto-seo-phish-lure-content",
       "group": "socialEngineering",
       "description": "Detects SEO-optimized crypto phishing lure pages with characteristic filler text about login functionality and security features",
@@ -5341,6 +5576,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "fear-urgency-domain-in-html",
       "group": "socialEngineering",
       "description": "Detects fear/urgency keywords in the page hostname pattern commonly used in phishing domains (security-unauthorised, unauthorized-access, etc.)",
@@ -5352,6 +5588,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "fake-meeting-ref-parameter",
       "group": "socialEngineering",
       "description": "Detects fake meeting/interview reference IDs in URL parameters embedded in page source, common in job scam phishkits",
@@ -5363,6 +5600,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "security-urgency-domain-pattern",
       "group": "socialEngineering",
       "description": "Detects domains using security-urgency keywords (unauthorised, alert, verification, suspended) combined with brand names in subdomain",
@@ -5374,6 +5612,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -5385,6 +5624,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "cn-domain-western-brand",
       "group": "suspiciousHosting",
       "description": "Western brand impersonation on Chinese domains",
@@ -5396,6 +5636,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "godaddy-sites-random-subdomain",
       "group": "suspiciousHosting",
       "description": "Random subdomain on GoDaddy website builder indicating potential phishing",
@@ -5407,6 +5648,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "discord-title-impersonation",
       "group": "titleImpersonation",
       "description": "Discord official page title on non-Discord domain",
@@ -5418,6 +5660,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "apple-title-impersonation-official",
       "group": "titleImpersonation",
       "description": "Detects page titles claiming to be 'Official Apple' support/contact pages on non-Apple domains",
@@ -5429,6 +5672,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "unicode-homoglyph-brand-in-title",
       "group": "titleImpersonation",
       "description": "Detects Unicode homoglyph characters (mathematical script, accented Latin) used in title or meta tags to spell crypto/financial brand names while evading text matching — e.g. G𝓮miñi for Gemini",
@@ -5440,6 +5684,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-login-title-impersonation",
       "group": "titleImpersonation",
       "description": "Detects exact Microsoft sign-in page title combined with password input and form action, indicating credential phishing clone",
@@ -5451,6 +5696,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "cloudflare-challenge-title-typo",
       "group": "titleImpersonation",
       "description": "Detects Cloudflare challenge impersonation pages with common misspelling 'Challange' in title or body",
@@ -5462,6 +5708,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "dropbox-title-impersonation",
       "group": "titleImpersonation",
       "description": "Detects pages using Dropbox sign-in page title patterns with credential fields, indicating brand impersonation when served from non-Dropbox domains",
@@ -5473,6 +5720,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "microsoft-account-title-impersonation",
       "group": "titleImpersonation",
       "description": "Detects pages with Microsoft account sign-in title hosted on non-Microsoft domains",
@@ -5484,6 +5732,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "docusign-title-impersonation",
       "group": "titleImpersonation",
       "description": "Detects DocuSign login page title impersonation pattern in HTML title or visible text",
@@ -5495,6 +5744,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "ndax-auth-typosquat",
       "group": "typosquat",
       "description": "NDAX authentication typosquat patterns",
@@ -5506,6 +5756,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "itrustcapital-typosquat",
       "group": "typosquatPatterns",
       "description": "iTrustCapital typosquat - missing 'i' in 'capital'",
@@ -5517,6 +5768,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "aws-subdomain-typosquat",
       "group": "typosquatPatterns",
       "description": "AWS brand in subdomain on non-Amazon domain",
@@ -5528,6 +5780,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "webflow-brand-typosquat",
       "group": "typosquatPatterns",
       "description": "Brand impersonation with signin/verifier keywords on Webflow",
@@ -5539,6 +5792,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "scotiabank-subdomain-typosquat",
       "group": "typosquatPatterns",
       "description": "Scotiabank subdomain impersonation patterns",
@@ -5550,6 +5804,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "gov-domain-appendage",
       "group": "typosquatPatterns",
       "description": "Government domain with appended characters",
@@ -5561,6 +5816,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "sso-eng-typosquat-pattern",
       "group": "typosquatPatterns",
       "description": "SSO engineering subdomain typosquat pattern",
@@ -5572,6 +5828,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "digitalmaillane-subdomain-pattern",
       "group": "typosquatPatterns",
       "description": "Single character subdomains on digitalmaillane.com domain",
@@ -5583,6 +5840,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "whatsapp-extra-char-typosquat",
       "group": "typosquatPatterns",
       "description": "WhatsApp typosquats with extra repeated characters",
@@ -5594,6 +5852,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "ledger-start-typosquat",
       "group": "typosquatPatterns",
       "description": "Ledger start page typosquat patterns",
@@ -5605,6 +5864,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "logistics-brand-subdomain-typosquat",
       "group": "typosquatPatterns",
       "description": "Logistics brand names as subdomains on non-official TLDs",
@@ -5616,6 +5876,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "gov-agency-subdomain-on-nongov",
       "group": "typosquatPatterns",
       "description": "Government agency identifier (dmv, irs, ssa, etc.) used as subdomain on non-.gov domain, indicating government impersonation phishing",
@@ -5627,6 +5888,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "bmo-hostname-typosquat",
       "group": "typosquatPatterns",
       "description": "Detects hostnames containing 'bmo' combined with banking-related keywords (online, banking, login, secure, business) on non-BMO domains",
@@ -5638,6 +5900,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "arvest-hostname-impersonation",
       "group": "typosquatPatterns",
       "description": "Detects hostnames containing 'myarv' prefix pattern impersonating Arvest Bank's myarvest.com portal on non-Arvest domains",
@@ -5649,6 +5912,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "ms-service-name-in-subdomain",
       "group": "typosquatPatterns",
       "description": "Detects Microsoft service names (sharepoint, 1drv, onedrive, outlook, microsoftonline) embedded in subdomains of non-Microsoft domains",
@@ -5660,6 +5924,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "office-typosquat-offlce-hostname",
       "group": "typosquatPatterns",
       "description": "Hostname contains 'offlce' — a typosquat of 'office' replacing 'i' with 'l', commonly used in Microsoft credential phishing",
@@ -5671,6 +5936,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "deep-subdomain-indonesia-business",
       "group": "urlHeuristics",
       "description": "Increase weight for deep subdomains on Indonesian business domains",
@@ -5682,6 +5948,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "cfd-login-pattern",
       "group": "urlHeuristics",
       "description": "CFD domain with login path - common phishing pattern",
@@ -5693,6 +5960,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "ipfs-credential-harvest",
       "group": "urlHeuristics",
       "description": "IPFS-hosted pages with password fields indicating credential harvesting",
@@ -5704,6 +5972,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "bond-tld-logistics-abuse",
       "group": "urlHeuristics",
       "description": "Suspicious use of .bond TLD with logistics-related subdomains",
@@ -5715,6 +5984,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "uuid-base64-targeted-phish-path",
       "group": "urlHeuristics",
       "description": "URL path contains UUID followed by Base64-encoded string, characteristic of targeted spearphishing campaigns with per-victim URLs",
@@ -5726,6 +5996,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "ipfs-gateway-credential-form",
       "group": "urlHeuristics",
       "description": "Detects credential harvesting forms hosted on IPFS gateways (dweb.link, ipfs.io, etc.)",
@@ -5737,6 +6008,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "my-prefix-risky-tld-banking",
       "group": "urlHeuristics",
       "description": "Detects 'my' prefix hostnames on high-risk TLDs (.icu, .top, .xyz, .sbs) commonly used for banking portal phishing",
@@ -5748,6 +6020,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "random-prefix-brand-subdomain",
       "group": "urlHeuristics",
       "description": "Detects random alphanumeric prefix followed by brand-related keyword in subdomain, indicating wildcard DNS abuse on compromised domain",
@@ -5759,6 +6032,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "query-param-brand-selector",
       "group": "urlHeuristics",
       "description": "URL query parameter selects brand name for phishkit template rendering (e.g. ?d=swedbank, ?brand=paypal)",
@@ -5770,6 +6044,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "b64-microsoft-oauth-in-query",
       "group": "urlHeuristics",
       "description": "Base64-encoded Microsoft OAuth URL found in query parameter — characteristic of phishkits that proxy Microsoft login flows through compromised domains",
@@ -5781,6 +6056,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "brand-job-scam-url-pattern",
       "group": "urlHeuristics",
       "description": "Detects domains using brand-job/career/hiring pattern with fake meeting or reference IDs commonly used in employment scam phishkits",
@@ -5792,6 +6068,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "constantcontact-landing-page-abuse",
       "group": "urlHeuristics",
       "description": "Constant Contact landing page URL pattern commonly abused for phishing",
@@ -5803,6 +6080,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "google-sites-suspicious-path-domain",
       "group": "urlHeuristics",
       "description": "Detects Google Sites pages where the URL path contains a third-party domain (attacker's Workspace domain) — indicates abuse of Google Sites for brand impersonation",
@@ -5814,6 +6092,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "base64-email-in-url-param",
       "group": "urlHeuristics",
       "description": "Detects base64-encoded email addresses in URL query parameters, common in targeted phishing campaigns",
@@ -5825,6 +6104,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "base64-email-in-path",
       "group": "urlHeuristics",
       "description": "URL path contains a base64-encoded string that likely encodes an email address (contains @ when decoded), indicating per-victim phishing targeting",
@@ -5836,6 +6116,7 @@
       "note": ""
     },
     {
+      "domHashes": [],
       "id": "login-keyword-cloud-tld-random-path",
       "group": "urlHeuristics",
       "description": "Detects domains combining login/service keywords on .cloud TLD with randomized short path identifiers typical of phishing campaign infrastructure",
