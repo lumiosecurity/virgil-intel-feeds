@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T20:54:58.343Z",
+    "compiledAt": "2026-03-31T20:57:09.065Z",
     "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 283,
+    "patternCount": 285,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2665,6 +2665,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "securityiq-phished-data-callback",
+      "group": "credentialHarvesting",
+      "description": "SecurityIQ-style credential exfiltration callback path /phished/dataEntered/ with UUID, indicating phishing simulation or kit derivative",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "/phished/dataEntered/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+      "patternFlags": "i"
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -4075,6 +4085,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "securityiq-phishing-template-assets",
+      "group": "phishkitSignatures",
+      "description": "SecurityIQ phishing template assets loaded from S3 bucket, used in Outlook/Microsoft credential harvesting pages",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "s3\\.amazonaws\\.com/securityiq/phishing-templates/",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4307,11 +4327,11 @@
     {
       "id": "outlook365-title-impersonation",
       "group": "titleImpersonation",
-      "description": "Page title contains 'Outlook 365 Login' — Microsoft Outlook brand impersonation in title",
+      "description": "Page title containing 'Outlook 365 Login' — used by phishing kits impersonating Microsoft Outlook; real Microsoft pages never use this exact title",
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "<title>[^<]{0,30}Outlook\\s*365\\s*Login[^<]{0,30}</title>",
+      "patternString": "<title>[^<]{0,20}Outlook 365 Login[^<]{0,20}</title>",
       "patternFlags": "i"
     },
     {
@@ -4652,7 +4672,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T20:51:26.116Z",
+      "compiledAt": "2026-03-31T20:54:56.969Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

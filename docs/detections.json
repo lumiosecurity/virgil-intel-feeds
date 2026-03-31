@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:54",
-    "generatedAt": "2026-03-31T20:54:58.356Z",
+    "version": "2026-03-31-20:57",
+    "generatedAt": "2026-03-31T20:57:09.077Z",
     "brandCount": 107,
-    "patternCount": 283
+    "patternCount": 285
   },
   "brandEntries": [
     {
@@ -13837,6 +13837,18 @@
     },
     {
       "domHashes": [],
+      "id": "securityiq-phished-data-callback",
+      "group": "credentialHarvesting",
+      "description": "SecurityIQ-style credential exfiltration callback path /phished/dataEntered/ with UUID, indicating phishing simulation or kit derivative",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "/phished/dataEntered/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -15529,6 +15541,18 @@
     },
     {
       "domHashes": [],
+      "id": "securityiq-phishing-template-assets",
+      "group": "phishkitSignatures",
+      "description": "SecurityIQ phishing template assets loaded from S3 bucket, used in Outlook/Microsoft credential harvesting pages",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "s3\\.amazonaws\\.com/securityiq/phishing-templates/",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -15807,11 +15831,11 @@
       "domHashes": [],
       "id": "outlook365-title-impersonation",
       "group": "titleImpersonation",
-      "description": "Page title contains 'Outlook 365 Login' — Microsoft Outlook brand impersonation in title",
+      "description": "Page title containing 'Outlook 365 Login' — used by phishing kits impersonating Microsoft Outlook; real Microsoft pages never use this exact title",
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "<title>[^<]{0,30}Outlook\\s*365\\s*Login[^<]{0,30}</title>",
+      "patternString": "<title>[^<]{0,20}Outlook 365 Login[^<]{0,20}</title>",
       "patternFlags": "i",
       "note": ""
     },
