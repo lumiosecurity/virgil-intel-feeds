@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T20:20:41.106Z",
+    "compiledAt": "2026-03-31T20:21:37.093Z",
     "brandCount": 106,
     "signalCount": 1,
     "patternCount": 283,
@@ -2604,10 +2604,10 @@
       "group": "credentialHarvesting",
       "description": "Detects phishing pages that track keystrokes, clicks, and time-on-page via inline counters — characteristic of phishing simulations and credential harvesting kits",
       "severity": "high",
-      "weight": 0.4,
+      "weight": 0.3,
       "source": "html",
-      "patternString": "(keystrokes|clicks\\s*tracked|time\\s*on\\s*page).*?(keystrokes|clicks\\s*tracked|time\\s*on\\s*page)",
-      "patternFlags": "is"
+      "patternString": "(?:keystrokes|clicks\\s{0,3}tracked|time\\s{0,3}on\\s{0,3}page)[\\s\\S]{0,2000}(?:keystrokes|clicks\\s{0,3}tracked|time\\s{0,3}on\\s{0,3}page)",
+      "patternFlags": "i"
     },
     {
       "id": "hidden-field-credential-relay",
@@ -2616,7 +2616,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "patternString": "querySelectorAll\\([\"']input\\[type=['\"]?hidden['\"]?\\]\\[name=['\"]?(?:username|password|pass_entered|email)",
+      "patternString": "querySelectorAll\\([\"']input\\[[^\\]]{0,60}(?:username|password|pass_entered|passwd|pwd|email|login|user)[^\\]]{0,60}\\][\"']\\)",
       "patternFlags": "i"
     },
     {
@@ -4637,7 +4637,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T20:19:14.560Z",
+      "compiledAt": "2026-03-31T20:20:39.439Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

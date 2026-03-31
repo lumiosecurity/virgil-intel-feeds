@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:20",
-    "generatedAt": "2026-03-31T20:20:41.119Z",
+    "version": "2026-03-31-20:21",
+    "generatedAt": "2026-03-31T20:21:37.105Z",
     "brandCount": 106,
     "patternCount": 283
   },
@@ -13766,10 +13766,10 @@
       "group": "credentialHarvesting",
       "description": "Detects phishing pages that track keystrokes, clicks, and time-on-page via inline counters — characteristic of phishing simulations and credential harvesting kits",
       "severity": "high",
-      "weight": 0.4,
+      "weight": 0.3,
       "source": "html",
-      "patternString": "(keystrokes|clicks\\s*tracked|time\\s*on\\s*page).*?(keystrokes|clicks\\s*tracked|time\\s*on\\s*page)",
-      "patternFlags": "is",
+      "patternString": "(?:keystrokes|clicks\\s{0,3}tracked|time\\s{0,3}on\\s{0,3}page)[\\s\\S]{0,2000}(?:keystrokes|clicks\\s{0,3}tracked|time\\s{0,3}on\\s{0,3}page)",
+      "patternFlags": "i",
       "note": ""
     },
     {
@@ -13780,7 +13780,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "patternString": "querySelectorAll\\([\"']input\\[type=['\"]?hidden['\"]?\\]\\[name=['\"]?(?:username|password|pass_entered|email)",
+      "patternString": "querySelectorAll\\([\"']input\\[[^\\]]{0,60}(?:username|password|pass_entered|passwd|pwd|email|login|user)[^\\]]{0,60}\\][\"']\\)",
       "patternFlags": "i",
       "note": ""
     },
