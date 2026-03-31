@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-31-06:05",
-    "generatedAt": "2026-03-31T06:05:25.609Z",
+    "version": "2026-03-31-06:07",
+    "generatedAt": "2026-03-31T06:07:35.332Z",
     "brandCount": 106,
-    "patternCount": 287
+    "patternCount": 289
   },
   "brandEntries": [
     {
@@ -1234,6 +1234,9 @@
         "instagran",
         "intagram",
         "insta-gram",
+        "insatgram",
+        "insragram",
+        "instagrom",
         "instaram"
       ]
     },
@@ -3793,6 +3796,18 @@
     },
     {
       "domHashes": [],
+      "id": "formsubmit-co-exfil",
+      "group": "credentialHarvesting",
+      "description": "Form action posts credentials to formsubmit.co, a free form-to-email relay commonly used for phishing exfiltration",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "action=[\"']https?://formsubmit\\.co/[^\"']+[\"']",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -5840,6 +5855,18 @@
       "weight": 0.4,
       "source": "html",
       "patternString": "<title>[^<]*DocuSign\\s+Login[^<]*</title>",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
+      "id": "instagram-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Page title contains Instagram login/signin branding on a non-Instagram domain",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<title>[^<]*instagram[^<]*(log\\s*in|sign\\s*in|verify|confirm)[^<]*</title>",
       "patternFlags": "i",
       "note": ""
     },

@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T06:05:25.598Z",
+    "compiledAt": "2026-03-31T06:07:35.322Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 287,
+    "patternCount": 289,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -1241,6 +1241,9 @@
         "instagran",
         "intagram",
         "insta-gram",
+        "insatgram",
+        "insragram",
+        "instagrom",
         "instaram"
       ]
     },
@@ -2629,6 +2632,16 @@
       "weight": 0.4,
       "source": "html",
       "patternString": "action=[\"']https?://(www\\.)?facebook\\.com/?[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "formsubmit-co-exfil",
+      "group": "credentialHarvesting",
+      "description": "Form action posts credentials to formsubmit.co, a free form-to-email relay commonly used for phishing exfiltration",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "action=[\"']https?://formsubmit\\.co/[^\"']+[\"']",
       "patternFlags": "i"
     },
     {
@@ -4342,6 +4355,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "instagram-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Page title contains Instagram login/signin branding on a non-Instagram domain",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<title>[^<]*instagram[^<]*(log\\s*in|sign\\s*in|verify|confirm)[^<]*</title>",
+      "patternFlags": "i"
+    },
+    {
       "id": "ndax-auth-typosquat",
       "group": "typosquat",
       "description": "NDAX authentication typosquat patterns",
@@ -4669,7 +4692,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T06:00:53.401Z",
+      "compiledAt": "2026-03-31T06:05:24.374Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
