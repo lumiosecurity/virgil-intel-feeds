@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:10",
-    "generatedAt": "2026-03-31T20:10:10.266Z",
+    "version": "2026-03-31-20:11",
+    "generatedAt": "2026-03-31T20:11:33.004Z",
     "brandCount": 106,
     "patternCount": 285
   },
@@ -15700,7 +15700,7 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "both",
-      "patternString": "^https?://[^/]*(?:whatsapp|facebook|google|apple|microsoft|amazon)[^/]*\\.cn/",
+      "patternString": "^https?://(?!(?:[^/]*\\.)?(?:google|microsoft|apple|amazon|facebook|whatsapp)\\.com\\.cn/)[^/]*(?:whatsapp|facebook|google|apple|microsoft|amazon)[^/]*\\.cn/",
       "patternFlags": "i",
       "note": ""
     },
