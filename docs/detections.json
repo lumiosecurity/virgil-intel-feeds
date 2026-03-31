@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:37",
-    "generatedAt": "2026-03-31T20:37:28.213Z",
-    "brandCount": 106,
-    "patternCount": 274
+    "version": "2026-03-31-20:44",
+    "generatedAt": "2026-03-31T20:44:58.631Z",
+    "brandCount": 107,
+    "patternCount": 276
   },
   "brandEntries": [
     {
@@ -1723,6 +1723,21 @@
         "at&t",
         "at-t",
         "attt"
+      ]
+    },
+    {
+      "name": "orange",
+      "vertical": "telecom",
+      "domains": [
+        "orange.fr",
+        "orange.com",
+        "sosh.fr"
+      ],
+      "typos": [
+        "oranqe",
+        "0range",
+        "orangee",
+        "orang3"
       ]
     },
     {
@@ -13594,6 +13609,18 @@
     },
     {
       "domHashes": [],
+      "id": "fake-captcha-gate-french",
+      "group": "captchaGating",
+      "description": "French-language fake CAPTCHA verification page with form action to PHP — phishkit gating technique",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "rification[^<]{0,50}(?:CAPTCHA|s[eé]curit[eé])[\\s\\S]{0,5000}<form[^>]{0,300}action=[\"'][^\"']{1,60}\\.php",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
       "id": "cookie-gate-reload-phishkit",
       "group": "cdnGating",
       "description": "Detects phishkit gate pattern: sets a cookie with timestamp then reloads page to pass server-side check",
@@ -16085,6 +16112,18 @@
       "weight": 0.4,
       "source": "html",
       "patternString": "https?://[^/]+/com/(a_)?index\\.html",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
+      "id": "duckdns-form-submission",
+      "group": "urlHeuristics",
+      "description": "Page on duckdns.org free DDNS contains an HTML form — extremely high phishing correlation",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "duckdns\\.org[^\"]{0,200}[\\s\\S]{0,50000}<form[^>]{0,500}action=[\"'][^\"']{1,100}\\.php",
       "patternFlags": "i",
       "note": ""
     }

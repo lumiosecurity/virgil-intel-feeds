@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T20:37:28.201Z",
-    "brandCount": 106,
+    "compiledAt": "2026-03-31T20:44:58.620Z",
+    "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 274,
+    "patternCount": 276,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -1757,6 +1757,21 @@
       "vertical": "telecom"
     },
     {
+      "name": "orange",
+      "domains": [
+        "orange.fr",
+        "orange.com",
+        "sosh.fr"
+      ],
+      "typos": [
+        "oranqe",
+        "0range",
+        "orangee",
+        "orang3"
+      ],
+      "vertical": "telecom"
+    },
+    {
       "name": "bellsouth",
       "domains": [
         "bellsouth.net",
@@ -2457,6 +2472,16 @@
       "weight": 0.3,
       "source": "html",
       "patternString": "(?:checking your browser|verify.{0,30}human).{0,500}(?:#main-content|form-container).{0,100}display:\\s*none",
+      "patternFlags": "i"
+    },
+    {
+      "id": "fake-captcha-gate-french",
+      "group": "captchaGating",
+      "description": "French-language fake CAPTCHA verification page with form action to PHP — phishkit gating technique",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "rification[^<]{0,50}(?:CAPTCHA|s[eé]curit[eé])[\\s\\S]{0,5000}<form[^>]{0,300}action=[\"'][^\"']{1,60}\\.php",
       "patternFlags": "i"
     },
     {
@@ -4542,12 +4567,22 @@
       "source": "html",
       "patternString": "https?://[^/]+/com/(a_)?index\\.html",
       "patternFlags": "i"
+    },
+    {
+      "id": "duckdns-form-submission",
+      "group": "urlHeuristics",
+      "description": "Page on duckdns.org free DDNS contains an HTML form — extremely high phishing correlation",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "duckdns\\.org[^\"]{0,200}[\\s\\S]{0,50000}<form[^>]{0,500}action=[\"'][^\"']{1,100}\\.php",
+      "patternFlags": "i"
     }
   ],
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T20:30:09.208Z",
+      "compiledAt": "2026-03-31T20:37:26.685Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
