@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/url_shorteners.txt",
-    "syncedAt": "2026-03-31T06:22:16.792Z",
+    "syncedAt": "2026-03-31T15:39:36.967Z",
     "role": "url_shorteners",
     "description": "URL shorteners that can mask phishing destinations",
-    "count": 334
+    "count": 336
   },
   "entries": [
     "1in.me",
@@ -257,6 +257,7 @@
     "tiny.pl",
     "tiny123.com",
     "tinyarro.ws",
+    "tinyl.io",
     "tinytw.it",
     "tinyuri.ca",
     "tinyurl.com",
@@ -312,6 +313,7 @@
     "urlz.fr",
     "urlzen.com",
     "utm.guru",
+    "v.gd",
     "virl.com",
     "vl.am",
     "w3t.org",

@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T06:22:19.647Z",
+    "compiledAt": "2026-03-31T15:39:40.828Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -198,6 +198,7 @@
     "center.tl",
     "ch.st",
     "chat.dj",
+    "chickenkiller.com",
     "city.tl",
     "ciy.de",
     "cl4n.org",
@@ -309,6 +310,7 @@
     "jixx.de",
     "jixx.net",
     "jp.tn",
+    "jumpingcrab.com",
     "k1.cx",
     "kinsta.cloud",
     "kinsta.page",
@@ -413,6 +415,7 @@
     "tumblr.com",
     "turkish.lc",
     "tv.gg",
+    "twilightparadox.com",
     "typeform.com",
     "uk.tn",
     "up.railway.app",
@@ -968,6 +971,7 @@
     "tiny.pl",
     "tiny123.com",
     "tinyarro.ws",
+    "tinyl.io",
     "tinytw.it",
     "tinyuri.ca",
     "tinyurl.com",
@@ -1023,6 +1027,7 @@
     "urlz.fr",
     "urlzen.com",
     "utm.guru",
+    "v.gd",
     "virl.com",
     "vl.am",
     "w3t.org",

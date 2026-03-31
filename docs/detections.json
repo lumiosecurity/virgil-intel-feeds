@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-03-31-06:22",
-    "generatedAt": "2026-03-31T06:22:21.124Z",
+    "version": "2026-03-31-15:39",
+    "generatedAt": "2026-03-31T15:39:41.554Z",
     "brandCount": 106,
     "patternCount": 291
   },
@@ -6255,7 +6255,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "[A-Za-z0-9+/]{20,}={0,2}",
+      "patternString": "#[A-Za-z0-9+/]{20,}={0,2}",
       "patternFlags": "i",
       "note": ""
     },
