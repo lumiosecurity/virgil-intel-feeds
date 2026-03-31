@@ -58,6 +58,12 @@ jobs:
           node scripts/sync-sublime.js 2>&1 | tee /tmp/sync-output.txt
           echo "Sublime sync complete"
 
+      - name: Download Tranco top 10K
+        run: |
+          cd extension
+          node tools/download-tranco.js 2>&1 | tee /tmp/tranco-output.txt
+          echo "Tranco download complete"
+
       - name: Compile detections.json
         env:
           GITHUB_TOKEN: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
@@ -115,3 +121,10 @@ jobs:
           echo '```' >> $GITHUB_STEP_SUMMARY
           cat /tmp/compile-output.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
+          if [ -f /tmp/tranco-output.txt ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Tranco" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat /tmp/tranco-output.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
