@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:44",
-    "generatedAt": "2026-03-31T20:44:58.631Z",
+    "version": "2026-03-31-20:49",
+    "generatedAt": "2026-03-31T20:49:52.223Z",
     "brandCount": 107,
-    "patternCount": 276
+    "patternCount": 279
   },
   "brandEntries": [
     {
@@ -15469,6 +15469,30 @@
     },
     {
       "domHashes": [],
+      "id": "cybeready-phishkit-resource",
+      "group": "phishkitSignatures",
+      "description": "CybeReady phishing simulation kit loading resources from lp.cybeready.net",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "lp\\.cybeready\\.net/Forms/[^\"]{1,100}",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
+      "id": "cybeready-crrid-tracker",
+      "group": "phishkitSignatures",
+      "description": "CybeReady campaign tracking function getcrrid() returning hex ID",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "function\\s+getcrrid\\s*\\(\\s*\\)\\s*\\{\\s*return\\s+['\"][0-9a-f]{20,64}['\"]",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -15728,6 +15752,18 @@
       "weight": 0.35,
       "source": "html",
       "patternString": "<title>[^<]*instagram[^<]*(log\\s*in|sign\\s*in|verify|confirm)[^<]*</title>",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
+      "id": "facebook-title-login-impersonation",
+      "group": "titleImpersonation",
+      "description": "Page title containing 'Log in' or 'Log into' with 'Facebook' on non-Facebook domain",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "<title>[^<]{0,20}Log\\s+in(?:to)?\\s+Facebook[^<]{0,20}</title>",
       "patternFlags": "i",
       "note": ""
     },

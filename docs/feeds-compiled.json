@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T20:44:58.620Z",
+    "compiledAt": "2026-03-31T20:49:52.209Z",
     "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 276,
+    "patternCount": 279,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -4025,6 +4025,26 @@
       "patternFlags": "i"
     },
     {
+      "id": "cybeready-phishkit-resource",
+      "group": "phishkitSignatures",
+      "description": "CybeReady phishing simulation kit loading resources from lp.cybeready.net",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "lp\\.cybeready\\.net/Forms/[^\"]{1,100}",
+      "patternFlags": "i"
+    },
+    {
+      "id": "cybeready-crrid-tracker",
+      "group": "phishkitSignatures",
+      "description": "CybeReady campaign tracking function getcrrid() returning hex ID",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "function\\s+getcrrid\\s*\\(\\s*\\)\\s*\\{\\s*return\\s+['\"][0-9a-f]{20,64}['\"]",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4242,6 +4262,16 @@
       "weight": 0.35,
       "source": "html",
       "patternString": "<title>[^<]*instagram[^<]*(log\\s*in|sign\\s*in|verify|confirm)[^<]*</title>",
+      "patternFlags": "i"
+    },
+    {
+      "id": "facebook-title-login-impersonation",
+      "group": "titleImpersonation",
+      "description": "Page title containing 'Log in' or 'Log into' with 'Facebook' on non-Facebook domain",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "<title>[^<]{0,20}Log\\s+in(?:to)?\\s+Facebook[^<]{0,20}</title>",
       "patternFlags": "i"
     },
     {
@@ -4582,7 +4612,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T20:37:26.685Z",
+      "compiledAt": "2026-03-31T20:44:57.210Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
