@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:16",
-    "generatedAt": "2026-03-31T20:16:30.088Z",
+    "version": "2026-03-31-20:18",
+    "generatedAt": "2026-03-31T20:18:31.271Z",
     "brandCount": 106,
-    "patternCount": 284
+    "patternCount": 283
   },
   "brandEntries": [
     {
@@ -16060,19 +16060,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/[A-Za-z0-9+/]{16,}={0,2}",
-      "patternFlags": "i",
-      "note": ""
-    },
-    {
-      "domHashes": [],
-      "id": "ipfs-gateway-credential-form",
-      "group": "urlHeuristics",
-      "description": "Detects credential harvesting forms hosted on IPFS gateways (dweb.link, ipfs.io, etc.)",
-      "severity": "high",
-      "weight": 0.4,
-      "source": "html",
-      "patternString": "(?:type=[\"']password[\"']|input.*password)",
+      "patternString": "/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/[A-Za-z0-9+/]{24,}={0,2}(?:[?#&]|$)",
       "patternFlags": "i",
       "note": ""
     },
@@ -16096,7 +16084,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "[a-z0-9]{6,}[-.](?:sharepoint|onedrive|1drv|outlook|microsoft|office365)\\.",
+      "patternString": "(?<![a-z0-9.])(?!(?:www|mail|smtp|ftp|vpn|portal|admin)[-.])[a-z0-9]{8,}[-.](?:sharepoint|onedrive|1drv|outlook|office365)\\.",
       "patternFlags": "i",
       "note": ""
     },
@@ -16131,8 +16119,8 @@
       "description": "Detects domains using brand-job/career/hiring pattern with fake meeting or reference IDs commonly used in employment scam phishkits",
       "severity": "high",
       "weight": 0.45,
-      "source": "html",
-      "patternString": "(adidas|nike|puma|zara|gucci|amazon|walmart|target|costco|apple|google|meta|microsoft)[-_]?(job|jobs|career|careers|hiring|recruit|hr|employment|apply|onboarding|work)",
+      "source": "url",
+      "patternString": "https?://[^/\"'\\s]{0,80}(?:adidas|nike|puma|zara|gucci|amazon|walmart|target|costco|apple|google|meta|microsoft)[^/\"'\\s]{0,20}[-_](?:jobs?|careers?|hiring|recruit|hr|employment|apply|onboarding)[^/\"'\\s]{0,40}(?:/|\\?|$)",
       "patternFlags": "i",
       "note": ""
     },
@@ -16168,7 +16156,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "[?&](username|email|user|id|token|key|uid|account)=[A-Za-z0-9+/]{20,}={0,2}(?:&|$)",
+      "patternString": "[?&](?:username|email|user|uid|account)=[A-Za-z0-9+/]{20,}={0,2}(?:&|$)",
       "patternFlags": "i",
       "note": ""
     },

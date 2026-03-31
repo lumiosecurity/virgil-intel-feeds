@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T20:16:30.076Z",
+    "compiledAt": "2026-03-31T20:18:31.258Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 284,
+    "patternCount": 283,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -4520,17 +4520,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/[A-Za-z0-9+/]{16,}={0,2}",
-      "patternFlags": "i"
-    },
-    {
-      "id": "ipfs-gateway-credential-form",
-      "group": "urlHeuristics",
-      "description": "Detects credential harvesting forms hosted on IPFS gateways (dweb.link, ipfs.io, etc.)",
-      "severity": "high",
-      "weight": 0.4,
-      "source": "html",
-      "patternString": "(?:type=[\"']password[\"']|input.*password)",
+      "patternString": "/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/[A-Za-z0-9+/]{24,}={0,2}(?:[?#&]|$)",
       "patternFlags": "i"
     },
     {
@@ -4550,7 +4540,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "[a-z0-9]{6,}[-.](?:sharepoint|onedrive|1drv|outlook|microsoft|office365)\\.",
+      "patternString": "(?<![a-z0-9.])(?!(?:www|mail|smtp|ftp|vpn|portal|admin)[-.])[a-z0-9]{8,}[-.](?:sharepoint|onedrive|1drv|outlook|office365)\\.",
       "patternFlags": "i"
     },
     {
@@ -4579,8 +4569,8 @@
       "description": "Detects domains using brand-job/career/hiring pattern with fake meeting or reference IDs commonly used in employment scam phishkits",
       "severity": "high",
       "weight": 0.45,
-      "source": "html",
-      "patternString": "(adidas|nike|puma|zara|gucci|amazon|walmart|target|costco|apple|google|meta|microsoft)[-_]?(job|jobs|career|careers|hiring|recruit|hr|employment|apply|onboarding|work)",
+      "source": "url",
+      "patternString": "https?://[^/\"'\\s]{0,80}(?:adidas|nike|puma|zara|gucci|amazon|walmart|target|costco|apple|google|meta|microsoft)[^/\"'\\s]{0,20}[-_](?:jobs?|careers?|hiring|recruit|hr|employment|apply|onboarding)[^/\"'\\s]{0,40}(?:/|\\?|$)",
       "patternFlags": "i"
     },
     {
@@ -4610,7 +4600,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "[?&](username|email|user|id|token|key|uid|account)=[A-Za-z0-9+/]{20,}={0,2}(?:&|$)",
+      "patternString": "[?&](?:username|email|user|uid|account)=[A-Za-z0-9+/]{20,}={0,2}(?:&|$)",
       "patternFlags": "i"
     },
     {
@@ -4647,7 +4637,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T20:15:32.916Z",
+      "compiledAt": "2026-03-31T20:11:29.207Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
