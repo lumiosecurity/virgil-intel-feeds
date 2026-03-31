@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:51",
-    "generatedAt": "2026-03-31T20:51:28.217Z",
+    "version": "2026-03-31-20:54",
+    "generatedAt": "2026-03-31T20:54:58.356Z",
     "brandCount": 107,
-    "patternCount": 280
+    "patternCount": 283
   },
   "brandEntries": [
     {
@@ -13825,6 +13825,18 @@
     },
     {
       "domHashes": [],
+      "id": "securityiq-phished-exfil",
+      "group": "credentialHarvesting",
+      "description": "SecurityIQ phishing simulation kit exfiltration endpoint /phished/dataEntered/ with UUID",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "/phished/dataEntered/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -15505,6 +15517,18 @@
     },
     {
       "domHashes": [],
+      "id": "securityiq-s3-phishkit-assets",
+      "group": "phishkitSignatures",
+      "description": "SecurityIQ phishing simulation kit loading brand impersonation assets from S3 bucket",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "s3\\.amazonaws\\.com/securityiq/phishing-templates/[^\"]{1,200}",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -15776,6 +15800,18 @@
       "weight": 0.4,
       "source": "html",
       "patternString": "<title>[^<]{0,20}Log\\s+in(?:to)?\\s+Facebook[^<]{0,20}</title>",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
+      "id": "outlook365-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Page title contains 'Outlook 365 Login' — Microsoft Outlook brand impersonation in title",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<title>[^<]{0,30}Outlook\\s*365\\s*Login[^<]{0,30}</title>",
       "patternFlags": "i",
       "note": ""
     },
