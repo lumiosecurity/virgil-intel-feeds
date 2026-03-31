@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-31-18:10",
-    "generatedAt": "2026-03-31T18:10:22.297Z",
+    "version": "2026-03-31-20:06",
+    "generatedAt": "2026-03-31T20:06:28.911Z",
     "brandCount": 106,
-    "patternCount": 291
+    "patternCount": 287
   },
   "brandEntries": [
     {
@@ -15568,7 +15568,7 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "patternString": "تنبيه أمني.*إدارة النظام.*تأكيد هويتك.*محتوى مقيد|(?:facebook|meta).*security.*alert.*verify.*identity.*restricted",
+      "patternString": "تنبيه أمني[\\s\\S]{0,300}إدارة النظام[\\s\\S]{0,300}تأكيد هويتك[\\s\\S]{0,300}محتوى مقيد|(?:facebook|meta)[^<]{0,200}security[^<]{0,200}alert[^<]{0,200}verify[^<]{0,200}identity[^<]{0,200}restricted",
       "patternFlags": "i",
       "note": ""
     },
@@ -15592,8 +15592,8 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "<a[^>]+href=[\"']https?://[^\"']+[\"'][^>]*class=[\"']w-inline-block[\"'][^>]*>\\s*<img[^>]+alt=[\"'][\"'][^>]+sizes=[\"']100vw[\"'][^>]*>\\s*</a>",
-      "patternFlags": "is",
+      "patternString": "<a[^>]+href=[\"']https?://[^\"']{1,500}[\"'][^>]*class=[\"']w-inline-block[\"'][^>]*>[\\s]{0,50}<img[^>]+alt=[\"'][\"'][^>]+sizes=[\"']100vw[\"'][^>]*>[\\s]{0,50}</a>",
+      "patternFlags": "i",
       "note": ""
     },
     {
@@ -15604,7 +15604,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "(?=.*\\.msi)(?=.*(?:windows.computer.required|windows.desktop.only))(?=.*(?:download|install|launch))",
+      "patternString": "\\.msi[\\s\\S]{0,3000}(?:windows[\\s._-]?computer[\\s._-]?required|windows[\\s._-]?desktop[\\s._-]?only)[\\s\\S]{0,2000}(?:download|install|launch)",
       "patternFlags": "i",
       "note": ""
     },
@@ -15616,19 +15616,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "WhatsApp.*安全.*中心.*驗證|系統.*帳號.*風險.*驗證|自動.*帳號.*封禁.*註銷",
-      "patternFlags": "i",
-      "note": ""
-    },
-    {
-      "domHashes": [],
-      "id": "session-expired-phishing",
-      "group": "socialEngineering",
-      "description": "Session expiry social engineering combined with credential harvesting",
-      "severity": "medium",
-      "weight": 0.25,
-      "source": "html",
-      "patternString": "(?:session|login)\\s+(?:has\\s+)?expired.*(?:log\\s*in|sign\\s*in)\\s+to\\s+continue.*password",
+      "patternString": "WhatsApp[\\s\\S]{0,300}安全[\\s\\S]{0,300}中心[\\s\\S]{0,300}驗證|系統[\\s\\S]{0,300}帳號[\\s\\S]{0,300}風險[\\s\\S]{0,300}驗證|自動[\\s\\S]{0,300}帳號[\\s\\S]{0,300}封禁[\\s\\S]{0,300}註銷",
       "patternFlags": "i",
       "note": ""
     },
@@ -15640,7 +15628,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "Apple\\s+(ID|Pay|Store).*\\$\\d+\\.\\d{2}.*transaction.*\\+?1?[-\\s]?\\d{3}[-\\s]?\\d{3}[-\\s]?\\d{4}",
+      "patternString": "Apple[\\s]+(ID|Pay|Store)[^<]{0,400}\\$\\d+\\.\\d{2}[^<]{0,400}transaction[^<]{0,600}\\+?1?[\\s-]?\\d{3}[\\s-]?\\d{3}[\\s-]?\\d{4}",
       "patternFlags": "i",
       "note": ""
     },
@@ -15652,19 +15640,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "callnowbtn.*Call\\s+Now|Call\\s+Now.*callnowbtn|pulse.*Apple\\s+Support.*\\d{3}[-\\s]\\d{3}[-\\s]\\d{4}",
-      "patternFlags": "i",
-      "note": ""
-    },
-    {
-      "domHashes": [],
-      "id": "apple-tech-support-scam-phone",
-      "group": "socialEngineering",
-      "description": "Detects Apple impersonation pages with fake transaction alerts urging victims to call a phone number",
-      "severity": "high",
-      "weight": 0.45,
-      "source": "html",
-      "patternString": "apple\\s*(id|pay|store).*\\$\\d+\\.\\d{2}.*transaction.*call.*\\+?1[\\-\\s]?\\(?\\d{3}\\)?[\\-\\s]?\\d{3}[\\-\\s]?\\d{4}",
+      "patternString": "callnowbtn[^<]{0,200}Call[\\s]+Now|Call[\\s]+Now[^<]{0,200}callnowbtn|pulse[\\s\\S]{0,500}Apple[\\s]+Support[\\s\\S]{0,300}\\d{3}[\\s-]\\d{3}[\\s-]\\d{4}",
       "patternFlags": "i",
       "note": ""
     },
@@ -15676,19 +15652,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "(unauthorized|did not authorize).*\\b(purchase|transaction|payment).*\\bcall\\b.*\\b(support|immediately)\\b.*\\+?1[\\-\\s]?\\(?\\d{3}\\)?[\\-\\s]?\\d{3}[\\-\\s]?\\d{4}",
-      "patternFlags": "i",
-      "note": ""
-    },
-    {
-      "domHashes": [],
-      "id": "crypto-seo-phish-lure-content",
-      "group": "socialEngineering",
-      "description": "Detects SEO-optimized crypto phishing lure pages with characteristic filler text about login functionality and security features",
-      "severity": "medium",
-      "weight": 0.35,
-      "source": "html",
-      "patternString": "(login|sign\\s*in)\\s+(stands as|serves as)\\s+(a\\s+)?(robust|secure|reliable)?\\s*(gateway|point of entry|portal)",
+      "patternString": "(?:unauthorized|did not authorize)[\\s\\S]{0,600}\\b(?:purchase|transaction|payment)\\b[\\s\\S]{0,600}\\bcall\\b[\\s\\S]{0,400}\\b(?:support|immediately)\\b[\\s\\S]{0,400}\\+?1[\\s-]?\\(?\\d{3}\\)?[\\s-]?\\d{3}[\\s-]?\\d{4}",
       "patternFlags": "i",
       "note": ""
     },
@@ -15706,25 +15670,13 @@
     },
     {
       "domHashes": [],
-      "id": "fake-meeting-ref-parameter",
-      "group": "socialEngineering",
-      "description": "Detects fake meeting/interview reference IDs in URL parameters embedded in page source, common in job scam phishkits",
-      "severity": "medium",
-      "weight": 0.3,
-      "source": "html",
-      "patternString": "(\\?|&)(id[-_]?\\d{6,}[/&]meeting|meeting[-_]?id=\\d{6,}|ref=[A-Z]{2}\\d{2,}[A-Z]{2})",
-      "patternFlags": "i",
-      "note": ""
-    },
-    {
-      "domHashes": [],
       "id": "security-urgency-domain-pattern",
       "group": "socialEngineering",
       "description": "Detects domains using security-urgency keywords (unauthorised, alert, verification, suspended) combined with brand names in subdomain",
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "https?://[a-z0-9.-]*(?:amazon|paypal|microsoft|google|apple|netflix)[a-z0-9.-]*\\.(?:security|secure|verify|account|alert)[\\-]?(?:unauthori[sz]ed|alert|verif(?:y|ication)|suspend|locked|blocked|request|update|confirm)",
+      "patternString": "https?://[a-z0-9-]{0,40}(?:amazon|paypal|microsoft|google|apple|netflix)[a-z0-9-]{0,40}\\.(?:security|secure|verify|account|alert)-?(?:unauthori[sz]ed|alert|verif(?:y|ication)|suspend(?:ed)?|locked|blocked|request|update|confirm)[a-z0-9.-]{0,30}",
       "patternFlags": "i",
       "note": ""
     },
@@ -15736,7 +15688,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "scheduled your ad account.*for deletion.*appeal",
+      "patternString": "scheduled your ad account[\\s\\S]{0,300}for deletion[\\s\\S]{0,300}appeal",
       "patternFlags": "is",
       "note": ""
     },
