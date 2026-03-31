@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T05:52:37.635Z",
+    "compiledAt": "2026-03-31T06:00:54.536Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 283,
+    "patternCount": 285,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2414,6 +2414,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "sso-keyword-domain-microsoft-impersonation",
+      "group": "brandImpersonation",
+      "description": "Detects Microsoft login impersonation on domains containing SSO-related keywords like sso-security, sso-auth, etc.",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "Sign in.*Microsoft account.*(?:Enter.*email|Enter password|Forgot my password)",
+      "patternFlags": "is"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -4044,6 +4054,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "microsoft-segoeui-fontface-phishkit",
+      "group": "phishkitSignatures",
+      "description": "Detects cloned Microsoft @font-face Segoe UI Webfont declaration characteristic of Microsoft login phishkits",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "@font-face\\s*\\{[^}]*font-family:\\s*[\"']Segoe UI Webfont[\"']\\s*;\\s*src:\\s*local\\([\"']Segoe UI[\"']\\)",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4246,11 +4266,11 @@
     {
       "id": "microsoft-login-title-impersonation",
       "group": "titleImpersonation",
-      "description": "Detects exact Microsoft sign-in page title combined with password input and form action, indicating credential phishing clone",
+      "description": "Detects Microsoft account sign-in page title impersonation used by credential harvesting phishkits",
       "severity": "high",
-      "weight": 0.4,
+      "weight": 0.45,
       "source": "html",
-      "patternString": "<title>Sign in to your Microsoft account</title>[\\s\\S]{0,5000}type=[\"']password[\"']",
+      "patternString": "<title>\\s*Sign in to your Microsoft account\\s*</title>",
       "patternFlags": "i"
     },
     {
@@ -4621,7 +4641,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T01:02:07.771Z",
+      "compiledAt": "2026-03-31T05:52:37.029Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
