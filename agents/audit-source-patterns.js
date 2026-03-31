@@ -167,7 +167,7 @@ async function main() {
 
   // ── Ask Opus to review flagged patterns — with retry and incremental issue creation ──
 
-  console.log(`\nAsking Opus to review ${flagged.length} flagged pattern(s)...`);
+  console.log(`\nAsking Sonnet to review ${flagged.length} flagged pattern(s)...`);
 
   // Group flagged patterns by file FIRST so we can create issues incrementally
   const byFile = {};
@@ -176,12 +176,12 @@ async function main() {
     byFile[f.file].push(f);
   }
 
-  // Retry wrapper for Opus calls — handles 529 overloaded and transient errors
+  // Retry wrapper — handles 529 overloaded and transient errors
   async function claudeWithRetry(system, userContent, maxRetries = 4) {
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         const resp = await client.messages.create({
-          model:      'claude-opus-4-6',
+          model:      'claude-sonnet-4-6',
           max_tokens: 2000,
           system,
           messages: [{ role: 'user', content: userContent }],
