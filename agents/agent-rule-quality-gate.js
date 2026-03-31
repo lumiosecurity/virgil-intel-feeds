@@ -5,7 +5,8 @@
 // Triggered when agent-triaged label is added to a rule-gap issue.
 //
 // Escalation model:
-//   Attempt 1-2: Sonnet reviews rules and tries to fix failures
+//   Attempt 1:   Opus reviews Sonnet's rules, Sonnet fixes failures
+//   Attempt 2:   Opus re-reviews Sonnet's fixes, Sonnet tries again
 //   Attempt 3:   Opus rewrites rules from scratch using the full rule
 //                writing guide + original issue evidence — not patching
 //                Sonnet's broken output but starting clean
@@ -85,9 +86,9 @@ const LEGITIMATE_SAMPLES = [
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-async function claude(system, user, maxTokens = 2000) {
+async function claude(system, user, maxTokens = 2000, model = 'claude-sonnet-4-6') {
   const resp = await client.messages.create({
-    model:      'claude-sonnet-4-6',
+    model,
     max_tokens: maxTokens,
     system,
     messages:   [{ role: 'user', content: user }],
@@ -290,9 +291,11 @@ Warnings: ${e.warnings.length > 0 ? e.warnings.join('; ') : 'none'}
 Rule: ${JSON.stringify(r, null, 2)}`;
   }).join('\n\n');
 
+  // Opus reviews — a different, stronger model than the Sonnet that generated the rules
   const judgment = await claude(REVIEW_SYSTEM_PROMPT,
     `## Rule Quality Gate — Issue #${ISSUE_NUMBER}\n\n**Rules proposed:** ${rules.length}\n\n## Automated evaluation results\n\n${evalSummary}\n\n## Decision\n\nShould these rules be auto-promoted? Respond PASS or FAIL on the first line.`,
-    1500
+    1500,
+    'claude-opus-4-6'
   );
 
   const passed = judgment.trimStart().startsWith('PASS');
