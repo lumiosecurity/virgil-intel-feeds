@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T06:00:54.536Z",
+    "compiledAt": "2026-03-31T06:05:25.598Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 285,
+    "patternCount": 287,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -1498,6 +1498,14 @@
         "partner-invite",
         "business-partner",
         "meta-partner",
+        "metta",
+        "m3ta",
+        "faceb00k",
+        "facebok",
+        "facebbok",
+        "faceboook",
+        "fecebook",
+        "facebookk",
         "agency-partner-apply",
         "business-partner-apply",
         "creator-partner-apply",
@@ -2611,6 +2619,16 @@
       "weight": 0.35,
       "source": "js",
       "patternString": "querySelectorAll\\([\"']input\\[type=['\"]?hidden['\"]?\\]\\[name=['\"]?(?:username|password|pass_entered|email)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "meta-form-action-decoy",
+      "group": "credentialHarvesting",
+      "description": "Form action pointing to facebook.com from non-Facebook domain, common phishkit decoy technique",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "action=[\"']https?://(www\\.)?facebook\\.com/?[\"']",
       "patternFlags": "i"
     },
     {
@@ -4204,6 +4222,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "meta-ad-account-deletion-phish",
+      "group": "socialEngineering",
+      "description": "Detects Meta ad account deletion phishing template with appeal lure",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "scheduled your ad account.*for deletion.*appeal",
+      "patternFlags": "is"
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -4641,7 +4669,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T05:52:37.029Z",
+      "compiledAt": "2026-03-31T06:00:53.401Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

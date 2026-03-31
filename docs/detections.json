@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-31-06:00",
-    "generatedAt": "2026-03-31T06:00:54.548Z",
+    "version": "2026-03-31-06:05",
+    "generatedAt": "2026-03-31T06:05:25.609Z",
     "brandCount": 106,
-    "patternCount": 285
+    "patternCount": 287
   },
   "brandEntries": [
     {
@@ -1468,6 +1468,14 @@
         "partner-invite",
         "business-partner",
         "meta-partner",
+        "metta",
+        "m3ta",
+        "faceb00k",
+        "facebok",
+        "facebbok",
+        "faceboook",
+        "fecebook",
+        "facebookk",
         "agency-partner-apply",
         "business-partner-apply",
         "creator-partner-apply",
@@ -3773,6 +3781,18 @@
     },
     {
       "domHashes": [],
+      "id": "meta-form-action-decoy",
+      "group": "credentialHarvesting",
+      "description": "Form action pointing to facebook.com from non-Facebook domain, common phishkit decoy technique",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "action=[\"']https?://(www\\.)?facebook\\.com/?[\"']",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -5677,6 +5697,18 @@
       "source": "html",
       "patternString": "https?://[a-z0-9.-]*(?:amazon|paypal|microsoft|google|apple|netflix)[a-z0-9.-]*\\.(?:security|secure|verify|account|alert)[\\-]?(?:unauthori[sz]ed|alert|verif(?:y|ication)|suspend|locked|blocked|request|update|confirm)",
       "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
+      "id": "meta-ad-account-deletion-phish",
+      "group": "socialEngineering",
+      "description": "Detects Meta ad account deletion phishing template with appeal lure",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "scheduled your ad account.*for deletion.*appeal",
+      "patternFlags": "is",
       "note": ""
     },
     {
