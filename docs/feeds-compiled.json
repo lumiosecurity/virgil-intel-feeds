@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T20:30:12.193Z",
+    "compiledAt": "2026-03-31T20:37:28.201Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 281,
+    "patternCount": 274,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2726,7 +2726,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "prod-cdn\\.wetransfer\\.net.*(?:password|login|signin)",
+      "patternString": "prod-cdn\\.wetransfer\\.net[\\s\\S]{0,2000}(?:password|login|signin)",
       "patternFlags": "is"
     },
     {
@@ -2746,18 +2746,8 @@
       "severity": "high",
       "weight": 0.45,
       "source": "js",
-      "patternString": "function\\s+(username_handler|password_handler)\\s*\\([^)]*\\)\\s*{[^}]*querySelectorAll\\s*\\([^)]*hidden[^)]*\\)",
+      "patternString": "function\\s+(?:username_handler|password_handler)\\s*\\([^)]{0,100}\\)[\\s\\S]{0,500}querySelectorAll\\s*\\([^)]{0,200}hidden[^)]{0,200}\\)",
       "patternFlags": "i"
-    },
-    {
-      "id": "file-verification-cred-phish",
-      "group": "phishkitSignatures",
-      "description": "Detects file verification credential phishing pages",
-      "severity": "medium",
-      "weight": 0.35,
-      "source": "html",
-      "patternString": "File\\s+Verification.{0,500}(?:username|password).{0,300}login.{0,300}(?:email|address)",
-      "patternFlags": "is"
     },
     {
       "id": "indonesian-lottery-scam",
@@ -2766,7 +2756,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "(?:KODE\\s+ID\\s+PEMENANG|pemenang\\s+yang\\s+beruntung.*hadiah|Galeri\\s+Pemenang\\s+Hadiah).*(?:shopee|SHOPEE)",
+      "patternString": "(?:KODE\\s+ID\\s+PEMENANG|pemenang\\s+yang\\s+beruntung[^<]{0,300}hadiah|Galeri\\s+Pemenang\\s+Hadiah)[\\s\\S]{0,2000}(?:shopee|SHOPEE)",
       "patternFlags": "i"
     },
     {
@@ -2796,7 +2786,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "Internal Revenue Service.{0,2000}Electronic Filing PIN.{0,1000}<input.{0,500}Social Security Number.{0,1000}Adjusted Gross Income",
+      "patternString": "Internal Revenue Service[\\s\\S]{0,2000}Electronic Filing PIN[\\s\\S]{0,1000}<input[^>]{0,500}Social Security Number[\\s\\S]{0,1000}Adjusted Gross Income",
       "patternFlags": "is"
     },
     {
@@ -2806,7 +2796,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "Electronic Filing PIN.*first 3 digits.*middle 2 digits.*last 4 digits.*5-digit Electronic Filing PIN",
+      "patternString": "Electronic Filing PIN[\\s\\S]{0,1000}first 3 digits[\\s\\S]{0,500}middle 2 digits[\\s\\S]{0,500}last 4 digits[\\s\\S]{0,500}5-digit Electronic Filing PIN",
       "patternFlags": "is"
     },
     {
@@ -2816,7 +2806,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "js",
-      "patternString": "html2canvas\\(document\\.body\\)[\\s\\S]*?ajax/heartbeat\\.php[\\s\\S]*?canvas\\.toDataURL\\(['\"](image/png|image/jpeg)['\"]\\)",
+      "patternString": "html2canvas\\(document\\.body\\)[\\s\\S]{0,3000}ajax/heartbeat\\.php[\\s\\S]{0,3000}canvas\\.toDataURL\\(['\"](?:image/png|image/jpeg)['\"]\\)",
       "patternFlags": "i"
     },
     {
@@ -2826,17 +2816,7 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "js",
-      "patternString": "ajax/flow\\.php[\\s\\S]*?panel_action[\\s\\S]*?final_redirect_url",
-      "patternFlags": "i"
-    },
-    {
-      "id": "spotify-dom-structure",
-      "group": "phishkitSignatures",
-      "description": "Spotify DOM structure with playlist cards and logo on non-Spotify domain",
-      "severity": "medium",
-      "weight": 0.35,
-      "source": "html",
-      "patternString": "spotify[^<]{0,200}playlist[^<]{0,200}card[^>]{0,200}data-songs[^<]{0,200}logo\\.svg",
+      "patternString": "ajax/flow\\.php[\\s\\S]{0,2000}panel_action[\\s\\S]{0,2000}final_redirect_url",
       "patternFlags": "i"
     },
     {
@@ -2846,7 +2826,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "public\\.bnbstatic\\.com[^\"']*ogImage\\.jpg|content=[\"']Binance[\"'][^>]*(?:og:site_name|twitter:site)|(?:og:site_name|twitter:site)[\"'][^>]*content=[\"']Binance[\"']",
+      "patternString": "public\\.bnbstatic\\.com[^\"']{0,200}ogImage\\.jpg|content=[\"']Binance[\"'][^>]{0,200}(?:og:site_name|twitter:site)|(?:og:site_name|twitter:site)[^>]{0,200}content=[\"']Binance[\"']",
       "patternFlags": "i"
     },
     {
@@ -2856,18 +2836,8 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "<title[^>]*>[^<]*Binance[^<]*</title>[^]{0,2000}<meta[^>]*keywords[^>]*(?:Bitcoin|Cryptocurrency|BTC|ETH|crypto)",
+      "patternString": "<title[^>]*>[^<]*Binance[^<]*</title>[\\s\\S]{0,2000}<meta[^>]*keywords[^>]*(?:Bitcoin|Cryptocurrency|BTC|ETH|crypto)",
       "patternFlags": "is"
-    },
-    {
-      "id": "ledger-image-redirect",
-      "group": "phishkitSignatures",
-      "description": "Ledger-branded image redirecting to external credential harvesting site",
-      "severity": "high",
-      "weight": 0.45,
-      "source": "html",
-      "patternString": "<a[^>]*href=[\"'][^\"']*(?!ledger\\.com)[^\"']+[\"'][^>]*>\\s*<img[^>]*ledger[^>]*>",
-      "patternFlags": "i"
     },
     {
       "id": "telegram-bot-exfil-obfuscated",
@@ -2876,7 +2846,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "js",
-      "patternString": "\\x68\\x74\\x74\\x70\\x73\\x3a\\x2f\\x2f\\x61\\x70\\x69\\x2e\\x74\\x65\\x6c\\x65\\x67\\x72\\x61\\x6d\\x2e\\x6f\\x72\\x67|api\\.telegram\\.org.*sendMessage.*chat_id",
+      "patternString": "\\x68\\x74\\x74\\x70\\x73\\x3a\\x2f\\x2f\\x61\\x70\\x69\\x2e\\x74\\x65\\x6c\\x65\\x67\\x72\\x61\\x6d\\x2e\\x6f\\x72\\x67|api\\.telegram\\.org[^\\s\"']{0,200}sendMessage[^\\s\"']{0,200}chat_id",
       "patternFlags": "i"
     },
     {
@@ -2906,7 +2876,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "customer\\s*care\\s*dana.*login\\.php|dana.*customer.*care.*<form",
+      "patternString": "customer\\s{0,3}care\\s{0,3}dana[\\s\\S]{0,500}login\\.php|dana[^<]{0,300}customer[^<]{0,300}care[\\s\\S]{0,500}<form",
       "patternFlags": "i"
     },
     {
@@ -2936,7 +2906,7 @@
       "severity": "medium",
       "weight": 0.45,
       "source": "both",
-      "patternString": "(dana|metamask|coinbase|trustwallet|phantom[\\-_]?wallet).+\\.(my\\.id|netlify\\.app|vercel\\.app|github\\.io|pages\\.dev|web\\.app)",
+      "patternString": "(?:dana|metamask|coinbase|trustwallet|phantom[\\-_]?wallet)[^\\s\"'<>]{1,100}\\.(?:my\\.id|netlify\\.app|vercel\\.app|github\\.io|pages\\.dev|web\\.app)",
       "patternFlags": "i"
     },
     {
@@ -2946,7 +2916,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "<title>\\s*Sharing Link Validation\\s*</title>.*OneDrive.*Verify Your Identity",
+      "patternString": "<title>\\s*Sharing Link Validation\\s*</title>[\\s\\S]{0,3000}OneDrive[\\s\\S]{0,1000}Verify Your Identity",
       "patternFlags": "is"
     },
     {
@@ -2956,7 +2926,7 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "patternString": "sharing with a secure link which requires you to verify your identity.*Your email address is required",
+      "patternString": "sharing with a secure link which requires you to verify your identity[\\s\\S]{0,2000}Your email address is required",
       "patternFlags": "is"
     },
     {
@@ -2966,7 +2936,7 @@
       "severity": "medium",
       "weight": 0.3,
       "source": "html",
-      "patternString": "American Computer Development Inc-GCCH.*privacy statement.*Microsoft Terms of Use",
+      "patternString": "American Computer Development Inc-GCCH[\\s\\S]{0,2000}privacy statement[\\s\\S]{0,2000}Microsoft Terms of Use",
       "patternFlags": "is"
     },
     {
@@ -2976,7 +2946,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "js",
-      "patternString": "\\$\\.post\\(\\s*['\"]online\\.php['\"].*local:\\s*window\\.location\\.pathname",
+      "patternString": "\\$\\.post\\(\\s*['\"]online\\.php['\"][^)]{0,500}local:\\s*window\\.location\\.pathname",
       "patternFlags": "i"
     },
     {
@@ -2996,7 +2966,7 @@
       "severity": "high",
       "weight": 0.5,
       "source": "html",
-      "patternString": "onclick=\"return validator\\.validate\\(\\)\".*(?:facebook|input[^>]*type=['\"]password['\"])",
+      "patternString": "onclick=\"return validator\\.validate\\(\\)\"[\\s\\S]{0,2000}(?:facebook|input[^>]{0,200}type=['\"]password['\"])",
       "patternFlags": "is"
     },
     {
@@ -3008,16 +2978,6 @@
       "source": "html",
       "patternString": "function getcrrid\\(\\).*Log in Facebook",
       "patternFlags": "is"
-    },
-    {
-      "id": "google-phishkit-handlers",
-      "group": "phishkitSignatures",
-      "description": "Google phishkit credential collection handlers",
-      "severity": "high",
-      "weight": 0.5,
-      "source": "js",
-      "patternString": "function\\s+(username_handler|password_handler)\\(event\\)\\s*\\{[\\s\\S]*querySelectorAll.*input\\[type='hidden'\\]",
-      "patternFlags": "i"
     },
     {
       "id": "pmeimg-google-assets",
@@ -3046,7 +3006,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "js",
-      "patternString": "function\\s+(username_handler|password_handler)\\s*\\([^)]*\\)\\s*\\{[^}]*querySelectorAll[^}]*input\\[type=['\"]hidden['\"]\\]",
+      "patternString": "function\\s+(?:username_handler|password_handler)\\s*\\([^)]{0,100}\\)\\s*\\{[^}]{0,2000}querySelectorAll[^}]{0,500}input\\[type=['\"]hidden['\"]\\]",
       "patternFlags": "i"
     },
     {
@@ -3056,7 +3016,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "File\\s+Verification\\s+for\\s+Adobe\\s+PDF.*<input[^>]*type=[\"']password[\"']",
+      "patternString": "File\\s+Verification\\s+for\\s+Adobe\\s+PDF[\\s\\S]{0,3000}<input[^>]{0,200}type=[\"']password[\"']",
       "patternFlags": "is"
     },
     {
@@ -3066,7 +3026,7 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "patternString": "NETFLIX.*(?:sign\\s*in|verify|update|confirm|suspend|locked).*<form[^>]*>.*<input[^>]+type=[\"'](?:email|password)[\"']",
+      "patternString": "NETFLIX[\\s\\S]{0,1000}(?:sign\\s*in|verify|update|confirm|suspend|locked)[\\s\\S]{0,3000}<form[^>]{0,300}>[\\s\\S]{0,2000}<input[^>]+type=[\"'](?:email|password)[\"']",
       "patternFlags": "is"
     },
     {
@@ -3076,7 +3036,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "Aktifkan\\s+DANA\\s+Paylater.*Putuskan\\s+DANA\\s+Paylater.*Pemulihan\\s+Akun",
+      "patternString": "Aktifkan\\s+DANA\\s+Paylater[\\s\\S]{0,3000}Putuskan\\s+DANA\\s+Paylater[\\s\\S]{0,3000}Pemulihan\\s+Akun",
       "patternFlags": "i"
     },
     {
@@ -3086,7 +3046,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "(?:&#[0-9]+;){6,}[^<]*(?:bet365|paypal|amazon|microsoft|apple|google)",
+      "patternString": "(?:&#[0-9]{1,6};){6,30}[^<]{0,200}(?:bet365|paypal|amazon|microsoft|apple|google)",
       "patternFlags": "i"
     },
     {
@@ -3096,7 +3056,7 @@
       "severity": "medium",
       "weight": 0.3,
       "source": "js",
-      "patternString": "Math\\.floor\\(Math\\.random\\(\\)\\*len\\);.*txt\\[rnd\\].*\\.com",
+      "patternString": "Math\\.floor\\(Math\\.random\\(\\)\\*len\\)[\\s\\S]{0,200}txt\\[rnd\\][\\s\\S]{0,200}\\.com",
       "patternFlags": "s"
     },
     {
@@ -3116,7 +3076,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "font-family:\\s*[\"']Segoe UI Webfont[\"'][^}]*color:\\s*#0067b8.*<input[^>]+type=[\"']password[\"']",
+      "patternString": "font-family:\\s*[\"']Segoe UI Webfont[\"'][^}]{0,500}color:\\s*#0067b8[\\s\\S]{0,3000}<input[^>]+type=[\"']password[\"']",
       "patternFlags": "i"
     },
     {
@@ -3156,7 +3116,7 @@
       "severity": "medium",
       "weight": 0.3,
       "source": "html",
-      "patternString": "NDAX.*Login.*Crypto Trading Platform.*Canadians",
+      "patternString": "NDAX[^<]{0,50}Login[^<]{0,80}Crypto Trading Platform[^<]{0,80}Canadians",
       "patternFlags": "i"
     },
     {
@@ -3166,7 +3126,7 @@
       "severity": "high",
       "weight": 0.5,
       "source": "html",
-      "patternString": "action=[\"']save\\.php[\"'].*Outlook Web App",
+      "patternString": "action=[\"']save\\.php[\"'][\\s\\S]{0,5000}Outlook Web App",
       "patternFlags": "is"
     },
     {
@@ -3176,7 +3136,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "background-color:#0072C6.*Segoe UI WPC.*password",
+      "patternString": "background-color:#0072C6[\\s\\S]{0,3000}Segoe UI WPC[\\s\\S]{0,2000}password",
       "patternFlags": "is"
     },
     {
@@ -3188,16 +3148,6 @@
       "source": "both",
       "patternString": "[a-z0-9]{50,}\\.ipfs\\..+\\.(html?|php)\b",
       "patternFlags": "i"
-    },
-    {
-      "id": "sa-courier-fee-scam",
-      "group": "phishkitSignatures",
-      "description": "South African courier delivery fee scam pattern with VAT calculation",
-      "severity": "high",
-      "weight": 0.35,
-      "source": "html",
-      "patternString": "VAT 15\\s*%.*R\\s*\\d+\\.\\d{2}.*delivery.*fee",
-      "patternFlags": "is"
     },
     {
       "id": "indonesian-urgency-klik",
@@ -3236,7 +3186,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "js",
-      "patternString": "function\\s+(username_handler|password_handler)\\s*\\(event\\)\\s*\\{[^}]*document\\.querySelectorAll\\(\"input\\[type='hidden'\\]",
+      "patternString": "<title>Adobe-PDF\\s+Online</title>[\\s\\S]{0,3000}File\\s+Verification\\s+for\\s+Adobe\\s+PDF[\\s\\S]{0,3000}<form[^>]+action=\"/site/submit\"",
       "patternFlags": "i"
     },
     {
@@ -3256,7 +3206,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "This is a very important security measure.*To protect your email account.*Your account may be restricted",
+      "patternString": "This is a very important security measure[\\s\\S]{0,500}To protect your email account[\\s\\S]{0,500}Your account may be restricted",
       "patternFlags": "is"
     },
     {
@@ -3266,18 +3216,8 @@
       "severity": "medium",
       "weight": 0.3,
       "source": "html",
-      "patternString": "<title>Webmail</title>.*<form[^>]+action=[\"'][^\"']*(?:log|auth|verify|next)[^\"']*[\"'].*<input[^>]*type=[\"']password[\"']",
+      "patternString": "<title>Webmail</title>[\\s\\S]{0,3000}<form[^>]{0,200}action=[\"'][^\"']{0,200}(?:log|auth|verify|next)[^\"']{0,200}[\"'][\\s\\S]{0,1000}<input[^>]{0,200}type=[\"']password[\"']",
       "patternFlags": "is"
-    },
-    {
-      "id": "external-favicon-phishkit",
-      "group": "phishkitSignatures",
-      "description": "External favicon from alphatrade-options domain",
-      "severity": "medium",
-      "weight": 0.25,
-      "source": "html",
-      "patternString": "alphatrade-options\\.com/git/rand/favicon\\.png",
-      "patternFlags": "i"
     },
     {
       "id": "css-phishkit-birthdate",
@@ -3286,7 +3226,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "geburtsdatum.*send_date\\.php|myCSS.*Bestätigen Sie Ihre Identität.*Geburtsdatum",
+      "patternString": "geburtsdatum[^<]{0,200}send_date\\.php|myCSS[\\s\\S]{0,2000}Best\\u00e4tigen Sie Ihre Identit\\u00e4t[\\s\\S]{0,500}Geburtsdatum",
       "patternFlags": "i"
     },
     {
@@ -3296,7 +3236,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "myCSS.*--css-ui-color-darkblue.*#00327d|registrierung.*myCSS.*Identität",
+      "patternString": "myCSS[\\s\\S]{0,2000}--css-ui-color-darkblue[\\s\\S]{0,500}#00327d|registrierung[\\s\\S]{0,1000}myCSS[\\s\\S]{0,1000}Identit\\u00e4t",
       "patternFlags": "i"
     },
     {
@@ -3306,7 +3246,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "class=\"[^\"]*a-ws[^\"]*\".*auth-workflow.*signIn",
+      "patternString": "class=\"[^\"]{0,100}a-ws[^\"]{0,100}\"[\\s\\S]{0,3000}auth-workflow[\\s\\S]{0,500}signIn",
       "patternFlags": "is"
     },
     {
@@ -3317,16 +3257,6 @@
       "weight": 0.45,
       "source": "html",
       "patternString": "1111365[a-z]{2}\\.com.*打开网站",
-      "patternFlags": "i"
-    },
-    {
-      "id": "fake-speed-test-gambling",
-      "group": "phishkitSignatures",
-      "description": "Fake speed testing interface for gambling site redirects",
-      "severity": "medium",
-      "weight": 0.35,
-      "source": "html",
-      "patternString": "<span class=\"ms\".*ms</span>.*打开网站",
       "patternFlags": "i"
     },
     {
@@ -4617,7 +4547,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T20:23:47.353Z",
+      "compiledAt": "2026-03-31T20:30:09.208Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
