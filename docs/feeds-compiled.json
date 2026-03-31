@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T20:14:14.358Z",
+    "compiledAt": "2026-03-31T20:15:35.423Z",
     "brandCount": 106,
     "signalCount": 1,
     "patternCount": 284,
@@ -2666,7 +2666,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "<div\\s+id=[\"'][a-z]{1,3}[\"']>\\s*</div>\\s*<script>[\\s\\S]*?var\\s+[a-z]\\s*=\\s*[\"'][A-Za-z0-9+/=]{500,}",
+      "patternString": "<div\\s+id=[\"'][a-z]{1,3}[\"']>\\s*</div>[\\s\\S]{0,2000}<script>[\\s\\S]{0,500}var\\s+[a-z]\\s*=\\s*[\"'][A-Za-z0-9+/=]{500,}",
       "patternFlags": "i"
     },
     {
@@ -2706,7 +2706,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "js",
-      "patternString": "__SCRIPT_PLACEHOLDER_\\d+__.*document\\.write\\(decoded\\)",
+      "patternString": "__SCRIPT_PLACEHOLDER_\\d+__[\\s\\S]{0,2000}document\\.write\\(",
       "patternFlags": "i"
     },
     {
@@ -2716,7 +2716,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "js",
-      "patternString": "var\\s+\\w+\\s*=\\s*\"[A-Za-z0-9+/=]{20,}\";.*\\.splice\\(\\w+,\\s*1\\).*atob\\(.*document\\.write\\(",
+      "patternString": "var\\s+\\w+\\s*=\\s*\"[A-Za-z0-9+/=]{20,}\"[\\s\\S]{0,500}\\.splice\\(\\w+,\\s*1\\)[\\s\\S]{0,500}atob\\([\\s\\S]{0,500}document\\.write\\(",
       "patternFlags": "i"
     },
     {
@@ -2726,7 +2726,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "js",
-      "patternString": "document\\[?['\"]write['\"]\\]?\\s*\\(\\s*(unescape\\s*\\(\\s*)?atob\\s*\\(",
+      "patternString": "document[.\\[]\\s*['\"]?write['\"]?\\s*[\\])]?\\s*\\(\\s*(?:unescape\\s*\\(\\s*)?atob\\s*\\(",
       "patternFlags": "i"
     },
     {
