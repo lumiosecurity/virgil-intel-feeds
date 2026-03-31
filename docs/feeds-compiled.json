@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T20:18:31.258Z",
+    "compiledAt": "2026-03-31T20:19:16.278Z",
     "brandCount": 106,
     "signalCount": 1,
     "patternCount": 283,
@@ -1846,7 +1846,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "js",
-      "patternString": "navigator\\.webdriver.*(?:callPhantom|_phantom|window\\.phantom)",
+      "patternString": "navigator\\.webdriver[^\\n]{0,200}(?:callPhantom|_phantom|window\\.phantom)",
       "patternFlags": "i"
     },
     {
@@ -1866,7 +1866,7 @@
       "severity": "medium",
       "weight": 0.3,
       "source": "js",
-      "patternString": "visibility['\"]?\\s*[:=]\\s*['\"]?hidden.*cdn-cgi/challenge-platform/scripts",
+      "patternString": "visibility['\"]?\\s*[:=]\\s*['\"]?hidden[^\\n]{0,300}cdn-cgi/challenge-platform/scripts",
       "patternFlags": "i"
     },
     {
@@ -4637,7 +4637,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T20:11:29.207Z",
+      "compiledAt": "2026-03-31T20:18:29.257Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:18",
-    "generatedAt": "2026-03-31T20:18:31.271Z",
+    "version": "2026-03-31-20:19",
+    "generatedAt": "2026-03-31T20:19:16.290Z",
     "brandCount": 106,
     "patternCount": 283
   },
@@ -12856,7 +12856,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "js",
-      "patternString": "navigator\\.webdriver.*(?:callPhantom|_phantom|window\\.phantom)",
+      "patternString": "navigator\\.webdriver[^\\n]{0,200}(?:callPhantom|_phantom|window\\.phantom)",
       "patternFlags": "i",
       "note": ""
     },
@@ -12880,7 +12880,7 @@
       "severity": "medium",
       "weight": 0.3,
       "source": "js",
-      "patternString": "visibility['\"]?\\s*[:=]\\s*['\"]?hidden.*cdn-cgi/challenge-platform/scripts",
+      "patternString": "visibility['\"]?\\s*[:=]\\s*['\"]?hidden[^\\n]{0,300}cdn-cgi/challenge-platform/scripts",
       "patternFlags": "i",
       "note": ""
     },
