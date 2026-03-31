@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:11",
-    "generatedAt": "2026-03-31T20:11:33.004Z",
+    "version": "2026-03-31-20:14",
+    "generatedAt": "2026-03-31T20:14:14.371Z",
     "brandCount": 106,
-    "patternCount": 285
+    "patternCount": 284
   },
   "brandEntries": [
     {
@@ -15856,7 +15856,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "both",
-      "patternString": "^www-[a-z]+(verifier|signin|login|auth|secure)[a-z]*-com\\.webflow\\.io$",
+      "patternString": "^www-[a-z]+(?:verifier|signin|login|auth|secure)[a-z]*-com\\.webflow\\.io$",
       "patternFlags": "i",
       "note": ""
     },
@@ -15868,7 +15868,7 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "both",
-      "patternString": "^(sb|scotia|scotiabank)[-_](invoice|statement|bill|pay|account|login|secure)",
+      "patternString": "^(?:sb|scotia|scotiabank)[-_](?:invoice|statement|bill|pay|account|login|secure)[^.]*\\.(?!scotiabank\\.com$)[a-z0-9-]+\\.[a-z]{2,}$",
       "patternFlags": "i",
       "note": ""
     },
@@ -15880,7 +15880,7 @@
       "severity": "high",
       "weight": 0.5,
       "source": "both",
-      "patternString": "\\b[a-z]{2,}\\.gov-[a-z0-9]{2,}\\.(info|org|com|net)\\b",
+      "patternString": "\\b[a-z]{2,}\\.gov-[a-z0-9]{2,}\\.(?:info|org|com|net)\\b",
       "patternFlags": "i",
       "note": ""
     },
@@ -15928,7 +15928,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "(?:sttrt|strt).*(?:leddger|ledgger|ledgerr)|(?:leddger|ledgger|ledgerr).*(?:sttrt|start|strt)",
+      "patternString": "(?:sttrt|strt)[^<]{0,200}(?:leddger|ledgger|ledgerr)|(?:leddger|ledgger|ledgerr)[^<]{0,200}(?:sttrt|strt)",
       "patternFlags": "i",
       "note": ""
     },
@@ -15952,7 +15952,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "(?:^|\\.)(?:tx ?dmv|dmv|irs|ssa|uscis|dot|dol|va|hud|dps|txdot|txdps)\\.[a-z0-9-]+\\.(?:life|top|xyz|click|shop|online|site|store|fun|icu|buzz|cc|pw|tk|ml|ga|cf|gq)",
+      "patternString": "(?:^|\\.)(?:txdmv|dmv|irs|ssa|uscis|uscis|dol|hud|dps|txdot|txdps)\\.[a-z0-9-]+\\.(?:life|top|xyz|click|shop|online|site|store|fun|icu|buzz|cc|pw|tk|ml|ga|cf|gq)(?:/|$)",
       "patternFlags": "i",
       "note": ""
     },
@@ -15982,18 +15982,6 @@
     },
     {
       "domHashes": [],
-      "id": "ms-service-name-in-subdomain",
-      "group": "typosquatPatterns",
-      "description": "Detects Microsoft service names (sharepoint, 1drv, onedrive, outlook, microsoftonline) embedded in subdomains of non-Microsoft domains",
-      "severity": "high",
-      "weight": 0.45,
-      "source": "html",
-      "patternString": "(?:sharepoint|1drv|onedrive|microsoftonline|outlook).*(?!microsoft\\.com|sharepoint\\.com|live\\.com|office\\.com)",
-      "patternFlags": "i",
-      "note": ""
-    },
-    {
-      "domHashes": [],
       "id": "office-typosquat-offlce-hostname",
       "group": "typosquatPatterns",
       "description": "Hostname contains 'offlce' — a typosquat of 'office' replacing 'i' with 'l', commonly used in Microsoft credential phishing",
@@ -16008,11 +15996,11 @@
       "domHashes": [],
       "id": "usps-random-domain-cheap-tld",
       "group": "typosquatPatterns",
-      "description": "Random short-string domain on disposable TLD with path mimicking USPS structure — classic smishing landing page pattern",
+      "description": "Short random domain on disposable TLD with /com/ path — generic smishing landing page infrastructure pattern",
       "severity": "high",
-      "weight": 0.35,
+      "weight": 0.2,
       "source": "html",
-      "patternString": "https?://[a-z]{4,6}\\.(life|top|xyz|shop|icu|cc|cyou|cfd|sbs|buzz)/com/",
+      "patternString": "https?://[a-z]{3,7}\\.(?:life|top|xyz|shop|icu|cc|cyou|cfd|sbs|buzz)/com/",
       "patternFlags": "i",
       "note": ""
     },
