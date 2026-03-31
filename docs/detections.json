@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:19",
-    "generatedAt": "2026-03-31T20:19:16.290Z",
+    "version": "2026-03-31-20:20",
+    "generatedAt": "2026-03-31T20:20:41.119Z",
     "brandCount": 106,
     "patternCount": 283
   },
@@ -13648,7 +13648,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "action=[\"']https://formspree\\.io/f/[a-zA-Z0-9]+[\"'][^>]*>.*?<input[^>]*type=[\"']password[\"']",
+      "patternString": "action=[\"']https://formspree\\.io/f/[a-zA-Z0-9]+[\"'][^>]*>[\\s\\S]{0,2000}<input[^>]*type=[\"']password[\"']",
       "patternFlags": "is",
       "note": ""
     },
@@ -13660,7 +13660,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "(?=[\\s\\S]*netflix[\\s\\S]*\\.(?:png|svg|jpg|webp))(?=[\\s\\S]*<form[\\s\\S]*<input[^>]*type=[\"'](?:email|text)[\"'])(?=[\\s\\S]*(?:get\\s*started|sign\\s*in|sign\\s*up))",
+      "patternString": "netflix[^\"']{0,200}\\.(?:png|svg|jpg|webp)[\\s\\S]{0,5000}<form[\\s\\S]{0,2000}<input[^>]*type=[\"'](?:email|text)[\"'][\\s\\S]{0,3000}(?:get\\s*started|sign\\s*in|sign\\s*up)",
       "patternFlags": "i",
       "note": ""
     },
@@ -13696,7 +13696,7 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "patternString": "hsbc.*滙豐.*action=.*(?:send_login|login_process|auth)\\.php",
+      "patternString": "hsbc[\\s\\S]{0,2000}滙豐[\\s\\S]{0,2000}action=[^>]{0,500}(?:send_login|login_process|auth)\\.php",
       "patternFlags": "i",
       "note": ""
     },
@@ -13708,7 +13708,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "(?:dmv|irs|ssa|uscis|txdmv|txdps|dps)\\.(?!.*\\.gov)[a-z0-9.-]+/pay",
+      "patternString": "(?:dmv|irs|ssa|uscis|txdmv|txdps|dps)\\.(?:[a-z0-9-]{1,63}\\.)+(?!gov\\b)[a-z]{2,10}/pay",
       "patternFlags": "i",
       "note": ""
     },
@@ -13744,7 +13744,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "\\/(common|verify|auth|login|secure|account)\\?.*key=[a-z0-9]{6,}.*username=|username=.*key=[a-z0-9]{6,}",
+      "patternString": "\\/(common|verify|auth|login|secure|account)\\?[^\"'\\s]{0,500}key=[a-z0-9]{6,}[^\"'\\s]{0,500}username=|username=[^\"'\\s]{0,500}key=[a-z0-9]{6,}",
       "patternFlags": "i",
       "note": ""
     },

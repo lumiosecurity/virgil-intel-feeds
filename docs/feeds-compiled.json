@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T20:19:16.278Z",
+    "compiledAt": "2026-03-31T20:20:41.106Z",
     "brandCount": 106,
     "signalCount": 1,
     "patternCount": 283,
@@ -2506,7 +2506,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "action=[\"']https://formspree\\.io/f/[a-zA-Z0-9]+[\"'][^>]*>.*?<input[^>]*type=[\"']password[\"']",
+      "patternString": "action=[\"']https://formspree\\.io/f/[a-zA-Z0-9]+[\"'][^>]*>[\\s\\S]{0,2000}<input[^>]*type=[\"']password[\"']",
       "patternFlags": "is"
     },
     {
@@ -2516,7 +2516,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "(?=[\\s\\S]*netflix[\\s\\S]*\\.(?:png|svg|jpg|webp))(?=[\\s\\S]*<form[\\s\\S]*<input[^>]*type=[\"'](?:email|text)[\"'])(?=[\\s\\S]*(?:get\\s*started|sign\\s*in|sign\\s*up))",
+      "patternString": "netflix[^\"']{0,200}\\.(?:png|svg|jpg|webp)[\\s\\S]{0,5000}<form[\\s\\S]{0,2000}<input[^>]*type=[\"'](?:email|text)[\"'][\\s\\S]{0,3000}(?:get\\s*started|sign\\s*in|sign\\s*up)",
       "patternFlags": "i"
     },
     {
@@ -2546,7 +2546,7 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "patternString": "hsbc.*滙豐.*action=.*(?:send_login|login_process|auth)\\.php",
+      "patternString": "hsbc[\\s\\S]{0,2000}滙豐[\\s\\S]{0,2000}action=[^>]{0,500}(?:send_login|login_process|auth)\\.php",
       "patternFlags": "i"
     },
     {
@@ -2556,7 +2556,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "(?:dmv|irs|ssa|uscis|txdmv|txdps|dps)\\.(?!.*\\.gov)[a-z0-9.-]+/pay",
+      "patternString": "(?:dmv|irs|ssa|uscis|txdmv|txdps|dps)\\.(?:[a-z0-9-]{1,63}\\.)+(?!gov\\b)[a-z]{2,10}/pay",
       "patternFlags": "i"
     },
     {
@@ -2586,7 +2586,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "\\/(common|verify|auth|login|secure|account)\\?.*key=[a-z0-9]{6,}.*username=|username=.*key=[a-z0-9]{6,}",
+      "patternString": "\\/(common|verify|auth|login|secure|account)\\?[^\"'\\s]{0,500}key=[a-z0-9]{6,}[^\"'\\s]{0,500}username=|username=[^\"'\\s]{0,500}key=[a-z0-9]{6,}",
       "patternFlags": "i"
     },
     {
@@ -4637,7 +4637,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T20:18:29.257Z",
+      "compiledAt": "2026-03-31T20:19:14.560Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
