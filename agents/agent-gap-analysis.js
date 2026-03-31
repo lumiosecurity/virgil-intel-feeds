@@ -122,6 +122,30 @@ async function main() {
     LIMIT 15
   `);
 
+  // ── DOM structure hash template reuse gaps ─────────────────────────────────
+  // Find structural fingerprints seen across 3+ unique dangerous domains that
+  // have NOT yet been codified as domHashes rules — these are known phishkit
+  // templates we've observed but haven't turned into instant-match rules yet.
+  const uncodedTemplates = d1raw(`
+    SELECT
+      v.dom_structure_hash,
+      COUNT(DISTINCT v.registered_domain)                                    AS unique_domains,
+      COUNT(*)                                                                AS total_hits,
+      SUM(CASE WHEN v.risk_level IN ('suspicious','dangerous') THEN 1 END)  AS threat_hits,
+      GROUP_CONCAT(DISTINCT v.detected_brand)                                AS brands,
+      MIN(v.created_at)                                                       AS first_seen
+    FROM verdicts v
+    WHERE v.dom_structure_hash IS NOT NULL
+      AND v.risk_level IN ('suspicious', 'dangerous')
+      AND v.created_at >= datetime('now', '-${LOOKBACK_DAYS} days')
+    GROUP BY v.dom_structure_hash
+    HAVING unique_domains >= 3
+    ORDER BY unique_domains DESC
+    LIMIT 20
+  `);
+
+  console.log(`Uncoded DOM template patterns (3+ unique domains): ${uncodedTemplates.length}`);
+
   // ── Ask Claude for gap analysis ─────────────────────────────────────────────
   console.log('Calling Claude for gap analysis...');
 
@@ -158,6 +182,13 @@ ${tldGaps.slice(0,10).map(r =>
   `- \`${r.tld}\`: ${(r.phish_rate*100).toFixed(0)}% phish rate (${r.phish_count} phish, ${r.safe_count} safe)`
 ).join('\n') || '(none)'}
 
+### Uncoded DOM template patterns (seen 3+ unique domains, no rule yet)
+These phishkit templates have been observed in the corpus but not yet added to
+dom-hashes.json — each could be caught instantly without Claude once promoted.
+${uncodedTemplates.slice(0,10).map(r =>
+  `- \`${r.dom_structure_hash?.slice(0,16)}…\`: ${r.unique_domains} unique domains, ${r.total_hits} total hits, brands: ${r.brands || 'unknown'} (first seen: ${r.first_seen?.slice(0,10)})`
+).join('\n') || '(none)'}
+
 ## Your task
 
 Write a gap analysis report with:
@@ -178,6 +209,12 @@ Based on the phishing correlation data, which signals are under-weighted or over
 
 ### New TLD Risk Entries
 Which TLDs from the gap analysis should be added to TLD_RISK? Propose specific weights.
+
+### DOM Template Gaps
+For any uncoded DOM template patterns with 5+ unique domains, propose a domHashes rule entry:
+- Estimate the kitName based on the associated brands and hit pattern
+- Weight: 0.30 for 3-4 domains, 0.40 for 5-9 domains, 0.45 for 10+
+- These can ship via remote config immediately — highest ROI of any rule type
 
 ### Quick Wins
 2-3 changes that could be shipped via remote config today (no code change) with the highest expected impact.`;

@@ -171,6 +171,43 @@ async function main() {
     ORDER BY created_at DESC LIMIT 5
   `;
 
+  // DOM structure hash — check if this page's template has been seen across other domains
+  const domHashFromIssue = issue?.body?.match(/DOM structure hash[:\s]+([0-9a-f]{64})/i)?.[1]
+    || issue?.body?.match(/domStructureHash[:\s`"]+([0-9a-f]{64})/i)?.[1]
+    || null;
+
+  let domHashCorpusData = null;
+  if (domHashFromIssue) {
+    const hashRows = d1`
+      SELECT
+        dom_hash,
+        occurrence_count,
+        first_seen_at,
+        last_seen_at,
+        risk_level_counts,
+        associated_brands,
+        flagged_as_kit,
+        kit_name
+      FROM dom_hash_corpus
+      WHERE dom_hash = ${domHashFromIssue}
+    `;
+    if (hashRows.length > 0) {
+      domHashCorpusData = hashRows[0];
+    }
+
+    // Also check how many unique dangerous domains share this template
+    const hashDomainRows = d1`
+      SELECT COUNT(DISTINCT registered_domain) as unique_domains
+      FROM verdicts
+      WHERE dom_structure_hash = ${domHashFromIssue}
+        AND risk_level IN ('suspicious', 'dangerous')
+        AND created_at > datetime('now', '-30 days')
+    `;
+    if (hashDomainRows.length > 0 && domHashCorpusData) {
+      domHashCorpusData.uniqueDangerousDomains = hashDomainRows[0].unique_domains;
+    }
+  }
+
   // ── Build Claude prompt ──────────────────────────────────────────────────────
   console.log('Calling Claude for analysis...');
 
@@ -277,6 +314,17 @@ ${signalRows.length > 0 ? signalRows.map(r => `- \`${r.type}\`: ${r.hits} hit(s)
 
 ${verdictRows.length > 0 ? `## Prior verdicts\n${verdictRows.map(v => `- ${v.risk_level} conf:${v.confidence?.toFixed(2)} brand:${v.detected_brand||'none'} pwd-form:${v.has_password_form?'YES':'no'}`).join('\n')}` : ''}
 
+${domHashCorpusData ? `## DOM Structure Hash (template reuse analysis)
+Hash: \`${domHashFromIssue}\`
+Total observations: ${domHashCorpusData.occurrence_count}
+Unique dangerous domains sharing this template (last 30d): ${domHashCorpusData.uniqueDangerousDomains ?? 'unknown'}
+First seen: ${domHashCorpusData.first_seen_at}
+Risk breakdown: ${domHashCorpusData.risk_level_counts}
+Associated brands: ${domHashCorpusData.associated_brands || 'none recorded'}
+${domHashCorpusData.uniqueDangerousDomains >= 10 ? '⚠️  HIGH-CONFIDENCE CAMPAIGN: 10+ unique domains share this template — near-definitive phishkit reuse.' : domHashCorpusData.uniqueDangerousDomains >= 5 ? '⚠️  STRONG TEMPLATE REUSE: 5-9 unique domains share this skeleton — probable phishkit campaign.' : domHashCorpusData.uniqueDangerousDomains >= 2 ? 'TEMPLATE REUSE DETECTED: 2+ unique domains share this skeleton — consider proposing a domHashes rule entry.' : ''}` : domHashFromIssue ? `## DOM Structure Hash
+Hash: \`${domHashFromIssue}\`
+No prior corpus data for this hash (first time seen).` : ''}
+
 ## Your task
 
 ${isRuleGap ? `This is a rule-gap issue. Claude already confirmed this is phishing at ${confidence || 'high'} confidence. Your job is NOT to re-evaluate whether it's phishing — it is. Your job is to propose the 3 best local rules that would catch this without Claude.
@@ -357,6 +405,26 @@ IMPORTANT — use ONLY these exact values:
 - weight: number between 0.05 and 0.50
 - severity: "high" | "medium" | "low"
 
+DOM structure hash (propose when template reuse is confirmed across 2+ domains):
+\`\`\`json
+{
+  "hash": "<64-char hex SHA-256 of the structural HTML skeleton>",
+  "brand": "brandname",
+  "kitName": "descriptive-kit-name-v1",
+  "severity": "high",
+  "weight": 0.45,
+  "description": "Template seen across N domains targeting <brand>",
+  "addedAt": "<ISO timestamp>",
+  "source": "auto-promoted"
+}
+\`\`\`
+DOM hash weight guidance:
+- 2-4 unique dangerous domains → weight 0.30 (corroborating signal)
+- 5-9 unique dangerous domains → weight 0.40 (strong signal)
+- 10+ unique dangerous domains → weight 0.45 (near-definitive — confirmed campaign)
+kitName convention: <brand>-<kit-family>-v<N> (e.g. "paypal-16shop-v3", "microsoft-evilginx-v2")
+If the hash appears in the DOM Structure Hash section above with 2+ unique dangerous domains, ALWAYS include a domHashes entry as one of your proposed rules.
+
 4. **Recommended action** (primary rule type — NO_ACTION IS NOT VALID for rule-gap issues): ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADJUST_WEIGHT / NEEDS_MANUAL_REVIEW` : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
 
 1. **What is this page?** Describe what you see visually. What brand does it impersonate? What is it asking the user to do?
@@ -380,7 +448,7 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
   }
   const analysis = await claude(systemPrompt, userContent, isRuleGap ? 3000 : 2000, screenshotUrl, isRuleGap ? 'claude-opus-4-6' : null);
 
-  const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|ADD_SOURCE_PATTERN|NO_ACTION|NEEDS_MANUAL_REVIEW/);
+  const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|ADD_SOURCE_PATTERN|ADD_DOM_HASH_ENTRY|NO_ACTION|NEEDS_MANUAL_REVIEW/);
   let action = actionMatch2?.[0] || 'NEEDS_MANUAL_REVIEW';
 
   // NO_ACTION is never valid for rule-gap issues — the detection worked but the gap still needs closing
