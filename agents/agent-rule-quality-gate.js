@@ -3,10 +3,12 @@
 //
 // Runs BEFORE auto-promote commits rules to core-rules.
 // Triggered when agent-triaged label is added to a rule-gap issue.
-// Uses Claude to evaluate quality, FP risk, specificity, and performance.
 //
-// RETRY LOOP: If rules fail review, the gate asks Claude to fix them and
-// re-evaluates. Up to 3 total attempts. On final failure → needs-review.
+// Escalation model:
+//   Attempt 1-2: Sonnet reviews rules and tries to fix failures
+//   Attempt 3:   Opus rewrites rules from scratch using the full rule
+//                writing guide + original issue evidence — not patching
+//                Sonnet's broken output but starting clean
 //
 // Exit codes:
 //   0 = PASS  — auto-promote may proceed
@@ -16,12 +18,26 @@
 
 import { cfg, d1, github } from './agent-tools.js';
 import Anthropic from '@anthropic-ai/sdk';
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const ISSUE_NUMBER = parseInt(process.env.ISSUE_NUMBER || process.argv[2]);
 const REPO         = cfg.coreRulesRepo;
 const MAX_ATTEMPTS = 3;
 
 if (!ISSUE_NUMBER) { console.error('ISSUE_NUMBER required'); process.exit(1); }
+
+// ── Load rule writing guide for Opus final-attempt rewrite ───────────────────
+let RULE_WRITING_GUIDE = '';
+try {
+  RULE_WRITING_GUIDE = readFileSync(join(__dirname, 'rule-writing-guide.md'), 'utf8');
+  console.log(`Loaded rule writing guide (${(RULE_WRITING_GUIDE.length / 1024).toFixed(1)}KB)`);
+} catch (e) {
+  console.warn('Could not load rule-writing-guide.md:', e.message);
+}
 
 const TRANCO_TOP_1000_SAMPLE = [
   'google.com','youtube.com','facebook.com','twitter.com','instagram.com',
@@ -328,6 +344,82 @@ Output ONLY the JSON blocks, no prose.`;
   return { fixed, removed };
 }
 
+// ── Opus escalation — clean rewrite on final attempt ──────────────────────────
+// When Sonnet's fixes fail twice, Opus gets the original issue context and the
+// full rule writing guide to produce rules from scratch. This is the last chance
+// before the issue falls to manual review.
+
+async function askOpusToRewrite(issue, failedRules, attemptLog) {
+  if (!RULE_WRITING_GUIDE) {
+    console.warn('No rule writing guide available — skipping Opus rewrite');
+    return { fixed: [], removed: [] };
+  }
+
+  console.log('\n🔴 Escalating to Opus for clean rewrite...');
+
+  // Extract page content and signals from the issue body for Opus context
+  const issueBody = issue.body || '';
+  const urlMatch = issueBody.match(/\| Full URL \| `([^`]+)` \|/);
+  const url = urlMatch?.[1] || 'unknown';
+
+  // Build a summary of what went wrong in previous attempts
+  const failureSummary = attemptLog.map(a =>
+    `Attempt ${a.attempt}: auto-checks ${a.autoPassCount} passed / ${a.autoFailCount} failed, Claude review: ${a.claudePassed ? 'PASS' : 'FAIL'}`
+  ).join('\n');
+
+  const failedRulesSummary = failedRules.map(r =>
+    `- ${r.id || r.name}: ${JSON.stringify(r, null, 2)}`
+  ).join('\n\n');
+
+  const systemPrompt = `You are Virgil's senior detection engineer (Opus). Sonnet attempted to write detection rules for a phishing page but failed quality review twice. You are the last chance before this falls to manual human review.
+
+Your job: write correct rules from scratch. Do NOT try to fix Sonnet's broken rules — start fresh using the original issue evidence.
+
+${RULE_WRITING_GUIDE}`;
+
+  const userPrompt = `## Clean Rewrite Request
+
+**Original issue:** #${ISSUE_NUMBER} — ${issue.title}
+**URL:** ${url}
+
+## What Sonnet tried and failed
+${failureSummary}
+
+## Sonnet's failed rules (DO NOT fix these — write new ones from scratch)
+${failedRulesSummary}
+
+## Original issue body (your primary evidence)
+${issueBody.slice(0, 20000)}
+
+## Your task
+Write 1-3 detection rules from scratch that would catch this phishing page. Use the original issue evidence — the URL, page content, signals, and screenshot — not Sonnet's failed attempts.
+
+Output each rule as a separate \`\`\`json code block. Follow the rule writing guide exactly. If you cannot write a rule that would pass quality review, output nothing rather than a bad rule.`;
+
+  const opusClient = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const resp = await opusClient.messages.create({
+    model:      'claude-opus-4-6',
+    max_tokens: 4000,
+    system:     systemPrompt,
+    messages:   [{ role: 'user', content: userPrompt }],
+  });
+
+  const text = resp.content?.[0]?.text || '';
+
+  const fixBlocks = [];
+  const fixRe = /```json\n([\s\S]*?)```/g;
+  let fm;
+  while ((fm = fixRe.exec(text)) !== null) {
+    try { fixBlocks.push(JSON.parse(fm[1])); } catch {}
+  }
+
+  const fixed = fixBlocks.filter(b => b.action !== 'remove');
+  const removed = fixBlocks.filter(b => b.action === 'remove');
+
+  console.log(`Opus produced ${fixed.length} rule(s) from scratch, ${removed.length} removal(s)`);
+  return { fixed, removed, opusResponse: text };
+}
+
 // ── Extract rules from the most recent triage/gate comment ────────────────────
 
 function extractRulesFromComment(comment) {
@@ -430,16 +522,17 @@ async function main() {
     }
 
     // Not passed — can we fix?
-    if (attempt < MAX_ATTEMPTS) {
+    if (attempt < MAX_ATTEMPTS - 1) {
+      // Attempts 1-2: Sonnet tries to fix its own rules
       const rulesToFix = allPassed ? currentRules : evaluations.filter(e => e.issues.length > 0).map(e => e.rule);
-      console.log(`  Asking Claude to fix ${rulesToFix.length} rule(s)...`);
+      console.log(`  Asking Sonnet to fix ${rulesToFix.length} rule(s)...`);
 
       const { fixed, removed } = await askClaudeToFix(rulesToFix, judgment);
       removedRules.push(...removed);
-      console.log(`  Claude produced ${fixed.length} fix(es), ${removed.length} removal(s)`);
+      console.log(`  Sonnet produced ${fixed.length} fix(es), ${removed.length} removal(s)`);
 
       if (fixed.length === 0) {
-        // Claude couldn't fix anything — keep rules that passed automated checks
+        // Sonnet couldn't fix anything — keep rules that passed automated checks
         if (passedRules.length > 0) {
           finalPassed = true;
           finalRules = passedRules;
@@ -455,12 +548,39 @@ async function main() {
         ...fixed.filter(f => !passedIds.has(f.id || f.name)),
       ];
     } else {
-      // Final attempt failed — accept whatever passed automated checks
-      const { passedRules: lastPassed } = evaluateRules(currentRules);
-      if (lastPassed.length > 0) {
-        finalPassed = true;
-        finalRules = lastPassed;
-        console.log(`  Final attempt — accepting ${lastPassed.length} rule(s) that passed automated checks`);
+      // Final attempt: escalate to Opus for a clean rewrite from scratch
+      // Opus gets the original issue, the rule writing guide, and a summary of
+      // what Sonnet tried — then writes rules from scratch, not fixing Sonnet's.
+      const allFailed = evaluations.filter(e => e.issues.length > 0).map(e => e.rule);
+      const { fixed: opusRules, removed: opusRemoved } = await askOpusToRewrite(issue, allFailed, attemptLog);
+      removedRules.push(...opusRemoved);
+
+      if (opusRules.length > 0) {
+        // Run Opus's rules through automated checks (but NOT through Claude review again —
+        // Opus IS the senior reviewer, we trust its output against automated checks only)
+        const { passedRules: opusPassed } = evaluateRules(opusRules);
+        if (opusPassed.length > 0) {
+          finalPassed = true;
+          finalRules = opusPassed;
+          console.log(`  ✅ Opus rewrite: ${opusPassed.length} rule(s) passed automated checks`);
+        } else {
+          console.log(`  ❌ Opus rewrite failed automated checks — giving up`);
+          // Last resort: accept any rules from Sonnet that passed automated checks earlier
+          const { passedRules: lastPassed } = evaluateRules(currentRules);
+          if (lastPassed.length > 0) {
+            finalPassed = true;
+            finalRules = lastPassed;
+            console.log(`  Falling back to ${lastPassed.length} Sonnet rule(s) that passed automated checks`);
+          }
+        }
+      } else {
+        console.log(`  Opus produced no rules — falling back to automated-check survivors`);
+        const { passedRules: lastPassed } = evaluateRules(currentRules);
+        if (lastPassed.length > 0) {
+          finalPassed = true;
+          finalRules = lastPassed;
+          console.log(`  Accepting ${lastPassed.length} rule(s) that passed automated checks`);
+        }
       }
     }
   }
