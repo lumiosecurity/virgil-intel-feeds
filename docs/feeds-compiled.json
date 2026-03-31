@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T20:06:28.899Z",
+    "compiledAt": "2026-03-31T20:07:21.503Z",
     "brandCount": 106,
     "signalCount": 1,
     "patternCount": 287,
@@ -2496,7 +2496,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "js",
-      "patternString": "document\\.cookie\\s*=\\s*[\"'][^\"']*[\"']\\s*\\+\\s*Date\\.now\\(\\).*?location\\.reload\\(\\)",
+      "patternString": "document\\.cookie\\s*=\\s*[\"'][^\"']{0,100}[\"']\\s*\\+\\s*Date\\.now\\(\\)[\\s\\S]{0,500}location\\.reload\\(\\)",
       "patternFlags": "i"
     },
     {

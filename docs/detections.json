@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:06",
-    "generatedAt": "2026-03-31T20:06:28.911Z",
+    "version": "2026-03-31-20:07",
+    "generatedAt": "2026-03-31T20:07:21.516Z",
     "brandCount": 106,
     "patternCount": 287
   },
@@ -13636,7 +13636,7 @@
       "severity": "high",
       "weight": 0.4,
       "source": "js",
-      "patternString": "document\\.cookie\\s*=\\s*[\"'][^\"']*[\"']\\s*\\+\\s*Date\\.now\\(\\).*?location\\.reload\\(\\)",
+      "patternString": "document\\.cookie\\s*=\\s*[\"'][^\"']{0,100}[\"']\\s*\\+\\s*Date\\.now\\(\\)[\\s\\S]{0,500}location\\.reload\\(\\)",
       "patternFlags": "i",
       "note": ""
     },
