@@ -1,0 +1,109 @@
+name: Sync Tranco Top 10K
+
+on:
+  schedule:
+    - cron: '0 4 * * 3'    # Every Wednesday at 04:00 UTC
+  workflow_dispatch:         # Manual trigger
+    inputs:
+      dry_run:
+        description: 'Dry run (download only, no publish trigger)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  actions: write             # Needed to dispatch publish-detections
+
+jobs:
+  sync-tranco:
+    name: Download Tranco & Trigger Publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout intel-feeds
+        uses: actions/checkout@v4
+
+      - name: Checkout virgil-extension (for download tool)
+        uses: actions/checkout@v4
+        with:
+          repository: lumiosecurity/virgil-extension
+          path: extension
+          token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Download Tranco top 10K
+        run: |
+          cd extension
+          node tools/download-tranco.js 2>&1 | tee /tmp/tranco-output.txt
+
+      - name: Copy to intel-feeds
+        run: |
+          mkdir -p feeds
+          if [ -f extension/feeds/tranco-top10k.json ]; then
+            cp extension/feeds/tranco-top10k.json feeds/tranco-top10k.json
+            echo "Copied tranco-top10k.json to feeds/"
+          fi
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet feeds/tranco-top10k.json 2>/dev/null || echo "changed=true" >> $GITHUB_OUTPUT
+          # Also check if file is new (untracked)
+          git status --porcelain feeds/tranco-top10k.json | grep -q '??' && echo "changed=true" >> $GITHUB_OUTPUT
+          echo "changed=$(git diff --quiet feeds/tranco-top10k.json 2>/dev/null && echo false || echo true)" >> $GITHUB_OUTPUT
+
+      - name: Commit Tranco data
+        if: steps.changes.outputs.changed == 'true' && github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.name  "lumio-7"
+          git config user.email "lumio-7@users.noreply.github.com"
+          git add feeds/tranco-top10k.json
+          TIER1=$(node -e "const d=require('./feeds/tranco-top10k.json'); console.log(d.tier1.length)" 2>/dev/null || echo "0")
+          TIER2=$(node -e "const d=require('./feeds/tranco-top10k.json'); console.log(d.tier2.length)" 2>/dev/null || echo "0")
+          LIST_ID=$(node -e "const d=require('./feeds/tranco-top10k.json'); console.log(d.listId)" 2>/dev/null || echo "unknown")
+          git commit -m "chore: update Tranco top 10K (list ${LIST_ID}) [${TIER1} tier1, ${TIER2} tier2]"
+          git push
+
+      - name: Trigger publish-detections
+        if: steps.changes.outputs.changed == 'true' && github.event.inputs.dry_run != 'true'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+          script: |
+            await github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'rules-updated',
+              client_payload: { source: 'tranco-sync' },
+            });
+            console.log('Dispatched rules-updated → publish-detections will run');
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Tranco Top 10K Sync" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f feeds/tranco-top10k.json ]; then
+            TIER1=$(node -e "const d=require('./feeds/tranco-top10k.json'); console.log(d.tier1.length)" 2>/dev/null || echo "0")
+            TIER2=$(node -e "const d=require('./feeds/tranco-top10k.json'); console.log(d.tier2.length)" 2>/dev/null || echo "0")
+            LIST_ID=$(node -e "const d=require('./feeds/tranco-top10k.json'); console.log(d.listId)" 2>/dev/null || echo "unknown")
+            echo "✅ **List ${LIST_ID}** — ${TIER1} tier1 + ${TIER2} tier2 domains" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Download failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ "${{ steps.changes.outputs.changed }}" = "true" ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "🔄 Triggered publish-detections for recompile" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "ℹ️ No changes from previous list" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat /tmp/tranco-output.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
