@@ -76,6 +76,31 @@ async function main() {
 
       const literalLen = pat.patternString.replace(/[.*+?^${}()|[\]\\]/g, '').length;
 
+      // ── PERFORMANCE CHECK ─────────────────────────────────────────────
+      // Source patterns run against full page source (5-10MB on news sites).
+      // 340+ patterns × multi-MB string = seconds of main-thread blocking
+      // unless patterns are linear-time safe.
+      const ps = pat.patternString;
+      const pflags = pat.patternFlags || '';
+      const dotstarCount = (ps.match(/(?<!\\)\.\*/g) || []).length;
+      const hasAlternation = /(?<!\\)\|/.test(ps);
+      const hasDotall = pflags.includes('s');
+      const hasNestedQuant = /[+*]\)[+*?]/.test(ps);
+      const lookaheadCount = (ps.match(/\(\?=/g) || []).length;
+
+      let perfScore = 0;
+      if (hasDotall && dotstarCount > 0) perfScore += dotstarCount * 2;
+      if (dotstarCount >= 2 && !hasDotall) perfScore += dotstarCount;
+      if (dotstarCount > 0 && hasAlternation) perfScore += 2;
+      if (lookaheadCount >= 2 && dotstarCount > 0) perfScore += lookaheadCount;
+      if (hasNestedQuant) perfScore += 5;
+
+      if (perfScore >= 5) {
+        issues.push(`⚡ CRITICAL PERF (score ${perfScore}): ${hasDotall && dotstarCount > 0 ? `DOTALL+.* (×${dotstarCount}) spans entire document` : ''}${dotstarCount >= 2 ? ` ${dotstarCount} sequential .*` : ''}${lookaheadCount >= 2 ? ` ${lookaheadCount} lookaheads` : ''}${hasNestedQuant ? ' nested quantifiers' : ''}`.replace(/^ /, ''));
+      } else if (perfScore >= 3) {
+        issues.push(`⚡ PERF RISK (score ${perfScore}): pattern has backtracking-prone constructs`);
+      }
+
       // 2. FP test against legitimate samples
       const fpMatches = LEGITIMATE_SAMPLES.filter(s => re.test(s));
       if (fpMatches.length > 0) {
@@ -158,10 +183,27 @@ async function main() {
       system: [
         'You are a Virgil detection engineer auditing existing phishing detection source patterns.',
         'For each pattern give: 1) KEEP / FIX / REMOVE verdict  2) One-line reason  3) If FIX: exact corrected patternString.',
-        'KEEP = specific enough, low FP risk.',
-        'FIX = has merit but needs tightening — provide corrected patternString.',
+        'KEEP = specific enough, low FP risk, and performance-safe.',
+        'FIX = has merit but needs tightening — provide corrected patternString and patternFlags.',
         'REMOVE = too broad, duplicates logic, or no detection value.',
         'For phishkitSignatures: be strict. These run on every page source. When in doubt, REMOVE.',
+        '',
+        'PERFORMANCE IS A HARD REQUIREMENT. Patterns flagged with ⚡ MUST be fixed or removed.',
+        'There are 340+ source patterns that all run against 5-10MB page source on every page load.',
+        'Performance rewrites:',
+        '- Replace .* with bounded quantifiers: [^<]{0,2000} for HTML context, [\\s\\S]{0,2000} for cross-line',
+        '- Replace (?=.*X)(?=.*Y)(?=.*Z) with: X[\\s\\S]{0,5000}Y[\\s\\S]{0,5000}Z (ordered match)',
+        '  or split into separate patterns if order cannot be guaranteed',
+        '- Remove the s (DOTALL) flag — use [\\s\\S]{0,N} explicitly where cross-line matching is needed',
+        '- Start patterns with a literal prefix of 4+ chars for V8 Boyer-Moore fast skip',
+        '- Use [^>]* instead of .* inside HTML tag context, [^"\\n]* inside attribute values',
+        '- NEVER use nested quantifiers like (a+)+ or (.*?)*',
+        '',
+        'When providing a FIX, the corrected pattern MUST:',
+        '1. Have zero unanchored .* with the s flag',
+        '2. Have no more than one .* without a bounded alternative',
+        '3. Start with a literal string of 4+ characters where possible',
+        '4. Detect the same phishing content as the original (no detection regression)',
       ].join('\n'),
       messages: [{ role: 'user', content: `Review these ${batch.length} flagged patterns:\n\n${batchText}` }],
     });
