@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T06:07:35.322Z",
+    "compiledAt": "2026-03-31T06:09:26.759Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 289,
+    "patternCount": 291,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -641,7 +641,12 @@
       "typos": [
         "usps-tracking",
         "usps-delivery",
-        "uspss"
+        "uspss",
+        "ussp",
+        "u5ps",
+        "uspos",
+        "uspds",
+        "usp5"
       ]
     },
     {
@@ -4529,6 +4534,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "usps-random-domain-cheap-tld",
+      "group": "typosquatPatterns",
+      "description": "Random short-string domain on disposable TLD with path mimicking USPS structure — classic smishing landing page pattern",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "https?://[a-z]{4,6}\\.(life|top|xyz|shop|icu|cc|cyou|cfd|sbs|buzz)/com/",
+      "patternFlags": "i"
+    },
+    {
       "id": "deep-subdomain-indonesia-business",
       "group": "urlHeuristics",
       "description": "Increase weight for deep subdomains on Indonesian business domains",
@@ -4686,6 +4701,16 @@
       "weight": 0.3,
       "source": "html",
       "patternString": "loginservice\\.cloud|signin-?service\\.cloud|login-?service\\.cloud|account-?service\\.cloud",
+      "patternFlags": "i"
+    },
+    {
+      "id": "usps-phishkit-com-path",
+      "group": "urlHeuristics",
+      "description": "USPS phishkit URL pattern with /com/ path segment and index-style HTML files, commonly seen on throwaway domains",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "https?://[^/]+/com/(a_)?index\\.html",
       "patternFlags": "i"
     }
   ],
