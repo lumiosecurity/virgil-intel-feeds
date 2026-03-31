@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:07",
-    "generatedAt": "2026-03-31T20:07:21.516Z",
+    "version": "2026-03-31-20:08",
+    "generatedAt": "2026-03-31T20:08:40.261Z",
     "brandCount": 106,
-    "patternCount": 287
+    "patternCount": 286
   },
   "brandEntries": [
     {
@@ -13576,8 +13576,8 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "I am not a robot.*checkbox.*verify.*human.*display:\\s*none.*<input[^>]*type=[\\x22\\x27]password[\\x22\\x27]",
-      "patternFlags": "is",
+      "patternString": "I am not a robot[\\s\\S]{0,300}checkbox[\\s\\S]{0,300}verify[\\s\\S]{0,300}human[\\s\\S]{0,1000}display:\\s*none[\\s\\S]{0,2000}<input[^>]*type=[\\x22\\x27]password[\\x22\\x27]",
+      "patternFlags": "i",
       "note": ""
     },
     {
@@ -13588,20 +13588,8 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "I am not a robot.*checkbox.*verify.*human",
+      "patternString": "I am not a robot[^\\r\\n]{0,200}checkbox|checkbox[^\\r\\n]{0,200}I am not a robot",
       "patternFlags": "i",
-      "note": ""
-    },
-    {
-      "domHashes": [],
-      "id": "fake-captcha-gate-with-hidden-form",
-      "group": "captchaGating",
-      "description": "Detects fake CAPTCHA/bot-check interstitial hiding a login form, common in credential phishing kits",
-      "severity": "high",
-      "weight": 0.35,
-      "source": "html",
-      "patternString": "(?=.*I am not a robot)(?=.*display:\\s*none)(?=.*(?:password|passwd|form))",
-      "patternFlags": "is",
       "note": ""
     },
     {
@@ -13612,7 +13600,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "<title>\\s*Just a moment[.…]*\\s*</title>(?!.*challenges\\.cloudflare\\.com)",
+      "patternString": "<title>\\s*Just a moment[.…]{0,3}\\s*</title>",
       "patternFlags": "i",
       "note": ""
     },
