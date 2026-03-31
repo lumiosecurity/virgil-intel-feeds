@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:08",
-    "generatedAt": "2026-03-31T20:08:40.261Z",
+    "version": "2026-03-31-20:10",
+    "generatedAt": "2026-03-31T20:10:10.266Z",
     "brandCount": 106,
-    "patternCount": 286
+    "patternCount": 285
   },
   "brandEntries": [
     {
@@ -15748,7 +15748,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "<title>[^<]*[\\u{1D400}-\\u{1D7FF}\\u00F1\\u00E9\\u00ED\\u00E8\\u0435\\u043E\\u0430][^<]*(login|sign.?in|verify|wallet|account)",
+      "patternString": "<title>[^<]{0,80}[\\u{1D400}-\\u{1D44F}\\u{1D4D0}-\\u{1D4FF}\\u{1D538}-\\u{1D56B}\\u00F1\\u00E9\\u00ED\\u00E8\\u0435\\u043E\\u0430][^<]{0,80}(?:login|sign[- ]?in|verify|wallet|account)[^<]{0,40}</title>",
       "patternFlags": "iu",
       "note": ""
     },
@@ -15785,18 +15785,6 @@
       "weight": 0.45,
       "source": "html",
       "patternString": "<title>\\s*Dropbox\\s*[-–—]\\s*Sign\\s*in\\s*</title>",
-      "patternFlags": "i",
-      "note": ""
-    },
-    {
-      "domHashes": [],
-      "id": "microsoft-account-title-impersonation",
-      "group": "titleImpersonation",
-      "description": "Detects pages with Microsoft account sign-in title hosted on non-Microsoft domains",
-      "severity": "high",
-      "weight": 0.45,
-      "source": "html",
-      "patternString": "<title>\\s*Sign in to your Microsoft account\\s*</title>",
       "patternFlags": "i",
       "note": ""
     },
