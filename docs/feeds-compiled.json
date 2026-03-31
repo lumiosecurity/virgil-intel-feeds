@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T01:02:08.636Z",
+    "compiledAt": "2026-03-31T05:52:37.635Z",
     "brandCount": 106,
     "signalCount": 1,
-    "patternCount": 281,
+    "patternCount": 283,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -828,7 +828,21 @@
       "typos": [
         "fideIity",
         "fidelty",
-        "fidelity-investments"
+        "fidelity-investments",
+        "fidellty",
+        "fidelltyae",
+        "fidelitty",
+        "fideilty",
+        "fideliy",
+        "fideliti",
+        "fidleity",
+        "fidelety",
+        "fidelitiy",
+        "fldellty",
+        "fidelltiy",
+        "netbenefits",
+        "netbenifits",
+        "netbenfits"
       ]
     },
     {
@@ -4010,6 +4024,26 @@
       "patternFlags": "i"
     },
     {
+      "id": "elementor-render-phishkit",
+      "group": "phishkitSignatures",
+      "description": "Elementor.render() phishkit framework with inline JSON form definitions — used in credential harvesting campaigns",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "elementor\\.render\\s*\\(\\s*\\{\\s*[\"']?layouts[\"']?.*blockId[\"']?\\s*:\\s*[\"']form\\.form[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "chinese-pagekey-meta-financial",
+      "group": "phishkitSignatures",
+      "description": "Chinese-language page-key meta tag in page impersonating English-language financial brand — offshore phishkit indicator",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<meta\\s+name=[\"']page-key[\"']\\s+content=[\"'][\\u4e00-\\u9fff]+[\"']",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4587,7 +4621,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-30T15:43:59.904Z",
+      "compiledAt": "2026-03-31T01:02:07.771Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -5058,6 +5092,7 @@
       "breely.com",
       "buildin.ai",
       "canva.com",
+      "cloudclusters.net",
       "cloudworkstations.dev",
       "coda.io",
       "cognito.com",
@@ -5102,11 +5137,13 @@
       "scribehow.com",
       "seesaw.me",
       "soloist.ai",
+      "studio.site",
       "surveymonkey.com",
       "systeme.io",
       "tana.pub",
       "tithelysetup.com",
       "typedream.app",
+      "upresenter.ai",
       "view.genially.com",
       "wasmer.app",
       "weavely.ai",
@@ -5116,7 +5153,8 @@
       "wpdevcloud.com",
       "wpenginepowered.com",
       "yayforms.link",
-      "zapier.app"
+      "zapier.app",
+      "zeabur.app"
     ],
     "freeFileHosts": [
       "0x0.st",
@@ -5209,6 +5247,7 @@
       "hidrive.ionos.com",
       "hightail.com",
       "icedrive.net",
+      "iceiy.com",
       "idrive.com",
       "indd.adobe.com",
       "issuu.com",
@@ -5408,6 +5447,7 @@
       "ibit.ly",
       "icanhaz.com",
       "idek.net",
+      "inlnk.co",
       "inreply.to",
       "ionos.ly",
       "is.gd",
@@ -5442,6 +5482,7 @@
       "ln.run",
       "lnk.gd",
       "lnk.in",
+      "lnk.ink",
       "lnk.sk",
       "lnkd.in",
       "loopt.us",
