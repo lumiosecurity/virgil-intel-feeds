@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-03-31T20:57:09.065Z",
+    "compiledAt": "2026-03-31T22:46:01.055Z",
     "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 285,
+    "patternCount": 288,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2445,6 +2445,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "outlook-title-password-signin",
+      "group": "brandImpersonation",
+      "description": "Page titled or headed Outlook with password field and sign-in button, typical of lightweight Outlook credential phish",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<title>[^<]{0,20}Outlook[^<]{0,20}</title>[\\s\\S]{0,5000}type=[\"']password[\"'][\\s\\S]{0,3000}sign\\s*in",
+      "patternFlags": "i"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -2672,6 +2682,16 @@
       "weight": 0.4,
       "source": "js",
       "patternString": "/phished/dataEntered/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+      "patternFlags": "i"
+    },
+    {
+      "id": "outlook-fake-error-credential-harvest",
+      "group": "credentialHarvesting",
+      "description": "Outlook phishkit with pre-populated incorrect password error to encourage re-entry of credentials",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "Outlook[^<]{0,500}password[^<]{0,500}(user\\s*name|username)\\s+(or|and)\\s+password[^<]{0,300}(isn.t correct|incorrect|wrong)",
       "patternFlags": "i"
     },
     {
@@ -4095,6 +4115,16 @@
       "patternFlags": "i"
     },
     {
+      "id": "outlook-webapp-filename-pattern",
+      "group": "phishkitSignatures",
+      "description": "Phishkit filename pattern mimicking Outlook Web App (homeWEBAPP.html) commonly found on compromised domains",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "home(WEBAPP|OWA|MAIL|APP)\\.html",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4672,7 +4702,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T20:54:56.969Z",
+      "compiledAt": "2026-03-31T20:57:06.500Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
