@@ -4,11 +4,33 @@
 // Triggered when a user-feedback issue is opened in core-rules.
 // Runs a full investigation on the FULL URL/hostname (not just registered domain)
 // and posts a structured analysis comment with a proposed resolution.
+//
+// Model selection:
+//   Rule-gap issues → Sonnet (first-pass rule generation, guided by rule-writing-guide.md)
+//   FP/FN triage    → Sonnet (default)
+//   Quality gate    → Opus (separate agent, runs after triage)
 
 import { cfg, d1, claude, github, getDomainIntel, analyzeUrl, fmtIntel, fmtHeuristics, extractRegisteredDomain } from './agent-tools.js';
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const ISSUE_NUMBER = parseInt(process.env.ISSUE_NUMBER || process.argv[2]);
 const REPO         = cfg.coreRulesRepo;
+
+// ── Load rule writing guide for injection into rule-gap system prompts ────────
+// This guide contains all field constraints, valid enum values, weight calibration,
+// regex escaping rules, quality gate criteria, and worked examples that Sonnet needs
+// to produce rules that pass the Opus quality gate on the first attempt.
+let RULE_WRITING_GUIDE = '';
+try {
+  RULE_WRITING_GUIDE = readFileSync(join(__dirname, 'rule-writing-guide.md'), 'utf8');
+  console.log(`Loaded rule writing guide (${(RULE_WRITING_GUIDE.length / 1024).toFixed(1)}KB)`);
+} catch (e) {
+  console.warn('Could not load rule-writing-guide.md — rule-gap prompts will use inline constraints only:', e.message);
+}
 
 if (!ISSUE_NUMBER) { console.error('ISSUE_NUMBER required'); process.exit(1); }
 
@@ -284,7 +306,13 @@ Your job is to identify WHAT SPECIFIC RULE would catch this page locally without
 - What brand is being impersonated and is it missing from brand entries?
 - Is there a URL pattern, subdomain structure, or typosquat that should be a detection rule?
 - Is there a page source pattern (JS, form action, exfil endpoint) that's characteristic of this phishkit?
-Do NOT recommend NO_ACTION. Do NOT say "detection was correct" as a final answer — the detection worked but the RULE GAP still needs to be closed.` : ''}`;
+Do NOT recommend NO_ACTION. Do NOT say "detection was correct" as a final answer — the detection worked but the RULE GAP still needs to be closed.
+
+${RULE_WRITING_GUIDE ? `## RULE WRITING INSTRUCTIONS — FOLLOW THESE EXACTLY
+
+The following is the authoritative guide for producing detection rules. Your output MUST conform to every constraint in this document. The Opus quality gate will evaluate your rules against these standards — if you deviate, your rules will be rejected.
+
+${RULE_WRITING_GUIDE}` : ''}` : ''}`;
 
   const userContent = `
 ## Triage Request
@@ -462,7 +490,11 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
   if (screenshotUrl) {
     console.log('Passing screenshot to Claude:', screenshotUrl);
   }
-  const analysis = await claude(systemPrompt, userContent, isRuleGap ? 3000 : 2000, screenshotUrl, isRuleGap ? 'claude-opus-4-6' : null);
+  // Sonnet handles first-pass rule generation for rule-gap issues.
+  // Opus is reserved for the quality gate (agent-rule-quality-gate.js) which reviews
+  // Sonnet's proposals before they ship. This separation keeps costs proportional:
+  // Sonnet generates (cheap, fast), Opus validates (expensive, thorough).
+  const analysis = await claude(systemPrompt, userContent, isRuleGap ? 4000 : 2000, screenshotUrl, null);
 
   const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|ADD_SOURCE_PATTERN|ADD_DOM_HASH_ENTRY|NO_ACTION|NEEDS_MANUAL_REVIEW/);
   let action = actionMatch2?.[0] || 'NEEDS_MANUAL_REVIEW';
