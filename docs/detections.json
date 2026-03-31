@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-03-31-20:21",
-    "generatedAt": "2026-03-31T20:21:37.105Z",
+    "version": "2026-03-31-20:23",
+    "generatedAt": "2026-03-31T20:23:48.788Z",
     "brandCount": 106,
     "patternCount": 283
   },
@@ -12904,7 +12904,7 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "patternString": "(?=.*Your Library)(?=.*loginbtn|Log in)(?=.*Spotify)",
+      "patternString": "Your Library[\\s\\S]{0,3000}(?:loginbtn|Log in)[\\s\\S]{0,3000}Spotify",
       "patternFlags": "i",
       "note": ""
     },
@@ -12916,7 +12916,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "logos-world\\.net.*amazon.*logo.*amazon",
+      "patternString": "logos-world\\.net[^\"']{0,200}amazon[^\"']{0,100}logo[^\"']{0,100}amazon",
       "patternFlags": "i",
       "note": ""
     },
@@ -12928,7 +12928,7 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "patternString": "(?=.*amazon\\.(?:com|in))(?=.*Account.*Cart.*Orders)",
+      "patternString": "amazon\\.(?:com|in)[\\s\\S]{0,5000}Account[^<]{0,200}Cart[^<]{0,200}Orders",
       "patternFlags": "i",
       "note": ""
     },
@@ -12940,7 +12940,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "(?=.*Instagram.*Login)(?=.*Log.*in.*with.*Facebook)(?=.*<input[^>]*type=[\"']password[\"'])",
+      "patternString": "Instagram[^<]{0,500}Login[\\s\\S]{0,3000}Log[\\s\\S]{0,50}in[\\s\\S]{0,200}with[\\s\\S]{0,200}Facebook[\\s\\S]{0,3000}<input[^>]*type=[\"']password[\"']",
       "patternFlags": "is",
       "note": ""
     },
@@ -12964,7 +12964,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "github\\.io.*discord.*(?:logo|brand|#404EED|IMAGINE A PLACE)",
+      "patternString": "github\\.io[^\"'<]{0,300}discord[^\"'<]{0,200}(?:logo|brand|#404EED|IMAGINE A PLACE)",
       "patternFlags": "i",
       "note": ""
     },
@@ -13000,7 +13000,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "instagram-logo\\.(png|jpg|svg).*<input[^>]*type=[\"']password[\"']",
+      "patternString": "instagram-logo\\.(?:png|jpg|svg)[\\s\\S]{0,5000}<input[^>]*type=[\"']password[\"']",
       "patternFlags": "is",
       "note": ""
     },
@@ -13024,7 +13024,7 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "(?=.*nav-signin)(?=.*nav-cart)(?=.*search-input)(?=.*Hello, sign in)",
+      "patternString": "nav-signin[\\s\\S]{0,2000}nav-cart[\\s\\S]{0,2000}search-input[\\s\\S]{0,3000}Hello,\\s*sign in",
       "patternFlags": "i",
       "note": ""
     },
