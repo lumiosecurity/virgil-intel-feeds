@@ -188,6 +188,62 @@ async function main() {
       if (compilesOk) {
         const patternLength = rule.patternString.replace(/[.*+?^${}()|[\]\\]/g, '').length;
 
+        // ── PERFORMANCE CHECK ─────────────────────────────────────────────
+        // Source patterns run against full page source (potentially 5MB+) on
+        // every page load. Patterns with backtracking-prone constructs cause
+        // measurable UI freezes on content-heavy sites (CNN, Yahoo).
+        // These checks enforce linear-time-safe regex construction.
+        const ps = rule.patternString;
+        const flags = rule.patternFlags || '';
+        const dotstarCount = (ps.match(/(?<!\\)\.\*/g) || []).length;
+        const hasAlternation = /(?<!\\)\|/.test(ps);
+        const hasDotall = flags.includes('s');
+        const hasNestedQuant = /[+*]\)[+*?]/.test(ps);
+        const lookaheadCount = (ps.match(/\(\?=/g) || []).length;
+        const hasMultiDotstar = dotstarCount >= 2;
+
+        let perfScore = 0;
+        const perfIssues = [];
+
+        // .* with DOTALL — spans entire multi-MB document as a single line
+        if (hasDotall && dotstarCount > 0) {
+          perfScore += dotstarCount * 2;
+          perfIssues.push(`DOTALL flag with .* (×${dotstarCount}) — each .* scans the entire document as one line. Use [\\\\s\\\\S]{0,N} with a bounded quantifier instead.`);
+        }
+
+        // Multiple .* in sequence — A.*B.*C rescans from every position
+        if (hasMultiDotstar && !hasDotall) {
+          perfScore += dotstarCount;
+          perfIssues.push(`${dotstarCount} sequential .* operators — causes O(n²) scanning. Use bounded quantifiers: A[^<]{0,2000}B[^<]{0,2000}C`);
+        }
+
+        // .* combined with alternation — tries each branch at every position
+        if (dotstarCount > 0 && hasAlternation) {
+          perfScore += 2;
+          perfIssues.push(`.* with alternation (|) — backtracking engine tries each branch at every string position. Put the most specific literal first or use bounded quantifiers.`);
+        }
+
+        // Multiple lookaheads with .* — (?=.*X)(?=.*Y) is O(n) per lookahead per position
+        if (lookaheadCount >= 2 && dotstarCount > 0) {
+          perfScore += lookaheadCount;
+          perfIssues.push(`${lookaheadCount} lookaheads with .* — each rescans from every position. Rewrite as: X[\\\\s\\\\S]{0,5000}Y|Y[\\\\s\\\\S]{0,5000}X or split into separate patterns.`);
+        }
+
+        // Nested quantifiers — catastrophic backtracking risk
+        if (hasNestedQuant) {
+          perfScore += 5;
+          perfIssues.push(`Nested quantifiers detected — can cause catastrophic exponential backtracking. Restructure to avoid (a+)+ or (.*?)* patterns.`);
+        }
+
+        // Verdict: critical perf issues are blocking, moderate are warnings
+        if (perfScore >= 5) {
+          eval_.issues.push(`⚡ PERFORMANCE BLOCK (score ${perfScore}): ${perfIssues.join(' ')}`);
+        } else if (perfScore >= 3) {
+          eval_.issues.push(`⚡ Performance risk (score ${perfScore}): ${perfIssues.join(' ')}`);
+        } else if (perfScore > 0) {
+          eval_.warnings.push(`⚡ Minor performance concern (score ${perfScore}): ${perfIssues.join(' ')}`);
+        }
+
         // 2. Broadness check
         if (/^\.\*$/.test(rule.patternString)) eval_.issues.push('Pattern is just .* — matches everything');
         if (patternLength < 5) eval_.issues.push(`Pattern too short (${patternLength} literal chars)`);
@@ -283,15 +339,18 @@ Rule: ${JSON.stringify(r, null, 2)}`;
 
   const systemPrompt = `You are Virgil's rule quality gate — a senior detection engineer reviewing proposed phishing detection rules before they ship to users.
 
-Your job is to block rules that would cause false positives or provide no detection value. You are the last line of defense before a rule goes live. Be strict about FP risk but don't block rules just because corpus coverage is low — new phishing campaigns won't have corpus hits yet.
+Your job is to block rules that would cause false positives, provide no detection value, OR degrade browser performance. You are the last line of defense before a rule goes live. Be strict about FP risk and performance but don't block rules just because corpus coverage is low — new phishing campaigns won't have corpus hits yet.
 
 CRITICAL: Rules in "phishkitSignatures" run against EVERY page source for EVERY user. A bad pattern here causes widespread false positives. Apply extra scrutiny to phishkitSignatures patterns — when in doubt, FAIL them. They can always be refined and resubmitted.
+
+PERFORMANCE IS A HARD REQUIREMENT: Source patterns run against full page HTML (potentially 5-10MB on news sites, portals). There are currently 340+ patterns and this number grows with every auto-promote. Each pattern with .* and alternation causes the V8 regex engine to scan the entire string at every position — on a 5MB page this takes measurable seconds. Patterns flagged with ⚡ PERFORMANCE BLOCK must be rewritten before they can ship.
 
 PASS criteria:
 - Typosquats are plausibly related to the brand and not common English words
 - Source patterns are specific enough to not match legitimate sites
 - Weights are proportional to pattern specificity
 - No critical issues found
+- Regex patterns are performance-safe: no unanchored .* with DOTALL, no nested quantifiers, no multiple sequential .* without bounded quantifiers
 
 FAIL criteria (any one of these = FAIL):
 - Pattern matches >1% of top legitimate sites (FP risk)
@@ -300,6 +359,17 @@ FAIL criteria (any one of these = FAIL):
 - Weight is disproportionately high relative to pattern specificity
 - Pattern is too narrow/specific to ever match real phishing (0 corpus hits + very long literal string)
 - Rule exactly duplicates existing detection logic already in the ruleset
+- ⚡ Pattern has a performance score >= 5 (will cause browser timeouts on large pages)
+- Pattern uses .* with the DOTALL (s) flag — this makes .* span the entire multi-MB document
+- Pattern uses nested quantifiers like (a+)+ or (.*?)*
+- Pattern has 3+ sequential .* operators without bounded quantifiers
+
+When fixing patterns for performance, apply these rewrites:
+- Replace .* with [^<]{0,2000} or [\\s\\S]{0,2000} (bounded quantifier)
+- Replace (?=.*X)(?=.*Y) with X[\\s\\S]{0,5000}Y|Y[\\s\\S]{0,5000}X
+- Remove the s (DOTALL) flag and use [\\s\\S]{0,N} explicitly where needed
+- Start patterns with a literal prefix of 4+ chars for V8 fast-skip
+- Split patterns with 3+ lookaheads into multiple simpler patterns
 
 Respond with exactly: PASS or FAIL on the first line, then your reasoning.`;
 

@@ -405,6 +405,22 @@ IMPORTANT — use ONLY these exact values:
 - weight: number between 0.05 and 0.50
 - severity: "high" | "medium" | "low"
 
+REGEX PERFORMANCE RULES — patterns run against 5-10MB page source on EVERY page load:
+There are 340+ source patterns and growing. Every inefficient pattern adds seconds of main-thread blocking on content-heavy pages like CNN, Yahoo, and news sites. The quality gate will REJECT patterns that violate these rules.
+
+NEVER do:
+- .* with the "s" (DOTALL) flag — this makes .* match across the entire multi-MB document. Use [\\s\\S]{0,N} with a bounded quantifier instead.
+- Multiple sequential .* (e.g. A.*B.*C) — causes O(n²) scanning. Use bounded: A[^<]{0,2000}B[^<]{0,2000}C
+- Multiple lookaheads with .* (e.g. (?=.*X)(?=.*Y)(?=.*Z)) — rescans from every position. Rewrite as X[\\s\\S]{0,5000}Y[\\s\\S]{0,5000}Z or split into separate patterns.
+- Nested quantifiers like (a+)+ or (.*?)* — catastrophic exponential backtracking.
+
+ALWAYS do:
+- Start with a literal prefix of 4+ characters (e.g. "api\\.telegram\\.org" not ".*telegram")
+- Use [^>]* instead of .* when scanning within HTML tags
+- Use [^"\\n]* instead of .* when scanning within attribute values
+- Bound all quantifiers: .{0,500} not .*, [\\s\\S]{0,2000} not [\\s\\S]*
+- Prefer "i" flag over "is" — only add "s" if you genuinely need dot to match newlines, and if so use [\\s\\S]{0,N} instead
+
 DOM structure hash (propose when template reuse is confirmed across 2+ domains):
 \`\`\`json
 {
