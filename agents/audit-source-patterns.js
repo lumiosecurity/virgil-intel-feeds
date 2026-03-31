@@ -165,101 +165,113 @@ async function main() {
     return;
   }
 
-  // ── Ask Opus to review each flagged pattern ─────────────────────────────────
+  // ── Ask Opus to review flagged patterns — with retry and incremental issue creation ──
 
   console.log(`\nAsking Opus to review ${flagged.length} flagged pattern(s)...`);
-  const opusReviews = [];
 
-  for (let i = 0; i < flagged.length; i += 10) {
-    const batch = flagged.slice(i, i + 10);
-    const batchText = batch.map(f => {
-      const pat = allPatterns[`${f.file}:${f.id}`] || { id: f.id };
-      return `### ${f.id} (${f.file})\nIssues found: ${f.issues.join('; ')}\nPattern: ${JSON.stringify(pat, null, 2)}`;
-    }).join('\n\n');
-
-    const resp = await client.messages.create({
-      model:      'claude-opus-4-6',
-      max_tokens: 2000,
-      system: [
-        'You are a Virgil detection engineer auditing existing phishing detection source patterns.',
-        'For each pattern give: 1) KEEP / FIX / REMOVE verdict  2) One-line reason  3) If FIX: exact corrected patternString.',
-        'KEEP = specific enough, low FP risk, and performance-safe.',
-        'FIX = has merit but needs tightening — provide corrected patternString and patternFlags.',
-        'REMOVE = too broad, duplicates logic, or no detection value.',
-        'For phishkitSignatures: be strict. These run on every page source. When in doubt, REMOVE.',
-        '',
-        'PERFORMANCE IS A HARD REQUIREMENT. Patterns flagged with ⚡ MUST be fixed or removed.',
-        'There are 340+ source patterns that all run against 5-10MB page source on every page load.',
-        'Performance rewrites:',
-        '- Replace .* with bounded quantifiers: [^<]{0,2000} for HTML context, [\\s\\S]{0,2000} for cross-line',
-        '- Replace (?=.*X)(?=.*Y)(?=.*Z) with: X[\\s\\S]{0,5000}Y[\\s\\S]{0,5000}Z (ordered match)',
-        '  or split into separate patterns if order cannot be guaranteed',
-        '- Remove the s (DOTALL) flag — use [\\s\\S]{0,N} explicitly where cross-line matching is needed',
-        '- Start patterns with a literal prefix of 4+ chars for V8 Boyer-Moore fast skip',
-        '- Use [^>]* instead of .* inside HTML tag context, [^"\\n]* inside attribute values',
-        '- NEVER use nested quantifiers like (a+)+ or (.*?)*',
-        '',
-        'When providing a FIX, the corrected pattern MUST:',
-        '1. Have zero unanchored .* with the s flag',
-        '2. Have no more than one .* without a bounded alternative',
-        '3. Start with a literal string of 4+ characters where possible',
-        '4. Detect the same phishing content as the original (no detection regression)',
-      ].join('\n'),
-      messages: [{ role: 'user', content: `Review these ${batch.length} flagged patterns:\n\n${batchText}` }],
-    });
-
-    opusReviews.push(resp.content?.[0]?.text || '');
-    console.log(`  Batch ${Math.floor(i / 10) + 1}/${Math.ceil(flagged.length / 10)} done`);
-  }
-
-  // ── Create GitHub issues — one per file to stay under 65k char limit ────────
-
+  // Group flagged patterns by file FIRST so we can create issues incrementally
   const byFile = {};
   for (const f of flagged) {
     if (!byFile[f.file]) byFile[f.file] = [];
     byFile[f.file].push(f);
   }
 
-  // Map Opus review text back to files by scanning for file names
-  const reviewsByFile = {};
-  for (const [file, patterns] of Object.entries(byFile)) {
-    const baseName = file.replace('.json', '');
-    reviewsByFile[file] = opusReviews
-      .map(r => {
-        // Extract sections mentioning this file's pattern IDs
-        const patIds = patterns.map(p => p.id);
-        const lines = r.split('\n');
-        const relevant = [];
-        let capturing = false;
-        for (const line of lines) {
-          if (patIds.some(id => line.includes(id))) capturing = true;
-          if (capturing) {
-            relevant.push(line);
-            // Stop at next pattern heading
-            if (relevant.length > 1 && line.startsWith('###') && !patIds.some(id => line.includes(id))) break;
-          }
+  // Retry wrapper for Opus calls — handles 529 overloaded and transient errors
+  async function claudeWithRetry(system, userContent, maxRetries = 4) {
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const resp = await client.messages.create({
+          model:      'claude-opus-4-6',
+          max_tokens: 2000,
+          system,
+          messages: [{ role: 'user', content: userContent }],
+        });
+        return resp.content?.[0]?.text || '';
+      } catch (e) {
+        const retryable = e.status === 529 || e.status === 500 || e.status === 502 || e.status === 503;
+        if (!retryable || attempt === maxRetries) {
+          console.warn(`  Opus call failed after ${attempt + 1} attempt(s): ${e.message}`);
+          return null; // return null instead of crashing — we'll create the issue without Opus review
         }
-        return relevant.join('\n').trim();
-      })
-      .filter(Boolean)
-      .join('\n\n');
+        const delay = Math.min(2000 * Math.pow(2, attempt), 30000) + Math.random() * 1000;
+        console.log(`  Opus returned ${e.status} — retrying in ${Math.round(delay / 1000)}s (attempt ${attempt + 1}/${maxRetries})...`);
+        await new Promise(r => setTimeout(r, delay));
+      }
+    }
+    return null;
   }
 
-  if (DRY_RUN) {
-    console.log('\n--- DRY RUN ---');
-    console.log(`Would create ${Object.keys(byFile).length} issues`);
-    return;
-  }
+  const opusSystemPrompt = [
+    'You are a Virgil detection engineer auditing existing phishing detection source patterns.',
+    'For each pattern give: 1) KEEP / FIX / REMOVE verdict  2) One-line reason  3) If FIX: exact corrected patternString.',
+    'KEEP = specific enough, low FP risk, and performance-safe.',
+    'FIX = has merit but needs tightening — provide corrected patternString and patternFlags.',
+    'REMOVE = too broad, duplicates logic, or no detection value.',
+    'For phishkitSignatures: be strict. These run on every page source. When in doubt, REMOVE.',
+    '',
+    'PERFORMANCE IS A HARD REQUIREMENT. Patterns flagged with ⚡ MUST be fixed or removed.',
+    'There are 340+ source patterns that all run against 5-10MB page source on every page load.',
+    'Performance rewrites:',
+    '- Replace .* with bounded quantifiers: [^<]{0,2000} for HTML context, [\\s\\S]{0,2000} for cross-line',
+    '- Replace (?=.*X)(?=.*Y)(?=.*Z) with: X[\\s\\S]{0,5000}Y[\\s\\S]{0,5000}Z (ordered match)',
+    '  or split into separate patterns if order cannot be guaranteed',
+    '- Remove the s (DOTALL) flag — use [\\s\\S]{0,N} explicitly where cross-line matching is needed',
+    '- Start patterns with a literal prefix of 4+ chars for V8 Boyer-Moore fast skip',
+    '- Use [^>]* instead of .* inside HTML tag context, [^"\\n]* inside attribute values',
+    '- NEVER use nested quantifiers like (a+)+ or (.*?)*',
+    '',
+    'When providing a FIX, the corrected pattern MUST:',
+    '1. Have zero unanchored .* with the s flag',
+    '2. Have no more than one .* without a bounded alternative',
+    '3. Start with a literal string of 4+ characters where possible',
+    '4. Detect the same phishing content as the original (no detection regression)',
+  ].join('\n');
 
+  // Process file by file — review patterns, then immediately create issue
+  // This way if a later batch fails, earlier issues are already filed
   let issuesCreated = 0;
+  let batchNum = 0;
+  const totalBatches = Math.ceil(flagged.length / 10);
+
   for (const [file, patterns] of Object.entries(byFile)) {
-    const opusSection = reviewsByFile[file]
-      ? `## Opus Review\n\n${reviewsByFile[file].slice(0, 20000)}\n\n---\n\n`
-      : '';
+    // Review this file's patterns in batches of 10
+    const fileReviews = [];
+
+    for (let i = 0; i < patterns.length; i += 10) {
+      batchNum++;
+      const batch = patterns.slice(i, i + 10);
+      const batchText = batch.map(f => {
+        const pat = allPatterns[`${f.file}:${f.id}`] || { id: f.id };
+        return `### ${f.id} (${f.file})\nIssues found: ${f.issues.join('; ')}\nPattern: ${JSON.stringify(pat, null, 2)}`;
+      }).join('\n\n');
+
+      const review = await claudeWithRetry(
+        opusSystemPrompt,
+        `Review these ${batch.length} flagged patterns:\n\n${batchText}`
+      );
+
+      if (review) {
+        fileReviews.push(review);
+      }
+      console.log(`  Batch ${batchNum}/${totalBatches} done${review ? '' : ' (no Opus review — API error)'}`);
+
+      // Brief pause between batches to avoid rate limits
+      await new Promise(r => setTimeout(r, 1000));
+    }
+
+    // ── Create issue for this file immediately ────────────────────────────
+    if (DRY_RUN) {
+      console.log(`  [DRY RUN] Would create issue for ${file} (${patterns.length} patterns)`);
+      continue;
+    }
+
+    const opusSection = fileReviews.length > 0
+      ? `## Opus Review\n\n${fileReviews.join('\n\n---\n\n').slice(0, 20000)}\n\n---\n\n`
+      : '## Opus Review\n\n_Opus review unavailable (API errors during audit run). Automated findings below._\n\n---\n\n';
 
     const findingsSection = patterns.map(p =>
       `- **\`${p.id}\`** (weight: ${p.weight})\n` +
-      p.issues.map(i => `  - ${i}`).join('\n')
+      p.issues.map(iss => `  - ${iss}`).join('\n')
     ).join('\n');
 
     const body = [
@@ -281,16 +293,19 @@ async function main() {
       `*Generated at ${new Date().toISOString()}*`,
     ].filter(s => s !== null && s !== undefined).join('\n').slice(0, 65000);
 
-    await github.createIssue(
-      REPO,
-      `[AUDIT] ${file} — ${patterns.length} pattern issue(s)`,
-      body,
-      ['needs-review']
-    );
-    issuesCreated++;
-    console.log(`  Created issue for ${file}`);
+    try {
+      await github.createIssue(
+        REPO,
+        `[AUDIT] ${file} — ${patterns.length} pattern issue(s)`,
+        body,
+        ['needs-review']
+      );
+      issuesCreated++;
+      console.log(`  ✓ Created issue for ${file}`);
+    } catch (e) {
+      console.warn(`  ✗ Failed to create issue for ${file}: ${e.message}`);
+    }
 
-    // Rate limit
     await new Promise(r => setTimeout(r, 500));
   }
 
