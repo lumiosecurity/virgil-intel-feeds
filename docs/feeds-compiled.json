@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T04:45:47.104Z",
+    "compiledAt": "2026-04-01T04:48:37.684Z",
     "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 300,
+    "patternCount": 302,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -1557,7 +1557,9 @@
         "microsofy",
         "microsoftaccount",
         "ms-account",
-        "resolve-issue"
+        "resolve-issue",
+        "micro-soft",
+        "microsoff"
       ]
     },
     {
@@ -2503,6 +2505,17 @@
       "patternString": "Adobe[\\s-]*PDF[\\s\\S]{0,1000}(?:File\\s+Verification|protected\\s+file)[\\s\\S]{0,1000}<input[^>]*type=['\"]password['\"]",
       "patternFlags": "i",
       "note": "Combines Adobe PDF branding with file verification pretext and password collection - legitimate Adobe services don't require arbitrary logins for PDF access"
+    },
+    {
+      "id": "microsoft-signin-ui-impersonation",
+      "group": "brandImpersonation",
+      "description": "Microsoft sign-in page UI elements and terminology impersonation",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "Sign\\s+in\\s+to\\s+your\\s+account[\\s\\S]{0,2000}(?:Can't\\s+access\\s+your\\s+account|Sign-in\\s+options|microsoftonline|office\\.com|azure)",
+      "patternFlags": "i",
+      "note": "Combines Microsoft's distinctive 'Sign in to your account' header with secondary UI elements or domain references"
     },
     {
       "id": "fake-captcha-gating",
@@ -4230,6 +4243,17 @@
       "note": "Phishkits commonly use a /Steps/auth/ or /steps/ directory layout with PHP endpoints. The combination of Steps path + auth subdirectory + .php extension is a strong kit fingerprint. Over 15 literal chars across Steps, auth, and .php anchors."
     },
     {
+      "id": "usecure-background-abuse",
+      "group": "phishkitSignatures",
+      "description": "usecure.io security training assets being used as phishing page backgrounds",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "background-image:\\s*url\\(['\"]https://assets\\.(?:eu\\.)?usecure\\.io/",
+      "patternFlags": "i",
+      "note": "Security training platform assets repurposed for phishing - distinctive enough to indicate malicious reuse"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4840,7 +4864,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T04:22:18.920Z",
+      "compiledAt": "2026-04-01T04:45:44.462Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

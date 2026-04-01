@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-01-04:45",
-    "generatedAt": "2026-04-01T04:45:47.118Z",
+    "version": "2026-04-01-04:48",
+    "generatedAt": "2026-04-01T04:48:37.697Z",
     "brandCount": 107,
-    "patternCount": 300
+    "patternCount": 302
   },
   "brandEntries": [
     {
@@ -1526,7 +1526,9 @@
         "microsofy",
         "microsoftaccount",
         "ms-account",
-        "resolve-issue"
+        "resolve-issue",
+        "micro-soft",
+        "microsoff"
       ]
     },
     {
@@ -13639,6 +13641,18 @@
     },
     {
       "domHashes": [],
+      "id": "microsoft-signin-ui-impersonation",
+      "group": "brandImpersonation",
+      "description": "Microsoft sign-in page UI elements and terminology impersonation",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "Sign\\s+in\\s+to\\s+your\\s+account[\\s\\S]{0,2000}(?:Can't\\s+access\\s+your\\s+account|Sign-in\\s+options|microsoftonline|office\\.com|azure)",
+      "patternFlags": "i",
+      "note": "Combines Microsoft's distinctive 'Sign in to your account' header with secondary UI elements or domain references"
+    },
+    {
+      "domHashes": [],
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -15700,6 +15714,18 @@
       "patternString": "(?:action|href|src)\\s*=\\s*['\"][^'\"]*(?:/Steps/|/step[s]?/)[^'\"]*(?:auth|login|verify)[^'\"]*\\.php",
       "patternFlags": "i",
       "note": "Phishkits commonly use a /Steps/auth/ or /steps/ directory layout with PHP endpoints. The combination of Steps path + auth subdirectory + .php extension is a strong kit fingerprint. Over 15 literal chars across Steps, auth, and .php anchors."
+    },
+    {
+      "domHashes": [],
+      "id": "usecure-background-abuse",
+      "group": "phishkitSignatures",
+      "description": "usecure.io security training assets being used as phishing page backgrounds",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "background-image:\\s*url\\(['\"]https://assets\\.(?:eu\\.)?usecure\\.io/",
+      "patternFlags": "i",
+      "note": "Security training platform assets repurposed for phishing - distinctive enough to indicate malicious reuse"
     },
     {
       "domHashes": [],
