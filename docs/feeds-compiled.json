@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T21:00:48.405Z",
+    "compiledAt": "2026-04-01T21:08:48.319Z",
     "brandCount": 187,
     "signalCount": 1,
-    "patternCount": 930,
+    "patternCount": 943,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -4755,6 +4755,28 @@
       "patternString": "(?:facebook|instagram|twitter|youtube|linkedin|tiktok)\\s+icon[\\s\\S]{0,200}(?:facebook|instagram|twitter|youtube|linkedin|tiktok)\\s+icon",
       "patternFlags": "i",
       "note": "Social media icon elements (CSS class names like 'facebook icon', 'twitter icon') rendered without actual href links to social media profiles are decorative brand impersonation. Phishing kits clone the social icons from footers but don't link them to real profiles."
+    },
+    {
+      "id": "document-shared-brand-mismatch",
+      "group": "brandImpersonation",
+      "description": "Document sharing notification impersonating one brand but login form impersonating another — cross-brand phishing",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:OneDrive|SharePoint|Google\\s*Drive|Dropbox|Box|WeTransfer)[\\s\\S]{0,2000}(?:sign.?in\\s*with\\s*(?:your\\s*)?(?:email|Microsoft|Google|Office|Yahoo|Outlook)|<img[^>]*(?:microsoft|google|outlook|office365)[^>]*>)[\\s\\S]{0,500}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "A page showing a OneDrive/SharePoint/Google Drive sharing notification but presenting a generic Microsoft/Google/email login form is cross-brand document phishing. The sharing notification is fake — it's just lure text above a credential harvest form."
+    },
+    {
+      "id": "adobe-themed-document-login",
+      "group": "brandImpersonation",
+      "description": "Adobe-themed document viewer with login requirement — Adobe/PDF viewer credential phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:Adobe|Acrobat|PDF\\s*(?:Viewer|Reader))[\\s\\S]{0,1000}(?:sign.?in\\s*(?:to|with)|log.?in|enter\\s*(?:your\\s*)?(?:email|password|credentials))[\\s\\S]{0,500}(?:<input[^>]*type=['\"](?:password|email)['\"])",
+      "patternFlags": "i",
+      "note": "Adobe/Acrobat/PDF Viewer themed pages with a login form are among the most prevalent document lure phishing templates. Cyble documented these extensively — they use a blurred invoice background with an Adobe-branded login modal on top."
     },
     {
       "id": "fake-captcha-gating",
@@ -11167,6 +11189,28 @@
       "note": "Telegram sendMessage called via GET with chat_id and text in URL query parameters is the simplest possible Telegram exfiltration — no fetch/XHR needed, just a URL load. Data is passed as URL-encoded text parameter. This fires as a script src, image src, or iframe src."
     },
     {
+      "id": "hold-ctrl-click-view-instruction",
+      "group": "phishkitSignatures",
+      "description": "Hold Ctrl and click instruction — novel anti-scanner technique for document view buttons",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "(?:hold\\s*(?:the\\s*)?(?:Ctrl|CTRL|Control)\\s*(?:button|key)?\\s*(?:and|while|then)\\s*click|CTRL\\s*\\+\\s*click|Ctrl\\s*\\+\\s*Click)[\\s\\S]{0,300}(?:VIEW|OPEN|ACCESS|DOWNLOAD|view|open|access|download)\\s*(?:DOCUMENT|FILE|PDF|document|file|pdf)",
+      "patternFlags": "i",
+      "note": "Mimecast documented a SharePoint phishing campaign requiring users to 'HOLD CTRL BUTTON AND CLICK VIEW DOCUMENT'. This Ctrl+click requirement prevents automated security tools from following the link. No legitimate SharePoint page requires Ctrl+click to view a document."
+    },
+    {
+      "id": "html-attachment-self-contained-phish",
+      "group": "phishkitSignatures",
+      "description": "Self-contained HTML file with embedded login form and base64 background — HTML attachment phishing",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:data:image/[^;]+;base64,[A-Za-z0-9+/=]{500,})[\\s\\S]{0,3000}(?:<form|<input[^>]*type=['\"]password['\"])[\\s\\S]{0,1000}(?:api\\.telegram|discord|fetch\\(|XMLHttpRequest|sendBeacon|action=['\"])",
+      "patternFlags": "i",
+      "note": "A self-contained HTML file with a large base64-encoded background image AND a credential form with an exfiltration endpoint is the HTML attachment phishing pattern. No external hosting needed — the entire phishing page is in the HTML attachment, complete with blurred document image background."
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -12145,6 +12189,105 @@
       "note": "Fake DocuSign pages requiring login to 'view' or 'sign' documents. DocuSign is one of the most impersonated brands in ClickFix campaigns."
     },
     {
+      "id": "blurred-document-preview-login",
+      "group": "socialEngineering",
+      "description": "Blurred or obscured document preview image with login form overlay — document lure credential harvest",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:filter:\\s*blur|opacity:\\s*0\\.[2-6]|background[^;]*\\.(?:png|jpg|jpeg|gif|svg))[\\s\\S]{0,2000}(?:sign.?in|log.?in|password|enter\\s*(?:your\\s*)?(?:email|credentials))[\\s\\S]{0,500}(?:<input|<form)",
+      "patternFlags": "i",
+      "note": "A blurred or semi-transparent document image behind a login form is the #1 document lure layout. The 'document' is just an image with CSS blur/opacity applied, and a credential modal sits on top. No legitimate document-sharing service blurs a real document behind a login wall."
+    },
+    {
+      "id": "view-document-button-password",
+      "group": "socialEngineering",
+      "description": "View/Open/Access Document button on a page with password input — document lure leading to credential form",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:View\\s*(?:Document|File|PDF|Message|Attachment)|Open\\s*(?:Document|File|PDF)|Access\\s*(?:Document|File)|Review\\s*(?:Document|File)|Download\\s*(?:Document|PDF))[\\s\\S]{0,2000}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "A 'View Document' or 'Open File' button/heading on the same page as a password input field is a document lure phishing layout. Legitimate file sharing shows the document directly or uses the hosting service's own login, not a generic password prompt on the same page."
+    },
+    {
+      "id": "document-notification-generic-login",
+      "group": "socialEngineering",
+      "description": "Generic document sharing notification with login requirement — shared file credential phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:shared\\s*(?:a\\s*)?(?:document|file|folder)|sent\\s*you\\s*(?:a\\s*)?(?:document|file)|has\\s*shared|document\\s*(?:is\\s*)?ready|file\\s*available)[\\s\\S]{0,2000}(?:sign.?in\\s*(?:to|with)|log.?in\\s*to|enter\\s*(?:your\\s*)?(?:password|email|credentials)|verify\\s*(?:your\\s*)?(?:identity|email))",
+      "patternFlags": "i",
+      "note": "Generic 'X has shared a document with you' notification text followed by a 'sign in to view' prompt is the standard document lure layout. Legitimate sharing notifications link to the hosting service's own authenticated view, not a generic login prompt."
+    },
+    {
+      "id": "invoice-remittance-credential-harvest",
+      "group": "socialEngineering",
+      "description": "Invoice/remittance/purchase order document with credential or payment form — BEC document lure",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:invoice|remittance\\s*advice|purchase\\s*order|payment\\s*(?:advice|notification|confirmation)|quotation\\s*request|RFQ|statement\\s*of\\s*account)[\\s\\S]{0,2000}(?:<input[^>]*type=['\"]password['\"]|sign.?in\\s*(?:to|with)\\s*(?:view|access|download)|enter\\s*(?:your\\s*)?(?:email|password|credentials))",
+      "patternFlags": "i",
+      "note": "Invoice/remittance/PO/RFQ document text combined with a login prompt or password field on the same page is BEC document lure phishing. Real invoices are attached as PDFs or viewed in accounting software — they don't require signing in on the same page."
+    },
+    {
+      "id": "document-image-login-overlay",
+      "group": "socialEngineering",
+      "description": "Document preview as static background image with centered login modal — image-based document lure",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:background(?:-image)?\\s*:[^;]*url\\([^)]+\\)|<img[^>]*(?:invoice|document|pdf|file|preview|scan|fax))[\\s\\S]{0,2000}(?:position:\\s*(?:fixed|absolute)[^}]*(?:z-index|top|left))[\\s\\S]{0,1000}(?:password|email|sign.?in|log.?in)",
+      "patternFlags": "i",
+      "note": "A static document/invoice/PDF image as background with a positioned login modal on top is the visual layout of image-based document lures. The 'document' is a screenshot or placeholder image, not real interactive content. The login modal steals credentials."
+    },
+    {
+      "id": "secure-message-view-login",
+      "group": "socialEngineering",
+      "description": "Secure message or encrypted email notification with login — secure delivery impersonation phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:secure\\s*message|encrypted\\s*(?:email|message)|confidential\\s*(?:document|message)|protected\\s*(?:document|message|file)|Zix\\s*Secure)[\\s\\S]{0,2000}(?:sign.?in|log.?in|password|enter\\s*(?:your\\s*)?(?:email|credentials)|view\\s*(?:secure\\s*)?(?:message|document))[\\s\\S]{0,500}(?:<input|<form)",
+      "patternFlags": "i",
+      "note": "Fake 'secure message' or 'encrypted email' notifications that require signing in to view the message are a popular phishing lure. They impersonate services like Zix, Proofpoint Encryption, or Microsoft 365 Message Encryption. The login form harvests credentials."
+    },
+    {
+      "id": "fax-voicemail-document-lure",
+      "group": "socialEngineering",
+      "description": "Fax or voicemail notification requiring login — legacy communication lure for credential harvest",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:(?:new\\s+)?(?:fax|voicemail|voice\\s*message)\\s*(?:received|notification|message|from)|you\\s*(?:have|received)\\s*(?:a\\s*)?(?:new\\s*)?(?:fax|voicemail|voice\\s*message))[\\s\\S]{0,2000}(?:sign.?in|log.?in|password|listen|view|play|download)[\\s\\S]{0,500}(?:<input|<form)",
+      "patternFlags": "i",
+      "note": "Fake fax or voicemail notifications requiring login to 'listen' or 'view' the message are legacy communication lures. They impersonate services like eFax, RingCentral, or Microsoft 365 voicemail. The login form is the actual phishing payload."
+    },
+    {
+      "id": "document-page-count-preview-lure",
+      "group": "socialEngineering",
+      "description": "Document metadata (page count, file size) displayed as preview lure — fake document information theater",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "(?:\\d+\\s*(?:pages?|pg)|\\d+\\.?\\d*\\s*(?:MB|KB|GB)|PDF|DOCX?|XLSX?|PPTX?)[\\s\\S]{0,500}(?:(?:View|Open|Download|Access)\\s*(?:Document|File|PDF))[\\s\\S]{0,1000}(?:sign.?in|password|email|credential|verify)",
+      "patternFlags": "i",
+      "note": "Displaying document metadata (page count, file size, file type) alongside a View/Open/Download button that leads to a login form is document information theater. Real document sharing services show this metadata WITH the document, not instead of it behind a login wall."
+    },
+    {
+      "id": "sender-info-document-phish",
+      "group": "socialEngineering",
+      "description": "Sender name and email displayed in document sharing notification with login — personalized document lure",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:from|sent\\s*by|shared\\s*by)\\s*(?::|\\s)[\\s\\S]{0,100}(?:@[a-z0-9.-]+\\.[a-z]{2,})[\\s\\S]{0,1000}(?:View|Open|Access|Review|Download)\\s*(?:Document|File|PDF|Message)[\\s\\S]{0,1000}(?:sign.?in|password|credential|email)[\\s\\S]{0,500}(?:<input|<form)",
+      "patternFlags": "i",
+      "note": "Showing the sender's name and email address in a document sharing notification adds perceived legitimacy (the victim recognizes the sender). Combined with a View Document button and a login form, this is a personalized document lure. The sender info is often extracted from the victim's email."
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -13019,7 +13162,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T20:49:59.860Z",
+      "compiledAt": "2026-04-01T21:00:46.837Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
