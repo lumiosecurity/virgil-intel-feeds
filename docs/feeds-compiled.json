@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T15:30:22.246Z",
+    "compiledAt": "2026-04-01T15:59:18.782Z",
     "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 309,
+    "patternCount": 312,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2567,6 +2567,28 @@
       "note": "The 'Stay signed in?' prompt with checkbox is specific to Microsoft's KMSI (Keep Me Signed In) flow. Finding this alongside other login elements on a non-Microsoft domain indicates a full authentication flow clone. Weight kept moderate as some SSO integrations may embed this legitimately."
     },
     {
+      "id": "microsoft-signin-flow-text-impersonation",
+      "group": "brandImpersonation",
+      "description": "Microsoft-specific sign-in flow text phrases appearing together, indicating brand impersonation",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "Sign in with a security key[\\s\\S]{0,3000}Sign-in options|Sign-in options[\\s\\S]{0,3000}Sign in with a security key",
+      "patternFlags": "i",
+      "note": "The phrase 'Sign in with a security key' combined with 'Sign-in options' is specific to Microsoft's login flow. Legitimate Microsoft domains are excluded by the domain allowlist. Non-Microsoft domains showing this exact combination are impersonating the Microsoft login experience."
+    },
+    {
+      "id": "microsoft-create-account-signin-impersonation",
+      "group": "brandImpersonation",
+      "description": "Microsoft login page impersonation with 'No account? Create one!' and sign-in elements",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "No account\\?\\s*Create one![\\s\\S]{0,5000}(?:Sign-in options|sign in with a security key)",
+      "patternFlags": "i",
+      "note": "The exact phrasing 'No account? Create one!' is Microsoft-specific copy used on their login page. Combined with other Microsoft sign-in elements on a non-Microsoft domain, this is strong evidence of brand impersonation. This text combination does not appear on other major login providers."
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -2859,6 +2881,17 @@
       "source": "js",
       "patternString": "querySelectorAll\\(['\"]input\\[type=['\"]hidden['\"]\\]\\[name=['\"](?:username|email|user)['\"]\\]\\s*\\)[\\s\\S]{0,200}\\.forEach[\\s\\S]{0,500}querySelectorAll\\(['\"]input\\[type=['\"]hidden['\"]\\]\\[name=['\"](?:pass|password)['\"]\\]",
       "patternFlags": "i"
+    },
+    {
+      "id": "duplicate-password-fields-credential-harvest",
+      "group": "credentialHarvesting",
+      "description": "Form containing multiple password-type input fields suggesting credential harvesting across login steps",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<input[^>]*type=['\"]password['\"][^>]*/?>[\\s\\S]{0,2000}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "Phishkits that simulate multi-step login flows often render all password fields in a single page (hidden/shown via JS). Legitimate login pages rarely have two password inputs unless it is a password-change form. Combined with other signals this is a meaningful indicator."
     },
     {
       "id": "suspicious-subdomain-financial",
@@ -4944,7 +4977,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T07:03:39.146Z",
+      "compiledAt": "2026-04-01T15:30:20.670Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
