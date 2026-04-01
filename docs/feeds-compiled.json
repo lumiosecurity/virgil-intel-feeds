@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T20:34:38.125Z",
+    "compiledAt": "2026-04-01T20:40:44.640Z",
     "brandCount": 187,
     "signalCount": 1,
-    "patternCount": 865,
+    "patternCount": 881,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -7979,6 +7979,171 @@
       "note": "Chaining 5+ expressions with the comma operator collapses sequential statements into a single expression. This flattens control flow and makes code extremely hard to read: (a=1,b=fetch(c),d=e.value,f(d),g())"
     },
     {
+      "id": "zerofont-span-text-split",
+      "group": "obfuscation",
+      "description": "Zero font span elements splitting visible text — font-size:0px spans breaking up keywords",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "<span[^>]*style=['\"][^'\"]*font-size:\\s*0[^'\"]*['\"][^>]*>[^<]{1,50}</span>[^<]{0,10}<span[^>]*style=['\"][^'\"]*font-size:\\s*0[^'\"]*['\"]",
+      "patternFlags": "i",
+      "note": "Two or more font-size:0 span elements with non-empty text content within close proximity is the classic ZeroFont technique. The invisible spans break up brand names ('M<span style=font-size:0>junk</span>icrosoft') so keyword scanners can't match 'Microsoft'."
+    },
+    {
+      "id": "zerofont-display-none-text-block",
+      "group": "obfuscation",
+      "description": "Display:none element containing substantial text — invisible junk text block for content disruption",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<(?:span|div|p|font)[^>]*(?:display:\\s*none|display:none)[^>]*>[^<]{20,}</(?:span|div|p|font)>",
+      "patternFlags": "i",
+      "note": "A display:none element containing 20+ characters of text is a hidden text salting block. The invisible text confuses NLP-based detection by diluting malicious content with irrelevant words that parsers see but users don't."
+    },
+    {
+      "id": "zerofont-opacity-zero-container",
+      "group": "obfuscation",
+      "description": "Opacity:0 container with text content — transparent text block invisible to users but parsed by scanners",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<(?:span|div|p)[^>]*(?:opacity:\\s*0|opacity:0)[^>]*>[^<]{10,}</(?:span|div|p)>",
+      "patternFlags": "i",
+      "note": "Text inside an opacity:0 container is fully transparent but still present in the DOM and parsed by text analysis tools. Phishing uses this to inject 'Scanned by Advanced Threat Protection' fake security text that appears in email previews."
+    },
+    {
+      "id": "zerofont-multi-property-hide",
+      "group": "obfuscation",
+      "description": "Multi-property CSS text concealment — stacking font-size:0 + max-height:0 + overflow:hidden",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "style=['\"][^'\"]*(?:font-size:\\s*0|max-height:\\s*0|line-height:\\s*0|overflow:\\s*hidden|visibility:\\s*hidden|opacity:\\s*0)[^'\"]*(?:font-size:\\s*0|max-height:\\s*0|line-height:\\s*0|overflow:\\s*hidden|visibility:\\s*hidden|opacity:\\s*0)[^'\"]*['\"][^>]*>[^<]{5,}",
+      "patternFlags": "i",
+      "note": "Stacking two or more concealment CSS properties (font-size:0, max-height:0, line-height:0, overflow:hidden, visibility:hidden, opacity:0) on an element with text content is aggressive multi-layer text hiding. Cisco Talos identifies this as the most common salting pattern."
+    },
+    {
+      "id": "zerofont-color-match-background",
+      "group": "obfuscation",
+      "description": "Text color matching background color — white-on-white or matching color text concealment",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<(?:span|font|div)[^>]*(?:color:\\s*(?:#fff(?:fff)?|white|#fefefe|transparent|rgba\\(\\s*\\d+\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*,\\s*0)|color=['\"](?:#fff(?:fff)?|white|#fefefe))[^>]*>[^<]{5,}",
+      "patternFlags": "i",
+      "note": "Setting text color to white (#fff, #ffffff, white), transparent, or rgba with 0 alpha on a white background makes text invisible to users but readable by HTML parsers. One of the oldest text hiding techniques, still actively used in phishing."
+    },
+    {
+      "id": "zwsp-zwnj-brand-name-split",
+      "group": "obfuscation",
+      "description": "Zero-width characters inserted between letters of brand names — ZWSP/ZWNJ keyword splitting",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:&#x200[bBcCdDeE];|&#8203;|&#8204;|&#8205;|&zwnj;|&zwj;|\\u200[bBcCdDeE]|\\u00AD){2,}",
+      "patternFlags": "i",
+      "note": "Two or more zero-width characters (ZWSP &#x200B, ZWNJ &#x200C, ZWJ &#x200D, soft hyphen &#xAD) in proximity indicates character-level keyword splitting. Cisco Talos found Norton LifeLock phishing using ZWSP between every letter of the brand name."
+    },
+    {
+      "id": "bdo-text-reversal-trick",
+      "group": "obfuscation",
+      "description": "BDO element with RTL direction reversing displayed text order — bidirectional text rendering trick",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<bdo[^>]*dir=['\"]rtl['\"][^>]*>[^<]{3,}</bdo>",
+      "patternFlags": "i",
+      "note": "The BDO (Bidirectional Override) element with dir=rtl reverses the display order of text. Source '563 eciffo' renders as 'Office 365'. This hides brand names from source-level pattern matching while displaying them correctly to users."
+    },
+    {
+      "id": "zerofont-maxheight-zero-clip",
+      "group": "obfuscation",
+      "description": "Max-height:0 or height:0 with overflow:hidden — dimensional text clipping concealment",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "style=['\"][^'\"]*(?:max-height:\\s*0|height:\\s*0)[^'\"]*overflow:\\s*hidden[^'\"]*['\"][^>]*>[^<]{10,}",
+      "patternFlags": "i",
+      "note": "Setting max-height:0 or height:0 with overflow:hidden clips text content to zero height, making it invisible while keeping it in the DOM. This dimensional clipping is harder to detect than display:none because the element technically has visible styles."
+    },
+    {
+      "id": "zerofont-width-zero-clip",
+      "group": "obfuscation",
+      "description": "Width:0 or max-width:0 with overflow:hidden — horizontal text clipping concealment",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "style=['\"][^'\"]*(?:max-width:\\s*0|width:\\s*0)[^'\"]*overflow:\\s*hidden[^'\"]*['\"][^>]*>[^<]{10,}",
+      "patternFlags": "i",
+      "note": "Setting width:0 or max-width:0 with overflow:hidden clips text horizontally. Like height-based clipping, this is subtler than display:none and harder to detect as the element is technically rendered."
+    },
+    {
+      "id": "zerofont-lineheight-zero-collapse",
+      "group": "obfuscation",
+      "description": "Line-height:0 or line-height:1px text collapsing — vertically collapsed but DOM-present text",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "style=['\"][^'\"]*line-height:\\s*[01](?:px)?[^'\"]*font-size:\\s*[01](?:px)?[^'\"]*['\"][^>]*>[^<]{10,}",
+      "patternFlags": "i",
+      "note": "Combining line-height:0/1px with font-size:0/1px collapses text to effectively zero visual height. The text occupies no space in the layout but remains in the HTML for parser consumption."
+    },
+    {
+      "id": "zerofont-mso-hide-outlook",
+      "group": "obfuscation",
+      "description": "MSO-hide:all Outlook-specific text concealment — hidden text visible only in Outlook preview pane",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "mso-hide:\\s*all[^>]*>[^<]{5,}",
+      "patternFlags": "i",
+      "note": "The mso-hide:all CSS property is Outlook-specific and hides content from the message body while potentially showing it in the preview pane. Attackers combine this with display:none and font-size:0 for multi-client concealment."
+    },
+    {
+      "id": "html-comment-junk-padding",
+      "group": "obfuscation",
+      "description": "Large HTML comments inserted between visible content — comment-based text salting for parser confusion",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<!--[^-]{100,}-->[\\s\\S]{0,50}<!--[^-]{100,}-->",
+      "patternFlags": "",
+      "note": "Two or more large HTML comments (100+ chars each) in close proximity is comment-based content salting. HTML comments are stripped from rendering but parsed by text extractors, diluting content analysis with junk data."
+    },
+    {
+      "id": "zerofont-interleaved-junk-chars",
+      "group": "obfuscation",
+      "description": "Single junk characters in zero-font spans interleaved between visible letters — character-level splitting",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "[A-Za-z]<span[^>]*(?:font-size:\\s*0|display:\\s*none)[^>]*>[^<]{1,3}</span>[A-Za-z]<span[^>]*(?:font-size:\\s*0|display:\\s*none)[^>]*>[^<]{1,3}</span>[A-Za-z]",
+      "patternFlags": "i",
+      "note": "Single junk characters in font-size:0 or display:none spans interleaved between EVERY visible letter is the most aggressive ZeroFont splitting: 'M<span style=font-size:0>x</span>i<span style=font-size:0>q</span>c...' breaks 'Microsoft' at the character level."
+    },
+    {
+      "id": "zerofont-font-tag-size-zero",
+      "group": "obfuscation",
+      "description": "Legacy <font size=0> or <font size=1> tag with hidden text — old-school zero font technique",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<font[^>]*(?:size=['\"]?[01]['\"]?|color=['\"](?:#fff(?:fff)?|white|#fefefe)['\"])[^>]*>[^<]{5,}</font>",
+      "patternFlags": "i",
+      "note": "Legacy HTML <font> tags with size=0/1 or color matching the background hide text using deprecated markup. Old phishing kits and email campaigns still use <font> tags because email clients support them for backward compatibility."
+    },
+    {
+      "id": "zerofont-absolute-offscreen",
+      "group": "obfuscation",
+      "description": "Text positioned absolutely far offscreen — left:-9999px or similar offscreen positioning",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "style=['\"][^'\"]*position:\\s*absolute[^'\"]*(?:left:\\s*-\\d{3,}|top:\\s*-\\d{3,}|right:\\s*-\\d{3,})[^'\"]*['\"][^>]*>[^<]{10,}",
+      "patternFlags": "i",
+      "note": "Positioning text absolutely far offscreen (left:-9999px, top:-10000px) hides it visually while keeping it in the DOM. Some email clients strip display:none but don't check for offscreen positioning, making this a fallback concealment method."
+    },
+    {
       "id": "base64-html-password-obfuscation",
       "group": "phishkitSignatures",
       "description": "Base64 obfuscated HTML containing password input fields",
@@ -11485,6 +11650,17 @@
       "note": "Threatening collections agency referral, legal action, or credit score impact for unpaid tolls is extreme-pressure toll phishing. Real toll debt follows months of physical mail notices before any collections referral."
     },
     {
+      "id": "zerofont-preheader-fake-security",
+      "group": "socialEngineering",
+      "description": "Hidden preheader text claiming email was scanned/verified — ZeroFont fake security assurance",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:font-size:\\s*0|display:\\s*none|visibility:\\s*hidden|opacity:\\s*0)[^>]*>[^<]*(?:scanned|verified|secured|protected|safe|clean|threat\\s*protection|virus\\s*free|malware\\s*free|trusted|authenticated)",
+      "patternFlags": "i",
+      "note": "Hidden text claiming 'Scanned and secured by Advanced Threat Protection' or similar fake security assurances appears in email previews, making the message look legitimate. SANS ISC documented this as a 'new spin' on ZeroFont in September 2023, still active."
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -12304,7 +12480,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T20:29:31.738Z",
+      "compiledAt": "2026-04-01T20:34:36.534Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
