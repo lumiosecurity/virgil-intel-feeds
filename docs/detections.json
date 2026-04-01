@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-01-06:18",
-    "generatedAt": "2026-04-01T06:18:30.382Z",
+    "version": "2026-04-01-06:33",
+    "generatedAt": "2026-04-01T06:33:47.946Z",
     "brandCount": 107,
     "patternCount": 306
   },
@@ -1090,35 +1090,6 @@
       ]
     },
     {
-      "name": "adobe",
-      "vertical": "financial",
-      "domains": [
-        "adobe.com"
-      ],
-      "typos": [
-        "ad0be",
-        "adobee",
-        "adobe-login",
-        "adobefiles",
-        "adobepdf",
-        "adobereader",
-        "adobeviewer",
-        "adobedocs",
-        "adoobe",
-        "adob3",
-        "adobo",
-        "adobb",
-        "adobbe",
-        "addobe",
-        "adobe-pdf",
-        "abode",
-        "adb0e",
-        "adone",
-        "adbe",
-        "adope"
-      ]
-    },
-    {
       "name": "bet365",
       "vertical": "gambling",
       "domains": [
@@ -1173,6 +1144,36 @@
         "cloudflaire",
         "cloudflar",
         "cIoudflare"
+      ]
+    },
+    {
+      "name": "adobe",
+      "vertical": "general",
+      "domains": [
+        "adobe.com"
+      ],
+      "typos": [
+        "ad0be",
+        "adobee",
+        "adobe-login",
+        "adobefiles",
+        "adobepdf",
+        "adobereader",
+        "adobeviewer",
+        "adobedocs",
+        "adobo",
+        "adope",
+        "addobe",
+        "abode",
+        "adone",
+        "adobe-verify",
+        "adoobe",
+        "adobe-pdf",
+        "adobbe",
+        "adbe",
+        "adb0e",
+        "adobb",
+        "adob3"
       ]
     },
     {
