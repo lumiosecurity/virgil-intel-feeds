@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-01-21:38",
-    "generatedAt": "2026-04-01T21:38:39.215Z",
+    "version": "2026-04-01-21:42",
+    "generatedAt": "2026-04-01T21:42:44.533Z",
     "brandCount": 187,
-    "patternCount": 945
+    "patternCount": 952
   },
   "brandEntries": [
     {
@@ -18099,27 +18099,63 @@
     },
     {
       "domHashes": [],
-      "id": "hidden-field-credential-sync",
+      "id": "shadow-form-hidden-input-sync",
       "group": "credentialHarvesting",
-      "description": "JavaScript handlers sync visible credential inputs to hidden form fields for collection",
+      "description": "Shadow form technique — JavaScript syncs visible input values into hidden form fields via querySelectorAll",
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "patternString": "document\\.querySelectorAll\\(['\"]input\\[type=['\"]hidden['\"]\\]\\[name=['\"](?:username|user|email)['\"]\\]['\"]\\)[\\s\\S]{0,200}\\.forEach\\([\\s\\S]{0,300}input\\.value\\s*=\\s*valueToCollect",
+      "patternString": "querySelectorAll\\([\\s\\S]{0,50}(?:hidden|type=['\"]hidden)[\\s\\S]{0,50}\\)\\.forEach[\\s\\S]{0,100}(?:\\.value\\s*=|input\\.value)",
       "patternFlags": "i",
-      "note": "Phishing technique where visible login fields are synced to hidden inputs via querySelectorAll forEach loops - not seen in legitimate login flows"
+      "note": "The shadow form technique places visible credential inputs OUTSIDE the <form> element and hidden inputs INSIDE it. JavaScript copies the visible values into the hidden fields via querySelectorAll('input[type=hidden]').forEach(...). The form submits the hidden copies, not what the user typed into directly. This decouples the visual UI from the data submission."
     },
     {
       "domHashes": [],
-      "id": "password-entry-detection-flag",
+      "id": "onkeyup-onblur-credential-capture",
       "group": "credentialHarvesting",
-      "description": "JavaScript that detects password entry and sets hidden tracking flags",
+      "description": "Both onkeyup and onblur handlers on credential input — real-time keystroke tracking on login fields",
       "severity": "medium",
       "weight": 0.25,
-      "source": "js",
-      "patternString": "const\\s+pwEntered\\s*=\\s*event\\.target\\.value\\.trim\\(\\)\\.length\\s*>\\s*0\\s*\\?\\s*['\"]1['\"]\\s*:\\s*['\"]0['\"][\\s\\S]{0,300}pass_entered",
+      "source": "html",
+      "patternString": "<input[^>]*(?:type=['\"](?:text|password|email)['\"])[^>]*(?:onkeyup|onkeydown|oninput)=['\"][^'\"]+['\"][^>]*(?:onblur)=['\"][^'\"]+['\"]",
       "patternFlags": "i",
-      "note": "Tracks whether passwords were entered via hidden flags - legitimate forms don't need to detect password entry status"
+      "note": "Having BOTH onkeyup/oninput AND onblur event handlers on a credential field (text, password, or email input) means the value is captured on every keystroke AND when the field loses focus. This is real-time tracking — legitimate login forms use onsubmit, not per-keystroke capture."
+    },
+    {
+      "domHashes": [],
+      "id": "visible-input-outside-form",
+      "group": "credentialHarvesting",
+      "description": "Credential inputs placed outside the form element — visual inputs decoupled from form submission",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<input[^>]*type=['\"](?:text|password|email)['\"][^>]*(?:onkeyup|oninput|onblur|onchange)=['\"][^'\"]+['\"][\\s\\S]{0,2000}<form[^>]*>[\\s\\S]{0,500}<input[^>]*type=['\"]hidden['\"]",
+      "patternFlags": "i",
+      "note": "Credential input fields (text, password, email) with event handlers that appear BEFORE the <form> element, with hidden inputs inside the <form>, indicates the shadow form technique. The visible inputs aren't part of the form that gets submitted — their values are copied to hidden fields by JavaScript."
+    },
+    {
+      "domHashes": [],
+      "id": "generic-site-submit-endpoint",
+      "group": "credentialHarvesting",
+      "description": "Form action to /site/submit or similar generic collection endpoint — phishing platform credential receiver",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<form[^>]*action=['\"](?:/site/submit|/site/collect|/submit/data|/collect/creds|/log/data|/receive|/gate|/panel|/recv)['\"]",
+      "patternFlags": "i",
+      "note": "A form posting to generic collection endpoints like /site/submit, /collect/creds, /log/data indicates a phishing platform's credential receiver. Legitimate services use meaningful API paths (/api/v1/auth, /login, /oauth/token), not generic collection endpoints."
+    },
+    {
+      "domHashes": [],
+      "id": "pass-entered-boolean-field",
+      "group": "credentialHarvesting",
+      "description": "Hidden field tracking whether password was entered (boolean) — phishing engagement metric, not credential capture",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:name=['\"]pass_entered['\"]|name=['\"]password_entered['\"]|name=['\"]pw_entered['\"]|name=['\"]pwd_submitted['\"])[\\s\\S]{0,200}(?:value\\s*=\\s*['\"][01]['\"]|'1'\\s*:\\s*'0')",
+      "patternFlags": "i",
+      "note": "A hidden field named 'pass_entered' that stores 1 or 0 (boolean) instead of the actual password value is a phishing simulation or engagement tracking metric. It tracks WHETHER a password was entered, not what it was. This is distinctive to phishing platforms that measure user compliance."
     },
     {
       "domHashes": [],
@@ -23151,6 +23187,18 @@
     },
     {
       "domHashes": [],
+      "id": "code-level-browser-typo",
+      "group": "phishkitSignatures",
+      "description": "Programmatic typo 'broswer' in JavaScript — phishing template code-level typo indicator",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "(?:broswerLanguage|borwser|bowser[A-Z]|brwoser|browsr[A-Z]|brower[A-Z])",
+      "patternFlags": "",
+      "note": "Programmatic typos of 'browser' in JavaScript variable or function names (broswerLanguageDetection, borwserCheck, etc.) indicate hastily written or auto-generated phishing template code. These typos persist in template frameworks because the code still functions — JavaScript doesn't check spelling."
+    },
+    {
+      "domHashes": [],
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -24336,6 +24384,42 @@
       "patternString": "(?:from|sent\\s*by|shared\\s*by)\\s*(?::|\\s)[\\s\\S]{0,100}(?:@[a-z0-9.-]+\\.[a-z]{2,})[\\s\\S]{0,1000}(?:View|Open|Access|Review|Download)\\s*(?:Document|File|PDF|Message)[\\s\\S]{0,1000}(?:sign.?in|password|credential|email)[\\s\\S]{0,500}(?:<input|<form)",
       "patternFlags": "i",
       "note": "Showing the sender's name and email address in a document sharing notification adds perceived legitimacy (the victim recognizes the sender). Combined with a View Document button and a login form, this is a personalized document lure. The sender info is often extracted from the victim's email."
+    },
+    {
+      "domHashes": [],
+      "id": "login-to-view-file-button",
+      "group": "socialEngineering",
+      "description": "Login/Sign In button text combined with document/file access — compound action button phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:value|>)\\s*['\"]?(?:Login\\s*To\\s*(?:View|Access|Open|Download)|Sign\\s*[Ii]n\\s*[Tt]o\\s*(?:View|Access|Open|Download)|Log\\s*[Ii]n\\s*[Tt]o\\s*(?:View|Access|Open|Download))\\s*(?:File|Document|PDF|Message|Attachment)",
+      "patternFlags": "i",
+      "note": "A submit button text that combines a login action with a document access action ('Login To View File', 'Sign In to Access Document') is a document lure phishing compound button. Legitimate services separate authentication from document access — they don't combine them in a single button label."
+    },
+    {
+      "domHashes": [],
+      "id": "action-theater-radio-buttons",
+      "group": "socialEngineering",
+      "description": "Radio button action choices on a credential page — fake options that all submit the same form",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:<input[^>]*type=['\"]radio['\"][^>]*>[\\s\\S]{0,100}){2,}(?:View|Download|Send|Open|Access|Print|Forward|Share)[\\s\\S]{0,2000}(?:<input[^>]*type=['\"](?:password|hidden)['\"]|<form[^>]*action)",
+      "patternFlags": "i",
+      "note": "Two or more radio buttons offering different file actions (View Online, Download File, Send File) on a page with a credential form is action theater. The radio buttons create an illusion of choice but all options submit the same credential-harvesting form. Real file services don't mix action selection with login."
+    },
+    {
+      "domHashes": [],
+      "id": "authoritative-access-language",
+      "group": "socialEngineering",
+      "description": "Formal authoritative language about access rights — legal-sounding text suppressing skepticism on phishing pages",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:rightful\\s*(?:owner|recipient)|authorized\\s*(?:user|personnel|recipient)|unauthorized\\s*access\\s*(?:is\\s*)?(?:prohibited|forbidden|not\\s*(?:permitted|allowed))|protected\\s*(?:file|document|content)|access\\s*(?:is\\s*)?restricted|intended\\s*recipient)[\\s\\S]{0,500}(?:login|sign.?in|password|email|verify|<input|<form)",
+      "patternFlags": "i",
+      "note": "Formal, legal-sounding language about access rights ('rightful recipient', 'unauthorized access is prohibited', 'protected file') combined with a login form creates false authority. This language discourages the victim from questioning the page's legitimacy. Real login pages don't lecture about unauthorized access."
     },
     {
       "domHashes": [],
