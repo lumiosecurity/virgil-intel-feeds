@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T19:16:00.410Z",
+    "compiledAt": "2026-04-01T19:22:00.717Z",
     "brandCount": 171,
     "signalCount": 1,
-    "patternCount": 752,
+    "patternCount": 777,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -3603,6 +3603,17 @@
       "note": "Detecting the virtual keyboard opening by monitoring viewport height changes (the viewport shrinks when the keyboard appears) verifies the user is on a real mobile device. Emulators don't consistently replicate this behavior."
     },
     {
+      "id": "aitm-performance-timing-leak",
+      "group": "botEvasion",
+      "description": "Performance/Resource Timing API data collected — proxy latency fingerprinting or analysis evasion",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "performance\\.(?:getEntries|getEntriesByType|getEntriesByName|timing)[\\s\\S]{0,300}(?:fetch|XMLHttpRequest|sendBeacon|postMessage|duration|responseStart)",
+      "patternFlags": "i",
+      "note": "Collecting Performance/Resource Timing API data on a login page can detect proxy latency or be used to profile the victim's connection. AiTM kits may collect timing data to verify their proxy is working correctly or to exfiltrate network fingerprints."
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -4336,6 +4347,17 @@
       "patternString": "<meta[^>]*name=['\"]theme-color['\"][^>]*content=['\"]#(?:0078d4|1877f2|ea4335|ff9900|00a1f1|0067b8|5865f2|1DB954|E50914)['\"]",
       "patternFlags": "i",
       "note": "Setting the theme-color meta tag to exact brand colors (Microsoft blue, Facebook blue, Google red, Amazon orange, Spotify green, Netflix red) makes the mobile browser's address bar and status bar match the impersonated brand."
+    },
+    {
+      "id": "aitm-ms-branding-non-ms-domain",
+      "group": "brandImpersonation",
+      "description": "Microsoft corporate branding assets loaded from non-Microsoft CDN — proxied branding leak",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:aadcdn\\.msftauth\\.net|logincdn\\.msftauth\\.net|aadcdn\\.msauth\\.net|login\\.microsoftonline\\.com/consumers/css)[\\s\\S]{0,1000}(?:form|password|submit)",
+      "patternFlags": "i",
+      "note": "Microsoft's corporate branding CDN assets (aadcdn.msftauth.net, logincdn.msftauth.net) loading on a page with a login form means the proxy is serving Microsoft's real branding. Legitimate Microsoft login only serves these assets from Microsoft domains."
     },
     {
       "id": "fake-captcha-gating",
@@ -5917,6 +5939,105 @@
       "patternString": "<input[^>]*name=['\"]cf-turnstile-response['\"][^>]*type=['\"]hidden['\"][\\s\\S]{0,2000}<input[^>]*type=['\"]password['\"]",
       "patternFlags": "i",
       "note": "A hidden input named cf-turnstile-response on the same form as a password field confirms Turnstile is gating a credential harvesting form. The token is submitted alongside the stolen credentials."
+    },
+    {
+      "id": "aitm-ms-estsauth-cookie-capture",
+      "group": "credentialHarvesting",
+      "description": "Microsoft ESTSAUTH or ESTSAUTHPERSISTENT cookie captured in JavaScript — session token theft",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "(?:ESTSAUTH|ESTSAUTHPERSISTENT|ESTSAUTHLIGHT|x-ms-RefreshTokenCredential)",
+      "patternFlags": "",
+      "note": "ESTSAUTH and ESTSAUTHPERSISTENT are Microsoft's Entra ID session cookies. Finding these cookie names in JavaScript on a non-Microsoft domain means a phishing page is capturing Microsoft session tokens for replay. This is the core AiTM session hijacking indicator."
+    },
+    {
+      "id": "aitm-cookie-exfil-all-cookies",
+      "group": "credentialHarvesting",
+      "description": "document.cookie read and sent to external endpoint — bulk session cookie exfiltration",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "document\\.cookie[\\s\\S]{0,500}(?:fetch\\(['\"]https?://|XMLHttpRequest|sendBeacon|postMessage|new\\s+Image|websocket)",
+      "patternFlags": "i",
+      "note": "Reading document.cookie and sending it externally via any channel (fetch, XHR, sendBeacon, postMessage, Image, WebSocket) is the fundamental AiTM session cookie exfiltration pattern. The stolen cookies allow session replay without re-authentication."
+    },
+    {
+      "id": "aitm-cookie-extract-specific",
+      "group": "credentialHarvesting",
+      "description": "Specific auth cookie names extracted from document.cookie — targeted session token theft",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "document\\.cookie[\\s\\S]{0,200}(?:split|match|indexOf|includes)\\([\\s\\S]{0,100}(?:session|auth|token|sid|JSESSIONID|PHPSESSID|connect\\.sid|_ga_|csrftoken)",
+      "patternFlags": "i",
+      "note": "Extracting specific session/auth cookie names from document.cookie via string parsing is targeted session token theft. The phishing kit knows exactly which cookies to steal for session replay on the target service."
+    },
+    {
+      "id": "aitm-set-cookie-relay-js",
+      "group": "credentialHarvesting",
+      "description": "Set-Cookie values parsed from response headers and forwarded — proxy cookie relay in JavaScript",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:set-cookie|Set-Cookie|headers\\.get\\(['\"]set-cookie)[\\s\\S]{0,300}(?:document\\.cookie|cookie\\s*=|postMessage|fetch|XMLHttpRequest)",
+      "patternFlags": "",
+      "note": "Parsing Set-Cookie values from response headers and forwarding them via JavaScript is the AiTM cookie relay pattern. The proxy captures session cookies from the real server's response and sends them to the attacker."
+    },
+    {
+      "id": "aitm-oauth-code-intercept",
+      "group": "credentialHarvesting",
+      "description": "OAuth authorization code captured from URL and forwarded — OAuth flow interception",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:location\\.(?:search|hash|href)|URLSearchParams|window\\.location)[\\s\\S]{0,200}(?:code=|access_token=|id_token=)[\\s\\S]{0,300}(?:fetch|XMLHttpRequest|postMessage|sendBeacon)",
+      "patternFlags": "i",
+      "note": "Extracting OAuth authorization codes, access tokens, or ID tokens from the URL and forwarding them to an external endpoint is the OAuth flow interception pattern used by indirect AiTM proxies (Storm-1167 style)."
+    },
+    {
+      "id": "aitm-fake-mfa-after-password",
+      "group": "credentialHarvesting",
+      "description": "Fake MFA prompt shown after password capture — credential then MFA two-stage AiTM harvest",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:password|passwd|pwd)[\\s\\S]{0,500}(?:style\\.display|classList|visibility)[\\s\\S]{0,500}(?:verification|authenticator|code|otp|mfa|2fa|two.?factor)[\\s\\S]{0,300}(?:input|form|field)",
+      "patternFlags": "i",
+      "note": "After capturing the password, showing a hidden MFA/verification code prompt is the two-stage AiTM credential+MFA harvest. The password is relayed to the real site, which triggers a real MFA challenge, then the phish captures the MFA code."
+    },
+    {
+      "id": "aitm-websocket-credential-token-stream",
+      "group": "credentialHarvesting",
+      "description": "WebSocket streaming both credentials AND session tokens — real-time AiTM full-take exfiltration",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "(?:WebSocket|socket\\.io|ws://|wss://)[\\s\\S]{0,500}(?:send|emit)\\([\\s\\S]{0,300}(?:cookie|token|session|auth)[\\s\\S]{0,500}(?:password|credential|email|login)",
+      "patternFlags": "i",
+      "note": "WebSocket connections streaming BOTH session tokens/cookies AND credentials simultaneously is the full-take AiTM exfiltration pattern. This enables real-time session hijacking where the attacker can use the victim's active session immediately."
+    },
+    {
+      "id": "aitm-postmessage-iframe-credential",
+      "group": "credentialHarvesting",
+      "description": "postMessage listener capturing data from embedded auth iframe — cross-origin credential relay",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "addEventListener\\(['\"]message['\"][\\s\\S]{0,300}(?:data|event\\.data)[\\s\\S]{0,300}(?:token|cookie|credential|session|auth|code|access)",
+      "patternFlags": "i",
+      "note": "A postMessage event listener specifically looking for token/cookie/credential/auth data from embedded iframes is the cross-origin AiTM relay pattern. The parent page receives authentication data from the embedded legitimate login iframe."
+    },
+    {
+      "id": "aitm-multi-step-page-state",
+      "group": "credentialHarvesting",
+      "description": "Multi-step authentication state machine — manages email→password→MFA flow progression",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:step|state|phase|stage)\\s*(?:=|===?)\\s*(?:['\"](?:email|password|mfa|otp|verify|code)['\"]|[012345])[\\s\\S]{0,500}(?:style\\.display|classList|visibility|innerHTML)",
+      "patternFlags": "i",
+      "note": "A JavaScript state machine managing email→password→MFA step progression by showing/hiding page sections is the AiTM multi-step authentication flow controller. Each step captures different credentials and the kit advances through the auth flow."
     },
     {
       "id": "suspicious-subdomain-financial",
@@ -9483,6 +9604,149 @@
       "note": "Turnstile sitekeys starting with 0x4... are free-tier widgets. A free-tier Turnstile sitekey on a credential harvesting page is suspicious because legitimate enterprises use paid Cloudflare plans. Phishing kits register free Turnstile widgets specifically for phishing."
     },
     {
+      "id": "aitm-domain-mixing-ms",
+      "group": "phishkitSignatures",
+      "description": "Microsoft auth domain references on non-Microsoft page — reverse proxy leaking original domain references",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:login\\.microsoftonline\\.com|login\\.live\\.com|aadcdn\\.msauth\\.net|logincdn\\.msauth\\.net)[\\s\\S]{0,3000}(?:action=['\"]https?://(?!(?:login\\.microsoftonline|login\\.live|microsoft)\\.com))",
+      "patternFlags": "i",
+      "note": "Microsoft auth CDN/login domain references (login.microsoftonline.com, aadcdn.msauth.net) appearing on a page whose form action points to a NON-Microsoft domain is a reverse proxy artifact. The proxy relays Microsoft's real page content but the form posts to the attacker's domain."
+    },
+    {
+      "id": "aitm-domain-mixing-google",
+      "group": "phishkitSignatures",
+      "description": "Google auth domain references on non-Google page — reverse proxy leaking original domain references",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:accounts\\.google\\.com|gstatic\\.com/accounts|ssl\\.gstatic\\.com)[\\s\\S]{0,3000}(?:action=['\"]https?://(?!(?:accounts\\.google|google)\\.com))",
+      "patternFlags": "i",
+      "note": "Google auth domain references (accounts.google.com, gstatic.com) on a page whose form action points to a non-Google domain indicates a proxied Google login flow. The proxy relayed Google's real login page but the credentials post to the attacker."
+    },
+    {
+      "id": "aitm-injected-script-alongside-real",
+      "group": "phishkitSignatures",
+      "description": "Injected small script block in otherwise legitimate page content — reverse proxy script injection",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "<script[^>]*>[\\s\\S]{10,500}</script>[\\s\\S]{0,500}(?:microsoftonline|accounts\\.google|okta\\.com|login\\.salesforce)",
+      "patternFlags": "i",
+      "note": "A small injected script block appearing near references to legitimate auth providers (Microsoft, Google, Okta, Salesforce) indicates a reverse proxy injecting exfiltration JavaScript into the proxied page. The injected script steals credentials/tokens from the real auth flow."
+    },
+    {
+      "id": "aitm-url-rewrite-artifact",
+      "group": "phishkitSignatures",
+      "description": "URL rewriting artifacts — legitimate domain partially replaced with proxy domain in page source",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:href|src|action)=['\"](?:https?://)?[a-z0-9.-]+(?:\\.com|\\.net|\\.org)/(?:common/oauth2|_layouts/15|auth/realms|connect/authorize)",
+      "patternFlags": "i",
+      "note": "OAuth/SAML/auth paths (/common/oauth2, /_layouts/15, /auth/realms, /connect/authorize) appearing under a domain that isn't the legitimate provider indicates reverse proxy URL rewriting. The proxy replaced the original domain but kept the auth path structure."
+    },
+    {
+      "id": "aitm-redirect-after-capture",
+      "group": "phishkitSignatures",
+      "description": "Redirect to legitimate service after credential capture — AiTM post-phish legitimacy redirect",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:fetch|XMLHttpRequest|sendBeacon)[\\s\\S]{0,500}(?:then|onload|callback|success)[\\s\\S]{0,500}(?:location\\.href|window\\.location)\\s*=\\s*['\"]https?://(?:login\\.microsoftonline|accounts\\.google|portal\\.office|outlook\\.live)",
+      "patternFlags": "i",
+      "note": "Redirecting to the legitimate Microsoft/Google login page AFTER sending credentials to an external endpoint is the AiTM post-capture redirect. The victim ends up at the real login page, thinking nothing happened, while their credentials are already stolen."
+    },
+    {
+      "id": "evilproxy-phishlet-marker",
+      "group": "phishkitSignatures",
+      "description": "EvilProxy phishlet artifacts — custom JavaScript variables or DOM attributes from EvilProxy kit",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:phishlet|phish_params|ep_session|ep_token|evilproxy)[\\s\\S]{0,200}(?:config|session|redirect|callback|token)",
+      "patternFlags": "i",
+      "note": "EvilProxy uses specific JavaScript variable names and parameters (phishlet, phish_params, ep_session, ep_token) that leak into the proxied page. These internal variable names are definitive EvilProxy signatures even when the kit is updated."
+    },
+    {
+      "id": "nakedpages-kit-marker",
+      "group": "phishkitSignatures",
+      "description": "NakedPages phishing kit artifacts — distinctive DOM structure and variable naming patterns",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:NakedPages|nakedpages|naked_page|np_config|np_session)[\\s\\S]{0,200}(?:proxy|relay|capture|redirect|token)",
+      "patternFlags": "i",
+      "note": "NakedPages is one of the top 5 most prevalent AiTM kits as of 2025 (Sekoia). Its internal variable names and configuration references leak into proxied pages. NakedPages uses a reverse proxy approach targeting Microsoft 365."
+    },
+    {
+      "id": "storm-1167-indirect-proxy",
+      "group": "phishkitSignatures",
+      "description": "Storm-1167 indirect proxy pattern — fake MFA page with server-side token replay",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:Enter\\s+(?:the\\s+)?code|Verify\\s+(?:your\\s+)?identity|Additional\\s+verification)[\\s\\S]{0,500}(?:authenticator|push\\s+notification|text\\s+message|phone\\s+call)[\\s\\S]{0,300}(?:submit|verify|confirm)",
+      "patternFlags": "i",
+      "note": "Storm-1167 uses an indirect proxy method: instead of reverse-proxying the real page, it shows a FAKE MFA page listing common MFA methods (authenticator, push, SMS, phone call). The user's MFA code is captured and replayed server-side against the real auth provider."
+    },
+    {
+      "id": "greatness-kit-marker",
+      "group": "phishkitSignatures",
+      "description": "Greatness phishing kit artifacts — distinctive HTML structure and API patterns",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:Greatness|greatness)[\\s\\S]{0,200}(?:admin|panel|config|phish|kit)",
+      "patternFlags": "i",
+      "note": "Greatness is a PhaaS platform sold on Telegram since 2022 that specifically targets Microsoft 365 accounts. Its branding strings and admin panel references sometimes leak into phishing page source."
+    },
+    {
+      "id": "aitm-service-worker-intercept",
+      "group": "phishkitSignatures",
+      "description": "Service Worker registered to intercept network requests — persistent AiTM credential interception",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "navigator\\.serviceWorker\\.register\\([\\s\\S]{0,200}\\)[\\s\\S]{0,500}(?:fetch|FetchEvent|respondWith|credential|password|login|cookie)",
+      "patternFlags": "i",
+      "note": "Registering a Service Worker that intercepts fetch/FetchEvent requests creates a persistent client-side proxy. The Service Worker can intercept all network requests including credential submissions and session token exchanges, surviving page navigations."
+    },
+    {
+      "id": "aitm-csp-meta-override",
+      "group": "phishkitSignatures",
+      "description": "CSP meta tag injected to override security headers — proxy stripping content security policy",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "<meta[^>]*http-equiv=['\"]Content-Security-Policy['\"][^>]*content=['\"][^'\"]*(?:unsafe-inline|unsafe-eval|\\*)[^'\"]*['\"]",
+      "patternFlags": "i",
+      "note": "Injecting a permissive CSP meta tag (unsafe-inline, unsafe-eval, *) into a proxied page overrides the server's restrictive CSP headers. AiTM proxies need this to inject their own JavaScript into the proxied authentication page."
+    },
+    {
+      "id": "aitm-iframe-embed-login",
+      "group": "phishkitSignatures",
+      "description": "Legitimate login page loaded in iframe with credential interception — iframe-based AiTM",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<iframe[^>]*src=['\"]https?://(?:login\\.microsoftonline|accounts\\.google|login\\.live|auth\\.atlassian|login\\.salesforce|sso\\.)[^'\"]*['\"][\\s\\S]{0,500}<script",
+      "patternFlags": "i",
+      "note": "Embedding a legitimate login page in an iframe with an accompanying script enables credential interception via postMessage or DOM access. Evilginx 3.0 supports iframe embedding as a phishing technique that embeds the real login page."
+    },
+    {
+      "id": "aitm-referer-header-spoof",
+      "group": "phishkitSignatures",
+      "description": "Referrer-Policy set to hide proxy domain — prevents legitimate service from seeing attacker's origin",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<meta[^>]*name=['\"]referrer['\"][^>]*content=['\"](?:no-referrer|same-origin|origin)['\"]",
+      "patternFlags": "i",
+      "note": "Setting Referrer-Policy to no-referrer or same-origin via meta tag prevents the legitimate auth service from seeing the proxy's domain in the Referer header. AiTM proxies use this to avoid detection by the target service's anti-phishing checks."
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -10107,6 +10371,17 @@
       "patternString": "navigator\\.vibrate\\([\\s\\S]{0,100}\\)[\\s\\S]{0,300}(?:success|verified|confirmed|authenticated|approved)",
       "patternFlags": "i",
       "note": "Using the Vibration API to provide haptic feedback when credentials are 'verified' creates a convincing physical confirmation feeling on the victim's phone. The vibration makes the fake authentication feel real."
+    },
+    {
+      "id": "aitm-double-login-prompt",
+      "group": "socialEngineering",
+      "description": "Double login prompt — 'incorrect password' error after first submission forcing second credential entry",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:incorrect|invalid|wrong|failed|error)[\\s\\S]{0,300}(?:password|credential|authentication)[\\s\\S]{0,500}(?:try\\s*again|re-?enter|retry|one\\s*more)",
+      "patternFlags": "i",
+      "note": "Showing 'incorrect password' after the first credential submission and prompting re-entry is the AiTM double login pattern. The first submission is relayed to the real site; if it succeeds, a fake error captures the password again for the attacker's records."
     },
     {
       "id": "numeric-domain-pattern",
@@ -10807,7 +11082,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T19:10:12.464Z",
+      "compiledAt": "2026-04-01T19:15:58.089Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
