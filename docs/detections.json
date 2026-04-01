@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-01-20:16",
-    "generatedAt": "2026-04-01T20:16:45.522Z",
-    "brandCount": 179,
-    "patternCount": 830
+    "version": "2026-04-01-20:21",
+    "generatedAt": "2026-04-01T20:21:14.654Z",
+    "brandCount": 187,
+    "patternCount": 843
   },
   "brandEntries": [
     {
@@ -2010,6 +2010,115 @@
         "nhss",
         "nhs-uk",
         "nhsuk"
+      ]
+    },
+    {
+      "name": "fastrak",
+      "vertical": "government",
+      "domains": [
+        "bayareafastrak.org",
+        "thetollroads.com"
+      ],
+      "typos": [
+        "fastrakk",
+        "fastrrak",
+        "fas-trak",
+        "fastrak-pay",
+        "fast-trak"
+      ]
+    },
+    {
+      "name": "ipass",
+      "vertical": "government",
+      "domains": [
+        "getipass.com",
+        "illinoistollway.com"
+      ],
+      "typos": [
+        "i-pass",
+        "1pass",
+        "ipasss",
+        "i-pas",
+        "ipas"
+      ]
+    },
+    {
+      "name": "expresstoll",
+      "vertical": "government",
+      "domains": [
+        "expresstoll.com"
+      ],
+      "typos": [
+        "express-toll",
+        "expresstol",
+        "expresstolll",
+        "expres-toll"
+      ]
+    },
+    {
+      "name": "ntta",
+      "vertical": "government",
+      "domains": [
+        "ntta.org"
+      ],
+      "typos": [
+        "ntta-pay",
+        "nttatx",
+        "ntta-org",
+        "nttta"
+      ]
+    },
+    {
+      "name": "txtag",
+      "vertical": "government",
+      "domains": [
+        "txtag.org"
+      ],
+      "typos": [
+        "tx-tag",
+        "txtagg",
+        "txxtag",
+        "txtaq",
+        "tx-tagg"
+      ]
+    },
+    {
+      "name": "ezdrivema",
+      "vertical": "government",
+      "domains": [
+        "ezdrivema.com"
+      ],
+      "typos": [
+        "ezdrive-ma",
+        "ez-drivema",
+        "ezdrivemma",
+        "ezdrivma"
+      ]
+    },
+    {
+      "name": "peachpass",
+      "vertical": "government",
+      "domains": [
+        "peachpass.com"
+      ],
+      "typos": [
+        "peach-pass",
+        "peachpas",
+        "peachpasss",
+        "peach-pas"
+      ]
+    },
+    {
+      "name": "goodtogo",
+      "vertical": "government",
+      "domains": [
+        "mygoodtogo.com"
+      ],
+      "typos": [
+        "good-to-go",
+        "goodtogoo",
+        "goodtog0",
+        "g00dtogo"
       ]
     },
     {
@@ -15750,6 +15859,18 @@
     },
     {
       "domHashes": [],
+      "id": "toll-brand-name-payment-form",
+      "group": "brandImpersonation",
+      "description": "US toll system brand name on page with payment card form — toll service impersonation with card harvest",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:E-?Z-?Pass|SunPass|FasTrak|I-?Pass|TxTag|Peach\\s*Pass|ExpressToll|NTTA|EZDrive|Good\\s*To\\s*Go|RiverLink|PikePass|Toll\\s*(?:by\\s*Plate|Services|Authority|Agency))[\\s\\S]{0,2000}(?:<input[^>]*(?:card|cc|credit|cvv|expir|cvc))",
+      "patternFlags": "i",
+      "note": "Any US toll system brand name (EZPass, SunPass, FasTrak, I-Pass, TxTag, PeachPass, ExpressToll, NTTA, EZDrive, Good To Go, RiverLink, PikePass) on a page with credit card input fields is toll service impersonation."
+    },
+    {
+      "domHashes": [],
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -17763,6 +17884,66 @@
       "patternString": "(?:delivery|package|parcel|shipment)[\\s\\S]{0,300}(?:verification\\s*code|one-?time\\s*(?:code|password|pin)|OTP|security\\s*code)[\\s\\S]{0,300}(?:enter|input|verify|confirm|submit)[\\s\\S]{0,300}(?:sent\\s*to|text|sms|phone|mobile)",
       "patternFlags": "i",
       "note": "Delivery OTP verification pages claim a code was sent to the victim's phone to verify delivery. This is an MFA interception technique — the victim enters the real OTP from their carrier account, which the attacker uses for account takeover."
+    },
+    {
+      "domHashes": [],
+      "id": "toll-small-amount-card-harvest",
+      "group": "credentialHarvesting",
+      "description": "Small toll amount ($1.50-$12.50) with full payment card form — classic toll fee card harvesting",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:toll|balance|amount|owe)[\\s\\S]{0,200}\\$\\s*(?:[1-9]|1[0-2])\\.(?:\\d{2})[\\s\\S]{0,500}(?:card\\s*number|credit\\s*card|cvv|expir|cvc|security\\s*code|cc-number)",
+      "patternFlags": "i",
+      "note": "A small dollar amount ($1.50-$12.50) labeled as a toll balance with a full credit card form is the signature toll phishing card harvesting pattern. The amount is deliberately small to seem plausible but the real goal is capturing the full card details."
+    },
+    {
+      "domHashes": [],
+      "id": "toll-otp-after-card",
+      "group": "credentialHarvesting",
+      "description": "OTP/verification code requested after toll payment card entry — MFA interception for card fraud",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:card|payment|credit|debit)[\\s\\S]{0,1000}(?:verification\\s*code|one-?time\\s*(?:code|password)|OTP|security\\s*code\\s*sent|code\\s*(?:sent|texted)\\s*to\\s*(?:your|the)\\s*(?:phone|mobile|number))",
+      "patternFlags": "i",
+      "note": "Requesting an OTP/verification code AFTER the victim enters card details is the bank fraud escalation. The scammer initiates a real transaction with the stolen card and needs the victim's bank OTP to authorize it."
+    },
+    {
+      "domHashes": [],
+      "id": "toll-wallet-link-attempt",
+      "group": "credentialHarvesting",
+      "description": "Apple Pay or Google Pay wallet linking prompt on toll payment page — mobile wallet fraud",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:Apple\\s*Pay|Google\\s*Pay|Samsung\\s*Pay|mobile\\s*wallet|digital\\s*wallet|contactless)[\\s\\S]{0,300}(?:link|add|connect|setup|verify|authenticate)[\\s\\S]{0,300}(?:toll|payment|card)",
+      "patternFlags": "i",
+      "note": "Prompting victims to link a mobile wallet (Apple Pay, Google Pay) on a toll payment page is an emerging fraud vector. Scammers use the stolen card details to add the victim's card to their own mobile wallet for tap-to-pay fraud at physical stores."
+    },
+    {
+      "domHashes": [],
+      "id": "toll-license-plate-lookup",
+      "group": "credentialHarvesting",
+      "description": "License plate number input on toll payment page — vehicle identification harvesting",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:license\\s*plate|plate\\s*number|vehicle\\s*(?:number|registration|tag))[\\s\\S]{0,300}(?:<input|<select)[\\s\\S]{0,500}(?:state|province|toll|pay|balance)",
+      "patternFlags": "i",
+      "note": "Collecting license plate numbers alongside toll payment details harvests vehicle identification data. Combined with name and address from the card, this gives attackers enough for vehicle registration fraud or targeted physical crimes."
+    },
+    {
+      "domHashes": [],
+      "id": "toll-page-no-login-direct-pay",
+      "group": "credentialHarvesting",
+      "description": "Toll payment page with no account login option — direct card capture without authentication",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:toll|violation|balance|amount\\s*due)[\\s\\S]{0,1000}(?:card\\s*number|credit\\s*card|payment\\s*method)[\\s\\S]{0,2000}(?:</form>|</body>)(?!.*(?:sign\\s*in|log\\s*in|account|username|password))",
+      "patternFlags": "i",
+      "note": "A toll payment page that goes directly to card entry WITHOUT any account login is suspicious. Legitimate toll systems (EZPass, SunPass) require you to log into your account first. Going straight to card payment without auth is a phishing indicator."
     },
     {
       "domHashes": [],
@@ -22074,6 +22255,18 @@
     },
     {
       "domHashes": [],
+      "id": "toll-multiple-state-brands",
+      "group": "phishkitSignatures",
+      "description": "Multiple US state toll brand names on same page — smishing kit serving multiple toll templates",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:EZPass|E-ZPass|SunPass|FasTrak|I-Pass|TxTag|PeachPass|ExpressToll|EZDrive)[\\s\\S]{0,2000}(?:EZPass|E-ZPass|SunPass|FasTrak|I-Pass|TxTag|PeachPass|ExpressToll|EZDrive)",
+      "patternFlags": "i",
+      "note": "Two or more different US state toll brand names appearing on the same page indicates a smishing kit that serves multiple toll system templates. The kit configuration or template selection logic is leaking brand names from other campaigns."
+    },
+    {
+      "domHashes": [],
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -22899,6 +23092,66 @@
       "patternString": "(?:download|install)\\s*(?:our|the)?\\s*(?:new|updated|official)?\\s*(?:tracking|delivery|courier|shipping)?\\s*app[\\s\\S]{0,300}(?:track|manage|delivery|package)[\\s\\S]{0,300}(?:apk|download|install|play\\s*store|app\\s*store)",
       "patternFlags": "i",
       "note": "Fake courier app download prompts impersonate DHL, FedEx, USPS, etc. and direct users to install malicious APKs or fake apps. The 'tracking app' is actually malware that can intercept SMS (for OTP theft), access contacts, and steal banking credentials."
+    },
+    {
+      "domHashes": [],
+      "id": "toll-unpaid-balance-urgency",
+      "group": "socialEngineering",
+      "description": "Unpaid toll balance notification with late fee threat — the core toll phishing social engineering text",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:unpaid|outstanding|overdue|past\\s*due)\\s*(?:toll|balance|amount)[\\s\\S]{0,300}(?:late\\s*fee|penalty|fine|\\$\\s*50|\\$\\s*25|additional\\s*(?:fee|charge))[\\s\\S]{0,300}(?:pay|settle|resolve|clear|avoid)",
+      "patternFlags": "i",
+      "note": "The exact text pattern of toll phishing: 'unpaid toll balance' + threat of $25-$50 late fee/penalty + 'pay now to avoid'. This is the social engineering text on every Smishing Triad toll landing page. 60,000+ FBI complaints about this exact pattern."
+    },
+    {
+      "domHashes": [],
+      "id": "toll-account-suspension-warning",
+      "group": "socialEngineering",
+      "description": "Toll account suspension or hold warning — threatens account action if payment not made",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:toll|ezpass|sunpass|fastrak|ipass|txtag|peachpass|expresstoll)[\\s\\S]{0,300}(?:account|service)\\s*(?:will\\s*be|has\\s*been|may\\s*be)\\s*(?:suspended|terminated|held|frozen|deactivated|blocked)",
+      "patternFlags": "i",
+      "note": "Threatening toll account suspension/hold if payment isn't made is the escalation tactic used in toll phishing. Real toll agencies send physical mail for collections, not SMS threats of account suspension."
+    },
+    {
+      "domHashes": [],
+      "id": "toll-violation-number-display",
+      "group": "socialEngineering",
+      "description": "Toll violation or invoice number displayed — fake reference number adding perceived legitimacy",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:violation|invoice|notice|reference|citation)\\s*(?:#|number|no|id)?\\s*:?\\s*(?:[A-Z]{1,3}[-.]?\\d{4,8}|\\d{6,10})[\\s\\S]{0,500}(?:toll|balance|amount|pay|fee)",
+      "patternFlags": "i",
+      "note": "Displaying a fake violation/invoice number (like 'Violation #TX-89234' or 'Invoice: 7829341') alongside a toll balance adds perceived legitimacy. The number is generated per-visit and doesn't correspond to any real toll record."
+    },
+    {
+      "domHashes": [],
+      "id": "toll-dmv-registration-threat",
+      "group": "socialEngineering",
+      "description": "Vehicle registration or DMV action threatened for unpaid tolls — escalation scare tactic",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:vehicle\\s*registration|DMV|department\\s*of\\s*motor|license\\s*(?:plate|suspension)|registration\\s*(?:hold|suspension|revocation))[\\s\\S]{0,300}(?:toll|unpaid|outstanding|balance|violation)",
+      "patternFlags": "i",
+      "note": "Threatening DMV action, vehicle registration holds, or license plate suspension for unpaid tolls is the highest-pressure escalation in toll phishing. Real toll agencies follow lengthy legal processes, not instant SMS threats."
+    },
+    {
+      "domHashes": [],
+      "id": "toll-collections-escalation",
+      "group": "socialEngineering",
+      "description": "Collections agency or legal action threatened for toll balance — extreme pressure escalation",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:collection|collections\\s*agency|legal\\s*action|court|attorney|judgment|credit\\s*(?:report|score|bureau))[\\s\\S]{0,300}(?:toll|unpaid|balance|violation|outstanding)[\\s\\S]{0,200}(?:pay|settle|resolve|avoid|prevent)",
+      "patternFlags": "i",
+      "note": "Threatening collections agency referral, legal action, or credit score impact for unpaid tolls is extreme-pressure toll phishing. Real toll debt follows months of physical mail notices before any collections referral."
     },
     {
       "domHashes": [],
@@ -23823,6 +24076,18 @@
       "patternString": "(?:location\\.href|window\\.location|location\\.replace)[\\s\\S]{0,100}(?:firebaseapp\\.com|blob\\.core\\.windows\\.net|wixsite\\.com|tiktok\\.com|docs\\.google\\.com|sites\\.google\\.com)[\\s\\S]{0,200}(?:redirect|next|url|goto|dest|target)",
       "patternFlags": "i",
       "note": "Tycoon chains redirects through trusted services (Firebase, Azure Blob, Wix, TikTok, Google Docs/Sites) before landing on the phishing page. These trusted intermediate domains lend legitimacy to the redirect chain and bypass URL reputation checks."
+    },
+    {
+      "domHashes": [],
+      "id": "toll-xin-tld-domain",
+      "group": "urlHeuristics",
+      "description": "Domain using .xin TLD in page resources — Smishing Triad toll phishing infrastructure indicator",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:href|action|src)=['\"]https?://[a-z0-9.-]+\\.xin[/'\"]",
+      "patternFlags": "i",
+      "note": "The .xin TLD (Chinese for 'new/faith', managed by Elegant Leader Limited in Hong Kong) is specifically used by Smishing Triad for toll phishing domains. Resecurity identified thousands of toll phishing domains registered under .xin."
     }
   ]
 }
