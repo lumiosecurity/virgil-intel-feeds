@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-01-07:03",
-    "generatedAt": "2026-04-01T07:03:41.378Z",
+    "version": "2026-04-01-15:30",
+    "generatedAt": "2026-04-01T15:30:22.258Z",
     "brandCount": 107,
-    "patternCount": 306
+    "patternCount": 309
   },
   "brandEntries": [
     {
@@ -13667,6 +13667,42 @@
       "patternString": "Sign\\s+in\\s+to\\s+your\\s+account[\\s\\S]{0,2000}(?:Can't\\s+access\\s+your\\s+account|Sign-in\\s+options|microsoftonline|office\\.com|azure)",
       "patternFlags": "i",
       "note": "Combines Microsoft's distinctive 'Sign in to your account' header with secondary UI elements or domain references"
+    },
+    {
+      "domHashes": [],
+      "id": "ms-auth-flow-approve-signin-text",
+      "group": "brandImpersonation",
+      "description": "Microsoft MFA authentication flow text — 'Approve sign in request' and organization sign-in page language used in Microsoft login impersonation",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "Approve\\s+sign[\\s-]?in\\s+request[\\s\\S]{0,2000}Taking\\s+you\\s+to\\s+your\\s+organization",
+      "patternFlags": "i",
+      "note": "These exact phrases are from Microsoft's MFA/authenticator flow. Legitimate occurrences are only on login.microsoftonline.com and login.microsoft.com. Finding both strings together on any other domain is a strong Microsoft impersonation signal."
+    },
+    {
+      "domHashes": [],
+      "id": "ms-login-other-ways-signin",
+      "group": "brandImpersonation",
+      "description": "Microsoft-specific 'Other ways to sign in' text combined with password field — Microsoft login page impersonation",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "Other\\s+ways\\s+to\\s+sign\\s+in[\\s\\S]{0,3000}type=['\"]password['\"]|type=['\"]password['\"][\\s\\S]{0,3000}Other\\s+ways\\s+to\\s+sign\\s+in",
+      "patternFlags": "i",
+      "note": "The phrase 'Other ways to sign in' is specific to Microsoft's login UX. Combined with a password field on a non-Microsoft domain, this is a strong impersonation signal. Google uses 'More ways to sign in' and other providers use different wording."
+    },
+    {
+      "domHashes": [],
+      "id": "ms-stay-signed-in-prompt",
+      "group": "brandImpersonation",
+      "description": "Microsoft-specific 'Stay signed in?' post-authentication prompt found alongside sign-in elements",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "Stay\\s+signed\\s+in\\s*\\?[\\s\\S]{0,3000}(?:sign\\s*in|Forgot\\s+password|Terms\\s+of\\s+use)",
+      "patternFlags": "i",
+      "note": "The 'Stay signed in?' prompt with checkbox is specific to Microsoft's KMSI (Keep Me Signed In) flow. Finding this alongside other login elements on a non-Microsoft domain indicates a full authentication flow clone. Weight kept moderate as some SSO integrations may embed this legitimately."
     },
     {
       "domHashes": [],
