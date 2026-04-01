@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-01-17:55",
-    "generatedAt": "2026-04-01T17:55:58.966Z",
+    "version": "2026-04-01-18:56",
+    "generatedAt": "2026-04-01T18:56:26.788Z",
     "brandCount": 171,
-    "patternCount": 616
+    "patternCount": 650
   },
   "brandEntries": [
     {
@@ -3026,6 +3026,7 @@
     "mybluehost.me",
     "mybluemix.net",
     "myportfolio.com",
+    "myqcloud.com",
     "mystrikingly.com",
     "name.ac",
     "name.vu",
@@ -14560,6 +14561,66 @@
     },
     {
       "domHashes": [],
+      "id": "mobile-ua-desktop-redirect",
+      "group": "botEvasion",
+      "description": "Desktop user agents redirected to different content than mobile — mobile-only phishing page",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:userAgent|user-agent)[\\s\\S]{0,200}(?:!.*(?:Mobile|Android|iPhone|iPad)|(?:Windows|Macintosh|Linux)(?!.*Mobile))[\\s\\S]{0,300}(?:location\\.href|window\\.location|redirect|display:\\s*none)",
+      "patternFlags": "i",
+      "note": "Checking for desktop user agents and redirecting or hiding content ensures only mobile users see the phishing page. Security researchers primarily use desktop browsers, so this filters them out."
+    },
+    {
+      "domHashes": [],
+      "id": "screen-width-mobile-gate",
+      "group": "botEvasion",
+      "description": "Screen width checked to verify mobile device — shows phishing only on small screens",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "(?:screen\\.width|innerWidth|clientWidth)\\s*(?:<|<=)\\s*(?:768|800|600|480)[\\s\\S]{0,200}(?:style\\.display|innerHTML|location|redirect|classList)",
+      "patternFlags": "i",
+      "note": "Checking screen width to only show phishing content on mobile-sized screens (< 768px) is a smishing page technique. The page shows a blank or benign page on desktop to evade scanning."
+    },
+    {
+      "domHashes": [],
+      "id": "device-orientation-bot-detect",
+      "group": "botEvasion",
+      "description": "Device orientation/motion events checked for mobile bot detection — accelerometer verification",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "(?:deviceorientation|devicemotion|DeviceOrientationEvent|DeviceMotionEvent)[\\s\\S]{0,300}(?:alpha|beta|gamma|acceleration)[\\s\\S]{0,200}(?:redirect|display|form|content|phish)",
+      "patternFlags": "i",
+      "note": "Checking for device orientation/motion sensor data verifies the page is running on a real mobile device with an accelerometer. Emulators and desktop browsers don't produce real sensor data."
+    },
+    {
+      "domHashes": [],
+      "id": "mobile-pull-to-refresh-disable",
+      "group": "botEvasion",
+      "description": "Pull-to-refresh gesture disabled via overscroll-behavior — prevents mobile page reload",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "overscroll-behavior(?:-y)?:\\s*(?:none|contain)[\\s\\S]{0,500}(?:password|sign.?in|login|form)",
+      "patternFlags": "i",
+      "note": "Disabling pull-to-refresh via overscroll-behavior on a login page prevents mobile users from accidentally refreshing the page, which could reset the phishing state. Also prevents the user from seeing the URL flash during refresh."
+    },
+    {
+      "domHashes": [],
+      "id": "mobile-keyboard-detection",
+      "group": "botEvasion",
+      "description": "Virtual keyboard presence detected via viewport resize — verifies real mobile interaction",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "(?:visualViewport|resize|innerHeight)[\\s\\S]{0,200}(?:keyboard|focus|input)[\\s\\S]{0,200}(?:height|shrink|reduce|change)",
+      "patternFlags": "i",
+      "note": "Detecting the virtual keyboard opening by monitoring viewport height changes (the viewport shrinks when the keyboard appears) verifies the user is on a real mobile device. Emulators don't consistently replicate this behavior."
+    },
+    {
+      "domHashes": [],
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -15412,6 +15473,18 @@
     },
     {
       "domHashes": [],
+      "id": "theme-color-mobile-branding",
+      "group": "brandImpersonation",
+      "description": "Theme-color meta tag set to match brand colors — mobile browser chrome impersonation",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "<meta[^>]*name=['\"]theme-color['\"][^>]*content=['\"]#(?:0078d4|1877f2|ea4335|ff9900|00a1f1|0067b8|5865f2|1DB954|E50914)['\"]",
+      "patternFlags": "i",
+      "note": "Setting the theme-color meta tag to exact brand colors (Microsoft blue, Facebook blue, Google red, Amazon orange, Spotify green, Netflix red) makes the mobile browser's address bar and status bar match the impersonated brand."
+    },
+    {
+      "domHashes": [],
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -15529,6 +15602,18 @@
       "patternString": "recaptcha/api\\.js\\?[^'\"]*render=[a-zA-Z0-9_-]{30,}[\\s\\S]{0,500}data-sitekey=['\"][a-zA-Z0-9_-]{30,}['\"]",
       "patternFlags": "i",
       "note": "reCAPTCHA loaded with both render parameter and data-sitekey suggests the page is relaying CAPTCHA challenges. AiTM kits proxy the real site's reCAPTCHA to the victim and relay the solution back."
+    },
+    {
+      "domHashes": [],
+      "id": "touch-based-fake-captcha",
+      "group": "captchaGating",
+      "description": "Touch-based fake CAPTCHA requiring touch/swipe interaction — mobile-specific bot filter",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:touchstart|touchmove|touchend)[\\s\\S]{0,300}(?:captcha|verify|human|robot|check)[\\s\\S]{0,300}(?:style\\.display|classList|innerHTML|location|redirect)",
+      "patternFlags": "i",
+      "note": "Touch-based fake CAPTCHAs require swipe or touch interactions that only work on real mobile devices. This filters out desktop scanners while creating a convincing verification experience for mobile victims."
     },
     {
       "domHashes": [],
@@ -16585,6 +16670,102 @@
       "patternString": "navigator\\.credentials\\.(?:get|store|create)\\([\\s\\S]{0,300}(?:password|federated|publicKey)",
       "patternFlags": "i",
       "note": "Abusing the Credential Management API (navigator.credentials.get/store) to request stored credentials or create federated credentials is a sophisticated phishing technique. The browser's native credential prompt is trusted by users."
+    },
+    {
+      "domHashes": [],
+      "id": "mobile-number-input-pattern",
+      "group": "credentialHarvesting",
+      "description": "Mobile phone number input with specific mobile validation patterns — smishing landing page",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<input[^>]*(?:type=['\"]tel['\"]|inputmode=['\"]numeric['\"]|pattern=['\"][^'\"]*\\d{10,})[^>]*>[\\s\\S]{0,500}(?:verify|confirm|submit|send\\s*code|continue)",
+      "patternFlags": "i",
+      "note": "Phone number input fields with tel type or numeric inputmode combined with verification actions are characteristic of smishing landing pages that collect phone numbers for SIM swap attacks or further targeting."
+    },
+    {
+      "domHashes": [],
+      "id": "otp-sms-verification-ui",
+      "group": "credentialHarvesting",
+      "description": "SMS OTP verification code input UI with auto-read capability — MFA interception page",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:OTPCredential|otp|sms)[\\s\\S]{0,200}(?:autocomplete=['\"]one-time-code|navigator\\.credentials\\.get)[\\s\\S]{0,200}(?:transport.*sms|otp)",
+      "patternFlags": "i",
+      "note": "Using the Web OTP API (OTPCredential) or autocomplete='one-time-code' with navigator.credentials.get to auto-read SMS verification codes is used by phishing pages to silently intercept MFA codes sent to the victim's phone."
+    },
+    {
+      "domHashes": [],
+      "id": "otp-input-autofocus-chain",
+      "group": "credentialHarvesting",
+      "description": "Chain of single-digit OTP input fields with auto-focus — SMS code interception UI",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "(?:maxLength|maxlength)\\s*(?:=|:)\\s*['\"]?1[\\s\\S]{0,200}(?:nextElementSibling|nextSibling|focus\\(\\))[\\s\\S]{0,200}(?:otp|code|verify|token|pin)",
+      "patternFlags": "i",
+      "note": "JavaScript that auto-advances focus between single-digit input fields with OTP/code/verify context creates the 6-digit verification code entry UI. This auto-focus chain combined with verification text is a phishing MFA intercept indicator."
+    },
+    {
+      "domHashes": [],
+      "id": "mobile-responsive-only-form",
+      "group": "credentialHarvesting",
+      "description": "Login form only visible at mobile breakpoints — desktop hides credential harvesting",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "@media[\\s\\S]{0,50}min-width:\\s*(?:768|800|992|1024)px[\\s\\S]{0,200}(?:form|password|input)[\\s\\S]{0,100}display:\\s*none",
+      "patternFlags": "i",
+      "note": "CSS media queries that hide login forms on desktop breakpoints (min-width >= 768px) while showing them on mobile create mobile-only phishing pages. Desktop-based security scanners see no form at all."
+    },
+    {
+      "domHashes": [],
+      "id": "mobile-camera-permission-abuse",
+      "group": "credentialHarvesting",
+      "description": "Camera/microphone permission requested on phishing page — surveillance or document capture",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:getUserMedia|mediaDevices\\.getUserMedia)\\([\\s\\S]{0,200}(?:video|audio)[\\s\\S]{0,500}(?:password|credential|sign.?in|verify|selfie|id.?card|document|passport)",
+      "patternFlags": "i",
+      "note": "Requesting camera/microphone access on a credential harvesting page is used for selfie-based verification scams (fake KYC/ID verification) or to record the victim entering credentials. Legitimate login pages don't request camera access."
+    },
+    {
+      "domHashes": [],
+      "id": "nfc-payment-phish",
+      "group": "credentialHarvesting",
+      "description": "NFC/contactless payment API interaction on phishing page — payment data interception",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:NDEFReader|NDEFMessage|NFCReader|HCE|nfc)[\\s\\S]{0,300}(?:scan|read|write|send)[\\s\\S]{0,200}(?:card|payment|credit|token)",
+      "patternFlags": "i",
+      "note": "Interacting with NFC/NDEF APIs to read payment card data or write malicious payment tags is a mobile-specific credential harvesting technique targeting tap-to-pay functionality."
+    },
+    {
+      "domHashes": [],
+      "id": "geolocation-fine-harvest",
+      "group": "credentialHarvesting",
+      "description": "Fine GPS location harvested alongside credentials — precise victim location tracking",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "getCurrentPosition\\([\\s\\S]{0,300}(?:latitude|longitude|coords)[\\s\\S]{0,500}(?:fetch|XMLHttpRequest|sendBeacon|telegram|password|email|credential)",
+      "patternFlags": "i",
+      "note": "Requesting fine GPS location alongside credential capture gives attackers the victim's exact physical location. This data enables physical attacks (home break-in, stalking) or verifies victim identity for targeted fraud."
+    },
+    {
+      "domHashes": [],
+      "id": "webview-bridge-credential-leak",
+      "group": "credentialHarvesting",
+      "description": "JavaScript bridge to native app WebView detected — credential interception in app context",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:webkit\\.messageHandlers|AndroidBridge|JSBridge|nativeBridge|postToNative)[\\s\\S]{0,300}(?:password|credential|token|email|login)",
+      "patternFlags": "i",
+      "note": "JavaScript bridges to native WebView contexts (webkit.messageHandlers for iOS, AndroidBridge for Android) can intercept credentials entered in app-embedded browsers. Phishing pages detect they're in a WebView and use the bridge to exfiltrate data."
     },
     {
       "domHashes": [],
@@ -19804,6 +19985,78 @@
     },
     {
       "domHashes": [],
+      "id": "pwa-standalone-manifest",
+      "group": "phishkitSignatures",
+      "description": "PWA manifest with standalone display mode on credential page — app-like phishing install",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "manifest[\\s\\S]{0,1000}(?:display['\"]?\\s*:\\s*['\"]standalone|display['\"]?\\s*:\\s*['\"]fullscreen)[\\s\\S]{0,500}(?:password|sign.?in|log.?in|credential)",
+      "patternFlags": "i",
+      "note": "A PWA manifest with display:standalone or display:fullscreen on a page with login elements creates an app-like experience without a visible URL bar. When added to the home screen, the phishing page looks identical to a native app."
+    },
+    {
+      "domHashes": [],
+      "id": "webapk-silent-install-trigger",
+      "group": "phishkitSignatures",
+      "description": "WebAPK install triggered through Chrome's PWA installation mechanism — silent APK generation",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:getInstalledRelatedApps|beforeinstallprompt|onappinstalled)[\\s\\S]{0,300}(?:platform|play|store|webapk|chrome)",
+      "patternFlags": "i",
+      "note": "Chrome on Android can silently generate a WebAPK from a PWA, creating a native-looking app without going through the Play Store. Phishing kits abuse this to install persistent phishing 'apps' that bypass store security review."
+    },
+    {
+      "domHashes": [],
+      "id": "apple-mobile-web-app-capable",
+      "group": "phishkitSignatures",
+      "description": "Apple mobile web app capable meta tag on login page — iOS PWA phishing configuration",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "apple-mobile-web-app-capable[\\s\\S]{0,100}content=['\"]yes['\"][\\s\\S]{0,1000}(?:password|sign.?in|log.?in)",
+      "patternFlags": "i",
+      "note": "Setting apple-mobile-web-app-capable to yes on a login page enables iOS standalone mode. When saved to the home screen, the phishing page runs without Safari's address bar, hiding the phishing domain."
+    },
+    {
+      "domHashes": [],
+      "id": "android-intent-scheme-redirect",
+      "group": "phishkitSignatures",
+      "description": "Android intent:// URI scheme used for deep linking to app or malicious activity",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "intent://[^#]*#Intent;[\\s\\S]{0,300}(?:scheme=|package=|S\\.browser_fallback_url=)",
+      "patternFlags": "i",
+      "note": "Android intent:// URIs with #Intent parameters can launch apps, open URLs, or trigger actions. Phishing pages abuse intent:// schemes with browser_fallback_url to redirect to phishing pages when the target app isn't installed."
+    },
+    {
+      "domHashes": [],
+      "id": "standalone-display-no-urlbar",
+      "group": "phishkitSignatures",
+      "description": "CSS targeting standalone display mode to hide URL indicators — PWA phishing technique",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "@media\\s*\\(display-mode:\\s*standalone\\)[\\s\\S]{0,300}(?:header|nav|url|address|back)[\\s\\S]{0,100}(?:display:\\s*none|visibility:\\s*hidden)",
+      "patternFlags": "i",
+      "note": "CSS media queries targeting display-mode:standalone to hide navigation elements are used by PWA phishing pages. When installed as a standalone PWA, the page hides any visible URL indicators to prevent the user from checking the domain."
+    },
+    {
+      "domHashes": [],
+      "id": "clipboard-crypto-swap-monitor",
+      "group": "phishkitSignatures",
+      "description": "Clipboard monitoring for cryptocurrency address replacement — mobile crypto theft",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "(?:clipboard|navigator\\.clipboard\\.readText|paste)[\\s\\S]{0,300}(?:0x[0-9a-fA-F]|bc1|[13][a-km-zA-HJ-NP-Z1-9]|T[A-Za-z1-9])[\\s\\S]{0,200}(?:replace|writeText|clipboardData\\.setData)",
+      "patternFlags": "i",
+      "note": "Monitoring the clipboard for cryptocurrency wallet addresses (Ethereum 0x..., Bitcoin bc1/1.../3..., Tron T...) and replacing them with the attacker's address is a mobile crypto clipboard hijacker. Victims unknowingly send funds to the attacker."
+    },
+    {
+      "domHashes": [],
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -20377,6 +20630,126 @@
       "patternString": "(?:您的账[号户][已被](?:冻结|锁定|限制|暂停)|请(?:验证|确认)(?:您的|your)(?:身份|账户|信息)|立即(?:更新|验证|确认))",
       "patternFlags": "i",
       "note": "Chinese-language account urgency text ('您的账号已被冻结', '请验证您的身份', '立即更新') targets Chinese-speaking users with account suspension and verification phishing."
+    },
+    {
+      "domHashes": [],
+      "id": "fake-google-play-store",
+      "group": "socialEngineering",
+      "description": "Fake Google Play Store page impersonating app listing — malicious APK/PWA delivery",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:Google\\s*Play|Play\\s*Store|play\\.google\\.com)[\\s\\S]{0,500}(?:Install|Download|Update|Get\\s*(?:it|app))[\\s\\S]{0,300}(?:rating|stars|reviews|\\d+\\+?\\s*downloads)",
+      "patternFlags": "i",
+      "note": "Fake Google Play Store pages showing app listings with install buttons, ratings, and download counts are used to deliver malicious APKs or PWAs. The page impersonates Google Play's UI to build trust for sideloading malware."
+    },
+    {
+      "domHashes": [],
+      "id": "fake-apple-app-store",
+      "group": "socialEngineering",
+      "description": "Fake Apple App Store page impersonating app listing — malicious iOS profile/PWA delivery",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:App\\s*Store|apps\\.apple\\.com|apple\\.com/app)[\\s\\S]{0,500}(?:GET|Download|Install|Open)[\\s\\S]{0,300}(?:rating|\\d+\\.\\d\\s*(?:out|stars|rating)|reviews|Age\\s*Rating)",
+      "patternFlags": "i",
+      "note": "Fake Apple App Store pages with app listings, ratings, and GET/Download buttons trick iOS users into installing malicious profiles, PWAs, or enterprise-signed apps outside the real App Store."
+    },
+    {
+      "domHashes": [],
+      "id": "ios-smart-banner-spoof",
+      "group": "socialEngineering",
+      "description": "Fake iOS Smart App Banner prompting app install — impersonates native iOS UI element",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:apple-itunes-app|smart-app-banner|apple-mobile-web-app)[\\s\\S]{0,200}(?:app-id|content=['\"]app-id=\\d+|meta\\s+name=['\"]apple)",
+      "patternFlags": "i",
+      "note": "Fake Smart App Banners using apple-itunes-app meta tags trick iOS users into thinking there's a native app to install. The banner links to a phishing PWA or sideloaded enterprise app instead of the real App Store."
+    },
+    {
+      "domHashes": [],
+      "id": "sms-tel-scheme-redirect",
+      "group": "socialEngineering",
+      "description": "SMS or tel: scheme URI used in page links — triggers phone call or text from browser",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "href=['\"](?:sms|tel):[^'\"]*(?:\\?body=|&body=|\\?text=)[^'\"]+['\"]",
+      "patternFlags": "i",
+      "note": "SMS URIs with pre-filled body text (sms:+1234?body=...) can auto-compose messages on the victim's phone. Phishing pages use these to make victims send attacker-controlled text to premium numbers or other victims."
+    },
+    {
+      "domHashes": [],
+      "id": "whatsapp-share-link-phish",
+      "group": "socialEngineering",
+      "description": "WhatsApp share link with pre-filled phishing message — social engineering amplification",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:api\\.whatsapp\\.com|wa\\.me)/send\\?text=[^'\"]*(?:http|%3A%2F%2F)",
+      "patternFlags": "i",
+      "note": "WhatsApp share links (wa.me/send?text=...) with pre-filled URLs let phishing pages amplify attacks by making victims share phishing links with their contacts. The shared link comes from a trusted contact."
+    },
+    {
+      "domHashes": [],
+      "id": "telegram-share-link-phish",
+      "group": "socialEngineering",
+      "description": "Telegram share link with pre-filled phishing URL — social engineering amplification",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "t\\.me/share/url\\?url=[^'\"]*(?:http|%3A%2F%2F)",
+      "patternFlags": "i",
+      "note": "Telegram share links (t.me/share/url?url=...) with pre-filled phishing URLs amplify campaigns by making victims share malicious links within their Telegram contacts."
+    },
+    {
+      "domHashes": [],
+      "id": "carrier-billing-phish",
+      "group": "socialEngineering",
+      "description": "Mobile carrier billing or account verification form — carrier impersonation phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:mobile\\s*(?:account|billing|payment)|carrier\\s*(?:account|billing)|phone\\s*(?:plan|account|billing))[\\s\\S]{0,500}(?:verify|update|confirm|past\\s*due|outstanding)[\\s\\S]{0,300}(?:payment|credit\\s*card|debit|billing)",
+      "patternFlags": "i",
+      "note": "Mobile carrier billing/account verification pages that request payment updates are used in carrier impersonation phishing targeting T-Mobile, Verizon, AT&T, and other providers."
+    },
+    {
+      "domHashes": [],
+      "id": "add-to-homescreen-prompt",
+      "group": "socialEngineering",
+      "description": "Custom 'Add to Home Screen' instruction overlay for PWA install — mobile app phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:add\\s*to\\s*home\\s*screen|install\\s*(?:this\\s*)?app|save\\s*to\\s*home)[\\s\\S]{0,300}(?:share\\s*(?:button|icon)|(?:tap|click)\\s*(?:share|menu|install))[\\s\\S]{0,200}(?:icon|bookmark|shortcut)",
+      "patternFlags": "i",
+      "note": "Custom overlay instructions telling users how to 'Add to Home Screen' guide victims through installing a phishing PWA as an app. The instructions are tailored to iOS (share button → Add to Home Screen) or Android (menu → Install App)."
+    },
+    {
+      "domHashes": [],
+      "id": "mobile-status-bar-spoof",
+      "group": "socialEngineering",
+      "description": "Mobile status bar elements rendered in HTML — spoofing native device UI",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:status.?bar|signal.?(?:bar|strength|icon)|battery.?(?:icon|level|indicator)|wifi.?(?:icon|signal))[\\s\\S]{0,300}(?:(?:4G|5G|LTE)|\\d{1,2}:\\d{2}|\\d+%)[\\s\\S]{0,200}(?:position:\\s*fixed|top:\\s*0)",
+      "patternFlags": "i",
+      "note": "Rendering a fake mobile status bar (signal bars, battery, time, 4G/5G) in HTML positioned at the top of the page makes the phishing page look like it's running inside a native app rather than a browser."
+    },
+    {
+      "domHashes": [],
+      "id": "haptic-feedback-fake-auth",
+      "group": "socialEngineering",
+      "description": "Haptic/vibration feedback simulating authentication confirmation — fake success feeling",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "js",
+      "patternString": "navigator\\.vibrate\\([\\s\\S]{0,100}\\)[\\s\\S]{0,300}(?:success|verified|confirmed|authenticated|approved)",
+      "patternFlags": "i",
+      "note": "Using the Vibration API to provide haptic feedback when credentials are 'verified' creates a convincing physical confirmation feeling on the victim's phone. The vibration makes the fake authentication feel real."
     },
     {
       "domHashes": [],
@@ -21145,6 +21518,42 @@
       "patternString": "(?:microsoft|office|live)\\.com\\/.*(?:url|redirect|redir|goto)=https?%3A",
       "patternFlags": "i",
       "note": "Abusing Microsoft's open redirectors to bounce phishing links through Microsoft's trusted domain. Common in BEC campaigns targeting Office 365 users."
+    },
+    {
+      "domHashes": [],
+      "id": "deep-link-app-scheme",
+      "group": "urlHeuristics",
+      "description": "Custom app deep link schemes in page source — potential app-based phishing redirect",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "href=['\"](?:whatsapp|telegram|signal|viber|line|kakaotalk|wechat|weixin)://[^'\"]+['\"]",
+      "patternFlags": "i",
+      "note": "Custom URI schemes for messaging apps (whatsapp://, telegram://, signal://) in page links can deep-link into apps with pre-filled malicious content, contact additions, or group invites used in social engineering chains."
+    },
+    {
+      "domHashes": [],
+      "id": "smishing-triad-top-domain",
+      "group": "urlHeuristics",
+      "description": "Chinese .TOP domain in page source links — Smishing Triad infrastructure indicator",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:href|action|src)=['\"]https?://[a-z0-9-]+\\.top[/'\"\\s>][\\s\\S]{0,500}(?:toll|usps|fedex|ups|dhl|ezpass|sunpass|payment|delivery|package)",
+      "patternFlags": "i",
+      "note": "The Smishing Triad predominantly uses .TOP domains for their toll road, delivery, and payment phishing campaigns. Links to .top domains combined with logistics/toll/payment keywords are characteristic of this Chinese smishing group."
+    },
+    {
+      "domHashes": [],
+      "id": "link-in-bio-redirect",
+      "group": "urlHeuristics",
+      "description": "Link-in-bio service used as phishing redirect — abuses social media link tools",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "(?:linktr\\.ee|beacons\\.ai|stan\\.store|bio\\.link|hoo\\.be|linkin\\.bio|campsite\\.bio|tap\\.bio)/[a-z0-9_-]+",
+      "patternFlags": "i",
+      "note": "Link-in-bio services (Linktree, Beacons, Stan, Bio.link) are abused as phishing redirectors because their domains are trusted and rarely blocked. The phishing link hides behind a legitimate social media link tool."
     }
   ]
 }
