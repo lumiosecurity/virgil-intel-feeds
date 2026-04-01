@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T19:38:49.104Z",
+    "compiledAt": "2026-04-01T19:50:09.228Z",
     "brandCount": 171,
     "signalCount": 1,
-    "patternCount": 798,
+    "patternCount": 814,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -3625,6 +3625,61 @@
       "note": "Applying user-select:none to the entire page body prevents users from selecting and copying text. Phishing pages do this to prevent forensic text extraction and to make it harder to search for the page's text content."
     },
     {
+      "id": "tycoon-navigator-webdriver-check",
+      "group": "botEvasion",
+      "description": "navigator.webdriver check for Selenium/automation detection — Tycoon anti-bot evasion",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "navigator\\.webdriver[\\s\\S]{0,200}(?:===?\\s*true|!==?\\s*(?:false|undefined)|\\)|window\\.(?:__selenium|__driver|callSelenium|_phantom|callPhantom))",
+      "patternFlags": "i",
+      "note": "Checking navigator.webdriver for true (set by Selenium/Puppeteer), or checking for Selenium/PhantomJS global objects, detects automated browsers. Tycoon redirects to about:blank or a decoy site when automation is detected."
+    },
+    {
+      "id": "tycoon-phantomjs-detect",
+      "group": "botEvasion",
+      "description": "PhantomJS headless browser detection — Tycoon checks for PhantomJS-specific globals",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:window\\._phantom|window\\.callPhantom|phantom\\.exit|PhantomJS)",
+      "patternFlags": "",
+      "note": "Tycoon checks for PhantomJS-specific window properties (_phantom, callPhantom) to detect headless browser analysis. PhantomJS is used by some security scanning tools."
+    },
+    {
+      "id": "tycoon-clipboard-overwrite-oncopy",
+      "group": "botEvasion",
+      "description": "Clipboard data overwritten on copy event — Tycoon prevents page content extraction",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "addEventListener\\(['\"]copy['\"][\\s\\S]{0,200}(?:clipboardData\\.setData|e\\.preventDefault|event\\.preventDefault)[\\s\\S]{0,200}(?:text/plain|text/html)",
+      "patternFlags": "i",
+      "note": "Tycoon intercepts the copy event and overwrites the clipboard data with garbage or empty string, preventing security researchers from copying page source text for analysis. This is distinct from the right-click disable pattern."
+    },
+    {
+      "id": "tycoon-redirect-rakuten-antibot",
+      "group": "botEvasion",
+      "description": "Redirect to Rakuten homepage when analysis tool detected — Tycoon-specific decoy redirect",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:location\\.href|window\\.location)\\s*=\\s*['\"]https?://(?:www\\.)?rakuten\\.(?:com|co\\.jp)",
+      "patternFlags": "i",
+      "note": "Tycoon 2FA specifically redirects to Rakuten's homepage (rakuten.com or rakuten.co.jp) when analysis tools or debugging are detected. This exact redirect target is a definitive Tycoon 2FA signature — no other kit uses Rakuten as a decoy."
+    },
+    {
+      "id": "tycoon-f12-devtools-block",
+      "group": "botEvasion",
+      "description": "F12 key blocked to prevent DevTools opening — Tycoon's developer tools prevention",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:keydown|keypress|keyup)[\\s\\S]{0,200}(?:keyCode|which|key)\\s*(?:===?|==)\\s*(?:123|['\"]F12['\"])[\\s\\S]{0,200}(?:preventDefault|return\\s*false|stopPropagation)",
+      "patternFlags": "i",
+      "note": "Blocking F12 (keyCode 123) to prevent DevTools opening is a specific Tycoon anti-analysis technique added in December 2024. Combined with Ctrl+Shift+I and Ctrl+U blocking (which we already detect), this covers all DevTools entry points."
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -4628,6 +4683,39 @@
       "patternString": "(?:cf-turnstile|turnstile)[\\s\\S]{0,1000}(?:style=['\"][^'\"]*display:\\s*none|class=['\"][^'\"]*hidden)[\\s\\S]{0,1000}<input[^>]*type=['\"]password['\"]",
       "patternFlags": "i",
       "note": "A Turnstile widget followed by a hidden form containing a password field is the complete phishing gate pattern. The form is display:none until the Turnstile callback fires, then it becomes visible. This is the most distinctive Turnstile phishing signature."
+    },
+    {
+      "id": "tycoon-canvas-captcha-noise",
+      "group": "captchaGating",
+      "description": "Tycoon 2FA custom canvas CAPTCHA — randomized characters with background noise and distortion",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:canvas|getContext\\(['\"]2d['\"]\\))[\\s\\S]{0,300}(?:fillText|strokeText)[\\s\\S]{0,300}(?:random|Math\\.random|noise|distort|rotate|transform)[\\s\\S]{0,300}(?:verify|check|submit|validate)",
+      "patternFlags": "i",
+      "note": "Tycoon's custom CAPTCHA renders randomized characters on a canvas element with background noise and slight distortions, then validates user input. This replaced Cloudflare Turnstile starting April 2025. The canvas+randomization+verify chain is distinctive."
+    },
+    {
+      "id": "tycoon-captcha-verify-fetch-payload",
+      "group": "captchaGating",
+      "description": "CAPTCHA success triggers fetch for phishing page payload — Tycoon's gate-then-load architecture",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:captcha|verify|challenge)[\\s\\S]{0,300}(?:success|correct|pass|match)[\\s\\S]{0,500}fetch\\([\\s\\S]{0,200}(?:payload|page|content|template|next|stage|step)",
+      "patternFlags": "i",
+      "note": "After successful CAPTCHA verification, Tycoon fetches the actual phishing page payload from an attacker-controlled server. The CAPTCHA gate→success→fetch-payload chain ensures security scanners that can't solve the CAPTCHA never see the credential form."
+    },
+    {
+      "id": "tycoon-iconcaptcha-integration",
+      "group": "captchaGating",
+      "description": "IconCaptcha integration — icon-based CAPTCHA used by Tycoon as a rotating verification method",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:IconCaptcha|iconcaptcha|icon-captcha)[\\s\\S]{0,200}(?:init|render|setup|widget)",
+      "patternFlags": "i",
+      "note": "IconCaptcha is an icon-based CAPTCHA where users select the correct icon from a set. Tycoon 2FA rotates between custom canvas CAPTCHA, Google reCAPTCHA, and IconCaptcha to avoid signature-based detection of any single CAPTCHA type."
     },
     {
       "id": "cookie-gate-reload-phishkit",
@@ -7217,6 +7305,28 @@
       "patternString": "<script(?:(?!src=)[^>])*>[\\s\\S]{5000,}</script>",
       "patternFlags": "i",
       "note": "A page with a very large (5000+ char) inline script and no external script sources is characteristic of self-contained phishing pages where all code is embedded and typically obfuscated. Legitimate pages usually load scripts from external CDNs."
+    },
+    {
+      "id": "tycoon-whitespace-obfuscation-variants",
+      "group": "obfuscation",
+      "description": "Whitespace character encoding — tabs, spaces, and non-breaking spaces used as binary encoding for payloads",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:charCodeAt|fromCharCode|codePointAt|fromCodePoint)[\\s\\S]{0,200}(?:\\\\t|\\\\u0009|\\\\u0020|\\\\u00a0|\\\\u2000|\\\\u2001|\\\\u2002|\\\\u2003|\\\\u2004|\\\\u2005|\\\\u2006|\\\\u2007|\\\\u2008|\\\\u2009|\\\\u200a|\\\\u200b)",
+      "patternFlags": "i",
+      "note": "Beyond Hangul filler characters, Tycoon's latest versions use various whitespace Unicode characters (tabs, non-breaking spaces, thin spaces, zero-width spaces) as binary encoding. The charCodeAt/fromCharCode + whitespace Unicode patterns indicate this obfuscation."
+    },
+    {
+      "id": "tycoon-aes-payload-decrypt",
+      "group": "obfuscation",
+      "description": "AES decryption of phishing page payload at runtime — Tycoon's encrypted payload delivery (May 2025+)",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "(?:crypto\\.subtle\\.decrypt|CryptoJS\\.AES\\.decrypt|aesjs|sjcl\\.decrypt)[\\s\\S]{0,500}(?:innerHTML|document\\.write|eval|Function\\(|appendChild|insertAdjacentHTML)",
+      "patternFlags": "i",
+      "note": "Tycoon's May 2025+ versions encrypt the entire phishing page payload with AES. The encrypted blob is decrypted at runtime and injected into the DOM. The AES decrypt → DOM injection chain is the key signature."
     },
     {
       "id": "base64-html-password-obfuscation",
@@ -9857,6 +9967,61 @@
       "note": "A generic 'Thank you, your account has been verified/updated' message followed by a redirect is the phishing completion page. After stealing credentials, the kit shows a success message then redirects to the real site."
     },
     {
+      "id": "tycoon-email-first-then-password",
+      "group": "phishkitSignatures",
+      "description": "Tycoon 2FA email-first flow — email collected and validated before password field is shown",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:email|mail|user)[\\s\\S]{0,300}(?:fetch|XMLHttpRequest)[\\s\\S]{0,500}(?:then|onload|callback)[\\s\\S]{0,500}(?:style\\.display|classList|visibility)[\\s\\S]{0,300}(?:password|passwd|pwd)",
+      "patternFlags": "i",
+      "note": "Tycoon 2FA collects the email address first, validates it against Microsoft's API to check if it's a real M365 account, THEN reveals the password field. This email→validate→show-password flow is a distinctive Tycoon behavior that separates it from simple credential pages."
+    },
+    {
+      "id": "tycoon-org-branding-fetch",
+      "group": "phishkitSignatures",
+      "description": "Tycoon 2FA dynamic branding — fetches target org's login background/logo from Microsoft CDN based on email domain",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:aadcdn\\.msftauth\\.net|aadcdn\\.msauth\\.net|logincdn\\.msftauth\\.net)[\\s\\S]{0,300}(?:background|logo|banner|favicon|useDefaultBranding|tenantBranding)",
+      "patternFlags": "i",
+      "note": "Tycoon dynamically fetches the target organization's custom login branding (background image, logo) from Microsoft's AAD CDN based on the victim's email domain. This makes each phishing page look exactly like the victim's real corporate login."
+    },
+    {
+      "id": "tycoon-post-phish-ms-redirect",
+      "group": "phishkitSignatures",
+      "description": "Redirect to real Microsoft login after credential capture — Tycoon's post-phish legitimacy redirect",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:\\.value|getElementById|querySelector)[\\s\\S]{0,1000}(?:fetch|XMLHttpRequest|sendBeacon)[\\s\\S]{0,1000}(?:location\\.href|window\\.location)\\s*=\\s*['\"]https?://(?:login\\.microsoftonline\\.com|login\\.live\\.com)",
+      "patternFlags": "i",
+      "note": "After capturing credentials (reading .value, sending via fetch/XHR), redirecting to the REAL Microsoft login page (login.microsoftonline.com) is Tycoon's post-capture behavior. The victim lands at the real login, thinks they just need to sign in again."
+    },
+    {
+      "id": "tycoon-ms-error-message-adaptation",
+      "group": "phishkitSignatures",
+      "description": "Microsoft error message text parsed and displayed — Tycoon adapts to org security policies",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:error|message|response)[\\s\\S]{0,300}(?:AADSTS|Microsoft|account)[\\s\\S]{0,300}(?:innerHTML|textContent|innerText|display)",
+      "patternFlags": "i",
+      "note": "Tycoon parses error messages from Microsoft's real authentication API (AADSTS error codes) and displays them to the victim. This allows the phishing page to adapt to organization-specific security policies (e.g., 'this account requires MFA via authenticator app')."
+    },
+    {
+      "id": "tycoon-stage-progression-signals",
+      "group": "phishkitSignatures",
+      "description": "Multi-stage page with sequential div/section visibility toggling — Tycoon's stage-based authentication flow",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:getElementById|querySelector)\\(['\"](?:step|stage|page|phase|panel)[-_]?(?:[0-9]|one|two|three|four|five|captcha|email|password|otp|mfa|verify|success)['\"]\\)[\\s\\S]{0,200}(?:style\\.display|classList)",
+      "patternFlags": "i",
+      "note": "Tycoon uses sequential stage elements (step-1, step-2, stage-captcha, stage-email, stage-password, stage-otp) toggled via style.display or classList. The element naming pattern with stage/step + auth-stage-name is a Tycoon structural signature."
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -11308,12 +11473,23 @@
       "patternString": "<a[^>]*href=['\"]https?://[^'\"]+['\"][^>]*>[\\s\\S]{0,300}<a[^>]*href=['\"]https?://[^'\"]+['\"][^>]*>[\\s\\S]{0,300}<a[^>]*href=['\"]https?://[^'\"]+['\"]",
       "patternFlags": "i",
       "note": "A page where all links are absolute URLs to external domains (no relative internal links) indicates a page without internal site structure. Phishing pages link out to the real brand site for Terms/Privacy but have no internal pages."
+    },
+    {
+      "id": "tycoon-redirect-chain-intermediate",
+      "group": "urlHeuristics",
+      "description": "Redirect through trusted intermediate service before phishing landing — Tycoon's redirect laundering",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "(?:location\\.href|window\\.location|location\\.replace)[\\s\\S]{0,100}(?:firebaseapp\\.com|blob\\.core\\.windows\\.net|wixsite\\.com|tiktok\\.com|docs\\.google\\.com|sites\\.google\\.com)[\\s\\S]{0,200}(?:redirect|next|url|goto|dest|target)",
+      "patternFlags": "i",
+      "note": "Tycoon chains redirects through trusted services (Firebase, Azure Blob, Wix, TikTok, Google Docs/Sites) before landing on the phishing page. These trusted intermediate domains lend legitimacy to the redirect chain and bypass URL reputation checks."
     }
   ],
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T19:21:59.405Z",
+      "compiledAt": "2026-04-01T19:38:47.671Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
