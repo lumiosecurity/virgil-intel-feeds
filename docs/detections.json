@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-01-03:06",
-    "generatedAt": "2026-04-01T03:06:36.068Z",
+    "version": "2026-04-01-04:15",
+    "generatedAt": "2026-04-01T04:15:36.532Z",
     "brandCount": 107,
-    "patternCount": 292
+    "patternCount": 294
   },
   "brandEntries": [
     {
@@ -502,7 +502,11 @@
         "anazon",
         "amazn",
         "amazzon",
-        "arnazonwebservices"
+        "arnazonwebservices",
+        "amazin",
+        "amazoon",
+        "amozon",
+        "amazan"
       ]
     },
     {
@@ -13599,6 +13603,18 @@
     },
     {
       "domHashes": [],
+      "id": "amazon-interface-impersonation",
+      "group": "brandImpersonation",
+      "description": "Amazon brand impersonation detected through specific CSS classes and DOM structure",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "amazon-header[\\s\\S]{0,1000}products-grid[\\s\\S]{0,500}(?:js-product-grid|amazon\\.js)",
+      "patternFlags": "i",
+      "note": "Combination of Amazon-specific CSS classes and JavaScript files that only appear on Amazon impersonation sites"
+    },
+    {
+      "domHashes": [],
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -15912,6 +15928,18 @@
       "patternString": "<title>[^<]{0,20}Outlook 365 Login[^<]{0,20}</title>",
       "patternFlags": "i",
       "note": ""
+    },
+    {
+      "domHashes": [],
+      "id": "amazon-clone-project-title",
+      "group": "titleImpersonation",
+      "description": "Generic Amazon project title commonly used on Amazon clone/impersonation sites",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<title>\\s*Amazon\\s+(?:Project|Clone|Shop|Store|Site)\\s*</title>",
+      "patternFlags": "i",
+      "note": "Amateur Amazon impersonation sites often use generic titles like 'Amazon Project' instead of legitimate Amazon page titles"
     },
     {
       "domHashes": [],

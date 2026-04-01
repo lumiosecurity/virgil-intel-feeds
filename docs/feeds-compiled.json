@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T03:06:36.056Z",
+    "compiledAt": "2026-04-01T04:15:36.520Z",
     "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 292,
+    "patternCount": 294,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -505,7 +505,11 @@
         "anazon",
         "amazn",
         "amazzon",
-        "arnazonwebservices"
+        "arnazonwebservices",
+        "amazin",
+        "amazoon",
+        "amozon",
+        "amazan"
       ]
     },
     {
@@ -2468,6 +2472,17 @@
       "note": "Spanish banking phishkits reuse distinctive UI: Banca Online header with NIF/CIF/NIE document type selector and Clave de acceso password field. This combination is specific to Spanish bank impersonation kits — legitimate Spanish banks serve from their own domains, not random TLDs. 14+ literal chars in Banca Online and Clave de acceso anchors."
     },
     {
+      "id": "amazon-interface-impersonation",
+      "group": "brandImpersonation",
+      "description": "Amazon brand impersonation detected through specific CSS classes and DOM structure",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "amazon-header[\\s\\S]{0,1000}products-grid[\\s\\S]{0,500}(?:js-product-grid|amazon\\.js)",
+      "patternFlags": "i",
+      "note": "Combination of Amazon-specific CSS classes and JavaScript files that only appear on Amazon impersonation sites"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -4400,6 +4415,17 @@
       "patternFlags": "i"
     },
     {
+      "id": "amazon-clone-project-title",
+      "group": "titleImpersonation",
+      "description": "Generic Amazon project title commonly used on Amazon clone/impersonation sites",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<title>\\s*Amazon\\s+(?:Project|Clone|Shop|Store|Site)\\s*</title>",
+      "patternFlags": "i",
+      "note": "Amateur Amazon impersonation sites often use generic titles like 'Amazon Project' instead of legitimate Amazon page titles"
+    },
+    {
       "id": "ndax-auth-typosquat",
       "group": "typosquat",
       "description": "NDAX authentication typosquat patterns",
@@ -4748,7 +4774,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T02:57:58.376Z",
+      "compiledAt": "2026-04-01T03:06:34.312Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
