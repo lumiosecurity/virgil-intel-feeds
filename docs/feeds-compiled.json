@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T19:10:13.532Z",
+    "compiledAt": "2026-04-01T19:16:00.410Z",
     "brandCount": 171,
     "signalCount": 1,
-    "patternCount": 736,
+    "patternCount": 752,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -4454,6 +4454,116 @@
       "note": "Touch-based fake CAPTCHAs require swipe or touch interactions that only work on real mobile devices. This filters out desktop scanners while creating a convincing verification experience for mobile victims."
     },
     {
+      "id": "turnstile-widget-credential-page",
+      "group": "captchaGating",
+      "description": "Cloudflare Turnstile cf-turnstile widget div on a page with password/credential input fields",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "class=['\"]cf-turnstile['\"][^>]*data-sitekey=['\"]0x[A-Za-z0-9]{22,}['\"][\\s\\S]{0,3000}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "A cf-turnstile widget div with a real sitekey (0x prefix + 22+ alphanumeric chars) on the same page as a password input field is the #1 Turnstile phishing pattern. The Turnstile gates a credential harvesting form, blocking scanners but allowing human victims through."
+    },
+    {
+      "id": "turnstile-api-script-password-page",
+      "group": "captchaGating",
+      "description": "Turnstile API script loaded on a page with password input — CAPTCHA-gated credential harvest",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "challenges\\.cloudflare\\.com/turnstile/v0/api\\.js[\\s\\S]{0,5000}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "Loading the Turnstile v0 API script (challenges.cloudflare.com/turnstile/v0/api.js) on a page with a password field is the telltale phishkit integration. Legitimate login pages hosted behind Cloudflare use Managed Challenge, not embedded Turnstile widgets on credential forms."
+    },
+    {
+      "id": "turnstile-render-before-form",
+      "group": "captchaGating",
+      "description": "turnstile.render() called explicitly to create widget before credential form interaction",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "turnstile\\.render\\([\\s\\S]{0,200}sitekey[\\s\\S]{0,300}callback[\\s\\S]{0,500}(?:style\\.display|classList|visibility|submit|password|form)",
+      "patternFlags": "i",
+      "note": "Explicit turnstile.render() with a callback that reveals/enables a credential form is the programmatic Turnstile integration used by phishing kits. The callback fires after verification, enabling the hidden phishing form."
+    },
+    {
+      "id": "turnstile-callback-form-reveal",
+      "group": "captchaGating",
+      "description": "Turnstile success callback that shows or enables a hidden credential form — gate-then-reveal pattern",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:data-callback|callback)[\\s\\S]{0,100}function[\\s\\S]{0,300}(?:style\\.display\\s*=\\s*['\"](?:block|flex|grid)|classList\\.remove\\(['\"]hidden|removeAttribute\\(['\"]disabled|visibility\\s*=\\s*['\"]visible)[\\s\\S]{0,500}(?:form|password|input)",
+      "patternFlags": "i",
+      "note": "A Turnstile callback function that reveals a hidden form (display:block, removes 'hidden' class, enables disabled elements) is the gate-then-reveal pattern. The credential form only becomes visible/usable after Turnstile verification blocks scanners."
+    },
+    {
+      "id": "turnstile-explicit-render-sitekey",
+      "group": "captchaGating",
+      "description": "Turnstile explicit render with sitekey in JavaScript variable — programmatic widget creation",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "turnstile\\.render\\([\\s\\S]{0,100}sitekey\\s*:\\s*['\"]0x[A-Za-z0-9]{22,}['\"]",
+      "patternFlags": "i",
+      "note": "Explicit turnstile.render() with a sitekey starting with 0x is the programmatic Turnstile integration. Phishing kits use explicit rendering for more control over when the widget appears and what happens after verification."
+    },
+    {
+      "id": "turnstile-implicit-render-password",
+      "group": "captchaGating",
+      "description": "Turnstile implicit rendering (auto-detect cf-turnstile class) on credential page — automated widget setup",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "turnstile/v0/api\\.js['\"][^>]*(?:async|defer)[^>]*>[\\s\\S]{0,2000}class=['\"]cf-turnstile['\"][\\s\\S]{0,2000}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "The Turnstile script loaded with async/defer + a cf-turnstile class div + password input on the same page is implicit rendering on a credential form. The script auto-detects the cf-turnstile div and renders the widget."
+    },
+    {
+      "id": "turnstile-expired-callback-rerender",
+      "group": "captchaGating",
+      "description": "Turnstile expired-callback handling that re-renders or refreshes widget on phishing page",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "(?:expired-callback|expiredCallback|data-expired-callback)[\\s\\S]{0,200}(?:turnstile\\.reset|turnstile\\.render|location\\.reload|refresh)",
+      "patternFlags": "i",
+      "note": "Handling the Turnstile expired-callback to reset/re-render the widget shows the phishing kit is managing token lifecycle. Legitimate sites handle this server-side; client-side expired callback handling indicates a client-side-only phishing implementation."
+    },
+    {
+      "id": "turnstile-before-submit-check",
+      "group": "captchaGating",
+      "description": "Form submit blocked until Turnstile token is present — CAPTCHA validation gate on credential form",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:addEventListener|onsubmit)[\\s\\S]{0,200}(?:submit)[\\s\\S]{0,300}(?:cf-turnstile-response|turnstile|getResponse)[\\s\\S]{0,200}(?:preventDefault|return\\s+false|alert|error)",
+      "patternFlags": "i",
+      "note": "Checking for a valid Turnstile token before allowing form submission (preventing submit if token is missing) is the client-side enforcement pattern. The phishing kit ensures the victim completes Turnstile before credentials are submitted."
+    },
+    {
+      "id": "turnstile-challenge-platform-iframe",
+      "group": "captchaGating",
+      "description": "Cloudflare challenge-platform script loaded within Turnstile context — embedded challenge iframe",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "cdn-cgi/challenge-platform/[\\s\\S]{0,200}scripts/[\\s\\S]{0,200}\\.js[\\s\\S]{0,2000}cf-turnstile",
+      "patternFlags": "i",
+      "note": "The cdn-cgi/challenge-platform scripts loaded alongside a cf-turnstile widget indicate the full Cloudflare challenge infrastructure is being invoked. On a phishing page, this creates a convincing Cloudflare-protected appearance."
+    },
+    {
+      "id": "turnstile-form-hidden-until-verify",
+      "group": "captchaGating",
+      "description": "Login form initially hidden with Turnstile verification required before display — full gate pattern",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:cf-turnstile|turnstile)[\\s\\S]{0,1000}(?:style=['\"][^'\"]*display:\\s*none|class=['\"][^'\"]*hidden)[\\s\\S]{0,1000}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "A Turnstile widget followed by a hidden form containing a password field is the complete phishing gate pattern. The form is display:none until the Turnstile callback fires, then it becomes visible. This is the most distinctive Turnstile phishing signature."
+    },
+    {
       "id": "cookie-gate-reload-phishkit",
       "group": "cdnGating",
       "description": "Detects phishkit gate pattern: sets a cookie with timestamp then reloads page to pass server-side check",
@@ -5763,6 +5873,50 @@
       "patternString": "(?:new\\s+Image|createElement\\(['\"]img['\"]\\))[\\s\\S]{0,200}\\.src\\s*=\\s*[\\s\\S]{0,100}(?:\\+|\\$\\{|concat)[\\s\\S]{0,100}\\.value",
       "patternFlags": "i",
       "note": "Creating an Image element and setting its src to a URL that includes form input .value data exfiltrates via an image request. This bypass technique doesn't use fetch/XHR/sendBeacon — the browser simply tries to 'load' the image containing the stolen data in the URL."
+    },
+    {
+      "id": "turnstile-response-with-credentials",
+      "group": "credentialHarvesting",
+      "description": "cf-turnstile-response token submitted alongside credential fields — Turnstile-gated phishing exfil",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "cf-turnstile-response[\\s\\S]{0,500}(?:password|passwd|pwd|email|username|credential|login)",
+      "patternFlags": "i",
+      "note": "The cf-turnstile-response token being collected and submitted alongside credential field values confirms that Turnstile is being used to gate a credential harvesting form. The token proves the victim is human; the credentials are the payload."
+    },
+    {
+      "id": "turnstile-crossorigin-form-action",
+      "group": "credentialHarvesting",
+      "description": "Turnstile widget protecting a form with cross-origin action URL — credential exfil behind CAPTCHA gate",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "cf-turnstile[\\s\\S]{0,2000}<form[^>]*action=['\"]https?://[^'\"]+['\"][^>]*>[\\s\\S]{0,500}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "A Turnstile widget on the same page as a form with a cross-origin action URL containing a password field is almost certainly phishing. Legitimate sites that use Turnstile submit to their own domain, not to an external endpoint."
+    },
+    {
+      "id": "turnstile-token-relay-external",
+      "group": "credentialHarvesting",
+      "description": "Turnstile token extracted and sent to external server alongside credentials — AiTM token relay",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:cf-turnstile-response|turnstileToken|turnstile_token)[\\s\\S]{0,300}(?:fetch\\(['\"]https?://|XMLHttpRequest|sendBeacon)[\\s\\S]{0,200}(?:password|credential|email|token)",
+      "patternFlags": "i",
+      "note": "Extracting the Turnstile token and sending it to an external server alongside credentials is the AiTM relay pattern. The attacker uses the victim's solved Turnstile token to bypass CAPTCHA on the real site while stealing credentials."
+    },
+    {
+      "id": "turnstile-response-field-exfil",
+      "group": "credentialHarvesting",
+      "description": "Hidden input named cf-turnstile-response alongside credential inputs — Turnstile token in exfil payload",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<input[^>]*name=['\"]cf-turnstile-response['\"][^>]*type=['\"]hidden['\"][\\s\\S]{0,2000}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "A hidden input named cf-turnstile-response on the same form as a password field confirms Turnstile is gating a credential harvesting form. The token is submitted alongside the stolen credentials."
     },
     {
       "id": "suspicious-subdomain-financial",
@@ -9307,6 +9461,28 @@
       "note": "The HTML ping attribute on anchor tags causes the browser to send a POST request to the ping URL when the link is clicked. Phishing pages use this for exfiltration that happens outside of JavaScript, bypassing JS-focused detection."
     },
     {
+      "id": "turnstile-dummy-sitekey-production",
+      "group": "phishkitSignatures",
+      "description": "Turnstile testing/dummy sitekey used in production — phishing page with non-validating CAPTCHA",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "data-sitekey=['\"](?:1x00000000000000000000AA|1x00000000000000000000AB|2x00000000000000000000AB|2x00000000000000000000BB|3x00000000000000000000FF)['\"]",
+      "patternFlags": "",
+      "note": "Cloudflare's testing sitekeys (1x00000000000000000000AA, etc.) always pass without real verification. Phishing kits use these dummy keys to show a Turnstile widget that looks real but never actually validates — pure theater for the victim."
+    },
+    {
+      "id": "turnstile-sitekey-reused-mismatched",
+      "group": "phishkitSignatures",
+      "description": "Turnstile sitekey hardcoded with common phishkit-shared sitekey values — reused across campaigns",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "data-sitekey=['\"]0x4[A-Za-z0-9]{21,}['\"][\\s\\S]{0,3000}(?:password|sign.?in|log.?in|credential)",
+      "patternFlags": "i",
+      "note": "Turnstile sitekeys starting with 0x4... are free-tier widgets. A free-tier Turnstile sitekey on a credential harvesting page is suspicious because legitimate enterprises use paid Cloudflare plans. Phishing kits register free Turnstile widgets specifically for phishing."
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -10631,7 +10807,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T19:00:56.023Z",
+      "compiledAt": "2026-04-01T19:10:12.464Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
