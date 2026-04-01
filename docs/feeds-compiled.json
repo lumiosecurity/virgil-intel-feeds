@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T04:15:36.520Z",
+    "compiledAt": "2026-04-01T04:22:20.351Z",
     "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 294,
+    "patternCount": 297,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2483,6 +2483,17 @@
       "note": "Combination of Amazon-specific CSS classes and JavaScript files that only appear on Amazon impersonation sites"
     },
     {
+      "id": "brand-subdomain-impersonation",
+      "group": "brandImpersonation",
+      "description": "Major brand name used as subdomain on unrelated root domain",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:support|secure|login|signin|account|help|verify)\\.[a-zA-Z0-9-]*(?:paypal|venmo|chase|wellsfargo|bankofamerica|amazon|apple|microsoft|google)\\.[a-zA-Z0-9-]+\\.(?:org|net|info|biz|top|tk|ml|ga|cf)",
+      "patternFlags": "i",
+      "note": "Detects impersonation through brand-named subdomains on suspicious TLDs - legitimate brands use their own domains"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -2732,6 +2743,17 @@
       "patternString": "(?:select|option|radio|button)[^>]*>[\\s\\S]{0,200}NIF[\\s\\S]{0,200}CIF[\\s\\S]{0,200}NIE[\\s\\S]{0,200}Pasaporte",
       "patternFlags": "i",
       "note": "Spanish banking phishkits include a document type dropdown with NIF/CIF/NIE/Pasaporte options. This exact combination of all four Spanish ID types in a form selector is unique to Spanish bank login impersonation. Legitimate Spanish banks serve from .es domains or their own branded domains, not arbitrary TLDs. Multiple 3-9 char anchors (NIF, CIF, NIE, Pasaporte)."
+    },
+    {
+      "id": "drm-session-token-harvest",
+      "group": "credentialHarvesting",
+      "description": "DRM parameter with hex token in credential harvesting URL structure",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "[?&]DRM=[a-f0-9]{64}[^\\s<>\"']*(?:signin|login|auth|verify)",
+      "patternFlags": "i",
+      "note": "64-character hex DRM tokens are characteristic of phishing campaign tracking - not used by legitimate services"
     },
     {
       "id": "suspicious-subdomain-financial",
@@ -4769,12 +4791,23 @@
       "patternString": "(?:href|action|src)\\s*=\\s*['\"][^'\"]*(?:ven|venmo)[-_]?log\\.php",
       "patternFlags": "i",
       "note": "Detects Venmo-specific credential harvesting PHP endpoints in HTML attributes"
+    },
+    {
+      "id": "venmo-php-harvest-endpoint",
+      "group": "urlHeuristics",
+      "description": "Venmo-branded URL with PHP credential harvesting endpoint and randomized session path",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "venmo[^/]*(?:/signin/[a-zA-Z0-9]{8,})?/[^/]*(?:ven-log|venmo-log|v-log)\\.php",
+      "patternFlags": "i",
+      "note": "Specific to Venmo phishkits using PHP backends with characteristic naming conventions - legitimate Venmo never uses PHP endpoints"
     }
   ],
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T03:06:34.312Z",
+      "compiledAt": "2026-04-01T04:15:34.871Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
