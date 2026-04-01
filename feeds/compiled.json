@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T17:51:34.973Z",
+    "compiledAt": "2026-04-01T17:55:55.978Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -332,6 +332,7 @@
     "mybluehost.me",
     "mybluemix.net",
     "myportfolio.com",
+    "myqcloud.com",
     "mystrikingly.com",
     "name.ac",
     "name.vu",

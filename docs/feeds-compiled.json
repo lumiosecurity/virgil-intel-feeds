@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T17:51:36.331Z",
-    "brandCount": 159,
+    "compiledAt": "2026-04-01T17:55:58.950Z",
+    "brandCount": 171,
     "signalCount": 1,
-    "patternCount": 589,
+    "patternCount": 616,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -936,6 +936,51 @@
       "note": "DoorDash targeted for driver and customer credential theft."
     },
     {
+      "name": "ikea",
+      "vertical": "ecommerce",
+      "domains": [
+        "ikea.com"
+      ],
+      "typos": [
+        "ikeaa",
+        "1kea",
+        "lkea",
+        "ikeas",
+        "ikeea"
+      ],
+      "note": "IKEA impersonated in order confirmation and gift card phishing campaigns."
+    },
+    {
+      "name": "instacart",
+      "vertical": "ecommerce",
+      "domains": [
+        "instacart.com"
+      ],
+      "typos": [
+        "instacart1",
+        "instacrat",
+        "instaccart",
+        "lnstacart",
+        "instacartt"
+      ],
+      "note": "Instacart targeted for shopper and customer credential theft."
+    },
+    {
+      "name": "grubhub",
+      "vertical": "ecommerce",
+      "domains": [
+        "grubhub.com"
+      ],
+      "typos": [
+        "grubhubb",
+        "grubhb",
+        "qrubhub",
+        "grub-hub",
+        "grabhub"
+      ],
+      "note": "Grubhub targeted for driver and customer credential harvesting."
+    },
+    {
       "name": "spotify",
       "domains": [
         "spotify.com",
@@ -1545,6 +1590,50 @@
       "note": "Interac e-Transfer impersonated in Canadian payment phishing campaigns."
     },
     {
+      "name": "turbotax",
+      "vertical": "financial",
+      "domains": [
+        "turbotax.intuit.com"
+      ],
+      "typos": [
+        "turb0tax",
+        "turbottax",
+        "turbo-tax",
+        "turbotaxx",
+        "turbotrax"
+      ],
+      "note": "TurboTax impersonated during US tax season for tax refund fraud and credential theft."
+    },
+    {
+      "name": "usaa",
+      "vertical": "financial",
+      "domains": [
+        "usaa.com"
+      ],
+      "typos": [
+        "usaaa",
+        "ussaa",
+        "usa-a",
+        "ussaa"
+      ],
+      "note": "USAA military banking targeted for credential theft affecting military families."
+    },
+    {
+      "name": "allstate",
+      "vertical": "financial",
+      "domains": [
+        "allstate.com"
+      ],
+      "typos": [
+        "allstatee",
+        "a11state",
+        "allsstate",
+        "allstatte",
+        "allstete"
+      ],
+      "note": "Allstate insurance targeted for policy and payment credential phishing."
+    },
+    {
       "name": "bet365",
       "domains": [
         "bet365.com"
@@ -1604,6 +1693,69 @@
         "ro-blox"
       ],
       "note": "Roblox is heavily targeted for credential theft affecting children. Top 10 phished brand in Q4 2025. Typosquats target young users who are less careful with URLs."
+    },
+    {
+      "name": "playstation",
+      "vertical": "gaming",
+      "domains": [
+        "playstation.com",
+        "store.playstation.com"
+      ],
+      "typos": [
+        "playstati0n",
+        "p1aystation",
+        "playstatiom",
+        "playstatiion",
+        "playstaion"
+      ],
+      "note": "PlayStation targeted for gaming account credential theft and stored payment method access."
+    },
+    {
+      "name": "xbox",
+      "vertical": "gaming",
+      "domains": [
+        "xbox.com"
+      ],
+      "typos": [
+        "xb0x",
+        "xboxx",
+        "xbocks",
+        "x-box",
+        "xbbox"
+      ],
+      "note": "Xbox/Microsoft gaming accounts targeted for credential theft and game library access."
+    },
+    {
+      "name": "epicgames",
+      "vertical": "gaming",
+      "domains": [
+        "epicgames.com",
+        "store.epicgames.com"
+      ],
+      "typos": [
+        "epicgamess",
+        "eplcgames",
+        "ep1cgames",
+        "epicgams",
+        "epic-games"
+      ],
+      "note": "Epic Games targeted for Fortnite account theft and V-Bucks fraud."
+    },
+    {
+      "name": "nintendo",
+      "vertical": "gaming",
+      "domains": [
+        "nintendo.com",
+        "accounts.nintendo.com"
+      ],
+      "typos": [
+        "nintendoo",
+        "nintend0",
+        "nintndo",
+        "nlntendo",
+        "nintendo1"
+      ],
+      "note": "Nintendo targeted for eShop credential theft and stored payment method access."
     },
     {
       "name": "cloudflare",
@@ -2257,6 +2409,36 @@
         "redddit"
       ],
       "note": "Reddit targeted for account takeover, especially moderator and high-karma accounts."
+    },
+    {
+      "name": "tinder",
+      "vertical": "social",
+      "domains": [
+        "tinder.com"
+      ],
+      "typos": [
+        "tindeer",
+        "tlnder",
+        "tinderr",
+        "t1nder",
+        "tindr"
+      ],
+      "note": "Tinder targeted for account takeover, sextortion, and romance scam campaigns."
+    },
+    {
+      "name": "bumble",
+      "vertical": "social",
+      "domains": [
+        "bumble.com"
+      ],
+      "typos": [
+        "bumblee",
+        "bumbl3",
+        "bumblle",
+        "bumb1e",
+        "bummble"
+      ],
+      "note": "Bumble dating app targeted for credential theft and social engineering attacks."
     },
     {
       "name": "microsoft",
@@ -3342,6 +3524,28 @@
       "patternString": "caches\\.(?:delete|keys\\(\\))[\\s\\S]{0,200}(?:forEach|then|map)[\\s\\S]{0,100}(?:delete|remove)",
       "patternFlags": "i",
       "note": "Deleting service worker caches prevents forensic analysis of cached phishing page content. After the attack, cached evidence is destroyed so investigators can't reconstruct the phishing page."
+    },
+    {
+      "id": "intersection-observer-lazy-phish",
+      "group": "botEvasion",
+      "description": "IntersectionObserver delays phishing form injection until element is visible — lazy-load evasion",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "IntersectionObserver\\([\\s\\S]{0,300}(?:isIntersecting|intersectionRatio)[\\s\\S]{0,300}(?:innerHTML|createElement|appendChild|insertAdjacentHTML)[\\s\\S]{0,200}(?:form|password|input|login)",
+      "patternFlags": "i",
+      "note": "Using IntersectionObserver to inject the phishing form only when the user scrolls to that part of the page delays form insertion until actual user interaction. Security scanners that don't scroll won't trigger the form injection."
+    },
+    {
+      "id": "idle-detection-phish-trigger",
+      "group": "botEvasion",
+      "description": "IdleDetector API used to trigger phishing after user returns — attention-based triggering",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "IdleDetector[\\s\\S]{0,200}(?:start|requestPermission)[\\s\\S]{0,300}(?:userState|screenState)[\\s\\S]{0,200}(?:active|idle)[\\s\\S]{0,200}(?:style\\.display|innerHTML|location)",
+      "patternFlags": "i",
+      "note": "Using the IdleDetector API to wait until the user returns from being idle before showing phishing content ensures the victim is actively looking at the screen. This maximizes the chance of credential entry."
     },
     {
       "id": "spotify-impersonation-title",
@@ -4987,6 +5191,138 @@
       "patternString": "window\\.name[\\s\\S]{0,100}(?:password|email|credential|token|session)",
       "patternFlags": "i",
       "note": "Window.name persists across page navigations within the same tab. Phishing kits use it as a covert data channel to transfer stolen credentials between phishing domains without URL parameters or cookies."
+    },
+    {
+      "id": "web-worker-background-exfil",
+      "group": "credentialHarvesting",
+      "description": "Web Worker used for background credential exfiltration — invisible to page inspection",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "new\\s+Worker\\([\\s\\S]{0,200}(?:Blob|createObjectURL|data:)[\\s\\S]{0,300}(?:postMessage|onmessage)[\\s\\S]{0,300}(?:password|credential|token|email|card)",
+      "patternFlags": "i",
+      "note": "Creating an inline Web Worker from a Blob to exfiltrate credentials in a background thread. The Worker runs independently of the page and its network requests are harder to inspect. The credential data is sent to the Worker via postMessage."
+    },
+    {
+      "id": "fetch-keepalive-exfil",
+      "group": "credentialHarvesting",
+      "description": "Fetch with keepalive flag for fire-and-forget credential exfiltration on page unload",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "fetch\\([\\s\\S]{0,200}keepalive:\\s*true[\\s\\S]{0,300}(?:password|credential|token|email|card|payment)",
+      "patternFlags": "i",
+      "note": "Using fetch() with keepalive:true ensures the request completes even if the page is being unloaded. This fire-and-forget technique guarantees credential exfiltration even if the user navigates away immediately after submitting."
+    },
+    {
+      "id": "payment-request-api-abuse",
+      "group": "credentialHarvesting",
+      "description": "Payment Request API invoked on a non-payment page — fake payment harvesting",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "new\\s+PaymentRequest\\([\\s\\S]{0,300}(?:basic-card|credit|payment)[\\s\\S]{0,200}(?:show\\(\\)|canMakePayment)",
+      "patternFlags": "i",
+      "note": "Invoking the Payment Request API to display the browser's native payment sheet is a sophisticated phishing technique. The native payment UI is trusted by users, but on a phishing page it captures real payment details."
+    },
+    {
+      "id": "magecart-skimmer-input-listener",
+      "group": "credentialHarvesting",
+      "description": "Magecart-style payment form skimmer listening on credit card input fields",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:addEventListener|attachEvent)\\([\\s\\S]{0,100}(?:change|blur|input|keyup)[\\s\\S]{0,300}(?:card.?number|cc.?number|credit.?card|pan)[\\s\\S]{0,300}(?:fetch|XMLHttpRequest|sendBeacon|Image\\(\\))",
+      "patternFlags": "i",
+      "note": "Magecart-style skimmers attach event listeners to payment card input fields and exfiltrate the values on change/blur/keyup events. This pattern matches the listener-on-card-field-then-exfil chain."
+    },
+    {
+      "id": "magecart-checkout-intercept",
+      "group": "credentialHarvesting",
+      "description": "Checkout form submission intercepted for payment data skimming — e-commerce attack",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:checkout|payment|billing)[\\s\\S]{0,200}addEventListener\\([\\s\\S]{0,100}submit[\\s\\S]{0,300}(?:card|cvv|expir|cc_number)[\\s\\S]{0,300}(?:fetch|XMLHttpRequest|sendBeacon|new\\s+Image)",
+      "patternFlags": "i",
+      "note": "Intercepting checkout/payment form submission to skim card details is the classic Magecart attack pattern. The skimmer captures all payment fields on submit and sends them to an attacker-controlled endpoint."
+    },
+    {
+      "id": "contenteditable-credential-capture",
+      "group": "credentialHarvesting",
+      "description": "Contenteditable div used as credential input instead of standard form — evasion technique",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "<div[^>]*contenteditable=['\"]true['\"][^>]*>[\\s\\S]{0,500}(?:password|email|username|sign\\s*in|log\\s*in)",
+      "patternFlags": "i",
+      "note": "Using contenteditable divs instead of standard input elements for credential entry evades detection tools that look for <input type=password>. The div functions as an input field but doesn't trigger browser autofill or password manager features."
+    },
+    {
+      "id": "passkey-phishing-prompt",
+      "group": "credentialHarvesting",
+      "description": "Fake passkey/WebAuthn prompt with password fallback — phishing attack on passwordless auth",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:passkey|webauthn|credential)[\\s\\S]{0,300}(?:not\\s*(?:available|supported|found)|failed|error|try\\s*another)[\\s\\S]{0,300}(?:password|enter\\s*(?:your|a)\\s*password|sign\\s*in\\s*with\\s*password)",
+      "patternFlags": "i",
+      "note": "Fake passkey prompts that 'fail' and fall back to password entry are designed to phish users who normally use passwordless authentication. The passkey 'error' is fabricated to force password entry."
+    },
+    {
+      "id": "phone-country-code-harvest",
+      "group": "credentialHarvesting",
+      "description": "Phone number with country code dropdown and verification — PII harvesting for SIM swap",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:country.?code|dial.?code|phone.?prefix|intl.?tel)[\\s\\S]{0,300}(?:<select|<option)[\\s\\S]{0,500}(?:\\+1|\\+44|\\+61|\\+91)[\\s\\S]{0,300}(?:verify|confirm|submit|send\\s*code)",
+      "patternFlags": "i",
+      "note": "Phone number fields with country code dropdowns combined with 'verify/confirm' buttons harvest full international phone numbers. This data enables SIM swap attacks, vishing, and SMS-based attacks."
+    },
+    {
+      "id": "address-autocomplete-harvest",
+      "group": "credentialHarvesting",
+      "description": "Full address form with autocomplete harvesting — PII collection for identity theft",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:street|address)[\\s\\S]{0,300}(?:city|town)[\\s\\S]{0,300}(?:state|province|region)[\\s\\S]{0,300}(?:zip|postal)[\\s\\S]{0,300}(?:submit|continue|verify|confirm)",
+      "patternFlags": "i",
+      "note": "Full address forms collecting street, city, state, and zip with a submit action harvest complete physical address data. Combined with other PII fields, this enables identity theft and account takeover."
+    },
+    {
+      "id": "form-autofill-exfil-hidden",
+      "group": "credentialHarvesting",
+      "description": "Hidden form fields designed to capture browser autofill data — silent credential harvesting",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "<input[^>]*(?:style=['\"][^'\"]*(?:opacity:\\s*0|position:\\s*absolute[^'\"]*(?:left|top):\\s*-\\d{3,}|height:\\s*0)|type=['\"]hidden['\"])[^>]*(?:autocomplete=['\"](?:cc-number|cc-exp|cc-csc|name|email|tel|street-address|postal-code))",
+      "patternFlags": "i",
+      "note": "Hidden input fields with autocomplete attributes trick browsers into auto-filling credit card, name, email, phone, and address data. The fields are invisible to the user but the browser fills them automatically, enabling silent PII harvesting."
+    },
+    {
+      "id": "designmode-editable-page",
+      "group": "credentialHarvesting",
+      "description": "Document designMode enabled for credential capture — entire page made editable",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "document\\.designMode\\s*=\\s*['\"]on['\"]",
+      "patternFlags": "i",
+      "note": "Setting document.designMode='on' makes the entire page editable like a text editor. Phishing kits use this to create input areas without standard form elements, bypassing form-based detection. Any text entered anywhere on the page can be captured."
+    },
+    {
+      "id": "credential-management-api-store",
+      "group": "credentialHarvesting",
+      "description": "Credential Management API used to store or request credentials — API abuse for credential theft",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "navigator\\.credentials\\.(?:get|store|create)\\([\\s\\S]{0,300}(?:password|federated|publicKey)",
+      "patternFlags": "i",
+      "note": "Abusing the Credential Management API (navigator.credentials.get/store) to request stored credentials or create federated credentials is a sophisticated phishing technique. The browser's native credential prompt is trusted by users."
     },
     {
       "id": "suspicious-subdomain-financial",
@@ -7728,6 +8064,72 @@
       "note": "The string N0123N is used by Mamba 2FA as a separator between the base64-encoded parameters and the victim's email address in phishing URLs. This exact string is a definitive Mamba 2FA signature with zero false positive risk."
     },
     {
+      "id": "webrtc-datachannel-exfil",
+      "group": "phishkitSignatures",
+      "description": "WebRTC DataChannel used for credential/payment data exfiltration — CSP-bypassing technique",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "js",
+      "patternString": "RTCPeerConnection[\\s\\S]{0,500}createDataChannel[\\s\\S]{0,500}(?:send\\(|onopen)[\\s\\S]{0,300}(?:card|credit|payment|password|credential|cvv|expir)",
+      "patternFlags": "i",
+      "note": "WebRTC DataChannel exfiltration bypasses CSP entirely because CSP doesn't restrict WebRTC traffic. Discovered in March 2026 Magecart attack against automotive e-commerce. The DataChannel sends stolen data over DTLS-encrypted UDP, invisible to HTTP network inspection."
+    },
+    {
+      "id": "webrtc-stun-turn-exfil",
+      "group": "phishkitSignatures",
+      "description": "WebRTC STUN/TURN server configured for data exfiltration via username field",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "RTCPeerConnection\\([\\s\\S]{0,200}(?:iceServers|stun:|turn:)[\\s\\S]{0,200}(?:username|credential)[\\s\\S]{0,200}(?:document\\.cookie|password|token|email|card)",
+      "patternFlags": "i",
+      "note": "Exfiltrating data via the username field of STUN/TURN server configuration. The credential data is sent as part of the ICE negotiation handshake, bypassing all HTTP-level security controls."
+    },
+    {
+      "id": "csp-report-uri-exfil",
+      "group": "phishkitSignatures",
+      "description": "CSP report-uri used as data exfiltration channel — abuses CSP violation reporting",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "report-(?:uri|to)\\s+https?://[^;'\"\\s]+(?:\\.php|\\.asp|\\?|/collect|/report|/log|/exfil)",
+      "patternFlags": "i",
+      "note": "Abusing CSP report-uri to exfiltrate data by intentionally triggering CSP violations. The violation report includes the blocked-uri containing stolen data, which is sent to the attacker's report collector. CSP reports bypass same-origin restrictions."
+    },
+    {
+      "id": "share-api-data-exfil",
+      "group": "phishkitSignatures",
+      "description": "Web Share API used to exfiltrate data by triggering native share dialog",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "navigator\\.share\\([\\s\\S]{0,200}(?:password|credential|token|email|card)",
+      "patternFlags": "i",
+      "note": "Abusing navigator.share() to trigger the native share dialog with credential data pre-filled is a novel exfiltration technique. If the victim shares via email or messaging, the stolen data is sent through a legitimate channel."
+    },
+    {
+      "id": "file-api-credential-construct",
+      "group": "phishkitSignatures",
+      "description": "File API used to construct downloadable credential file — offline data harvesting",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "new\\s+(?:File|Blob)\\([\\s\\S]{0,200}(?:password|credential|email|card|token)[\\s\\S]{0,200}(?:download|createObjectURL|saveAs)",
+      "patternFlags": "i",
+      "note": "Constructing a downloadable file containing stolen credentials via the File API is an offline exfiltration technique. The victim unknowingly downloads a file containing their own credentials, which malware on their device can later exfiltrate."
+    },
+    {
+      "id": "popup-under-phish-open",
+      "group": "phishkitSignatures",
+      "description": "Pop-under window opened behind the current window — stealthy phishing window",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "window\\.open\\([\\s\\S]{0,200}\\)[\\s\\S]{0,100}(?:blur\\(\\)|focus\\(\\)|moveTo\\(|resizeTo\\()[\\s\\S]{0,200}(?:window\\.focus|opener\\.focus)",
+      "patternFlags": "i",
+      "note": "Opening a window and immediately blurring it or moving it offscreen creates a pop-under phishing page. The user doesn't notice it, but when they close their main window, the phishing page is revealed."
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -8165,6 +8567,83 @@
       "patternString": "SpeechSynthesisUtterance\\([\\s\\S]{0,300}(?:virus|infected|blocked|locked|compromised|unauthorized|warning|alert|microsoft|windows|apple)",
       "patternFlags": "i",
       "note": "Using the Web Speech API to read aloud fake security warnings ('Your computer is infected') adds an audio dimension to tech support scams. The voice message creates urgency and panic."
+    },
+    {
+      "id": "fullscreen-url-spoof",
+      "group": "socialEngineering",
+      "description": "Fullscreen mode with fake browser chrome and URL bar — URL spoofing attack",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "requestFullscreen\\(\\)[\\s\\S]{0,500}(?:address.?bar|url.?bar|location.?bar|browser.?frame|chrome.?frame)[\\s\\S]{0,300}(?:microsoft|google|apple|paypal|amazon|bank)",
+      "patternFlags": "i",
+      "note": "Going fullscreen and rendering a fake browser chrome with a fake URL bar showing a legitimate brand domain is a sophisticated URL spoofing technique. The user sees what appears to be a real browser address bar but it's an HTML rendering."
+    },
+    {
+      "id": "fake-biometric-prompt-ui",
+      "group": "socialEngineering",
+      "description": "Fake biometric authentication prompt — fingerprint/face ID phishing UI",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:fingerprint|biometric|face\\s*(?:id|recognition)|touch\\s*id)[\\s\\S]{0,500}(?:scan|verify|authenticate|confirm)[\\s\\S]{0,300}(?:password|pin|passcode|backup)",
+      "patternFlags": "i",
+      "note": "Fake biometric authentication prompts that actually fall back to requesting a password/PIN are a social engineering technique. The 'biometric failed, enter your password' flow tricks users into thinking they're using secure authentication."
+    },
+    {
+      "id": "notification-permission-phish",
+      "group": "socialEngineering",
+      "description": "Notification API permission granted with phishing notification content",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "new\\s+Notification\\([\\s\\S]{0,200}(?:password|verify|expired|locked|suspended|security|update|confirm)[\\s\\S]{0,200}(?:onclick|click|action)",
+      "patternFlags": "i",
+      "note": "Browser notifications containing urgency text (expired, locked, security) with click handlers redirect victims to phishing pages. The notification appears to come from the browser itself, increasing trust."
+    },
+    {
+      "id": "apk-download-prompt",
+      "group": "socialEngineering",
+      "description": "Android APK download prompted on phishing page — mobile malware delivery",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:download|href|src)=['\"][^'\"]+\\.apk['\"][\\s\\S]{0,300}(?:install|update|download|android|app)",
+      "patternFlags": "i",
+      "note": "APK file downloads prompted from phishing pages are mobile malware delivery. The fake page impersonates a legitimate app and tricks users into sideloading a malicious Android application."
+    },
+    {
+      "id": "msix-appx-download",
+      "group": "socialEngineering",
+      "description": "MSIX/APPX Windows app package download — fake update malware delivery",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:download|href)=['\"][^'\"]+\\.(?:msix|appx|appinstaller|msixbundle)['\"]",
+      "patternFlags": "i",
+      "note": "MSIX/APPX Windows app package downloads from phishing pages deliver malware disguised as legitimate Windows applications. This is a SocGholish/ClearFake delivery variant."
+    },
+    {
+      "id": "spanish-urgency-phishing",
+      "group": "socialEngineering",
+      "description": "Spanish-language banking urgency text — targets Spanish-speaking users",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:su\\s+cuenta\\s+(?:ha\\s+sido|est[aá])\\s+(?:bloqueada|suspendida|limitada|desactivada)|verifique\\s+su\\s+(?:identidad|cuenta|informaci[oó]n)|actualice\\s+sus\\s+datos)",
+      "patternFlags": "i",
+      "note": "Spanish-language account urgency text ('su cuenta ha sido bloqueada', 'verifique su identidad') targets Spanish-speaking users in Latin America and Spain."
+    },
+    {
+      "id": "chinese-urgency-phishing",
+      "group": "socialEngineering",
+      "description": "Chinese-language urgency text in phishing page — targets Chinese-speaking users",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:您的账[号户][已被](?:冻结|锁定|限制|暂停)|请(?:验证|确认)(?:您的|your)(?:身份|账户|信息)|立即(?:更新|验证|确认))",
+      "patternFlags": "i",
+      "note": "Chinese-language account urgency text ('您的账号已被冻结', '请验证您的身份', '立即更新') targets Chinese-speaking users with account suspension and verification phishing."
     },
     {
       "id": "numeric-domain-pattern",
@@ -8832,7 +9311,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T17:46:24.680Z",
+      "compiledAt": "2026-04-01T17:51:34.973Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
