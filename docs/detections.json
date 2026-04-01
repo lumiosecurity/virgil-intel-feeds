@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-01-17:12",
-    "generatedAt": "2026-04-01T17:12:34.111Z",
-    "brandCount": 123,
-    "patternCount": 518
+    "version": "2026-04-01-17:16",
+    "generatedAt": "2026-04-01T17:16:43.773Z",
+    "brandCount": 130,
+    "patternCount": 540
   },
   "brandEntries": [
     {
@@ -493,6 +493,20 @@
       ]
     },
     {
+      "name": "coinmarketcap",
+      "vertical": "crypto",
+      "domains": [
+        "coinmarketcap.com"
+      ],
+      "typos": [
+        "coinmarketcapp",
+        "coinmarkecap",
+        "coinmaketcap",
+        "c0inmarketcap",
+        "coinrnarketcap"
+      ]
+    },
+    {
       "name": "amazon",
       "vertical": "ecommerce",
       "domains": [
@@ -760,6 +774,35 @@
       ]
     },
     {
+      "name": "costco",
+      "vertical": "ecommerce",
+      "domains": [
+        "costco.com"
+      ],
+      "typos": [
+        "costcoo",
+        "c0stco",
+        "cosco",
+        "costtco",
+        "costc0",
+        "costcco"
+      ]
+    },
+    {
+      "name": "target",
+      "vertical": "ecommerce",
+      "domains": [
+        "target.com"
+      ],
+      "typos": [
+        "targett",
+        "targ3t",
+        "targeet",
+        "tarqet",
+        "targat"
+      ]
+    },
+    {
       "name": "spotify",
       "vertical": "entertainment",
       "domains": [
@@ -790,6 +833,50 @@
         "twitch-tv",
         "twiitch",
         "twittch"
+      ]
+    },
+    {
+      "name": "hbomax",
+      "vertical": "entertainment",
+      "domains": [
+        "max.com",
+        "hbomax.com"
+      ],
+      "typos": [
+        "hbomaax",
+        "hbornax",
+        "hb0max",
+        "maxstream",
+        "hbo-max"
+      ]
+    },
+    {
+      "name": "disneyplus",
+      "vertical": "entertainment",
+      "domains": [
+        "disneyplus.com"
+      ],
+      "typos": [
+        "disneeyplus",
+        "d1sneyplus",
+        "disneyp1us",
+        "disneypluus",
+        "dlsneyplus",
+        "disney-plus"
+      ]
+    },
+    {
+      "name": "hulu",
+      "vertical": "entertainment",
+      "domains": [
+        "hulu.com"
+      ],
+      "typos": [
+        "hullu",
+        "hu1u",
+        "huulu",
+        "hul0",
+        "huluu"
       ]
     },
     {
@@ -1178,6 +1265,22 @@
         "w1se",
         "wisee",
         "wisee"
+      ]
+    },
+    {
+      "name": "robinhood",
+      "vertical": "financial",
+      "domains": [
+        "robinhood.com"
+      ],
+      "typos": [
+        "robinhod",
+        "robinhood1",
+        "rob1nhood",
+        "robinhoodd",
+        "robinhoood",
+        "robinhod",
+        "r0binhood"
       ]
     },
     {
@@ -14653,6 +14756,18 @@
     },
     {
       "domHashes": [],
+      "id": "recaptcha-sitekey-mismatch",
+      "group": "captchaGating",
+      "description": "Google reCAPTCHA loaded with a site key on a non-matching domain — CAPTCHA proxy abuse",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "recaptcha/api\\.js\\?[^'\"]*render=[a-zA-Z0-9_-]{30,}[\\s\\S]{0,500}data-sitekey=['\"][a-zA-Z0-9_-]{30,}['\"]",
+      "patternFlags": "i",
+      "note": "reCAPTCHA loaded with both render parameter and data-sitekey suggests the page is relaying CAPTCHA challenges. AiTM kits proxy the real site's reCAPTCHA to the victim and relay the solution back."
+    },
+    {
+      "domHashes": [],
       "id": "cookie-gate-reload-phishkit",
       "group": "cdnGating",
       "description": "Detects phishkit gate pattern: sets a cookie with timestamp then reloads page to pass server-side check",
@@ -15445,6 +15560,78 @@
     },
     {
       "domHashes": [],
+      "id": "aitm-session-cookie-intercept",
+      "group": "credentialHarvesting",
+      "description": "Session cookie captured and sent to external endpoint — AiTM session hijacking",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "document\\.cookie[\\s\\S]{0,300}(?:fetch\\(['\"]https?://|XMLHttpRequest|sendBeacon|postMessage)[\\s\\S]{0,200}(?:session|token|auth|sid|ESTSAUTH|JSESSIONID)",
+      "patternFlags": "i",
+      "note": "Extracting document.cookie and sending it to an external endpoint with session/auth-related cookie names is AiTM session hijacking. ESTSAUTH is the Microsoft session cookie specifically targeted by Tycoon 2FA."
+    },
+    {
+      "domHashes": [],
+      "id": "oauth-consent-phish",
+      "group": "credentialHarvesting",
+      "description": "Fake OAuth consent screen requesting broad permissions — OAuth phishing technique",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:oauth|authorize|consent|permission)[\\s\\S]{0,500}(?:access\\s+your\\s+(?:email|contacts|calendar|files|drive)|read\\s+(?:your|all)\\s+(?:emails?|messages?|contacts?))[\\s\\S]{0,300}(?:allow|accept|grant|approve)",
+      "patternFlags": "i",
+      "note": "Fake OAuth consent screens requesting broad permissions (email access, contacts, calendar, files) are used to trick users into granting malicious apps access to their data without stealing passwords."
+    },
+    {
+      "domHashes": [],
+      "id": "css-keylogger-background-image",
+      "group": "credentialHarvesting",
+      "description": "CSS attribute selectors with background-image on input values — CSS keylogging technique",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "input\\[value\\$=['\"][a-z]['\"]\\][\\s\\S]{0,50}background(?:-image)?:\\s*url\\(",
+      "patternFlags": "i",
+      "note": "CSS attribute selectors targeting input values with background-image URLs create a CSS keylogger. As the user types, each new character triggers a different CSS rule that loads a unique URL, logging each keystroke server-side without any JavaScript."
+    },
+    {
+      "domHashes": [],
+      "id": "domain-fronting-cdn-exfil",
+      "group": "credentialHarvesting",
+      "description": "CDN domain used to front exfiltration requests — credential theft hidden behind trusted CDN",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "fetch\\(['\"]https?://[^'\"]*(?:cloudfront\\.net|azureedge\\.net|akamaihd\\.net|fastly\\.net)[^'\"]*['\"][\\s\\S]{0,300}(?:password|credential|token|email\\.value)",
+      "patternFlags": "i",
+      "note": "Sending credentials to CDN domains (CloudFront, Azure CDN, Akamai, Fastly) uses domain fronting to hide the exfiltration destination. The CDN domain is trusted, but the request routes to the attacker's origin server."
+    },
+    {
+      "domHashes": [],
+      "id": "timeout-redirect-to-legit",
+      "group": "credentialHarvesting",
+      "description": "Page auto-redirects to legitimate site after timeout — self-destructing phishing page",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "setTimeout\\([\\s\\S]{0,200}(?:window\\.location|location\\.href|location\\.replace)[\\s\\S]{0,100}(?:microsoft|google|apple|amazon|paypal)\\.com[\\s\\S]{0,100}(?:\\d{4,6}|\\d+\\s*\\*\\s*\\d+\\s*\\*\\s*\\d+)",
+      "patternFlags": "i",
+      "note": "A timed auto-redirect to a legitimate brand site after a delay (encoded as milliseconds like 300000 or 5*60*1000) is a self-destruct mechanism. The phishing page exists only temporarily, then becomes an innocent redirect."
+    },
+    {
+      "domHashes": [],
+      "id": "cross-origin-iframe-login",
+      "group": "credentialHarvesting",
+      "description": "Cross-origin iframe loading a login page from a different domain — credential capture via framing",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "<iframe[^>]*src=['\"]https?://[^'\"]+['\"][^>]*(?:style=['\"][^'\"]*(?:width:\\s*100%|border:\\s*(?:none|0))|(?:width|height)=['\"]\\d{3,})[\\s\\S]{0,500}(?:password|sign\\s*in|log\\s*in)",
+      "patternFlags": "i",
+      "note": "A full-width, borderless iframe loading content from an external domain on a page with login elements is the GhostFrame technique. The outer page looks clean while the iframe contains the actual phishing form."
+    },
+    {
+      "domHashes": [],
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -16138,6 +16325,30 @@
       "patternString": "(?:\\u200B|\\u200C|\\u200D|\\uFEFF|&#8203;|&#x200[BCD];){2,}",
       "patternFlags": "",
       "note": "Multiple zero-width characters (ZWSP, ZWNJ, ZWJ, BOM) inserted between visible characters break string matching while rendering normally in the browser. Text like 'M‌i‌c‌r‌o‌s‌o‌f‌t' with ZWNJs is invisible to pattern matchers but displays as 'Microsoft'."
+    },
+    {
+      "domHashes": [],
+      "id": "text-direction-rtl-obfuscation",
+      "group": "obfuscation",
+      "description": "Right-to-left text direction override used to disguise file extensions or URLs",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:\\u202E|&#8238;|&rlm;|&#x202E;)",
+      "patternFlags": "",
+      "note": "The Right-to-Left Override character (U+202E) reverses the visual display of text, used to disguise file extensions (exe.pdf appears as fdp.exe) or URLs. Multiple RTL overrides in page content is a definitive obfuscation signal."
+    },
+    {
+      "domHashes": [],
+      "id": "homoglyph-domain-in-source",
+      "group": "obfuscation",
+      "description": "Internationalized domain names using homoglyph characters in page source",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "xn--[a-z0-9]{5,}\\.[a-z]{2,}",
+      "patternFlags": "i",
+      "note": "Punycode-encoded internationalized domain names (xn--...) in page source links indicate homoglyph domain abuse. These domains use look-alike Unicode characters to impersonate legitimate brands."
     },
     {
       "domHashes": [],
@@ -18205,6 +18416,90 @@
     },
     {
       "domHashes": [],
+      "id": "wallet-connect-popup-inject",
+      "group": "phishkitSignatures",
+      "description": "WalletConnect-style wallet connection popup dynamically injected — crypto drainer technique",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "(?:walletconnect|wallet-connect|connectWallet|web3Modal)[\\s\\S]{0,500}(?:eth_requestAccounts|eth_signTypedData|personal_sign|eth_sendTransaction)",
+      "patternFlags": "i",
+      "note": "Wallet connection popups that immediately request eth_requestAccounts or signing operations are characteristic of crypto drainer scripts. The connection is used to initiate malicious token approvals."
+    },
+    {
+      "domHashes": [],
+      "id": "eth-sign-typed-data-drainer",
+      "group": "phishkitSignatures",
+      "description": "eth_signTypedData_v4 request for token approval — crypto drainer permit signature",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "eth_signTypedData(?:_v[34])?[\\s\\S]{0,500}(?:permit|approve|setApprovalForAll|transferFrom)",
+      "patternFlags": "i",
+      "note": "Requesting eth_signTypedData with permit/approve/setApprovalForAll parameters is the signature crypto drainer technique. The victim signs a message that grants the attacker unlimited token transfer approval."
+    },
+    {
+      "domHashes": [],
+      "id": "inferno-drainer-access-key",
+      "group": "phishkitSignatures",
+      "description": "Inferno Drainer configuration endpoint with access key — drainer-as-a-service signature",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "js",
+      "patternString": "(?:nftfastapi|seaport-api|claimapi|nftapi)[\\s\\S]{0,100}(?:config|drain|claim)[\\s\\S]{0,100}(?:key|access_key|ACCESS_KEY)=",
+      "patternFlags": "i",
+      "note": "Inferno Drainer and similar DaaS kits communicate with C2 APIs using access keys. The nftfastapi.com, seaport-api, and claimapi domains with config/drain endpoints are definitive drainer signatures."
+    },
+    {
+      "domHashes": [],
+      "id": "evilginx-x-header-leak",
+      "group": "phishkitSignatures",
+      "description": "X-Evilginx header artifact in page source — Evilginx AiTM proxy signature",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "X-Evilginx",
+      "patternFlags": "i",
+      "note": "The X-Evilginx header is an easter egg in unmodified Evilginx installations that leaks the proxy's presence. Many operators fail to remove this header. Definitive AiTM proxy indicator."
+    },
+    {
+      "domHashes": [],
+      "id": "evilginx-js-inject-pattern",
+      "group": "phishkitSignatures",
+      "description": "Evilginx-style JavaScript injection with obfuscator.io pattern in proxied page",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "_0x[0-9a-f]{4,6}[\\s\\S]{0,300}(?:phishlet|lure|redirect|proxy|session)[\\s\\S]{0,200}_0x[0-9a-f]{4,6}",
+      "patternFlags": "i",
+      "note": "Evilginx Pro uses obfuscator.io to obfuscate injected JavaScript. The combination of _0x hex variables with phishing-related keywords (phishlet, lure, redirect) in the same script block indicates Evilginx js_inject."
+    },
+    {
+      "domHashes": [],
+      "id": "pwa-install-prompt-phish",
+      "group": "phishkitSignatures",
+      "description": "Progressive Web App install prompt on login page — PWA phishing technique",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:beforeinstallprompt|BeforeInstallPromptEvent|prompt\\(\\))[\\s\\S]{0,500}(?:install|add\\s*to\\s*home)",
+      "patternFlags": "i",
+      "note": "Triggering a PWA install prompt on a login page creates a persistent phishing app on the victim's device. The installed PWA looks like a legitimate app icon but opens the phishing page without browser URL bar."
+    },
+    {
+      "domHashes": [],
+      "id": "manifest-json-phish-app",
+      "group": "phishkitSignatures",
+      "description": "Web app manifest referencing login/sign-in — PWA phishing app configuration",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<link[^>]*rel=['\"]manifest['\"][^>]*>[\\s\\S]{0,2000}(?:sign\\s*in|log\\s*in|password|credential)",
+      "patternFlags": "i",
+      "note": "A web app manifest on a page with login elements indicates a PWA phishing app. When installed, the app icon on the home screen opens the phishing page in a standalone window without browser URL bar."
+    },
+    {
+      "domHashes": [],
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -18550,6 +18845,54 @@
       "patternString": "(?:subscription|license|protection|antivirus)\\s+(?:has\\s+)?(?:expired|expiring|lapsed|ending|renewal)[\\s\\S]{0,500}(?:renew|reactivat|restore|update\\s+(?:now|payment))[\\s\\S]{0,300}(?:credit|debit|card|payment|billing)",
       "patternFlags": "i",
       "note": "Fake subscription renewal scams impersonating McAfee, Norton, and other software are a top phishing vector. They create urgency about 'expired protection' to harvest payment information."
+    },
+    {
+      "domHashes": [],
+      "id": "fake-airdrop-claim-page",
+      "group": "socialEngineering",
+      "description": "Fake cryptocurrency airdrop claim page with wallet connection prompt",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:claim|airdrop|free\\s*mint|whitelist)[\\s\\S]{0,500}(?:connect\\s*wallet|connect\\s*your\\s*wallet|link\\s*wallet)[\\s\\S]{0,300}(?:metamask|phantom|trustwallet|walletconnect|coinbase)",
+      "patternFlags": "i",
+      "note": "Fake airdrop/free mint/whitelist claim pages that prompt wallet connection are the primary crypto drainer delivery mechanism. The 'claim + connect wallet + wallet brand' triple is definitive."
+    },
+    {
+      "domHashes": [],
+      "id": "push-notification-permission",
+      "group": "socialEngineering",
+      "description": "Push notification permission requested with deceptive prompts — notification spam/phishing vector",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "Notification\\.requestPermission\\([\\s\\S]{0,300}(?:verify|confirm|captcha|human|robot|allow\\s+to\\s+continue)",
+      "patternFlags": "i",
+      "note": "Requesting push notification permission with deceptive prompts ('allow to verify you're human') tricks users into subscribing to malicious push notifications that later deliver phishing links."
+    },
+    {
+      "domHashes": [],
+      "id": "tel-link-vishing-lure",
+      "group": "socialEngineering",
+      "description": "Tel: link with fake support number — voice phishing (vishing) lure on phishing page",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<a[^>]*href=['\"]tel:\\+?1?\\d{10,}['\"][^>]*>[\\s\\S]{0,200}(?:support|help|call\\s*(?:us|now)|customer\\s*service|technical\\s*support)",
+      "patternFlags": "i",
+      "note": "Clickable phone number links labeled as support/help/customer service on phishing pages are vishing lures. The fake support number is answered by scammers who complete the credential theft over the phone."
+    },
+    {
+      "domHashes": [],
+      "id": "fake-chat-widget-phish",
+      "group": "socialEngineering",
+      "description": "Fake live chat widget on phishing page — social engineering through fake support interaction",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:live-?chat|chat-?widget|support-?chat|help-?chat|chatbox)[\\s\\S]{0,500}(?:agent|operator|support|available|online)[\\s\\S]{0,300}(?:password|sign\\s*in|verify|account)",
+      "patternFlags": "i",
+      "note": "Fake live chat widgets on phishing pages create the illusion of a legitimate support channel. Scammers may guide victims through entering credentials or personal information via the fake chat."
     },
     {
       "domHashes": [],
@@ -19294,6 +19637,30 @@
       "patternString": "[a-z0-9-]+\\.duckdns\\.org",
       "patternFlags": "i",
       "note": "DuckDNS is a free dynamic DNS service heavily abused for phishing infrastructure. The .duckdns.org subdomain indicates attacker-controlled dynamic DNS infrastructure."
+    },
+    {
+      "domHashes": [],
+      "id": "open-redirect-google-abuse",
+      "group": "urlHeuristics",
+      "description": "Google open redirect URLs used in page source — abuses Google's trusted domain for redirect",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "google\\.com\\/(?:url|amp\\/s|imgres)\\?[^'\"]*(?:url|q|u)=https?%3A%2F%2F",
+      "patternFlags": "i",
+      "note": "Using Google's open redirect endpoints (google.com/url?q=, google.com/amp/s/) to bounce through Google's domain makes phishing links appear to come from Google. This abuses Google's trusted reputation."
+    },
+    {
+      "domHashes": [],
+      "id": "open-redirect-microsoft-abuse",
+      "group": "urlHeuristics",
+      "description": "Microsoft open redirect URLs used in page source — abuses Microsoft's trusted domain",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:microsoft|office|live)\\.com\\/.*(?:url|redirect|redir|goto)=https?%3A",
+      "patternFlags": "i",
+      "note": "Abusing Microsoft's open redirectors to bounce phishing links through Microsoft's trusted domain. Common in BEC campaigns targeting Office 365 users."
     }
   ]
 }
