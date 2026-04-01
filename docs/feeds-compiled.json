@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T19:50:09.228Z",
-    "brandCount": 171,
+    "compiledAt": "2026-04-01T20:16:45.502Z",
+    "brandCount": 179,
     "signalCount": 1,
-    "patternCount": 814,
+    "patternCount": 830,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2144,6 +2144,123 @@
         "ausposst"
       ],
       "note": "Australia Post impersonated in delivery phishing targeting Australian users."
+    },
+    {
+      "name": "dhl",
+      "vertical": "logistics",
+      "domains": [
+        "dhl.com",
+        "dhl.de",
+        "dhl.co.uk"
+      ],
+      "typos": [
+        "dhll",
+        "dh1",
+        "dhl-express",
+        "dhli",
+        "dhhl",
+        "d-hl"
+      ],
+      "note": "DHL is the most impersonated logistics brand globally. Phishing pages impersonate DHL Express, DHL Parcel, and DHL eCommerce for customs fee and tracking scams."
+    },
+    {
+      "name": "evri",
+      "vertical": "logistics",
+      "domains": [
+        "evri.com"
+      ],
+      "typos": [
+        "evrii",
+        "3vri",
+        "evrl",
+        "evrri",
+        "evr1"
+      ],
+      "note": "Evri (formerly Hermes) is the UK's largest parcel delivery network, heavily impersonated for redelivery fee scams."
+    },
+    {
+      "name": "laposte",
+      "vertical": "logistics",
+      "domains": [
+        "laposte.fr"
+      ],
+      "typos": [
+        "lapostee",
+        "la-poste",
+        "lapost",
+        "1aposte"
+      ],
+      "note": "La Poste (French postal service) impersonated in delivery notification and customs fee phishing targeting French users."
+    },
+    {
+      "name": "correos",
+      "vertical": "logistics",
+      "domains": [
+        "correos.es"
+      ],
+      "typos": [
+        "correoss",
+        "coreos",
+        "corre0s",
+        "correos-es"
+      ],
+      "note": "Correos (Spanish postal service) impersonated in package delivery and customs fee scams targeting Spanish users."
+    },
+    {
+      "name": "deutschepost",
+      "vertical": "logistics",
+      "domains": [
+        "deutschepost.de"
+      ],
+      "typos": [
+        "deutsche-post",
+        "deutschpost",
+        "deutschepostt",
+        "deutshepost"
+      ],
+      "note": "Deutsche Post impersonated in German delivery notification phishing campaigns."
+    },
+    {
+      "name": "aramex",
+      "vertical": "logistics",
+      "domains": [
+        "aramex.com"
+      ],
+      "typos": [
+        "aramexx",
+        "aramx",
+        "arramex",
+        "arameks"
+      ],
+      "note": "Aramex impersonated in Middle East and South Asian delivery phishing campaigns."
+    },
+    {
+      "name": "gls",
+      "vertical": "logistics",
+      "domains": [
+        "gls-group.eu"
+      ],
+      "typos": [
+        "glss",
+        "g1s",
+        "gls-group",
+        "gls-eu"
+      ],
+      "note": "GLS parcel service impersonated in European delivery notification phishing."
+    },
+    {
+      "name": "purolator",
+      "vertical": "logistics",
+      "domains": [
+        "purolator.com"
+      ],
+      "typos": [
+        "purolatorr",
+        "purolater",
+        "purol4tor",
+        "puroltor"
+      ],
+      "note": "Purolator impersonated in Canadian delivery notification phishing campaigns."
     },
     {
       "name": "whatsapp",
@@ -4459,6 +4576,28 @@
       "note": "A large base64-encoded image (logo) on a page with a password field means the phishing page is completely self-contained — no external asset loads that could trigger network-level detection. The logo is embedded to avoid referencing the real brand's CDN."
     },
     {
+      "id": "fake-delivery-status-tracker",
+      "group": "brandImpersonation",
+      "description": "Fake package tracking status UI with progress bar/steps — courier tracking page impersonation",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:in\\s*transit|out\\s*for\\s*delivery|delivered|processing|shipped|dispatch|departed|arrived\\s*at\\s*(?:hub|facility|warehouse|depot))[\\s\\S]{0,300}(?:progress|step|status|timeline)[\\s\\S]{0,300}(?:update|action|pay|verify|confirm|schedule)",
+      "patternFlags": "i",
+      "note": "Fake delivery tracking status UIs showing package progress (in transit, processing, out for delivery) with a progress bar/steps UI create believable courier page impersonation. The tracking UI is real-looking but the action (pay/verify) is the scam."
+    },
+    {
+      "id": "courier-logo-header-form-combo",
+      "group": "brandImpersonation",
+      "description": "Courier brand logo/name in page header with payment or info form below — basic delivery phishing layout",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:<img[^>]*(?:dhl|fedex|ups|usps|royal.?mail|evri|hermes|dpd|la.?poste|correos|canada.?post|aus.?post)|(?:DHL|FedEx|UPS|USPS|Royal\\s*Mail|Evri|Hermes|DPD)\\s*(?:Express|Parcel|eCommerce)?)[\\s\\S]{0,2000}(?:<form|<input[^>]*type=['\"](?:text|email|tel|password|number))",
+      "patternFlags": "i",
+      "note": "A courier brand name or logo in the page header followed by a form with input fields is the basic layout of every delivery phishing page. This structural pattern catches the simplest delivery phish that have no obfuscation or JavaScript."
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -6214,6 +6353,72 @@
       "patternString": "<input[^>]*type=['\"]password['\"][\\s\\S]{0,3000}</body>(?!.*(?:create|sign\\s*up|register|new\\s*account|join))",
       "patternFlags": "i",
       "note": "A login page with no 'Create account', 'Sign up', or 'Register' link is a harvesting-only page. Legitimate login pages always offer a registration path. Phishing pages only need the login form."
+    },
+    {
+      "id": "address-update-for-delivery",
+      "group": "credentialHarvesting",
+      "description": "Address update form for supposed delivery problem — harvests full physical address and personal info",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:update|confirm|verify)\\s*(?:your\\s*)?(?:delivery|shipping|mailing)?\\s*address[\\s\\S]{0,500}(?:<input|<form)[\\s\\S]{0,500}(?:street|address|city|zip|postal|state|province)",
+      "patternFlags": "i",
+      "note": "Address update forms claiming delivery failure due to incorrect/incomplete address harvest full physical addresses. The data enables identity theft, physical attacks, and targeted social engineering with the victim's real address."
+    },
+    {
+      "id": "small-fee-card-harvest",
+      "group": "credentialHarvesting",
+      "description": "Very small payment amount ($0.30-$4.99) with full card details required — micro-fee card harvesting",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:\\$[0-3]\\.\\d{2}|€[0-3]\\.\\d{2}|£[0-3]\\.\\d{2}|\\$4\\.99|€4\\.99|£4\\.99)[\\s\\S]{0,500}(?:card\\s*number|cc-number|credit\\s*card|cvv|expir|cvc|security\\s*code)",
+      "patternFlags": "i",
+      "note": "Requesting full credit card details (card number, CVV, expiry) for a micro-payment of $0.30-$4.99 is the delivery fee scam signature. The small amount seems harmless but the goal is to capture the full card details for larger fraud."
+    },
+    {
+      "id": "delivery-preference-update-phish",
+      "group": "credentialHarvesting",
+      "description": "Delivery preference or notification settings update page — harvests contact info and login credentials",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:delivery\\s*preference|notification\\s*setting|shipping\\s*preference|communication\\s*preference)[\\s\\S]{0,500}(?:email|phone|mobile|sms|password|sign\\s*in|log\\s*in|account)[\\s\\S]{0,300}(?:update|save|confirm|submit)",
+      "patternFlags": "i",
+      "note": "Delivery preference/notification settings pages that ask for email, phone, or account credentials harvest contact information and login details under the guise of updating delivery preferences."
+    },
+    {
+      "id": "weight-dimensions-form-excuse",
+      "group": "credentialHarvesting",
+      "description": "Package weight/dimensions form asking for payment — surcharge scam for oversized/overweight package",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:overweight|oversized|over.?sized|exceeds?\\s*(?:weight|dimension|size)|surcharge|additional\\s*(?:weight|size)\\s*(?:fee|charge))[\\s\\S]{0,500}(?:pay|card|\\$|€|£|amount|fee)",
+      "patternFlags": "i",
+      "note": "Surcharge pages claiming a package exceeds weight or size limits and requires additional payment are a delivery phishing variant. Real surcharges are handled by the sender, not collected via web pages from the recipient."
+    },
+    {
+      "id": "courier-tracking-input-form",
+      "group": "credentialHarvesting",
+      "description": "Fake tracking number lookup form that then asks for personal info — track-to-harvest pipeline",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:track|tracking)\\s*(?:your\\s*)?(?:package|parcel|shipment|order|number)[\\s\\S]{0,300}<input[^>]*(?:placeholder|name|id)=['\"][^'\"]*(?:track|number|code|id)['\"][\\s\\S]{0,1000}(?:email|phone|address|name|card|password|sign.?in)",
+      "patternFlags": "i",
+      "note": "A fake tracking number input that leads to personal info or credential fields is the track-to-harvest pipeline. The victim enters a tracking number (any number works), then is asked for personal details or payment to 'release' the package."
+    },
+    {
+      "id": "delivery-otp-verification-page",
+      "group": "credentialHarvesting",
+      "description": "Delivery OTP verification page — collects one-time code sent to phone for account verification",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:delivery|package|parcel|shipment)[\\s\\S]{0,300}(?:verification\\s*code|one-?time\\s*(?:code|password|pin)|OTP|security\\s*code)[\\s\\S]{0,300}(?:enter|input|verify|confirm|submit)[\\s\\S]{0,300}(?:sent\\s*to|text|sms|phone|mobile)",
+      "patternFlags": "i",
+      "note": "Delivery OTP verification pages claim a code was sent to the victim's phone to verify delivery. This is an MFA interception technique — the victim enters the real OTP from their carrier account, which the attacker uses for account takeover."
     },
     {
       "id": "suspicious-subdomain-financial",
@@ -10681,6 +10886,94 @@
       "note": "A mailto link to a free email provider (Gmail, Yahoo, Hotmail) on a login page is suspicious. Legitimate enterprise services use their own domain for support contacts, not free email accounts."
     },
     {
+      "id": "customs-duty-fee-payment-form",
+      "group": "socialEngineering",
+      "description": "Customs duty or import fee payment form — fake customs clearance requiring credit card payment",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:customs?\\s*(?:duty|fee|charge|clearance)|import\\s*(?:duty|fee|tax|charges?)|duty\\s*(?:fee|payment|charge))[\\s\\S]{0,500}(?:pay|credit\\s*card|debit\\s*card|card\\s*number|payment\\s*method|\\$\\d|€\\d|£\\d)",
+      "patternFlags": "i",
+      "note": "Customs duty/import fee payment forms are one of the most common delivery scam pages. The page claims a package is held in customs and requires payment of a small fee ($1-$5) to release it. The fee is a pretext to collect credit card details."
+    },
+    {
+      "id": "tariff-fee-delivery-scam",
+      "group": "socialEngineering",
+      "description": "Tariff or de minimis duty payment scam — exploits 2025 tariff rule confusion",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:tariff|de\\s*minimis|import\\s*tariff|additional\\s*(?:tariff|duty))[\\s\\S]{0,500}(?:must\\s*be\\s*paid|payment\\s*required|pay\\s*(?:before|to\\s*release)|stuck\\s*in\\s*customs)[\\s\\S]{0,300}(?:pay|submit|continue|card)",
+      "patternFlags": "i",
+      "note": "Post-August 2025 tariff scams exploit consumer confusion about new US de minimis tariff rules on imports under $800. Scammers claim a tariff must be paid before delivery. The FCC specifically warned about this emerging scam vector."
+    },
+    {
+      "id": "tracking-number-display-payment",
+      "group": "socialEngineering",
+      "description": "Fake tracking number displayed alongside payment request — courier impersonation with tracking theater",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:tracking\\s*(?:number|#|no|id|code)|shipment\\s*(?:number|#|id))[\\s\\S]{0,100}(?:[A-Z]{2}\\d{9}[A-Z]{2}|\\d{12,22}|[A-Z0-9]{10,20})[\\s\\S]{0,500}(?:pay|fee|charge|update|verify|schedule|reschedule)",
+      "patternFlags": "i",
+      "note": "Displaying a fake tracking number (that looks real but isn't) alongside a payment or action request is the core courier phishing pattern. The tracking number adds perceived legitimacy but the fee/verify request is the scam."
+    },
+    {
+      "id": "package-held-urgency-text",
+      "group": "socialEngineering",
+      "description": "Package held/on hold/pending urgency text — delivery status pressure for immediate action",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:package|parcel|shipment|delivery)\\s+(?:is\\s+)?(?:on\\s+hold|held|pending|delayed|returned|undeliverable|stuck|awaiting)[\\s\\S]{0,300}(?:action\\s*required|update|verify|confirm|pay|schedule|within\\s*\\d+\\s*(?:hour|day))",
+      "patternFlags": "i",
+      "note": "Text claiming a package is 'on hold', 'pending', 'delayed', or 'awaiting action' combined with a required action (pay, verify, update) creates urgency. This is the fundamental social engineering pattern of ALL delivery phishing."
+    },
+    {
+      "id": "delivery-scheduling-fee",
+      "group": "socialEngineering",
+      "description": "Delivery scheduling or rescheduling fee form — fake redelivery charge to collect payment details",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:reschedule|schedule|re-?deliver|attempt)[\\s\\S]{0,300}(?:delivery|shipment|package)[\\s\\S]{0,300}(?:fee|charge|cost|\\$\\d|€\\d|£\\d|\\d\\.\\d{2})[\\s\\S]{0,300}(?:pay|card|credit|debit|submit)",
+      "patternFlags": "i",
+      "note": "Delivery scheduling/rescheduling fee forms claim a small charge ($0.99-$3.99) is required to reschedule a missed delivery. Real courier services don't charge rescheduling fees via SMS/email links. The fee is a pretext for card harvesting."
+    },
+    {
+      "id": "sms-delivery-notification-text",
+      "group": "socialEngineering",
+      "description": "SMS-style short delivery notification text on landing page — smishing landing page indicator",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:your\\s+(?:package|parcel|shipment|order|delivery)\\s+(?:has\\s+been|was|is)\\s+(?:delivered|attempted|held|delayed|returned|unable)|unable\\s+to\\s+deliver|delivery\\s+attempt\\s+(?:failed|unsuccessful)|missed\\s+delivery)",
+      "patternFlags": "i",
+      "note": "Short notification-style text about a delivery status (delivered, attempted, held, delayed, missed) is the landing page for an SMS phishing link. The text matches what was in the original smishing SMS that brought the victim to this page."
+    },
+    {
+      "id": "postage-due-payment",
+      "group": "socialEngineering",
+      "description": "Postage due or insufficient postage payment page — fee collection for undelivered mail",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:postage\\s*due|insufficient\\s*postage|unpaid\\s*postage|additional\\s*postage|shipping\\s*(?:fee|charge)\\s*(?:due|unpaid|outstanding))[\\s\\S]{0,500}(?:pay|amount|\\$|€|£|card)",
+      "patternFlags": "i",
+      "note": "Postage due/insufficient postage payment pages claim additional shipping fees must be paid to receive a package. These are common in USPS, Royal Mail, and La Poste impersonation phishing."
+    },
+    {
+      "id": "courier-app-download-prompt",
+      "group": "socialEngineering",
+      "description": "Fake courier app download prompt — directs users to install malicious tracking app",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:download|install)\\s*(?:our|the)?\\s*(?:new|updated|official)?\\s*(?:tracking|delivery|courier|shipping)?\\s*app[\\s\\S]{0,300}(?:track|manage|delivery|package)[\\s\\S]{0,300}(?:apk|download|install|play\\s*store|app\\s*store)",
+      "patternFlags": "i",
+      "note": "Fake courier app download prompts impersonate DHL, FedEx, USPS, etc. and direct users to install malicious APKs or fake apps. The 'tracking app' is actually malware that can intercept SMS (for OTP theft), access contacts, and steal banking credentials."
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -11489,7 +11782,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T19:38:47.671Z",
+      "compiledAt": "2026-04-01T19:50:07.976Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
