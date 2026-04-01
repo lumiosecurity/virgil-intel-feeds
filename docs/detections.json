@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-01-19:22",
-    "generatedAt": "2026-04-01T19:22:00.735Z",
+    "version": "2026-04-01-19:38",
+    "generatedAt": "2026-04-01T19:38:49.121Z",
     "brandCount": 171,
-    "patternCount": 777
+    "patternCount": 798
   },
   "brandEntries": [
     {
@@ -14633,6 +14633,18 @@
     },
     {
       "domHashes": [],
+      "id": "user-select-none-page",
+      "group": "botEvasion",
+      "description": "CSS user-select:none applied broadly — prevents text selection for anti-copy/anti-forensics",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "(?:body|\\*|html)\\s*\\{[^}]*user-select:\\s*none",
+      "patternFlags": "i",
+      "note": "Applying user-select:none to the entire page body prevents users from selecting and copying text. Phishing pages do this to prevent forensic text extraction and to make it harder to search for the page's text content."
+    },
+    {
+      "domHashes": [],
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -15506,6 +15518,42 @@
       "patternString": "(?:aadcdn\\.msftauth\\.net|logincdn\\.msftauth\\.net|aadcdn\\.msauth\\.net|login\\.microsoftonline\\.com/consumers/css)[\\s\\S]{0,1000}(?:form|password|submit)",
       "patternFlags": "i",
       "note": "Microsoft's corporate branding CDN assets (aadcdn.msftauth.net, logincdn.msftauth.net) loading on a page with a login form means the proxy is serving Microsoft's real branding. Legitimate Microsoft login only serves these assets from Microsoft domains."
+    },
+    {
+      "domHashes": [],
+      "id": "copyright-brand-name-mismatch",
+      "group": "brandImpersonation",
+      "description": "Copyright text contains a well-known brand name — brand impersonation in page footer",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "(?:©|&copy;|copyright)[\\s\\S]{0,50}(?:20[12]\\d)[\\s\\S]{0,50}(?:Microsoft|Google|Apple|PayPal|Amazon|Netflix|Facebook|Meta|Adobe|Dropbox|LinkedIn|Twitter|Zoom)",
+      "patternFlags": "i",
+      "note": "Copyright text claiming ownership by a major brand (Microsoft, Google, Apple, etc.) on a page hosted on a different domain is a simple but effective brand impersonation indicator. Phishers copy the copyright footer from the real site."
+    },
+    {
+      "domHashes": [],
+      "id": "outdated-copyright-year",
+      "group": "brandImpersonation",
+      "description": "Copyright year significantly outdated — phishing page copied from an old version of the target site",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "(?:©|&copy;|copyright)\\s*(?:20(?:1[0-9]|2[0-3]))[\\s\\S]{0,100}(?:All\\s*Rights\\s*Reserved|rights\\s*reserved)",
+      "patternFlags": "i",
+      "note": "A copyright year from 2010-2023 (significantly older than the current year 2026) suggests the phishing page was cloned from an older snapshot of the target site. Phishers don't update the copyright year when they copy login pages."
+    },
+    {
+      "domHashes": [],
+      "id": "brand-logo-base64-embedded",
+      "group": "brandImpersonation",
+      "description": "Brand logo embedded as base64 data URI — self-contained phishing page with no external asset dependencies",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "<img[^>]*src=['\"]data:image/(?:png|jpeg|svg\\+xml);base64,[A-Za-z0-9+/=]{500,}['\"][^>]*>[\\s\\S]{0,2000}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "A large base64-encoded image (logo) on a page with a password field means the phishing page is completely self-contained — no external asset loads that could trigger network-level detection. The logo is embedded to avoid referencing the real brand's CDN."
     },
     {
       "domHashes": [],
@@ -17366,6 +17414,54 @@
       "patternString": "(?:step|state|phase|stage)\\s*(?:=|===?)\\s*(?:['\"](?:email|password|mfa|otp|verify|code)['\"]|[012345])[\\s\\S]{0,500}(?:style\\.display|classList|visibility|innerHTML)",
       "patternFlags": "i",
       "note": "A JavaScript state machine managing email→password→MFA step progression by showing/hiding page sections is the AiTM multi-step authentication flow controller. Each step captures different credentials and the kit advances through the auth flow."
+    },
+    {
+      "domHashes": [],
+      "id": "password-form-no-forgot-link",
+      "group": "credentialHarvesting",
+      "description": "Password input field without a 'Forgot password' or 'Reset password' link — missing expected UX element",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "<input[^>]*type=['\"]password['\"][^>]*>[\\s\\S]{0,2000}(?:</form>|</body>)(?!.*(?:forgot|reset|recover|trouble).*(?:password|access))",
+      "patternFlags": "i",
+      "note": "A legitimate login page always has a 'Forgot password?' link. Phishing pages frequently omit this because they don't have a password reset backend. The absence of forgot/reset/recover near a password field is a simple but telling indicator."
+    },
+    {
+      "domHashes": [],
+      "id": "form-action-php-endpoint",
+      "group": "credentialHarvesting",
+      "description": "Form action pointing to a PHP file — common phishing credential collection endpoint",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "<form[^>]*action=['\"][^'\"]*\\.php['\"][\\s\\S]{0,500}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "A login form posting to a PHP file is a classic phishing pattern. Modern legitimate services use API endpoints, not PHP scripts. PHP-based credential collectors remain the most common backend for low-sophistication phishing kits."
+    },
+    {
+      "domHashes": [],
+      "id": "autocomplete-off-credential-fields",
+      "group": "credentialHarvesting",
+      "description": "Autocomplete disabled on login form — prevents browser from recognizing this as a real login page",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "<form[^>]*autocomplete=['\"]off['\"][\\s\\S]{0,500}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "Setting autocomplete=off on a login form prevents the browser from offering saved credentials. Legitimate sites WANT autocomplete to work for user convenience. Phishing pages disable it to prevent the browser from alerting the user that this isn't the real site."
+    },
+    {
+      "domHashes": [],
+      "id": "login-form-only-no-register",
+      "group": "credentialHarvesting",
+      "description": "Login form without any 'Create account' or 'Sign up' link — harvesting-only page with no registration path",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "<input[^>]*type=['\"]password['\"][\\s\\S]{0,3000}</body>(?!.*(?:create|sign\\s*up|register|new\\s*account|join))",
+      "patternFlags": "i",
+      "note": "A login page with no 'Create account', 'Sign up', or 'Register' link is a harvesting-only page. Legitimate login pages always offer a registration path. Phishing pages only need the login form."
     },
     {
       "domHashes": [],
@@ -21569,6 +21665,30 @@
     },
     {
       "domHashes": [],
+      "id": "window-close-after-submit",
+      "group": "phishkitSignatures",
+      "description": "Window/tab closed or redirected after form submission — hides phishing page after credential capture",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:submit|send|post)[\\s\\S]{0,500}(?:window\\.close\\(\\)|self\\.close\\(\\)|window\\.location\\s*=\\s*['\"]about:blank)",
+      "patternFlags": "i",
+      "note": "Closing the browser tab or redirecting to about:blank immediately after form submission hides the phishing page so the victim can't review what happened. Legitimate sites show a success page or redirect to the dashboard."
+    },
+    {
+      "domHashes": [],
+      "id": "thank-you-redirect-after-credentials",
+      "group": "phishkitSignatures",
+      "description": "Generic 'Thank you' or 'Success' message shown after credential submission — phishing completion page",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:thank\\s*you|success(?:ful(?:ly)?)?|completed|verified|your\\s+(?:account|information)\\s+(?:has\\s+been|is)\\s+(?:updated|verified|confirmed|secured))[\\s\\S]{0,500}(?:redirect|location\\.href|window\\.location|setTimeout)",
+      "patternFlags": "i",
+      "note": "A generic 'Thank you, your account has been verified/updated' message followed by a redirect is the phishing completion page. After stealing credentials, the kit shows a success message then redirects to the real site."
+    },
+    {
+      "domHashes": [],
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -22274,6 +22394,30 @@
       "patternString": "(?:incorrect|invalid|wrong|failed|error)[\\s\\S]{0,300}(?:password|credential|authentication)[\\s\\S]{0,500}(?:try\\s*again|re-?enter|retry|one\\s*more)",
       "patternFlags": "i",
       "note": "Showing 'incorrect password' after the first credential submission and prompting re-entry is the AiTM double login pattern. The first submission is relayed to the real site; if it succeeds, a fake error captures the password again for the attacker's records."
+    },
+    {
+      "domHashes": [],
+      "id": "countdown-urgency-timer",
+      "group": "socialEngineering",
+      "description": "Countdown timer creating urgency — account action expires in X minutes/hours pattern",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "(?:setInterval|setTimeout)[\\s\\S]{0,300}(?:hour|minute|second|hr|min|sec|countdown|timer|remain|expire|left)[\\s\\S]{0,200}(?:innerHTML|textContent|innerText|display)",
+      "patternFlags": "i",
+      "note": "JavaScript countdown timers showing 'X minutes remaining' or 'expires in...' create artificial urgency on phishing pages. The timer pressures victims to enter credentials quickly before 'time runs out'."
+    },
+    {
+      "domHashes": [],
+      "id": "mailto-support-link-phish",
+      "group": "socialEngineering",
+      "description": "Mailto link to a suspicious email address on a login page — fake support contact for social engineering",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "mailto:[^@'\"]+@(?:gmail|yahoo|hotmail|outlook|protonmail|mail)\\.com[\\s\\S]{0,1000}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "A mailto link to a free email provider (Gmail, Yahoo, Hotmail) on a login page is suspicious. Legitimate enterprise services use their own domain for support contacts, not free email accounts."
     },
     {
       "domHashes": [],
@@ -23078,6 +23222,114 @@
       "patternString": "(?:linktr\\.ee|beacons\\.ai|stan\\.store|bio\\.link|hoo\\.be|linkin\\.bio|campsite\\.bio|tap\\.bio)/[a-z0-9_-]+",
       "patternFlags": "i",
       "note": "Link-in-bio services (Linktree, Beacons, Stan, Bio.link) are abused as phishing redirectors because their domains are trusted and rarely blocked. The phishing link hides behind a legitimate social media link tool."
+    },
+    {
+      "domHashes": [],
+      "id": "null-footer-links-phish",
+      "group": "urlHeuristics",
+      "description": "Footer navigation links pointing to # or javascript:void — phishing page with non-functional navigation",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "(?:footer|copyright|terms|privacy|contact|about|help)[\\s\\S]{0,200}<a[^>]*href=['\"](?:#|javascript:void|javascript:;|javascript:void\\(0\\))['\"][\\s\\S]{0,200}<a[^>]*href=['\"](?:#|javascript:void|javascript:;|javascript:void\\(0\\))['\"]",
+      "patternFlags": "i",
+      "note": "Two or more footer/navigation links pointing to # or javascript:void(0) indicates a phishing page with decorative non-functional links. Phishers copy the visual layout of legitimate sites but don't bother making footer links work."
+    },
+    {
+      "domHashes": [],
+      "id": "base-href-external-domain",
+      "group": "urlHeuristics",
+      "description": "Base href tag pointing to a different domain — makes relative URLs resolve to attacker's server",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<base[^>]*href=['\"]https?://[^'\"]+['\"]",
+      "patternFlags": "i",
+      "note": "A <base href> tag pointing to an external domain makes ALL relative URLs on the page resolve to that domain instead of the current one. Phishers use this to load assets from a different server while hosting the phishing page elsewhere."
+    },
+    {
+      "domHashes": [],
+      "id": "blank-or-generic-title",
+      "group": "urlHeuristics",
+      "description": "Page with empty, blank, or extremely generic title — phishing pages often lack proper titles",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "<title>\\s*(?:Untitled|Document|Page|Home|Welcome|Login|Sign\\s*[Ii]n|Verify|Confirm|Update|Secure|Account|Authentication)?\\s*</title>",
+      "patternFlags": "i",
+      "note": "Phishing pages often have generic, blank, or single-word titles like 'Document', 'Login', 'Verify', 'Untitled'. Legitimate login pages always have branded titles (e.g., 'Sign in to Microsoft'). A generic title on a credential page is suspicious."
+    },
+    {
+      "domHashes": [],
+      "id": "ip-address-in-resource-url",
+      "group": "urlHeuristics",
+      "description": "Page resources loaded from an IP address rather than a domain name — suspicious hosting indicator",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:src|href|action)=['\"]https?://\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}[/:'\"\\s]",
+      "patternFlags": "i",
+      "note": "Loading page resources (scripts, images, form actions) from raw IP addresses instead of domain names is a hosting indicator. Legitimate sites use domain names; phishing infrastructure often uses IP addresses to avoid domain takedowns."
+    },
+    {
+      "domHashes": [],
+      "id": "single-page-login-no-navigation",
+      "group": "urlHeuristics",
+      "description": "Login page with no navigation menu or site links — isolated credential form with no site context",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "<body[^>]*>[\\s\\S]{0,500}<(?:div|form|section)[\\s\\S]{0,3000}<input[^>]*type=['\"]password['\"][\\s\\S]{0,1000}</(?:div|form|section)>[\\s\\S]{0,500}</body>",
+      "patternFlags": "i",
+      "note": "A page with only a login form and no navigation menu, header links, or site structure is an isolated credential form. Legitimate login pages exist within a site with navigation to home, help, terms, etc. Phishing pages are stripped to just the form."
+    },
+    {
+      "domHashes": [],
+      "id": "cheap-tld-form-action-credential",
+      "group": "urlHeuristics",
+      "description": "Form action URL using a cheap/suspicious TLD — .xyz, .top, .tk, .ml, .ga, .cf, .gq hosting",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<form[^>]*action=['\"]https?://[^'\"]+\\.(?:xyz|top|tk|ml|ga|cf|gq|buzz|work|click|link|surf|icu|monster|rest|quest|cfd|sbs|boats|bond|hair|makeup|christmas)[/'\"]",
+      "patternFlags": "i",
+      "note": "Form actions posting to cheap or commonly-abused TLDs (.xyz, .top, .tk, .ml, .ga, .cf, .gq, .icu, etc.) are strong phishing indicators. These TLDs are disproportionately used for phishing due to low cost or free registration."
+    },
+    {
+      "domHashes": [],
+      "id": "empty-href-anchor-links",
+      "group": "urlHeuristics",
+      "description": "Multiple anchor tags with empty href — decorative non-functional links on phishing page",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "<a[^>]*href=['\"]\\s*['\"][^>]*>[\\s\\S]{0,200}<a[^>]*href=['\"]\\s*['\"][^>]*>[\\s\\S]{0,200}<a[^>]*href=['\"]\\s*['\"]",
+      "patternFlags": "i",
+      "note": "Three or more anchor tags with empty href attributes on the same page are decorative links that go nowhere. Phishing pages include visual link text (Terms, Privacy, Help) but with empty hrefs because the phisher didn't set up those pages."
+    },
+    {
+      "domHashes": [],
+      "id": "meta-refresh-redirect-delayed",
+      "group": "urlHeuristics",
+      "description": "Meta refresh tag with delayed redirect — auto-redirect to phishing page or away from evidence",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<meta[^>]*http-equiv=['\"]refresh['\"][^>]*content=['\"]\\d+;\\s*url=['\"]?https?://[^'\"\\s>]+",
+      "patternFlags": "i",
+      "note": "A meta refresh tag with a URL redirect can auto-redirect to a phishing page from a compromised/trusted site, or redirect away from the phishing page after credential capture to destroy evidence."
+    },
+    {
+      "domHashes": [],
+      "id": "external-links-only-page",
+      "group": "urlHeuristics",
+      "description": "Page where all hyperlinks point to external domains — no internal navigation structure",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "<a[^>]*href=['\"]https?://[^'\"]+['\"][^>]*>[\\s\\S]{0,300}<a[^>]*href=['\"]https?://[^'\"]+['\"][^>]*>[\\s\\S]{0,300}<a[^>]*href=['\"]https?://[^'\"]+['\"]",
+      "patternFlags": "i",
+      "note": "A page where all links are absolute URLs to external domains (no relative internal links) indicates a page without internal site structure. Phishing pages link out to the real brand site for Terms/Privacy but have no internal pages."
     }
   ]
 }
