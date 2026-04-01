@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T17:16:43.759Z",
-    "brandCount": 130,
+    "compiledAt": "2026-04-01T17:46:25.987Z",
+    "brandCount": 146,
     "signalCount": 1,
-    "patternCount": 540,
+    "patternCount": 564,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -816,6 +816,98 @@
       "note": "Target store impersonated in gift card and reward phishing campaigns."
     },
     {
+      "name": "airbnb",
+      "vertical": "ecommerce",
+      "domains": [
+        "airbnb.com"
+      ],
+      "typos": [
+        "aiirbnb",
+        "a1rbnb",
+        "airbnbb",
+        "airbnp",
+        "alrbnb",
+        "airb-nb"
+      ],
+      "note": "Airbnb targeted for account takeover and fake listing scams."
+    },
+    {
+      "name": "uber",
+      "vertical": "ecommerce",
+      "domains": [
+        "uber.com"
+      ],
+      "typos": [
+        "uberr",
+        "ub3r",
+        "ubeer",
+        "ubr",
+        "u-ber"
+      ],
+      "note": "Uber targeted for driver/rider account theft and payment method harvesting."
+    },
+    {
+      "name": "bestbuy",
+      "vertical": "ecommerce",
+      "domains": [
+        "bestbuy.com"
+      ],
+      "typos": [
+        "bestbuuy",
+        "bestbuy1",
+        "best-buy",
+        "bestbyy",
+        "b3stbuy",
+        "besttbuy"
+      ],
+      "note": "Best Buy impersonated in order confirmation and Geek Squad renewal phishing."
+    },
+    {
+      "name": "etsy",
+      "vertical": "ecommerce",
+      "domains": [
+        "etsy.com"
+      ],
+      "typos": [
+        "etsyy",
+        "3tsy",
+        "etssy",
+        "ettsy",
+        "etsi"
+      ],
+      "note": "Etsy targeted for seller and buyer account credential theft."
+    },
+    {
+      "name": "expedia",
+      "vertical": "ecommerce",
+      "domains": [
+        "expedia.com"
+      ],
+      "typos": [
+        "expediia",
+        "exped1a",
+        "expediaa",
+        "axpedia",
+        "expidia"
+      ],
+      "note": "Expedia targeted in travel booking phishing campaigns."
+    },
+    {
+      "name": "doordash",
+      "vertical": "ecommerce",
+      "domains": [
+        "doordash.com"
+      ],
+      "typos": [
+        "doordashh",
+        "doordassh",
+        "d00rdash",
+        "doordah",
+        "door-dash"
+      ],
+      "note": "DoorDash targeted for driver and customer credential theft."
+    },
+    {
       "name": "spotify",
       "domains": [
         "spotify.com",
@@ -1304,6 +1396,82 @@
       "note": "Robinhood targeted for investment account credential theft and financial fraud."
     },
     {
+      "name": "revolut",
+      "vertical": "financial",
+      "domains": [
+        "revolut.com"
+      ],
+      "typos": [
+        "revo1ut",
+        "revollut",
+        "revolutt",
+        "revoilut",
+        "revoiut",
+        "revo-lut"
+      ],
+      "note": "Revolut fintech banking targeted for account credential theft and payment fraud."
+    },
+    {
+      "name": "chime",
+      "vertical": "financial",
+      "domains": [
+        "chime.com"
+      ],
+      "typos": [
+        "chiime",
+        "ch1me",
+        "chimee",
+        "chyme",
+        "chlme"
+      ],
+      "note": "Chime mobile banking targeted for credential theft and unauthorized transfers."
+    },
+    {
+      "name": "sofi",
+      "vertical": "financial",
+      "domains": [
+        "sofi.com"
+      ],
+      "typos": [
+        "sofii",
+        "s0fi",
+        "soffi",
+        "sofl",
+        "so-fi"
+      ],
+      "note": "SoFi financial services targeted for investment and banking credential theft."
+    },
+    {
+      "name": "geico",
+      "vertical": "financial",
+      "domains": [
+        "geico.com"
+      ],
+      "typos": [
+        "geicoo",
+        "geiico",
+        "ge1co",
+        "geicco",
+        "gelco"
+      ],
+      "note": "GEICO insurance phishing targets policy and payment information."
+    },
+    {
+      "name": "statefarm",
+      "vertical": "financial",
+      "domains": [
+        "statefarm.com"
+      ],
+      "typos": [
+        "statefarm1",
+        "statefarrn",
+        "state-farm",
+        "stateferm",
+        "statefarrm"
+      ],
+      "note": "State Farm insurance targeted for credential theft and policy fraud."
+    },
+    {
       "name": "bet365",
       "domains": [
         "bet365.com"
@@ -1641,6 +1809,47 @@
       "note": "Regional US toll road brands (PeachPass GA, TxTag TX, NTTA TX) are targeted in toll road SMS phishing campaigns."
     },
     {
+      "name": "socialsecurity",
+      "vertical": "government",
+      "domains": [
+        "ssa.gov"
+      ],
+      "typos": [
+        "ssa-gov",
+        "ssagov",
+        "socialsecurlty",
+        "soclalsecurity"
+      ],
+      "note": "Social Security Administration impersonated in benefit fraud and identity theft campaigns."
+    },
+    {
+      "name": "hmrc",
+      "vertical": "government",
+      "domains": [
+        "hmrc.gov.uk"
+      ],
+      "typos": [
+        "hmrc-gov",
+        "hrnrc",
+        "hmrcc",
+        "hmrc-uk"
+      ],
+      "note": "HMRC (UK tax authority) impersonated in tax refund and verification phishing."
+    },
+    {
+      "name": "nhs",
+      "vertical": "government",
+      "domains": [
+        "nhs.uk"
+      ],
+      "typos": [
+        "nhss",
+        "nhs-uk",
+        "nhsuk"
+      ],
+      "note": "NHS (UK health service) impersonated in COVID/vaccination and medical appointment phishing."
+    },
+    {
       "name": "thecourierguy",
       "domains": [
         "thecourierguy.co.za"
@@ -1708,6 +1917,21 @@
         "telegrom"
       ],
       "note": "Telegram account phishing targets users with fake session expiry and verification messages."
+    },
+    {
+      "name": "signal",
+      "vertical": "messaging",
+      "domains": [
+        "signal.org"
+      ],
+      "typos": [
+        "signall",
+        "signa1",
+        "s1gnal",
+        "signai",
+        "singal"
+      ],
+      "note": "Signal messenger targeted for account takeover via fake verification pages."
     },
     {
       "name": "microsoft-outlook",
@@ -2093,6 +2317,22 @@
         "1pasword"
       ],
       "note": "1Password phishing (1Phish kit) specifically targets password manager users with fake breach notifications. Active since late 2025."
+    },
+    {
+      "name": "protonmail",
+      "vertical": "technology",
+      "domains": [
+        "proton.me",
+        "protonmail.com"
+      ],
+      "typos": [
+        "protonmai1",
+        "protonmal",
+        "protonmall",
+        "protonmeil",
+        "pr0tonmail"
+      ],
+      "note": "ProtonMail/Proton targeted for secure email credential theft."
     },
     {
       "name": "att",
@@ -2757,6 +2997,61 @@
       "patternString": "<meta[^>]*viewport[^>]*user-scalable\\s*=\\s*no[^>]*width\\s*=\\s*device-width",
       "patternFlags": "i",
       "note": "Viewport locked to device-width with scaling disabled prevents users from zooming out to see the full page URL or inspect the page. Supporting signal for mobile-targeting phishing."
+    },
+    {
+      "id": "email-validation-gate-api",
+      "group": "botEvasion",
+      "description": "Email address validated against external API before showing phishing content — targeted phishing gate",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:fetch|XMLHttpRequest)[\\s\\S]{0,200}(?:email|mail|user)[\\s\\S]{0,300}(?:valid|check|verify|exist|lookup)[\\s\\S]{0,300}(?:style\\.display|innerHTML|classList|location|redirect)",
+      "patternFlags": "i",
+      "note": "Validating the victim's email via API before showing phishing content ensures only real corporate email users see the phishing page. Sneaky 2FA and similar enterprise-targeted kits use this to filter out security researchers."
+    },
+    {
+      "id": "email-domain-corporate-filter",
+      "group": "botEvasion",
+      "description": "Email domain checked against corporate domain list before proceeding — enterprise targeting filter",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:split\\(['\"]@['\"]\\)|email\\.(?:split|indexOf|includes))[\\s\\S]{0,300}(?:gmail|yahoo|hotmail|outlook|aol)[\\s\\S]{0,200}(?:error|invalid|reject|block|redirect|not\\s*(?:supported|allowed|valid))",
+      "patternFlags": "i",
+      "note": "Checking the email domain and rejecting free providers (Gmail, Yahoo, Hotmail) is the Sneaky 2FA enterprise targeting filter. The phishing page only works for corporate email addresses."
+    },
+    {
+      "id": "wordpress-logged-in-check",
+      "group": "botEvasion",
+      "description": "WordPress login cookie checked to avoid showing malware to site admins",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:wordpress_logged_in|wp-settings)[\\s\\S]{0,200}(?:cookie|document\\.cookie)[\\s\\S]{0,200}(?:return|exit|redirect|display|none)",
+      "patternFlags": "i",
+      "note": "Checking for WordPress admin cookies and hiding malicious content from logged-in site admins is a SocGholish/ClearFake evasion technique. The site appears normal to the admin but shows fake updates to visitors."
+    },
+    {
+      "id": "history-flood-back-prevention",
+      "group": "botEvasion",
+      "description": "Browser history flooded to prevent back button from leaving page — page lock technique",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:history\\.pushState|history\\.replaceState)[\\s\\S]{0,100}(?:setInterval|for\\s*\\(|while\\s*\\()[\\s\\S]{0,200}(?:history\\.pushState|history\\.replaceState)",
+      "patternFlags": "i",
+      "note": "Flooding browser history with pushState/replaceState entries in a loop prevents the back button from working. Victims can't navigate away from tech support scam or phishing pages using the back button."
+    },
+    {
+      "id": "beforeunload-prevent-leave",
+      "group": "botEvasion",
+      "description": "Beforeunload event preventing page exit with confirmation dialog — page retention technique",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "addEventListener\\(['\"]beforeunload['\"][\\s\\S]{0,200}(?:returnValue|preventDefault|Are\\s+you\\s+sure)",
+      "patternFlags": "i",
+      "note": "Setting a beforeunload handler with returnValue or preventDefault shows a 'Are you sure you want to leave?' dialog. Tech support scams and phishing pages use this to prevent victims from closing the tab."
     },
     {
       "id": "spotify-impersonation-title",
@@ -4360,6 +4655,17 @@
       "note": "A full-width, borderless iframe loading content from an external domain on a page with login elements is the GhostFrame technique. The outer page looks clean while the iframe contains the actual phishing form."
     },
     {
+      "id": "multi-page-wizard-credential",
+      "group": "credentialHarvesting",
+      "description": "Multi-page form wizard collecting credentials across multiple steps — staged data harvesting",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "(?:step|page|stage|wizard)\\s*(?:=|\\+=)\\s*(?:\\d|step|page)[\\s\\S]{0,300}(?:classList|style\\.display|visibility)[\\s\\S]{0,300}(?:password|card|ssn|social|dob|birth)",
+      "patternFlags": "i",
+      "note": "Multi-step form wizards that progressively collect credentials, then personal info (SSN, DOB), then payment details across separate 'steps' are comprehensive data harvesting phishing pages."
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -5009,6 +5315,17 @@
       "patternString": "xn--[a-z0-9]{5,}\\.[a-z]{2,}",
       "patternFlags": "i",
       "note": "Punycode-encoded internationalized domain names (xn--...) in page source links indicate homoglyph domain abuse. These domains use look-alike Unicode characters to impersonate legitimate brands."
+    },
+    {
+      "id": "screen-reader-aria-hidden-phish",
+      "group": "obfuscation",
+      "description": "Aria-hidden elements containing phishing content invisible to accessibility tools",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "aria-hidden=['\"]true['\"][\\s\\S]{0,200}(?:password|sign\\s*in|log\\s*in|verify|credential)",
+      "patternFlags": "i",
+      "note": "Using aria-hidden=true on elements containing login/password text hides phishing content from screen readers and accessibility-based scanners while keeping it visually visible to sighted users."
     },
     {
       "id": "base64-html-password-obfuscation",
@@ -6846,6 +7163,105 @@
       "note": "A web app manifest on a page with login elements indicates a PWA phishing app. When installed, the app icon on the home screen opens the phishing page in a standalone window without browser URL bar."
     },
     {
+      "id": "clearfake-iframe-overlay",
+      "group": "phishkitSignatures",
+      "description": "ClearFake-style iframe overlay replacing page content with fake update lure",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "createElement\\(['\"]iframe['\"]\\)[\\s\\S]{0,300}(?:position:\\s*fixed|z-?[Ii]ndex:\\s*\\d{4,}|width:\\s*100%)[\\s\\S]{0,300}(?:update|browser|chrome)",
+      "patternFlags": "i",
+      "note": "ClearFake creates a full-page fixed iframe overlay that hides the real website content and shows the fake update lure. The iframe has high z-index and 100% width to cover the entire page."
+    },
+    {
+      "id": "etherhiding-smart-contract",
+      "group": "phishkitSignatures",
+      "description": "EtherHiding technique — payload retrieved from Binance Smart Chain smart contract",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "js",
+      "patternString": "(?:bsc-dataseed|binance\\.org|bscscan\\.com|smartchain)[\\s\\S]{0,500}(?:eth_call|getStorageAt|call\\(|contract)",
+      "patternFlags": "i",
+      "note": "EtherHiding retrieves malicious payloads from Binance Smart Chain smart contracts. This makes the payload immutable and impossible to take down since it's stored on the blockchain. Definitive advanced malware delivery technique."
+    },
+    {
+      "id": "cephas-astronomy-comments",
+      "group": "phishkitSignatures",
+      "description": "Astronomy or Bible-related code comments — Cephas phishing kit signature",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?://|/\\*)\\s*(?:wine\\s+tasting|Riverside\\s+Avenue|Spectral\\s+Quasar|celestial|constellation|psalm|revelation|genesis)[\\s\\S]{0,50}(?:\\*/|$)",
+      "patternFlags": "i",
+      "note": "The Cephas phishing kit contains distinctive astronomy and Bible-related code comments like 'wine tasting on Riverside Avenue' and 'Spectral Quasar'. These thematic anomalies serve as kit fingerprints and content diversification."
+    },
+    {
+      "id": "cogui-captcha-brand-filter",
+      "group": "phishkitSignatures",
+      "description": "CoGUI kit signature — CAPTCHA gate with brand impersonation targeting specific verticals",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:captcha|verify|challenge)[\\s\\S]{0,500}(?:rakuten|amazon|apple|paypal)[\\s\\S]{0,300}(?:redirect|location\\.href|window\\.location)",
+      "patternFlags": "i",
+      "note": "CoGUI phishing kit uses CAPTCHA gates combined with specific brand targeting (Rakuten, Amazon, Apple, PayPal). After CAPTCHA verification, victims are redirected to the brand-specific phishing page."
+    },
+    {
+      "id": "ndsw-parrot-tds-inject",
+      "group": "phishkitSignatures",
+      "description": "NDSW/Parrot TDS JavaScript injection marker — traffic distribution system for malware delivery",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "js",
+      "patternString": "(?:ndsw|ndsj|ndsx)\\s*=\\s*['\"]",
+      "patternFlags": "i",
+      "note": "The NDSW/NDSJ/NDSX variable assignment is the signature of Parrot TDS (Traffic Distribution System) injections. Compromised websites containing these markers redirect visitors to SocGholish fake update pages. Definitive malware indicator."
+    },
+    {
+      "id": "keitaro-tds-redirect",
+      "group": "phishkitSignatures",
+      "description": "Keitaro TDS redirect pattern — traffic distribution system used by TA569/SocGholish",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:keitaro|tds|tracker)[\\s\\S]{0,200}(?:click_id|campaign_id|landing_id)[\\s\\S]{0,200}(?:redirect|location|href)",
+      "patternFlags": "i",
+      "note": "Keitaro TDS parameters (click_id, campaign_id, landing_id) in JavaScript redirects indicate a traffic distribution system routing victims to phishing or malware pages. TA569 uses Keitaro extensively."
+    },
+    {
+      "id": "wordpress-plugin-inject-marker",
+      "group": "phishkitSignatures",
+      "description": "WordPress plugin path with suspicious script injection — compromised site indicator",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "wp-content/plugins/[a-z-]+/[a-z]+-script\\.js[\\s\\S]{0,200}(?:async|defer)",
+      "patternFlags": "i",
+      "note": "Suspicious asynchronous script loads from WordPress plugin directories (pattern: /wp-content/plugins/plugin-name/xyz-script.js) indicate fake plugins injected via stolen credentials for ClearFake/ClickFix delivery."
+    },
+    {
+      "id": "telegram-bot-message-format",
+      "group": "phishkitSignatures",
+      "description": "Telegram bot exfiltration with formatted message — structured credential report to attacker",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "sendMessage[\\s\\S]{0,200}(?:chat_id|parse_mode)[\\s\\S]{0,300}(?:%0A|\\\\n|<b>|<code>)[\\s\\S]{0,200}(?:email|user|pass|login|ip|country)",
+      "patternFlags": "i",
+      "note": "Telegram bot sendMessage calls with formatted text containing credential field labels (email, user, pass, ip, country) using newlines or HTML formatting is the structured exfiltration report format used by phishing kits."
+    },
+    {
+      "id": "discord-webhook-formatted-exfil",
+      "group": "phishkitSignatures",
+      "description": "Discord webhook with formatted embed — structured credential exfiltration report",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "discord(?:app)?\\.com/api/webhooks[\\s\\S]{0,300}(?:embeds|content)[\\s\\S]{0,300}(?:email|user|pass|login|password|credential)",
+      "patternFlags": "i",
+      "note": "Discord webhook calls with embed objects containing credential field labels are structured exfiltration reports. The attacker receives a nicely formatted Discord message with the victim's stolen credentials."
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -7195,6 +7611,94 @@
       "patternString": "(?:live-?chat|chat-?widget|support-?chat|help-?chat|chatbox)[\\s\\S]{0,500}(?:agent|operator|support|available|online)[\\s\\S]{0,300}(?:password|sign\\s*in|verify|account)",
       "patternFlags": "i",
       "note": "Fake live chat widgets on phishing pages create the illusion of a legitimate support channel. Scammers may guide victims through entering credentials or personal information via the fake chat."
+    },
+    {
+      "id": "fake-browser-update-lure",
+      "group": "socialEngineering",
+      "description": "Fake browser update notification with download prompt — SocGholish/ClearFake/FakeBat delivery",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:browser|chrome|firefox|edge|safari)\\s+(?:is\\s+)?(?:out\\s+of\\s+date|needs?\\s+(?:to\\s+be\\s+)?(?:updated|update)|update\\s+(?:required|needed|available))[\\s\\S]{0,500}(?:download|install|update\\s+now|click\\s+here)",
+      "patternFlags": "i",
+      "note": "Fake browser update notifications are the primary delivery mechanism for SocGholish, ClearFake, FakeBat, and RogueRaticate malware. The 'browser out of date + download' combination on any website that isn't an official browser vendor is a definitive malware lure."
+    },
+    {
+      "id": "tech-support-scam-lockscreen",
+      "group": "socialEngineering",
+      "description": "Tech support scam page with fake error/BSOD and phone number — browser lockscreen attack",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:your\\s+(?:computer|pc|device|windows)\\s+(?:has\\s+been|is)\\s+(?:blocked|locked|infected|compromised)|virus\\s+(?:detected|found|alert)|trojan\\s+(?:detected|found))[\\s\\S]{0,500}(?:call|phone|dial|contact)[\\s\\S]{0,200}(?:\\+?1[\\s-]?\\(?\\d{3}\\)?[\\s-]?\\d{3}[\\s-]?\\d{4}|\\d{3}[\\s-]\\d{3}[\\s-]\\d{4})",
+      "patternFlags": "i",
+      "note": "Tech support scam pages showing fake virus/trojan/computer locked messages with a phone number to call. These pages often use requestFullscreen() to simulate a locked computer."
+    },
+    {
+      "id": "fullscreen-lock-scam",
+      "group": "socialEngineering",
+      "description": "requestFullscreen used to simulate locked computer — tech support scam technique",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "requestFullscreen\\(\\)[\\s\\S]{0,500}(?:call|phone|support|virus|blocked|locked|error|warning|alert)",
+      "patternFlags": "i",
+      "note": "Using requestFullscreen() to make a fake error page take over the entire screen simulates a locked/crashed computer. Combined with fake error text and a phone number, this is a definitive tech support scam."
+    },
+    {
+      "id": "update-js-download-prompt",
+      "group": "socialEngineering",
+      "description": "JavaScript file download disguised as browser update — SocGholish payload delivery",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:download|href)=['\"][^'\"]*[Uu]pdate[^'\"]*\\.(?:js|zip|exe|msi|hta)['\"]",
+      "patternFlags": "i",
+      "note": "Download links or prompts for files named 'Update.js', 'Update.zip', or similar are the SocGholish/ClearFake payload delivery mechanism. The fake update downloads a malicious JavaScript file."
+    },
+    {
+      "id": "invoice-payment-bec-lure",
+      "group": "socialEngineering",
+      "description": "Invoice payment or wire transfer urgency text — BEC landing page indicator",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:invoice|payment|wire\\s*transfer|bank\\s*transfer)[\\s\\S]{0,300}(?:urgent|immediate|overdue|past\\s*due|final\\s*notice)[\\s\\S]{0,300}(?:pay\\s*now|transfer|submit\\s*payment|update\\s*(?:payment|billing|bank))",
+      "patternFlags": "i",
+      "note": "Invoice/payment urgency text combined with payment action prompts is characteristic of Business Email Compromise landing pages. These harvest banking details or redirect victims to payment fraud pages."
+    },
+    {
+      "id": "geek-squad-renewal-scam",
+      "group": "socialEngineering",
+      "description": "Geek Squad / Best Buy subscription renewal scam — tech support phishing",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:Geek\\s*Squad|Best\\s*Buy)[\\s\\S]{0,300}(?:subscription|renewal|membership|auto-?renew)[\\s\\S]{0,300}(?:\\$\\d{2,3}\\.\\d{2}|charged|debited|billed)",
+      "patternFlags": "i",
+      "note": "Geek Squad/Best Buy fake renewal scams claim a subscription has auto-renewed for a large amount ($249.99-$499.99) and provide a phone number to call for cancellation. Top tech support scam vector."
+    },
+    {
+      "id": "audio-alarm-scam-page",
+      "group": "socialEngineering",
+      "description": "Audio alarm or alert sound played on scam page — tech support scare tactic",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:Audio|play\\(\\))[\\s\\S]{0,200}(?:alarm|alert|warning|beep|siren)[\\s\\S]{0,200}(?:loop|autoplay|repeat)",
+      "patternFlags": "i",
+      "note": "Playing alarm/siren sounds on loop is a tech support scam scare tactic. The audio creates panic and urgency, pressuring victims to call the fake support number displayed on the page."
+    },
+    {
+      "id": "speech-synthesis-scam-voice",
+      "group": "socialEngineering",
+      "description": "Browser speech synthesis used to voice fake warnings — audio social engineering",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "SpeechSynthesisUtterance\\([\\s\\S]{0,300}(?:virus|infected|blocked|locked|compromised|unauthorized|warning|alert|microsoft|windows|apple)",
+      "patternFlags": "i",
+      "note": "Using the Web Speech API to read aloud fake security warnings ('Your computer is infected') adds an audio dimension to tech support scams. The voice message creates urgency and panic."
     },
     {
       "id": "numeric-domain-pattern",
@@ -7862,7 +8366,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T17:12:31.685Z",
+      "compiledAt": "2026-04-01T17:16:41.638Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
