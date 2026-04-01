@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T04:22:20.351Z",
+    "compiledAt": "2026-04-01T04:45:47.104Z",
     "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 297,
+    "patternCount": 300,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2494,6 +2494,17 @@
       "note": "Detects impersonation through brand-named subdomains on suspicious TLDs - legitimate brands use their own domains"
     },
     {
+      "id": "adobe-pdf-verification-impersonation",
+      "group": "brandImpersonation",
+      "description": "Adobe PDF document verification page requesting login credentials to access protected files",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "Adobe[\\s-]*PDF[\\s\\S]{0,1000}(?:File\\s+Verification|protected\\s+file)[\\s\\S]{0,1000}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "Combines Adobe PDF branding with file verification pretext and password collection - legitimate Adobe services don't require arbitrary logins for PDF access"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -2754,6 +2765,28 @@
       "patternString": "[?&]DRM=[a-f0-9]{64}[^\\s<>\"']*(?:signin|login|auth|verify)",
       "patternFlags": "i",
       "note": "64-character hex DRM tokens are characteristic of phishing campaign tracking - not used by legitimate services"
+    },
+    {
+      "id": "form-input-hidden-sync-pattern",
+      "group": "credentialHarvesting",
+      "description": "JavaScript handlers sync visible input values to hidden form fields across multiple forms",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "querySelectorAll\\(['\"]input\\[type=['\"]hidden['\"]\\]\\[name=['\"](?:username|password|pass_entered)['\"]\\]['\"]\\)\\.forEach",
+      "patternFlags": "i",
+      "note": "Phishkit pattern: visible inputs trigger handlers that sync values to hidden fields across all forms - legitimate sites don't need this cross-form synchronization"
+    },
+    {
+      "id": "password-entry-boolean-tracking",
+      "group": "credentialHarvesting",
+      "description": "JavaScript tracks boolean flag of password field entry rather than password value",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "const\\s+\\w+\\s*=\\s*event\\.target\\.value\\.trim\\(\\)\\.length\\s*>\\s*0\\s*\\?\\s*['\"]1['\"]\\s*:\\s*['\"]0['\"]",
+      "patternFlags": "",
+      "note": "Phishkit behavior: converting password presence to boolean flag for hidden field tracking - legitimate forms validate actual password values, not just presence"
     },
     {
       "id": "suspicious-subdomain-financial",
@@ -4807,7 +4840,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T04:15:34.871Z",
+      "compiledAt": "2026-04-01T04:22:18.920Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
