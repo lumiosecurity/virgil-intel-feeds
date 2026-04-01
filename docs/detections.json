@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-01-17:46",
-    "generatedAt": "2026-04-01T17:46:26.004Z",
-    "brandCount": 146,
-    "patternCount": 564
+    "version": "2026-04-01-17:51",
+    "generatedAt": "2026-04-01T17:51:36.347Z",
+    "brandCount": 159,
+    "patternCount": 589
   },
   "brandEntries": [
     {
@@ -504,6 +504,32 @@
         "coinmaketcap",
         "c0inmarketcap",
         "coinrnarketcap"
+      ]
+    },
+    {
+      "name": "crypto-com",
+      "vertical": "crypto",
+      "domains": [
+        "crypto.com"
+      ],
+      "typos": [
+        "crypt0",
+        "cryptoo",
+        "crypto-comm",
+        "crypt-o"
+      ]
+    },
+    {
+      "name": "gateio",
+      "vertical": "crypto",
+      "domains": [
+        "gate.io"
+      ],
+      "typos": [
+        "gatee",
+        "gat3",
+        "gatte",
+        "gate-io"
       ]
     },
     {
@@ -1441,6 +1467,48 @@
       ]
     },
     {
+      "name": "americanexpress",
+      "vertical": "financial",
+      "domains": [
+        "americanexpress.com"
+      ],
+      "typos": [
+        "americanexpres",
+        "amerlcanexpress",
+        "americanexpess",
+        "arnericanexpress",
+        "americanexpreess"
+      ]
+    },
+    {
+      "name": "discover",
+      "vertical": "financial",
+      "domains": [
+        "discover.com"
+      ],
+      "typos": [
+        "discoverr",
+        "dlscover",
+        "disc0ver",
+        "discoveer",
+        "discovar"
+      ]
+    },
+    {
+      "name": "interac",
+      "vertical": "financial",
+      "domains": [
+        "interac.ca"
+      ],
+      "typos": [
+        "intarac",
+        "lnterac",
+        "interacc",
+        "inter-ac",
+        "interrac"
+      ]
+    },
+    {
       "name": "bet365",
       "vertical": "gambling",
       "domains": [
@@ -1831,6 +1899,46 @@
       ]
     },
     {
+      "name": "canadapost",
+      "vertical": "logistics",
+      "domains": [
+        "canadapost-postescanada.ca"
+      ],
+      "typos": [
+        "canadapostt",
+        "canada-post",
+        "canadapostes",
+        "canadpost"
+      ]
+    },
+    {
+      "name": "royalmail",
+      "vertical": "logistics",
+      "domains": [
+        "royalmail.com"
+      ],
+      "typos": [
+        "royalmai1",
+        "royalmall",
+        "royalmal",
+        "royal-mail",
+        "royalmaiil"
+      ]
+    },
+    {
+      "name": "australiapost",
+      "vertical": "logistics",
+      "domains": [
+        "auspost.com.au"
+      ],
+      "typos": [
+        "auspostt",
+        "austpost",
+        "aus-post",
+        "ausposst"
+      ]
+    },
+    {
       "name": "whatsapp",
       "vertical": "messaging",
       "domains": [
@@ -1882,6 +1990,34 @@
         "s1gnal",
         "signai",
         "singal"
+      ]
+    },
+    {
+      "name": "wechat",
+      "vertical": "messaging",
+      "domains": [
+        "wechat.com",
+        "weixin.qq.com"
+      ],
+      "typos": [
+        "wechaat",
+        "wechatt",
+        "wechet",
+        "w3chat",
+        "we-chat"
+      ]
+    },
+    {
+      "name": "line",
+      "vertical": "messaging",
+      "domains": [
+        "line.me"
+      ],
+      "typos": [
+        "liine",
+        "1ine",
+        "linee",
+        "lline"
       ]
     },
     {
@@ -2000,6 +2136,48 @@
         "tiktoik",
         "tiktokk",
         "tik-tok"
+      ]
+    },
+    {
+      "name": "snapchat",
+      "vertical": "social",
+      "domains": [
+        "snapchat.com"
+      ],
+      "typos": [
+        "snapchatt",
+        "snapchat1",
+        "snapchaat",
+        "snapchet",
+        "snapcht"
+      ]
+    },
+    {
+      "name": "pinterest",
+      "vertical": "social",
+      "domains": [
+        "pinterest.com"
+      ],
+      "typos": [
+        "pintrest",
+        "plnterest",
+        "pinterestt",
+        "plnterest",
+        "pintarest"
+      ]
+    },
+    {
+      "name": "reddit",
+      "vertical": "social",
+      "domains": [
+        "reddit.com"
+      ],
+      "typos": [
+        "reddlt",
+        "redditt",
+        "redit",
+        "reddt",
+        "redddit"
       ]
     },
     {
@@ -14080,6 +14258,114 @@
     },
     {
       "domHashes": [],
+      "id": "canvas-fingerprint-hash",
+      "group": "botEvasion",
+      "description": "Canvas fingerprinting — drawing hidden shapes to generate unique browser fingerprint",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "getContext\\(['\"]2d['\"]\\)[\\s\\S]{0,300}(?:fillText|fillRect|arc\\()[\\s\\S]{0,300}toDataURL\\(",
+      "patternFlags": "i",
+      "note": "Canvas fingerprinting draws hidden text/shapes and converts to a data URL to create a unique browser fingerprint. Phishing kits use this to track victims and detect sandbox environments with non-standard renderers."
+    },
+    {
+      "domHashes": [],
+      "id": "webgl-renderer-fingerprint",
+      "group": "botEvasion",
+      "description": "WebGL renderer and vendor queried for browser fingerprinting — sandbox detection",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "getParameter\\([\\s\\S]{0,50}(?:UNMASKED_VENDOR|UNMASKED_RENDERER|VENDOR|RENDERER)",
+      "patternFlags": "i",
+      "note": "Querying WebGL renderer and vendor strings detects virtual machines and headless browsers that report generic GPU names like 'SwiftShader' or 'llvmpipe'. Phishing kits use this to filter out security scanners."
+    },
+    {
+      "domHashes": [],
+      "id": "audio-context-fingerprint",
+      "group": "botEvasion",
+      "description": "AudioContext fingerprinting — oscillator output analyzed for unique browser signature",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "(?:AudioContext|webkitAudioContext)[\\s\\S]{0,300}(?:createOscillator|createAnalyser)[\\s\\S]{0,200}(?:getChannelData|getFloatTimeDomainData)",
+      "patternFlags": "i",
+      "note": "AudioContext fingerprinting creates an oscillator and analyzes its output to generate a unique browser fingerprint. Each browser/OS combination produces slightly different audio processing results."
+    },
+    {
+      "domHashes": [],
+      "id": "timezone-locale-gate",
+      "group": "botEvasion",
+      "description": "Timezone and locale checked to target specific geographic regions — targeted phishing gate",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "(?:Intl\\.DateTimeFormat|timeZone|getTimezoneOffset)[\\s\\S]{0,300}(?:navigator\\.language|navigator\\.languages)[\\s\\S]{0,200}(?:redirect|location|display|block|filter)",
+      "patternFlags": "i",
+      "note": "Checking timezone and browser language together to gate content by geography is a targeted phishing technique. Pages show phishing content only to victims in the target country and redirect others."
+    },
+    {
+      "domHashes": [],
+      "id": "connection-type-mobile-check",
+      "group": "botEvasion",
+      "description": "Network connection type checked to verify mobile device — smishing page verification",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "navigator\\.connection[\\s\\S]{0,100}(?:effectiveType|type|downlink)[\\s\\S]{0,200}(?:cellular|4g|3g|slow-2g|redirect|display)",
+      "patternFlags": "i",
+      "note": "Checking navigator.connection for cellular network types verifies the visitor is on a mobile device. Smishing pages use this to ensure only mobile users (who arrived via SMS link) see the phishing content."
+    },
+    {
+      "domHashes": [],
+      "id": "touchevent-mobile-verify",
+      "group": "botEvasion",
+      "description": "Touch event support checked to verify mobile device — smishing page filter",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "js",
+      "patternString": "(?:ontouchstart|maxTouchPoints|TouchEvent)[\\s\\S]{0,200}(?:redirect|location|display|block|filter|mobile)",
+      "patternFlags": "i",
+      "note": "Checking for touch event support to verify the visitor is on a mobile/tablet device. SMS phishing pages that should only be viewed on phones use this to redirect desktop visitors."
+    },
+    {
+      "domHashes": [],
+      "id": "google-404-redirect-antibot",
+      "group": "botEvasion",
+      "description": "Redirect to google.com/404 when bot or invalid access detected — Mamba 2FA antibot",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:location\\.href|window\\.location|location\\.replace)\\s*(?:=|\\()\\s*['\"]https?://(?:www\\.)?google\\.com/404",
+      "patternFlags": "i",
+      "note": "Redirecting to google.com/404 on invalid access or bot detection is a specific Mamba 2FA antibot signature. The kit redirects to Google's 404 page rather than google.com homepage."
+    },
+    {
+      "domHashes": [],
+      "id": "local-session-storage-wipe",
+      "group": "botEvasion",
+      "description": "localStorage and sessionStorage cleared on page unload — anti-forensics evidence destruction",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "(?:addEventListener\\(['\"](?:unload|beforeunload)['\"]|window\\.onunload)[\\s\\S]{0,200}(?:localStorage\\.clear|sessionStorage\\.clear|localStorage\\.removeItem|sessionStorage\\.removeItem)",
+      "patternFlags": "i",
+      "note": "Clearing all storage when the page unloads destroys forensic evidence of the phishing interaction. Credentials staged in storage during multi-step flows are wiped when the victim navigates away."
+    },
+    {
+      "domHashes": [],
+      "id": "service-worker-cache-delete",
+      "group": "botEvasion",
+      "description": "Service worker caches deleted to prevent cached content analysis",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "caches\\.(?:delete|keys\\(\\))[\\s\\S]{0,200}(?:forEach|then|map)[\\s\\S]{0,100}(?:delete|remove)",
+      "patternFlags": "i",
+      "note": "Deleting service worker caches prevents forensic analysis of cached phishing page content. After the attack, cached evidence is destroyed so investigators can't reconstruct the phishing page."
+    },
+    {
+      "domHashes": [],
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -15928,6 +16214,42 @@
     },
     {
       "domHashes": [],
+      "id": "socketio-credential-relay",
+      "group": "credentialHarvesting",
+      "description": "Socket.IO used to relay credentials in real-time — AiTM phishing WebSocket communication",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:socket\\.io|io\\.connect|io\\()[\\s\\S]{0,500}(?:emit|send)\\([\\s\\S]{0,200}(?:password|credential|email|token|otp|mfa)",
+      "patternFlags": "i",
+      "note": "Using Socket.IO to emit/send credential data is the signature real-time relay mechanism of Mamba 2FA and similar AiTM kits. Credentials are relayed instantly to the attacker's server for live session hijacking."
+    },
+    {
+      "domHashes": [],
+      "id": "shadow-dom-hidden-form",
+      "group": "credentialHarvesting",
+      "description": "Shadow DOM used to hide credential harvesting form from page source inspection",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "attachShadow\\([\\s\\S]{0,200}(?:mode:\\s*['\"]closed['\"])[\\s\\S]{0,300}(?:innerHTML|password|input|form)",
+      "patternFlags": "i",
+      "note": "Using closed Shadow DOM to inject login forms makes the form completely invisible to document.querySelector and outerHTML inspection. Security tools that analyze the main DOM tree cannot see the phishing form."
+    },
+    {
+      "domHashes": [],
+      "id": "window-name-credential-persist",
+      "group": "credentialHarvesting",
+      "description": "Window.name used to persist credential data across page navigations",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "window\\.name[\\s\\S]{0,100}(?:password|email|credential|token|session)",
+      "patternFlags": "i",
+      "note": "Window.name persists across page navigations within the same tab. Phishing kits use it as a covert data channel to transfer stolen credentials between phishing domains without URL parameters or cookies."
+    },
+    {
+      "domHashes": [],
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -16657,6 +16979,30 @@
       "patternString": "aria-hidden=['\"]true['\"][\\s\\S]{0,200}(?:password|sign\\s*in|log\\s*in|verify|credential)",
       "patternFlags": "i",
       "note": "Using aria-hidden=true on elements containing login/password text hides phishing content from screen readers and accessibility-based scanners while keeping it visually visible to sighted users."
+    },
+    {
+      "domHashes": [],
+      "id": "canvas-stego-pixel-decode",
+      "group": "obfuscation",
+      "description": "Canvas pixel data extraction for steganographic payload decoding — hidden data in images",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "getImageData\\([\\s\\S]{0,200}(?:data\\[|pixel|rgba)[\\s\\S]{0,300}(?:String\\.fromCharCode|charCodeAt|eval|document\\.write|innerHTML)",
+      "patternFlags": "i",
+      "note": "Extracting pixel data from a canvas element and converting RGB values to characters is steganographic payload decoding. Malicious JavaScript or phishing HTML is hidden in image pixel values and decoded at runtime."
+    },
+    {
+      "domHashes": [],
+      "id": "benign-filler-body-hidden",
+      "group": "obfuscation",
+      "description": "Body content hidden via CSS with JavaScript redirect — Mamba 2FA HTML attachment technique",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<body[^>]*style=['\"][^'\"]*display:\\s*none[^'\"]*['\"][\\s\\S]{0,1000}<script>[\\s\\S]{0,200}(?:location\\.href|window\\.location|location\\.replace)\\s*(?:=|\\()\\s*(?:atob|decodeURI)",
+      "patternFlags": "i",
+      "note": "Mamba 2FA HTML attachments use body{display:none} to hide benign filler content, with a script that decodes and redirects to the phishing page. The hidden body + decoded redirect combination is a definitive Mamba 2FA attachment signature."
     },
     {
       "domHashes": [],
@@ -18913,6 +19259,138 @@
       "patternString": "discord(?:app)?\\.com/api/webhooks[\\s\\S]{0,300}(?:embeds|content)[\\s\\S]{0,300}(?:email|user|pass|login|password|credential)",
       "patternFlags": "i",
       "note": "Discord webhook calls with embed objects containing credential field labels are structured exfiltration reports. The attacker receives a nicely formatted Discord message with the victim's stolen credentials."
+    },
+    {
+      "domHashes": [],
+      "id": "mamba-2fa-socketio-template",
+      "group": "phishkitSignatures",
+      "description": "Mamba 2FA signature — Socket.IO library with template script and sti/vic HTML attributes",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "html",
+      "patternString": "(?:socket\\.io|socketio)[\\s\\S]{0,500}(?:sti|vic)=['\"][A-Za-z0-9+/=]{4,}['\"]",
+      "patternFlags": "i",
+      "note": "Mamba 2FA uses Socket.IO for real-time WebSocket communication with relay servers. The sti (customer ID, double base64) and vic (victim email) HTML attributes are definitive Mamba 2FA signatures. 10M+ attacks in late 2025."
+    },
+    {
+      "domHashes": [],
+      "id": "mamba-2fa-template-scripts",
+      "group": "phishkitSignatures",
+      "description": "Mamba 2FA template script filenames — jsnom, jsdrive, jssp, jsv templates",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "html",
+      "patternString": "(?:jsnom|jsdrive|jssp|jsv(?:oice)?)\\.js",
+      "patternFlags": "i",
+      "note": "Mamba 2FA uses specific template script filenames: jsnom.js (Microsoft sign-in), jsdrive.js (OneDrive), jssp.js (SharePoint), jsv.js (voice mail). These filenames are definitive kit signatures."
+    },
+    {
+      "domHashes": [],
+      "id": "mamba-2fa-socketio-events",
+      "group": "phishkitSignatures",
+      "description": "Mamba 2FA Socket.IO event names — new-session, password_command, otp_command relay events",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "js",
+      "patternString": "(?:new-session|password_command|otp_command|s2c_cookies|s2c_restart)",
+      "patternFlags": "i",
+      "note": "Mamba 2FA Socket.IO events: new-session (init), password_command (relay password), otp_command (relay MFA code), s2c_cookies (receive stolen cookies), s2c_restart (restart flow). These event names are definitive signatures."
+    },
+    {
+      "domHashes": [],
+      "id": "sneaky-2fa-food-decoy",
+      "group": "phishkitSignatures",
+      "description": "Sneaky 2FA food-themed decoy page — 'Gourmet Delights and Beverage' initial page content",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "html",
+      "patternString": "Gourmet\\s+Delights\\s+and\\s+Beverage",
+      "patternFlags": "i",
+      "note": "Sneaky 2FA initially loads a page titled 'Gourmet Delights and Beverage' with food-related content before reloading to show the Cloudflare Turnstile challenge. This exact title string is a definitive Sneaky 2FA signature."
+    },
+    {
+      "domHashes": [],
+      "id": "sneaky-2fa-verify-title-list",
+      "group": "phishkitSignatures",
+      "description": "Sneaky 2FA title pattern — randomized verify/confirm title from known list",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<title>(?:Verify\\s+your\\s+(?:account|identity|credentials|informations|email|login)|Confirm\\s+your\\s+(?:account|identity|credentials|information|email|login)|Signin\\s+to\\s+your\\s+account)</title>",
+      "patternFlags": "i",
+      "note": "Sneaky 2FA randomly selects page titles from a specific list: 'Verify your account/identity/credentials/informations/email/login', 'Confirm your ...', 'Signin to your account'. The exact set of alternatives is a Sneaky 2FA signature."
+    },
+    {
+      "domHashes": [],
+      "id": "sneaky-2fa-blurred-background",
+      "group": "phishkitSignatures",
+      "description": "Sneaky 2FA blurred Microsoft login background — base64-encoded transparent brand background",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:background|backdrop)[\\s\\S]{0,200}(?:blur|filter:\\s*blur)[\\s\\S]{0,200}(?:microsoft|msft|office|outlook|onedrive)",
+      "patternFlags": "i",
+      "note": "Sneaky 2FA uses a blurred screenshot of a legitimate Microsoft login page as background, creating the illusion that the victim is signing into a real Microsoft service. The blur+Microsoft branding combination is characteristic."
+    },
+    {
+      "domHashes": [],
+      "id": "supabase-exfil-endpoint",
+      "group": "phishkitSignatures",
+      "description": "Supabase API endpoint used for credential exfiltration — serverless database abuse",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "both",
+      "patternString": "[a-z]{10,}\\.supabase\\.co\\/rest\\/v1\\/",
+      "patternFlags": "i",
+      "note": "Supabase provides free PostgreSQL databases with REST APIs. Phishing kits use Supabase as a serverless credential store, writing stolen data directly to the database without any server-side code."
+    },
+    {
+      "domHashes": [],
+      "id": "firebase-realtime-exfil",
+      "group": "phishkitSignatures",
+      "description": "Firebase Realtime Database used for credential exfiltration",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "both",
+      "patternString": "[a-z0-9-]+\\.firebaseio\\.com\\/[\\s\\S]{0,200}(?:\\.json|password|credential|email|login)",
+      "patternFlags": "i",
+      "note": "Firebase Realtime Database (.firebaseio.com) is abused for credential exfiltration. Phishing kits write stolen credentials directly to Firebase using simple REST PUT/POST requests."
+    },
+    {
+      "domHashes": [],
+      "id": "airtable-api-exfil",
+      "group": "phishkitSignatures",
+      "description": "Airtable API used as credential exfiltration endpoint — spreadsheet database abuse",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "both",
+      "patternString": "api\\.airtable\\.com\\/v0\\/app[A-Za-z0-9]{14,}",
+      "patternFlags": "i",
+      "note": "Airtable's API (api.airtable.com/v0/appXXXX) is abused by phishing kits to write credentials to Airtable bases. The appXXX ID is unique to each attacker's base."
+    },
+    {
+      "domHashes": [],
+      "id": "notion-api-exfil",
+      "group": "phishkitSignatures",
+      "description": "Notion API used for credential exfiltration — database abuse",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "both",
+      "patternString": "api\\.notion\\.com\\/v1\\/(?:pages|databases|blocks)",
+      "patternFlags": "i",
+      "note": "Notion's API is abused by phishing kits to write stolen credentials to Notion databases. The structured API (pages, databases, blocks) provides a free, organized exfiltration backend."
+    },
+    {
+      "domHashes": [],
+      "id": "n0123n-email-separator",
+      "group": "phishkitSignatures",
+      "description": "N0123N separator used between base64 parameter and email address — Mamba 2FA URL marker",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "N0123N",
+      "patternFlags": "",
+      "note": "The string N0123N is used by Mamba 2FA as a separator between the base64-encoded parameters and the victim's email address in phishing URLs. This exact string is a definitive Mamba 2FA signature with zero false positive risk."
     },
     {
       "domHashes": [],
