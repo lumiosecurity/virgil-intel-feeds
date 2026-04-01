@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T20:29:34.354Z",
+    "compiledAt": "2026-04-01T20:34:38.125Z",
     "brandCount": 187,
     "signalCount": 1,
-    "patternCount": 843,
+    "patternCount": 865,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -7737,6 +7737,248 @@
       "note": "Tycoon's May 2025+ versions encrypt the entire phishing page payload with AES. The encrypted blob is decrypted at runtime and injected into the DOM. The AES decrypt → DOM injection chain is the key signature."
     },
     {
+      "id": "jsfuck-encoding-detected",
+      "group": "obfuscation",
+      "description": "JSFuck/JSFireTruck encoding — JavaScript written using only []()!+ characters",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "\\[\\]\\[\\(!\\[\\]\\+\\[\\]\\)\\[\\+\\[\\]\\]\\+\\(\\[!\\[\\]\\]\\+\\[\\]\\[\\[\\]\\]\\)",
+      "patternFlags": "",
+      "note": "JSFuck encodes ANY JavaScript using only 6 characters: []()!+. The pattern [][(![]+[])[+[]]+([![]]+[][[]])... is the definitive opening of JSFuck-encoded code. Unit 42 reported a widespread JSFireTruck (JSFuck variant) campaign starting April 2025 infecting many websites."
+    },
+    {
+      "id": "jsfuck-density-marker",
+      "group": "obfuscation",
+      "description": "High density of JSFuck character patterns — long sequences of only []()!+ characters",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:\\[\\+\\[\\]\\]|\\!\\!\\[\\]|\\!\\[\\]|\\+\\!\\+\\[\\]|\\[\\+\\!\\+\\[\\]\\]){10,}",
+      "patternFlags": "",
+      "note": "Ten or more JSFuck primitives (+[], !![], ![], +!+[], [+!+[]]) in sequence indicates JSFuck-encoded content. JSFuck is extremely verbose — even simple code becomes thousands of characters of these patterns."
+    },
+    {
+      "id": "jjencode-detected",
+      "group": "obfuscation",
+      "description": "JJEncode obfuscation — JavaScript encoded using $=~[] notation and Japanese characters",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "\\$=~\\[\\];\\$=\\{",
+      "patternFlags": "",
+      "note": "JJEncode starts with the distinctive $=~[];$={ initialization sequence. This encoding technique uses only 18 symbols ([]()!+,\"$.:;_{}~=) to encode arbitrary JavaScript. It's been used in phishing since 2013 and still appears in web compromises."
+    },
+    {
+      "id": "aaencode-detected",
+      "group": "obfuscation",
+      "description": "AAEncode obfuscation — JavaScript encoded using Japanese emoticon characters (゜ω゜ノ)",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "\\u309C[\\u03C9\\u0414]\\u309C",
+      "patternFlags": "",
+      "note": "AAEncode uses Japanese emoticon characters (゜ω゜ or ゜Д゜) to encode JavaScript. The ゜ω゜ or ゜Д゜ character sequences are the definitive AAEncode signature. While less common than JSFuck, AAEncode appears in web-based attacks."
+    },
+    {
+      "id": "dean-edwards-packer",
+      "group": "obfuscation",
+      "description": "Dean Edwards JavaScript Packer — eval(function(p,a,c,k,e,d) signature",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "eval\\(function\\(p,a,c,k,e,[dr]\\)",
+      "patternFlags": "",
+      "note": "Dean Edwards' JavaScript Packer output starts with eval(function(p,a,c,k,e,d) or eval(function(p,a,c,k,e,r). This is one of the oldest and most widely recognized JavaScript packers, still heavily used in phishing kits and web compromises."
+    },
+    {
+      "id": "packer-base62-decode",
+      "group": "obfuscation",
+      "description": "Dean Edwards Packer base62 decode pattern — string replacement with base62 dictionary",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "\\.split\\('\\|'\\)[\\s\\S]{0,100}replace\\([\\s\\S]{0,100}\\\\b\\\\w\\+\\\\b",
+      "patternFlags": "",
+      "note": "The Dean Edwards Packer decodes its payload by splitting a pipe-delimited dictionary and replacing word boundaries (\\b\\w+\\b) with dictionary entries. This split('|') + replace(\\b\\w+\\b) chain is the definitive Packer unpacking mechanism."
+    },
+    {
+      "id": "data-uri-script-load",
+      "group": "obfuscation",
+      "description": "Script loaded from data: URI — encoded JavaScript payload in data URI scheme",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<script[^>]*src=['\"]data:(?:text/javascript|application/javascript)[;,][^'\"]{50,}['\"]",
+      "patternFlags": "i",
+      "note": "Loading a script from a data: URI embeds the entire JavaScript payload inline as a base64 or URL-encoded string. This bypasses external script loading detection and CSP source restrictions that allow data: URIs."
+    },
+    {
+      "id": "blob-url-script-execution",
+      "group": "obfuscation",
+      "description": "Blob URL created and used as script source — runtime-generated code URL",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "URL\\.createObjectURL\\([\\s\\S]{0,200}new\\s+Blob\\([\\s\\S]{0,300}(?:text/javascript|application/javascript)",
+      "patternFlags": "i",
+      "note": "Creating a Blob URL from JavaScript code and using it as a script source generates code at runtime that can't be analyzed statically. The code only exists as a Blob in memory, never as a static file or inline script."
+    },
+    {
+      "id": "dynamic-import-code-load",
+      "group": "obfuscation",
+      "description": "Dynamic import() loading external JavaScript module at runtime — deferred code loading",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "import\\([\\s\\S]{0,100}(?:atob|decodeURI|String\\.fromCharCode|\\+|concat|\\$\\{)",
+      "patternFlags": "i",
+      "note": "Using dynamic import() with a decoded or constructed URL loads JavaScript modules at runtime. The module URL is obfuscated (base64, concatenated, etc.) so the true source can't be identified by static analysis."
+    },
+    {
+      "id": "tagged-template-literal-exec",
+      "group": "obfuscation",
+      "description": "Tagged template literal used for code execution — Function or eval invoked via template tag",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:Function|eval|setTimeout|setInterval)\\s*`[^`]{10,}`",
+      "patternFlags": "",
+      "note": "Using tagged template literals to invoke Function, eval, setTimeout, or setInterval (e.g., Function`return this`()) is an unusual execution pattern that bypasses keyword-based detection. The backtick syntax looks different from normal function calls."
+    },
+    {
+      "id": "css-content-data-encode",
+      "group": "obfuscation",
+      "description": "CSS content property used to store encoded data extracted by JavaScript — CSS-based data hiding",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "content:\\s*['\"][A-Za-z0-9+/=]{50,}['\"][\\s\\S]{0,500}(?:getComputedStyle|content|window\\.getComputedStyle)",
+      "patternFlags": "i",
+      "note": "Storing encoded data in CSS content properties and extracting it with getComputedStyle().content hides payloads in CSS where JavaScript analysis tools don't look. The data is decoded and executed after extraction."
+    },
+    {
+      "id": "with-statement-scope-abuse",
+      "group": "obfuscation",
+      "description": "JavaScript 'with' statement used for scope manipulation — obscures property access chains",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "with\\s*\\(\\s*(?:document|window|navigator|Math|String|this)\\s*\\)",
+      "patternFlags": "",
+      "note": "The 'with' statement extends the scope chain, allowing property access without explicitly naming the object. with(document){ write(cookie) } is equivalent to document.write(document.cookie) but hides the explicit document references from pattern matching."
+    },
+    {
+      "id": "arguments-callee-self-ref",
+      "group": "obfuscation",
+      "description": "arguments.callee used for self-referencing function — anti-analysis recursive obfuscation",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "arguments\\.callee[\\s\\S]{0,200}(?:toString|apply|call|bind)",
+      "patternFlags": "",
+      "note": "Using arguments.callee to reference the current function enables self-modifying and self-verifying code patterns. Combined with toString(), it creates integrity checks that break if the function is modified or deobfuscated."
+    },
+    {
+      "id": "string-constructor-exec",
+      "group": "obfuscation",
+      "description": "String constructor used to build and execute code — [].constructor.constructor pattern",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:\\[\\]|''|\"\")\\s*(?:\\.constructor|\\.constructor\\.constructor|\\['constructor'\\])\\s*(?:\\.constructor|\\.constructor|\\['constructor'\\])\\s*\\(",
+      "patternFlags": "",
+      "note": "The [].constructor.constructor('code')() or ''.constructor.constructor('code')() pattern accesses the Function constructor through prototype chains without ever writing the word 'Function'. This is the core mechanism behind JSFuck-style code execution."
+    },
+    {
+      "id": "number-constructor-string-build",
+      "group": "obfuscation",
+      "description": "Number.toString with custom radix to build strings — radix encoding for character generation",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:\\d+)\\.toString\\((?:3[0-6]|2[0-9])\\)",
+      "patternFlags": "",
+      "note": "Using Number.toString(radix) with high radix values (20-36) to generate alphabet characters is a string-building technique. For example, (35).toString(36) returns 'z'. Chaining these builds strings without any string literals in the source."
+    },
+    {
+      "id": "metasploit-jsobfu-pattern",
+      "group": "obfuscation",
+      "description": "Metasploit JSObfu output pattern — nested anonymous function wrappers with xor encoding",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "\\(function\\(\\)\\{[\\s\\S]{0,100}var\\s+[a-z]=(?:this|window|self)[\\s\\S]{0,200}(?:fromCharCode|\\^|xor)[\\s\\S]{0,200}(?:eval|Function)",
+      "patternFlags": "i",
+      "note": "Metasploit's JSObfu (JavaScript Obfuscator) wraps code in nested anonymous functions with a global reference variable, XOR decoding, and eval/Function execution. JSObfu is used in penetration testing but also adopted by real attackers."
+    },
+    {
+      "id": "double-eval-nesting",
+      "group": "obfuscation",
+      "description": "Nested eval() calls — multi-layer eval unwrapping for deeply obfuscated payloads",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "eval\\([\\s\\S]{0,200}eval\\(",
+      "patternFlags": "",
+      "note": "Nested eval(eval(...)) or eval(atob(eval(...))) creates multiple layers of unwrapping. Each eval layer decodes the next, requiring multiple deobfuscation passes. Two or more eval() calls within 200 chars indicates multi-layer obfuscation."
+    },
+    {
+      "id": "string-charcodeat-xor-loop",
+      "group": "obfuscation",
+      "description": "charCodeAt in loop with XOR — runtime string decryption using character-level XOR cipher",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:for|while)[\\s\\S]{0,200}charCodeAt\\([\\s\\S]{0,100}\\^[\\s\\S]{0,100}fromCharCode",
+      "patternFlags": "",
+      "note": "A loop iterating over characters with charCodeAt, XOR (^), and fromCharCode is a character-level XOR decryption routine. This pattern decodes encoded strings at runtime, where the XOR key can be any value."
+    },
+    {
+      "id": "document-create-element-script-inject",
+      "group": "obfuscation",
+      "description": "Script element created and injected with decoded source — dynamic script tag injection",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "createElement\\(['\"]script['\"]\\)[\\s\\S]{0,200}(?:src|textContent|innerText|innerHTML|text)\\s*=\\s*(?:atob|decodeURI|unescape|String\\.fromCharCode)",
+      "patternFlags": "i",
+      "note": "Creating a script element and setting its source or content to a decoded value (atob, decodeURI, unescape, fromCharCode) is dynamic script injection with obfuscated payload. The actual code is decoded from an encoded form at runtime."
+    },
+    {
+      "id": "array-map-fromcharcode-decode",
+      "group": "obfuscation",
+      "description": "Array of numbers mapped through String.fromCharCode — bulk character code to string conversion",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "\\[\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}[\\s\\S]{0,200}\\]\\.map\\([\\s\\S]{0,100}(?:fromCharCode|String)",
+      "patternFlags": "",
+      "note": "An array of numeric character codes mapped through String.fromCharCode converts encoded numbers back to characters. The pattern [72,101,108,108,111].map(n=>String.fromCharCode(n)) decodes to 'Hello'. Arrays of 5+ two/three-digit numbers mapped to chars is obfuscation."
+    },
+    {
+      "id": "regex-constructor-from-string",
+      "group": "obfuscation",
+      "description": "RegExp constructed from assembled string — builds regex at runtime to avoid static pattern matching",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "new\\s+RegExp\\([\\s\\S]{0,100}(?:\\+|concat|atob|fromCharCode|decodeURI)",
+      "patternFlags": "i",
+      "note": "Constructing a RegExp from concatenated or decoded strings builds the regex pattern at runtime. This hides URL patterns, brand names, or detection-related strings from static source analysis."
+    },
+    {
+      "id": "comma-operator-control-flow",
+      "group": "obfuscation",
+      "description": "Comma operator chains for control flow flattening — multiple expressions collapsed into one statement",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "(?:=|return)\\s*\\([^)]{0,50},[^)]{0,50},[^)]{0,50},[^)]{0,50},[^)]{0,50}\\)",
+      "patternFlags": "",
+      "note": "Chaining 5+ expressions with the comma operator collapses sequential statements into a single expression. This flattens control flow and makes code extremely hard to read: (a=1,b=fetch(c),d=e.value,f(d),g())"
+    },
+    {
       "id": "base64-html-password-obfuscation",
       "group": "phishkitSignatures",
       "description": "Base64 obfuscated HTML containing password input fields",
@@ -12062,7 +12304,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T20:21:12.828Z",
+      "compiledAt": "2026-04-01T20:29:31.738Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
