@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T17:06:07.024Z",
-    "brandCount": 107,
+    "compiledAt": "2026-04-01T17:12:34.094Z",
+    "brandCount": 123,
     "signalCount": 1,
-    "patternCount": 495,
+    "patternCount": 518,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -483,6 +483,20 @@
       "vertical": "crypto"
     },
     {
+      "name": "coinbase-wallet",
+      "vertical": "crypto",
+      "domains": [
+        "wallet.coinbase.com"
+      ],
+      "typos": [
+        "coinbasewallet",
+        "coinbase-wallet",
+        "coinbasewalet",
+        "coinbaswa11et"
+      ],
+      "note": "Coinbase Wallet specifically targeted for seed phrase theft, distinct from the main Coinbase exchange."
+    },
+    {
       "name": "amazon",
       "vertical": "ecommerce",
       "domains": [
@@ -722,6 +736,40 @@
       "vertical": "ecommerce"
     },
     {
+      "name": "booking",
+      "vertical": "ecommerce",
+      "domains": [
+        "booking.com"
+      ],
+      "typos": [
+        "bookiing",
+        "booklng",
+        "b00king",
+        "bookking",
+        "bookinq",
+        "bookinng",
+        "bookng"
+      ],
+      "note": "Booking.com is in the top 10 most impersonated brands in Q2 2025. Travel phishing peaks during holiday seasons."
+    },
+    {
+      "name": "rackuten",
+      "vertical": "ecommerce",
+      "domains": [
+        "rakuten.com",
+        "rakuten.co.jp"
+      ],
+      "typos": [
+        "rackuten",
+        "rakutten",
+        "rakuton",
+        "rakutern",
+        "racuten",
+        "rakuten1"
+      ],
+      "note": "Rakuten is a top phishing target in Japan. CoGUI phishing kit specifically targets Rakuten users."
+    },
+    {
       "name": "spotify",
       "domains": [
         "spotify.com",
@@ -738,6 +786,22 @@
         "spotiffy"
       ],
       "vertical": "entertainment"
+    },
+    {
+      "name": "twitch",
+      "vertical": "entertainment",
+      "domains": [
+        "twitch.tv"
+      ],
+      "typos": [
+        "twitcch",
+        "tw1tch",
+        "twltch",
+        "twitch-tv",
+        "twiitch",
+        "twittch"
+      ],
+      "note": "Twitch streamer credential phishing targets content creators for account takeover and subscriber theft."
     },
     {
       "name": "chase",
@@ -1097,6 +1161,39 @@
       "vertical": "financial"
     },
     {
+      "name": "mastercard",
+      "vertical": "financial",
+      "domains": [
+        "mastercard.com",
+        "mastercard.us"
+      ],
+      "typos": [
+        "masterc4rd",
+        "mastercrad",
+        "mastercarrd",
+        "masstercard",
+        "masterrcard",
+        "rnastercard",
+        "mastercord"
+      ],
+      "note": "Mastercard returned to top 10 phished brands in Q1 2025. QR code phishing targeting Mastercard users is the #1 QR phishing brand with 14,233 malicious QR codes."
+    },
+    {
+      "name": "wise",
+      "vertical": "financial",
+      "domains": [
+        "wise.com"
+      ],
+      "typos": [
+        "wlse",
+        "wiise",
+        "w1se",
+        "wisee",
+        "wisee"
+      ],
+      "note": "Wise (formerly TransferWise) is targeted for international payment and money transfer fraud."
+    },
+    {
       "name": "bet365",
       "domains": [
         "bet365.com"
@@ -1137,6 +1234,25 @@
         "dicord"
       ],
       "vertical": "gaming"
+    },
+    {
+      "name": "roblox",
+      "vertical": "gaming",
+      "domains": [
+        "roblox.com"
+      ],
+      "typos": [
+        "robiox",
+        "rob1ox",
+        "roblx",
+        "robl0x",
+        "robloxx",
+        "rablox",
+        "robloxs",
+        "robiox",
+        "ro-blox"
+      ],
+      "note": "Roblox is heavily targeted for credential theft affecting children. Top 10 phished brand in Q4 2025. Typosquats target young users who are less careful with URLs."
     },
     {
       "name": "cloudflare",
@@ -1366,6 +1482,55 @@
       "vertical": "government"
     },
     {
+      "name": "ezpass",
+      "vertical": "government",
+      "domains": [
+        "e-zpassny.com",
+        "ezpassmd.com",
+        "ezpassva.com"
+      ],
+      "typos": [
+        "ezpas",
+        "e-zpass",
+        "ezpasss",
+        "ez-pass",
+        "epass",
+        "ezpaas"
+      ],
+      "note": "EZPass toll road impersonation is a massive SMS phishing campaign in 2025-2026, particularly using .TOP domains. Chinese phishing groups send millions of fake toll payment texts."
+    },
+    {
+      "name": "sunpass",
+      "vertical": "government",
+      "domains": [
+        "sunpass.com"
+      ],
+      "typos": [
+        "sunpas",
+        "sunpasss",
+        "sun-pass",
+        "sunspass",
+        "sunpaas"
+      ],
+      "note": "SunPass (Florida toll) is targeted alongside EZPass in toll road smishing campaigns."
+    },
+    {
+      "name": "tollsmart",
+      "vertical": "government",
+      "domains": [
+        "peachpass.com",
+        "txtag.org",
+        "ntta.org"
+      ],
+      "typos": [
+        "peachpas",
+        "peachpasss",
+        "txtaq",
+        "txtagg"
+      ],
+      "note": "Regional US toll road brands (PeachPass GA, TxTag TX, NTTA TX) are targeted in toll road SMS phishing campaigns."
+    },
+    {
       "name": "thecourierguy",
       "domains": [
         "thecourierguy.co.za"
@@ -1416,6 +1581,23 @@
         "what-apps"
       ],
       "vertical": "messaging"
+    },
+    {
+      "name": "telegram",
+      "vertical": "messaging",
+      "domains": [
+        "telegram.org",
+        "web.telegram.org"
+      ],
+      "typos": [
+        "telegrarn",
+        "teleqram",
+        "telegran",
+        "telegramm",
+        "te1egram",
+        "telegrom"
+      ],
+      "note": "Telegram account phishing targets users with fake session expiry and verification messages."
     },
     {
       "name": "microsoft-outlook",
@@ -1533,6 +1715,23 @@
         "meta-partner-apply"
       ],
       "vertical": "social"
+    },
+    {
+      "name": "tiktok",
+      "vertical": "social",
+      "domains": [
+        "tiktok.com"
+      ],
+      "typos": [
+        "tiktop",
+        "tlktok",
+        "tikttok",
+        "tikt0k",
+        "tiktoik",
+        "tiktokk",
+        "tik-tok"
+      ],
+      "note": "TikTok phishing targets account takeover and creator monetization theft. Growing target as the platform expands commerce features."
     },
     {
       "name": "microsoft",
@@ -1753,6 +1952,39 @@
       "vertical": "technology"
     },
     {
+      "name": "mcafee",
+      "vertical": "technology",
+      "domains": [
+        "mcafee.com"
+      ],
+      "typos": [
+        "mcaffe",
+        "mcafeee",
+        "mcafe",
+        "rncafee",
+        "mcaffee",
+        "macafee",
+        "mcafea"
+      ],
+      "note": "McAfee fake subscription renewal scams are a top phishing vector. Users receive fake 'your subscription has expired' warnings that harvest payment information."
+    },
+    {
+      "name": "1password",
+      "vertical": "technology",
+      "domains": [
+        "1password.com"
+      ],
+      "typos": [
+        "1passw0rd",
+        "1-password",
+        "1passwrd",
+        "1passwordd",
+        "onepassword",
+        "1pasword"
+      ],
+      "note": "1Password phishing (1Phish kit) specifically targets password manager users with fake breach notifications. Active since late 2025."
+    },
+    {
       "name": "att",
       "domains": [
         "att.com",
@@ -1783,6 +2015,41 @@
         "orang3"
       ],
       "vertical": "telecom"
+    },
+    {
+      "name": "tmobile",
+      "vertical": "telecom",
+      "domains": [
+        "t-mobile.com"
+      ],
+      "typos": [
+        "tmoblle",
+        "t-mobi1e",
+        "tmoblie",
+        "t-moblle",
+        "tmobiie",
+        "t-rnobile",
+        "tmobil3"
+      ],
+      "note": "T-Mobile is targeted in telecom phishing campaigns for SIM swap and account takeover attacks."
+    },
+    {
+      "name": "verizon",
+      "vertical": "telecom",
+      "domains": [
+        "verizon.com",
+        "vzw.com"
+      ],
+      "typos": [
+        "veriz0n",
+        "verizonn",
+        "verizan",
+        "verison",
+        "verrizon",
+        "ver1zon",
+        "verizom"
+      ],
+      "note": "Verizon is a top targeted telecom brand for account takeover and SIM swap phishing."
     },
     {
       "name": "bellsouth",
@@ -2358,6 +2625,28 @@
       "patternString": "(?:gmail\\.com|yahoo\\.com|hotmail\\.com|outlook\\.com|aol\\.com)[\\s\\S]{0,200}(?:reject|block|invalid|redirect|error|denied)",
       "patternFlags": "i",
       "note": "Rejecting free email providers (Gmail, Yahoo, Hotmail, AOL) and only accepting corporate email addresses is a Sneaky 2FA technique that specifically targets enterprise users. This filtering is a definitive phishing signal."
+    },
+    {
+      "id": "sms-phish-small-screen-only",
+      "group": "botEvasion",
+      "description": "Page CSS designed exclusively for small/mobile screens — smishing page targeting mobile",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "@media[\\s\\S]{0,50}max-width:\\s*(?:4[0-9]{2}|5[0-9]{2})px[\\s\\S]{0,200}(?:display|visibility|width:\\s*100%)[\\s\\S]{0,1000}(?:password|card|payment|sign\\s*in)",
+      "patternFlags": "i",
+      "note": "Pages styled exclusively for mobile screen widths (400-599px) with login/payment forms are SMS phishing pages. They're designed to look good only on phones because victims arrive via text message links."
+    },
+    {
+      "id": "viewport-meta-mobile-lock",
+      "group": "botEvasion",
+      "description": "Viewport meta tag with user-scalable=no and fixed width — mobile phishing page lockdown",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "<meta[^>]*viewport[^>]*user-scalable\\s*=\\s*no[^>]*width\\s*=\\s*device-width",
+      "patternFlags": "i",
+      "note": "Viewport locked to device-width with scaling disabled prevents users from zooming out to see the full page URL or inspect the page. Supporting signal for mobile-targeting phishing."
     },
     {
       "id": "spotify-impersonation-title",
@@ -3073,6 +3362,17 @@
       "note": "CSS custom properties using exact hex values for Microsoft (#0078d4), Facebook (#1877f2), Google (#ea4335), Amazon (#ff9900), etc. indicate brand color impersonation. Low weight because legitimate brand-themed sites exist, but stacks as a supporting signal."
     },
     {
+      "id": "brand-logo-svg-inline",
+      "group": "brandImpersonation",
+      "description": "Major brand logo embedded as inline SVG to avoid external image loading detection",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "<svg[\\s\\S]{0,500}(?:Microsoft|Google|Apple|PayPal|Amazon|Netflix|Facebook|LinkedIn|Dropbox|Adobe|Zoom|Slack)",
+      "patternFlags": "i",
+      "note": "Embedding brand logos as inline SVG avoids making external requests that could be tracked or blocked. Phishing kits inline SVG brand logos so the page looks legitimate without loading any external assets."
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -3230,6 +3530,17 @@
       "patternString": "(?:challenge|proof|compute|solve)[\\s\\S]{0,200}(?:crypto\\.subtle|Math\\.random|sha256|hash)[\\s\\S]{0,300}(?:style\\.display|innerHTML|location\\.href)",
       "patternFlags": "i",
       "note": "Fake proof-of-work JavaScript challenges that appear to compute something before revealing content are phishing gates. They impersonate the behavior of real CDN JS challenges but the 'computation' is just a timer."
+    },
+    {
+      "id": "cookie-consent-gate-phish",
+      "group": "cdnGating",
+      "description": "Fake cookie consent banner that gates phishing content — social engineering to bypass scanner",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:cookie-?(?:consent|banner|notice|popup)|accept-?cookies)[\\s\\S]{0,500}(?:accept|agree|continue)[\\s\\S]{0,500}(?:style\\.display|classList|visibility)[\\s\\S]{0,300}(?:form|password|sign\\s*in)",
+      "patternFlags": "i",
+      "note": "Fake cookie consent banners that must be clicked before the phishing form appears act as bot filters. Automated scanners that don't click the consent button never see the credential harvesting page."
     },
     {
       "id": "email-userid-label",
@@ -3818,6 +4129,50 @@
       "note": "Custom password visibility toggle implementations (show/hide password eye icon) in inline JavaScript indicate a phishing kit recreating the login UI rather than using the native browser feature. Very low weight as supporting signal."
     },
     {
+      "id": "recaptcha-token-exfil",
+      "group": "credentialHarvesting",
+      "description": "reCAPTCHA response token captured and exfiltrated alongside credentials",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "grecaptcha\\.getResponse\\(\\)[\\s\\S]{0,500}(?:fetch\\(|XMLHttpRequest|postMessage|sendBeacon)",
+      "patternFlags": "i",
+      "note": "Capturing the reCAPTCHA response token and sending it to an external server alongside credentials is an AiTM technique. The attacker uses the victim's solved CAPTCHA token to replay it on the real site."
+    },
+    {
+      "id": "form-method-get-credential",
+      "group": "credentialHarvesting",
+      "description": "Login form using GET method exposing credentials in URL — insecure or phishing form",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<form[^>]*method=['\"]get['\"][^>]*>[\\s\\S]{0,500}<input[^>]*type=['\"]password['\"]",
+      "patternFlags": "i",
+      "note": "A login form using GET method exposes credentials in the URL query string. No legitimate login page uses GET for password submission. Phishing kits sometimes use GET to simplify their credential collection."
+    },
+    {
+      "id": "webauthn-fake-prompt",
+      "group": "credentialHarvesting",
+      "description": "Fake WebAuthn/FIDO2 prompt impersonating browser security key dialog",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:webauthn|credentials\\.get|publicKeyCredential|authenticatorAttachment)[\\s\\S]{0,500}(?:innerHTML|createElement|modal|dialog|popup)",
+      "patternFlags": "i",
+      "note": "Creating a fake WebAuthn/FIDO2 dialog to trick users into thinking they're using their security key when they're actually on a phishing page. The fake prompt captures the user's interaction while the real authentication happens on the attacker's server."
+    },
+    {
+      "id": "data-email-attribute-tracking",
+      "group": "credentialHarvesting",
+      "description": "Custom data attribute storing victim email for tracking — personalized phishing",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "data-(?:email|user|victim|target|recipient)=['\"][^@'\"]+@[^'\"]+['\"]",
+      "patternFlags": "i",
+      "note": "Custom HTML data attributes containing email addresses indicate personalized phishing where the victim's email is embedded in the page for tracking or form pre-fill. The page was generated specifically for this victim."
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -4035,6 +4390,28 @@
       "patternString": "[a-z0-9-]+\\.glitch\\.me",
       "patternFlags": "i",
       "note": "Glitch.me free hosting is abused for phishing pages. The platform allows rapid deployment of server-side code including PHP-like credential handlers."
+    },
+    {
+      "id": "arweave-hosted-page",
+      "group": "hostingPatterns",
+      "description": "Content loaded from Arweave permanent storage — decentralized hosting immune to takedown",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "arweave\\.net\\/[A-Za-z0-9_-]{43}",
+      "patternFlags": "i",
+      "note": "Arweave provides permanent, immutable storage. Phishing pages hosted on Arweave cannot be taken down by anyone — they exist forever on the permaweb. The 43-character transaction ID identifies each stored page."
+    },
+    {
+      "id": "filecoin-ipfs-gateway",
+      "group": "hostingPatterns",
+      "description": "Content loaded from Filecoin/IPFS gateways — decentralized storage for phishing persistence",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:w3s\\.link|nftstorage\\.link|web3\\.storage)\\/ipfs\\/",
+      "patternFlags": "i",
+      "note": "Web3 storage gateways (w3s.link, nftstorage.link) serve content from IPFS/Filecoin networks. These are increasingly used for takedown-resistant phishing hosting."
     },
     {
       "id": "unicode-brand-obfuscation",
@@ -4346,6 +4723,83 @@
       "patternString": "charCodeAt\\([\\s\\S]{0,100}\\^[\\s\\S]{0,100}charCodeAt\\([\\s\\S]{0,100}%\\s*(?:key|secret|pass|cipher)",
       "patternFlags": "i",
       "note": "XOR decryption using a repeating key string where each byte is XORed with the corresponding key byte (using modulo) is a signature obfuscation technique in Whisper 2FA and similar kits."
+    },
+    {
+      "id": "svg-embedded-phish-content",
+      "group": "obfuscation",
+      "description": "SVG file with embedded JavaScript or foreignObject containing phishing form — SVG-based attack",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<svg[\\s\\S]{0,500}(?:<foreignObject[\\s\\S]{0,500}<(?:form|input)|<script[\\s\\S]{0,200}(?:password|credential|login))",
+      "patternFlags": "i",
+      "note": "SVG files can contain foreignObject elements with full HTML forms or embedded JavaScript. This attack vector bypasses many file type filters because SVG appears to be an image format."
+    },
+    {
+      "id": "svg-redirect-phish",
+      "group": "obfuscation",
+      "description": "SVG with embedded JavaScript redirect — phishing redirect disguised as image",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<svg[\\s\\S]{0,300}<(?:script|animate)[\\s\\S]{0,300}(?:window\\.location|location\\.href|document\\.location)",
+      "patternFlags": "i",
+      "note": "SVG files with embedded script or animate elements that redirect the browser are used as phishing redirectors. The SVG appears to be an image attachment but executes JavaScript when opened."
+    },
+    {
+      "id": "img-onerror-script-exec",
+      "group": "obfuscation",
+      "description": "Image onerror handler used to execute JavaScript — stealthy script execution technique",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "<img[^>]*src=['\"][^'\"]*['\"][^>]*onerror=['\"][^'\"]{20,}['\"]",
+      "patternFlags": "i",
+      "note": "Using an img tag with an intentionally broken src and a long onerror handler is a technique to execute JavaScript without a <script> tag. The 'image' never loads, triggering the onerror which contains the phishing payload."
+    },
+    {
+      "id": "css-content-text-inject",
+      "group": "obfuscation",
+      "description": "CSS content property used to inject visible text — evades text-based scanning",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "content:\\s*['\"][^'\"]{10,}(?:sign\\s*in|log\\s*in|password|verify|account|security)[^'\"]*['\"]",
+      "patternFlags": "i",
+      "note": "Using CSS content property to inject visible text like 'Sign In' or 'Verify Your Account' evades text-based phishing detection. The phishing text doesn't exist in the HTML — it's rendered purely via CSS."
+    },
+    {
+      "id": "base64-image-heavy-page",
+      "group": "obfuscation",
+      "description": "Page contains extremely large base64-encoded inline images — anti-analysis code inflation",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "data:image/(?:png|jpeg|gif|svg);base64,[A-Za-z0-9+/=]{10000,}",
+      "patternFlags": "i",
+      "note": "Pages with very large base64-encoded inline images (10,000+ chars) inflate the page source to make analysis difficult. The images may be brand logos or backgrounds embedded to avoid external asset loading that could be tracked."
+    },
+    {
+      "id": "htmx-inject-phishing",
+      "group": "obfuscation",
+      "description": "HTMX library used to load phishing form dynamically via AJAX — client-side cloaking",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "hx-(?:get|post|trigger)=['\"][^'\"]+['\"][\\s\\S]{0,300}(?:hx-target|hx-swap)[\\s\\S]{0,200}(?:password|login|sign|credential)",
+      "patternFlags": "i",
+      "note": "Using HTMX attributes (hx-get, hx-post, hx-trigger) to dynamically load phishing form content is a client-side cloaking technique. The initial page appears clean; the phishing form loads via AJAX after a user action."
+    },
+    {
+      "id": "zero-width-char-obfuscation",
+      "group": "obfuscation",
+      "description": "Zero-width characters inserted in brand text to evade string matching",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:\\u200B|\\u200C|\\u200D|\\uFEFF|&#8203;|&#x200[BCD];){2,}",
+      "patternFlags": "",
+      "note": "Multiple zero-width characters (ZWSP, ZWNJ, ZWJ, BOM) inserted between visible characters break string matching while rendering normally in the browser. Text like 'M‌i‌c‌r‌o‌s‌o‌f‌t' with ZWNJs is invisible to pattern matchers but displays as 'Microsoft'."
     },
     {
       "id": "base64-html-password-obfuscation",
@@ -6073,6 +6527,39 @@
       "note": "Pipedream.net webhooks are automation endpoints abused for credential exfiltration. The service provides free webhook endpoints that can forward data to any destination."
     },
     {
+      "id": "window-crypto-random-session",
+      "group": "phishkitSignatures",
+      "description": "Cryptographic random values generated for session tracking — phishing kit victim fingerprinting",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "crypto\\.getRandomValues\\([\\s\\S]{0,200}(?:sessionId|trackId|victimId|clientId|uniqueId|visitorId)",
+      "patternFlags": "i",
+      "note": "Generating cryptographic random values for session/tracking IDs with names like victimId or trackId is a phishing kit fingerprinting technique for tracking individual victims across the multi-step flow."
+    },
+    {
+      "id": "double-extension-download",
+      "group": "phishkitSignatures",
+      "description": "File download with double extension — malware disguised as document",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "(?:href|download|src)=['\"][^'\"]+\\.(?:pdf|doc|xls|jpg|png)\\.(?:exe|scr|bat|cmd|js|vbs|ps1|hta|msi)['\"]",
+      "patternFlags": "i",
+      "note": "Files with double extensions like document.pdf.exe are malware disguised as documents. The first extension appears legitimate while the actual executable extension is the one Windows uses to run the file."
+    },
+    {
+      "id": "autocapture-screenshot-phish",
+      "group": "phishkitSignatures",
+      "description": "html2canvas or similar library used to screenshot the page — captures filled credentials visually",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "html2canvas\\([\\s\\S]{0,300}(?:toDataURL|toBlob)[\\s\\S]{0,300}(?:fetch|XMLHttpRequest|sendBeacon|telegram)",
+      "patternFlags": "i",
+      "note": "Using html2canvas to screenshot the page after the victim fills in credentials, then sending the screenshot via fetch/XHR/Telegram, is a phishing kit technique that captures credentials visually — it works even if the password field is obfuscated."
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -6345,6 +6832,39 @@
       "patternString": "(?:계정[이가]\\s*(?:정지|차단|제한)|본인\\s*확인[이을]\\s*(?:해주세요|필요합니다)|(?:비밀번호|정보)[를을]\\s*(?:변경|확인|업데이트))",
       "patternFlags": "i",
       "note": "Korean-language account urgency text ('계정이 정지', '본인 확인을 해주세요') targets Korean users with account suspension and identity verification phishing."
+    },
+    {
+      "id": "toll-road-payment-form",
+      "group": "socialEngineering",
+      "description": "Toll road payment form with small dollar amount — smishing toll scam indicator",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:toll|ezpass|sunpass|peachpass|txtag|fastrak|ipass)[\\s\\S]{0,500}(?:outstanding|unpaid|overdue|balance|amount\\s*(?:due|owed))[\\s\\S]{0,300}\\$\\s*\\d{1,2}\\.\\d{2}",
+      "patternFlags": "i",
+      "note": "Toll road payment pages showing small dollar amounts ($3-$12 typically) combined with toll brand names are the hallmark of the massive 2025-2026 Chinese smishing campaigns. The small amount makes victims less suspicious."
+    },
+    {
+      "id": "delivery-redelivery-fee",
+      "group": "socialEngineering",
+      "description": "Fake delivery redelivery fee or shipping fee payment form — logistics smishing scam",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:redelivery|redeliver|reschedul|shipping\\s*fee|delivery\\s*fee|customs\\s*(?:fee|charge|duty))[\\s\\S]{0,500}(?:\\$\\s*\\d{1,2}\\.\\d{2}|(?:credit|debit)\\s*card|payment\\s*(?:method|info|details))",
+      "patternFlags": "i",
+      "note": "Fake redelivery fees or customs charges are the hook for logistics phishing. USPS, DHL, FedEx, and UPS impersonation pages request small payment amounts to harvest credit card details."
+    },
+    {
+      "id": "subscription-renewal-scam",
+      "group": "socialEngineering",
+      "description": "Fake subscription renewal or expiration warning — McAfee/Norton/antivirus phishing",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:subscription|license|protection|antivirus)\\s+(?:has\\s+)?(?:expired|expiring|lapsed|ending|renewal)[\\s\\S]{0,500}(?:renew|reactivat|restore|update\\s+(?:now|payment))[\\s\\S]{0,300}(?:credit|debit|card|payment|billing)",
+      "patternFlags": "i",
+      "note": "Fake subscription renewal scams impersonating McAfee, Norton, and other software are a top phishing vector. They create urgency about 'expired protection' to harvest payment information."
     },
     {
       "id": "numeric-domain-pattern",
@@ -6990,7 +7510,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T17:01:37.099Z",
+      "compiledAt": "2026-04-01T17:06:05.851Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
