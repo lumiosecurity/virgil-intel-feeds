@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T20:21:14.636Z",
+    "compiledAt": "2026-04-01T20:29:34.354Z",
     "brandCount": 187,
     "signalCount": 1,
     "patternCount": 843,
@@ -21,12 +21,31 @@
       "note": "Why this brand is targeted / what impersonation technique is used"
     },
     {
+      "name": "millerhull",
+      "domains": [
+        "millerhull.com"
+      ],
+      "typos": [
+        "millerhul",
+        "milerhull",
+        "millerhullpartnership",
+        "themillerhull"
+      ],
+      "vertical": "business"
+    },
+    {
       "name": "zoho",
+      "vertical": "business",
       "domains": [
         "zoho.com",
         "zoho.eu",
         "zoho.in",
-        "zoho.com.au"
+        "zoho.com.au",
+        "zohomail.com",
+        "zohopublic.com",
+        "zohocdn.com",
+        "accounts.zoho.com",
+        "mail.zoho.com"
       ],
       "typos": [
         "z0ho",
@@ -44,14 +63,15 @@
         "zoho1",
         "zhoho",
         "zhoo"
-      ],
-      "vertical": "business"
+      ]
     },
     {
       "name": "networksolutions",
+      "vertical": "business",
       "domains": [
         "networksolutionsemail.com",
-        "networksolutions.com"
+        "networksolutions.com",
+        "webmail.networksolutionsemail.com"
       ],
       "typos": [
         "networksoltuions",
@@ -62,11 +82,11 @@
         "netsolutions",
         "networksolutionsemai",
         "networksolusions"
-      ],
-      "vertical": "business"
+      ]
     },
     {
       "name": "docusign",
+      "vertical": "business",
       "domains": [
         "docusign.com",
         "docusign.net",
@@ -87,24 +107,11 @@
         "docusign-verify",
         "docu-sign",
         "docusigne"
-      ],
-      "vertical": "business"
-    },
-    {
-      "name": "millerhull",
-      "domains": [
-        "millerhull.com"
-      ],
-      "typos": [
-        "millerhul",
-        "milerhull",
-        "millerhullpartnership",
-        "themillerhull"
-      ],
-      "vertical": "business"
+      ]
     },
     {
       "name": "dropbox",
+      "vertical": "cloud_storage",
       "domains": [
         "dropbox.com",
         "dropboxusercontent.com"
@@ -128,8 +135,7 @@
         "dropbax",
         "dropboxx",
         "drop-box"
-      ],
-      "vertical": "cloud_storage"
+      ]
     },
     {
       "name": "coinbase",
@@ -143,67 +149,6 @@
         "coinbase-pro",
         "coinbase-wallet"
       ]
-    },
-    {
-      "name": "binance",
-      "vertical": "crypto",
-      "domains": [
-        "binance.com"
-      ],
-      "typos": [
-        "binanse",
-        "binance-us",
-        "b1nance",
-        "binancee",
-        "binnance",
-        "binannce",
-        "bianance"
-      ]
-    },
-    {
-      "name": "kucoin",
-      "vertical": "crypto",
-      "domains": [
-        "kucoin.com"
-      ],
-      "typos": [
-        "kucoinn",
-        "kiucoin",
-        "kucoine",
-        "kucion",
-        "kucin",
-        "kucoim",
-        "kucoun",
-        "kucoon",
-        "kucuie",
-        "kuc0in",
-        "kucoiin",
-        "ku-coin",
-        "kucoin-pro",
-        "kuc01n",
-        "kucoin-exchange",
-        "kucoin-login",
-        "kucoin-trade",
-        "kuicoin",
-        "kuccoin",
-        "kucoln",
-        "kukoin",
-        "kucoin",
-        "kuciin",
-        "kucpoin",
-        "kucoi",
-        "kucooin",
-        "kukcoin",
-        "kuecoin",
-        "kuccon",
-        "kucoin-",
-        "kucoinlogin",
-        "kucconloggn",
-        "kuco1n",
-        "kucoins",
-        "kucoiereilgie"
-      ],
-      "note": "KuCoin is a top-5 crypto exchange. Credential theft gives direct access to trading accounts and withdrawal functions."
     },
     {
       "name": "bybit",
@@ -253,31 +198,6 @@
         "metamask-wallet",
         "meta-mask",
         "metmask"
-      ]
-    },
-    {
-      "name": "ledger",
-      "vertical": "crypto",
-      "domains": [
-        "ledger.com"
-      ],
-      "typos": [
-        "ledger-live",
-        "ledgerwallet",
-        "my-ledger",
-        "ledger-nano",
-        "leddger",
-        "ledgger",
-        "ledgerr",
-        "ledge",
-        "leder",
-        "lldger",
-        "ledgerlive",
-        "lledger",
-        "ledgre",
-        "ledgr",
-        "ledger-com",
-        "io--ledgre--com"
       ]
     },
     {
@@ -377,39 +297,6 @@
       ]
     },
     {
-      "name": "netcoins",
-      "domains": [
-        "netcoins.ca",
-        "netcoins.com"
-      ],
-      "typos": [
-        "neetcoins",
-        "netcoin",
-        "netcoins-app",
-        "netcoins-auth",
-        "netkoins",
-        "netcoinslogin"
-      ],
-      "vertical": "crypto"
-    },
-    {
-      "name": "atomicwallet",
-      "domains": [
-        "atomicwallet.io"
-      ],
-      "typos": [
-        "atomicwllet",
-        "atomicwallett",
-        "atomcwallet",
-        "atomiwallet",
-        "atoremwallet",
-        "atomicwalet",
-        "atomicwallets",
-        "atomikwallet"
-      ],
-      "vertical": "crypto"
-    },
-    {
       "name": "gemini",
       "domains": [
         "gemini.com"
@@ -450,22 +337,6 @@
         "bitmartexchange",
         "bitmartlogin",
         "bitmartapp"
-      ],
-      "vertical": "crypto"
-    },
-    {
-      "name": "coinsquare",
-      "domains": [
-        "coinsquare.com"
-      ],
-      "typos": [
-        "coinnsquare",
-        "coinsqware",
-        "coinssquare",
-        "coinnsqqware",
-        "coinsquarelogi",
-        "coinsquar",
-        "coinsquarre"
       ],
       "vertical": "crypto"
     },
@@ -538,6 +409,143 @@
         "gate-io"
       ],
       "note": "Gate.io crypto exchange targeted for credential theft."
+    },
+    {
+      "name": "binance",
+      "vertical": "crypto",
+      "domains": [
+        "binance.com",
+        "binance.us"
+      ],
+      "typos": [
+        "binanse",
+        "binance-us",
+        "b1nance",
+        "binancee",
+        "binnance",
+        "binannce",
+        "bianance"
+      ]
+    },
+    {
+      "name": "kucoin",
+      "vertical": "crypto",
+      "domains": [
+        "kucoin.com"
+      ],
+      "typos": [
+        "kucoinn",
+        "kiucoin",
+        "kucoine",
+        "kucion",
+        "kucin",
+        "kucoim",
+        "kucoun",
+        "kucoon",
+        "kucuie",
+        "kuc0in",
+        "kucoiin",
+        "ku-coin",
+        "kucoin-pro",
+        "kuc01n",
+        "kucoin-exchange",
+        "kucoin-login",
+        "kucoin-trade",
+        "kuicoin",
+        "kuccoin",
+        "kucoln",
+        "kukoin",
+        "kucoin",
+        "kuciin",
+        "kucpoin",
+        "kucoi",
+        "kucooin",
+        "kukcoin",
+        "kuecoin",
+        "kuccon",
+        "kucoin-",
+        "kucoinlogin",
+        "kucconloggn",
+        "kuco1n",
+        "kucoins",
+        "kucoiereilgie"
+      ],
+      "note": "KuCoin is a top-5 crypto exchange by volume. Credential theft gives direct access to trading accounts and withdrawal functions."
+    },
+    {
+      "name": "ledger",
+      "vertical": "crypto",
+      "domains": [
+        "ledger.com",
+        "ledgerwallet.com"
+      ],
+      "typos": [
+        "ledger-live",
+        "ledgerwallet",
+        "my-ledger",
+        "ledger-nano",
+        "leddger",
+        "ledgger",
+        "ledgerr",
+        "ledge",
+        "leder",
+        "lldger",
+        "ledgerlive",
+        "lledger",
+        "ledgre",
+        "ledgr",
+        "ledger-com",
+        "io--ledgre--com"
+      ]
+    },
+    {
+      "name": "netcoins",
+      "vertical": "crypto",
+      "domains": [
+        "netcoins.ca",
+        "netcoins.com"
+      ],
+      "typos": [
+        "neetcoins",
+        "netcoin",
+        "netcoins-app",
+        "netcoins-auth",
+        "netkoins",
+        "netcoinslogin"
+      ]
+    },
+    {
+      "name": "atomicwallet",
+      "vertical": "crypto",
+      "domains": [
+        "atomicwallet.io"
+      ],
+      "typos": [
+        "atomicwllet",
+        "atomicwallett",
+        "atomcwallet",
+        "atomiwallet",
+        "atoremwallet",
+        "atomicwalet",
+        "atomicwallets",
+        "atomikwallet"
+      ]
+    },
+    {
+      "name": "coinsquare",
+      "vertical": "crypto",
+      "domains": [
+        "coinsquare.com"
+      ],
+      "typos": [
+        "coinnsquare",
+        "coinsqware",
+        "coinssquare",
+        "coinnsqqware",
+        "coinsquarelogi",
+        "coinsquar",
+        "coinsquarre"
+      ]
     },
     {
       "name": "amazon",
@@ -623,27 +631,6 @@
       ]
     },
     {
-      "name": "netflix",
-      "vertical": "ecommerce",
-      "domains": [
-        "netflix.com"
-      ],
-      "typos": [
-        "netfl1x",
-        "netflixx",
-        "netflix-login",
-        "net-flix",
-        "netflik",
-        "netflx",
-        "netflicks",
-        "netflix-clone",
-        "netflex",
-        "neflix",
-        "netfix",
-        "neftlix"
-      ]
-    },
-    {
       "name": "steam",
       "vertical": "ecommerce",
       "domains": [
@@ -691,23 +678,6 @@
         "ups-tracking",
         "my-ups",
         "upss"
-      ]
-    },
-    {
-      "name": "usps",
-      "vertical": "ecommerce",
-      "domains": [
-        "usps.com"
-      ],
-      "typos": [
-        "usps-tracking",
-        "usps-delivery",
-        "uspss",
-        "ussp",
-        "u5ps",
-        "uspos",
-        "uspds",
-        "usp5"
       ]
     },
     {
@@ -981,22 +951,44 @@
       "note": "Grubhub targeted for driver and customer credential harvesting."
     },
     {
-      "name": "spotify",
+      "name": "netflix",
+      "vertical": "ecommerce",
       "domains": [
-        "spotify.com",
-        "open.spotify.com"
+        "netflix.com"
       ],
       "typos": [
-        "spotif",
-        "spotiphy",
-        "spotfiy",
-        "spottify",
-        "spotiy",
-        "spotfy",
-        "spotifi",
-        "spotiffy"
+        "netfl1x",
+        "netflixx",
+        "netflix-login",
+        "net-flix",
+        "netflik",
+        "netflx",
+        "netflicks",
+        "netflix-clone",
+        "netflex",
+        "neflix",
+        "netfix",
+        "neftlix"
+      ]
+    },
+    {
+      "name": "usps",
+      "vertical": "ecommerce",
+      "domains": [
+        "usps.com",
+        "tools.usps.com",
+        "informeddelivery.usps.com"
       ],
-      "vertical": "entertainment"
+      "typos": [
+        "usps-tracking",
+        "usps-delivery",
+        "uspss",
+        "ussp",
+        "u5ps",
+        "uspos",
+        "uspds",
+        "usp5"
+      ]
     },
     {
       "name": "twitch",
@@ -1060,6 +1052,24 @@
         "huluu"
       ],
       "note": "Hulu targeted for streaming credential theft and subscription fraud."
+    },
+    {
+      "name": "spotify",
+      "vertical": "entertainment",
+      "domains": [
+        "spotify.com",
+        "open.spotify.com"
+      ],
+      "typos": [
+        "spotif",
+        "spotiphy",
+        "spotfiy",
+        "spottify",
+        "spotiy",
+        "spotfy",
+        "spotifi",
+        "spotiffy"
+      ]
     },
     {
       "name": "chase",
@@ -1635,8 +1645,12 @@
     },
     {
       "name": "bet365",
+      "vertical": "gambling",
       "domains": [
-        "bet365.com"
+        "bet365.com",
+        "bet365.es",
+        "bet365.it",
+        "bet365.dk"
       ],
       "typos": [
         "bet356",
@@ -1656,8 +1670,7 @@
         "bet365365",
         "bet35",
         "1111365"
-      ],
-      "vertical": "gambling"
+      ]
     },
     {
       "name": "discord",
@@ -1758,65 +1771,6 @@
       "note": "Nintendo targeted for eShop credential theft and stored payment method access."
     },
     {
-      "name": "cloudflare",
-      "vertical": "general",
-      "domains": [
-        "cloudflare.com"
-      ],
-      "typos": [
-        "cloudfIare",
-        "cloudflare-login",
-        "cloudflair",
-        "cloudflaire",
-        "cloudflar",
-        "cIoudflare"
-      ]
-    },
-    {
-      "name": "adobe",
-      "vertical": "general",
-      "domains": [
-        "adobe.com"
-      ],
-      "typos": [
-        "ad0be",
-        "adobee",
-        "adobe-login",
-        "adobefiles",
-        "adobepdf",
-        "adobereader",
-        "adobeviewer",
-        "adobedocs",
-        "adobo",
-        "adope",
-        "addobe",
-        "abode",
-        "adone",
-        "adobe-verify",
-        "adoobe",
-        "adobe-pdf",
-        "adobbe",
-        "adbe",
-        "adb0e",
-        "adobb",
-        "adob3"
-      ]
-    },
-    {
-      "name": "linkedin",
-      "vertical": "general",
-      "domains": [
-        "linkedin.com"
-      ],
-      "typos": [
-        "linkedln",
-        "linke-din",
-        "linkediin",
-        "linkendin",
-        "linkdin"
-      ]
-    },
-    {
       "name": "twitter",
       "vertical": "general",
       "domains": [
@@ -1827,59 +1781,6 @@
         "tw1tter",
         "twltter",
         "twitterr"
-      ]
-    },
-    {
-      "name": "facebook",
-      "vertical": "general",
-      "domains": [
-        "facebook.com",
-        "fb.com"
-      ],
-      "typos": [
-        "faceb00k",
-        "facebok",
-        "face-book",
-        "facbook",
-        "fecebook",
-        "faceboook",
-        "facebbok",
-        "facebock",
-        "faccebook"
-      ]
-    },
-    {
-      "name": "instagram",
-      "vertical": "general",
-      "domains": [
-        "instagram.com"
-      ],
-      "typos": [
-        "lnstagram",
-        "instagramm",
-        "instagrarn",
-        "instagam",
-        "instgram",
-        "insstagrram",
-        "instagrm",
-        "instqgram",
-        "1nstagram",
-        "instegram",
-        "instagarm",
-        "instragram",
-        "instagrem",
-        "instaqram",
-        "instagran",
-        "intagram",
-        "insta-gram",
-        "insatgram",
-        "insragram",
-        "instagrom",
-        "lnstagrarn",
-        "lnstgrm",
-        "instaqrarn",
-        "inst4gram",
-        "instaram"
       ]
     },
     {
@@ -1906,6 +1807,20 @@
         "webmai1"
       ],
       "vertical": "general"
+    },
+    {
+      "name": "linkedin",
+      "vertical": "general",
+      "domains": [
+        "linkedin.com"
+      ],
+      "typos": [
+        "linkedln",
+        "linke-din",
+        "linkediin",
+        "linkendin",
+        "linkdin"
+      ]
     },
     {
       "name": "internalrevenueservice",
@@ -2536,6 +2451,37 @@
       "vertical": "productivity"
     },
     {
+      "name": "adobe",
+      "vertical": "productivity",
+      "domains": [
+        "adobe.com",
+        "acrobat.com"
+      ],
+      "typos": [
+        "ad0be",
+        "adobee",
+        "adobe-login",
+        "adobefiles",
+        "adobepdf",
+        "adobereader",
+        "adobeviewer",
+        "adobedocs",
+        "adobo",
+        "adope",
+        "addobe",
+        "abode",
+        "adone",
+        "adobe-verify",
+        "adoobe",
+        "adobe-pdf",
+        "adobbe",
+        "adbe",
+        "adb0e",
+        "adobb",
+        "adob3"
+      ]
+    },
+    {
       "name": "meta-business",
       "domains": [
         "business.facebook.com",
@@ -2549,36 +2495,6 @@
         "fb-business",
         "facebook-business",
         "meta-business"
-      ],
-      "vertical": "social"
-    },
-    {
-      "name": "meta",
-      "domains": [
-        "facebook.com",
-        "meta.com",
-        "instagram.com"
-      ],
-      "typos": [
-        "marketing-partner",
-        "member-invite",
-        "partner-invite",
-        "business-partner",
-        "meta-partner",
-        "metta",
-        "m3ta",
-        "faceb00k",
-        "facebok",
-        "facebbok",
-        "faceboook",
-        "fecebook",
-        "facebookk",
-        "agency-partner-apply",
-        "business-partner-apply",
-        "creator-partner-apply",
-        "partner-application",
-        "business-application",
-        "meta-partner-apply"
       ],
       "vertical": "social"
     },
@@ -2675,54 +2591,89 @@
       "note": "Bumble dating app targeted for credential theft and social engineering attacks."
     },
     {
-      "name": "microsoft",
-      "vertical": "sso",
+      "name": "facebook",
+      "vertical": "social",
       "domains": [
-        "microsoft.com",
-        "microsoftonline.com",
-        "live.com",
-        "outlook.com",
-        "office.com",
-        "azure.com"
+        "facebook.com",
+        "fb.com",
+        "messenger.com"
       ],
       "typos": [
-        "rnicros0ft",
-        "micros0ft",
-        "microsoft-login",
-        "microsofft",
-        "mlcrosoft",
-        "micorsoft",
-        "microsft",
-        "micrsoft",
-        "microsot",
-        "micr0soft",
-        "microsooft",
-        "micosoft",
-        "mircosoft",
-        "microsofy",
-        "microsoftaccount",
-        "ms-account",
-        "resolve-issue",
-        "micro-soft",
-        "microsoff"
+        "faceb00k",
+        "facebok",
+        "face-book",
+        "facbook",
+        "fecebook",
+        "faceboook",
+        "facebbok",
+        "facebock",
+        "faccebook"
       ]
     },
     {
-      "name": "google",
-      "vertical": "sso",
+      "name": "instagram",
+      "vertical": "social",
       "domains": [
-        "google.com",
-        "googleapis.com"
+        "instagram.com",
+        "ig.me"
       ],
       "typos": [
-        "g00gle",
-        "gooogle",
-        "googie",
-        "google-signin",
-        "googl3",
-        "googIe",
-        "googel",
-        "goog1e"
+        "lnstagram",
+        "instagramm",
+        "instagrarn",
+        "instagam",
+        "instgram",
+        "insstagrram",
+        "instagrm",
+        "instqgram",
+        "1nstagram",
+        "instegram",
+        "instagarm",
+        "instragram",
+        "instagrem",
+        "instaqram",
+        "instagran",
+        "intagram",
+        "insta-gram",
+        "insatgram",
+        "insragram",
+        "instagrom",
+        "lnstagrarn",
+        "lnstgrm",
+        "instaqrarn",
+        "inst4gram",
+        "instaram"
+      ]
+    },
+    {
+      "name": "meta",
+      "vertical": "social",
+      "domains": [
+        "facebook.com",
+        "meta.com",
+        "instagram.com",
+        "whatsapp.com"
+      ],
+      "typos": [
+        "marketing-partner",
+        "member-invite",
+        "partner-invite",
+        "business-partner",
+        "meta-partner",
+        "metta",
+        "m3ta",
+        "faceb00k",
+        "facebok",
+        "facebbok",
+        "faceboook",
+        "fecebook",
+        "facebookk",
+        "agency-partner-apply",
+        "business-partner-apply",
+        "creator-partner-apply",
+        "partner-application",
+        "business-application",
+        "meta-partner-apply"
       ]
     },
     {
@@ -2851,6 +2802,59 @@
       "vertical": "sso"
     },
     {
+      "name": "microsoft",
+      "vertical": "sso",
+      "domains": [
+        "microsoft.com",
+        "microsoftonline.com",
+        "live.com",
+        "outlook.com",
+        "office.com",
+        "azure.com"
+      ],
+      "typos": [
+        "rnicros0ft",
+        "micros0ft",
+        "microsoft-login",
+        "microsofft",
+        "mlcrosoft",
+        "micorsoft",
+        "microsft",
+        "micrsoft",
+        "microsot",
+        "micr0soft",
+        "microsooft",
+        "micosoft",
+        "mircosoft",
+        "microsofy",
+        "microsoftaccount",
+        "ms-account",
+        "resolve-issue",
+        "micro-soft",
+        "microsoff"
+      ]
+    },
+    {
+      "name": "google",
+      "vertical": "sso",
+      "domains": [
+        "google.com",
+        "googleapis.com",
+        "accounts.google.com",
+        "gmail.com"
+      ],
+      "typos": [
+        "g00gle",
+        "gooogle",
+        "googie",
+        "google-signin",
+        "googl3",
+        "googIe",
+        "googel",
+        "goog1e"
+      ]
+    },
+    {
       "name": "microsoftonedrive",
       "domains": [
         "onedrive.com",
@@ -2940,6 +2944,22 @@
         "pr0tonmail"
       ],
       "note": "ProtonMail/Proton targeted for secure email credential theft."
+    },
+    {
+      "name": "cloudflare",
+      "vertical": "technology",
+      "domains": [
+        "cloudflare.com",
+        "challenges.cloudflare.com"
+      ],
+      "typos": [
+        "cloudfIare",
+        "cloudflare-login",
+        "cloudflair",
+        "cloudflaire",
+        "cloudflar",
+        "cIoudflare"
+      ]
     },
     {
       "name": "att",
@@ -12042,7 +12062,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T20:16:43.428Z",
+      "compiledAt": "2026-04-01T20:21:12.828Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

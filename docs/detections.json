@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-01-20:21",
-    "generatedAt": "2026-04-01T20:21:14.654Z",
+    "version": "2026-04-01-20:29",
+    "generatedAt": "2026-04-01T20:29:34.374Z",
     "brandCount": 187,
     "patternCount": 843
   },
@@ -19,13 +19,31 @@
       ]
     },
     {
+      "name": "millerhull",
+      "vertical": "business",
+      "domains": [
+        "millerhull.com"
+      ],
+      "typos": [
+        "millerhul",
+        "milerhull",
+        "millerhullpartnership",
+        "themillerhull"
+      ]
+    },
+    {
       "name": "zoho",
       "vertical": "business",
       "domains": [
         "zoho.com",
         "zoho.eu",
         "zoho.in",
-        "zoho.com.au"
+        "zoho.com.au",
+        "zohomail.com",
+        "zohopublic.com",
+        "zohocdn.com",
+        "accounts.zoho.com",
+        "mail.zoho.com"
       ],
       "typos": [
         "z0ho",
@@ -50,7 +68,8 @@
       "vertical": "business",
       "domains": [
         "networksolutionsemail.com",
-        "networksolutions.com"
+        "networksolutions.com",
+        "webmail.networksolutionsemail.com"
       ],
       "typos": [
         "networksoltuions",
@@ -86,19 +105,6 @@
         "docusign-verify",
         "docu-sign",
         "docusigne"
-      ]
-    },
-    {
-      "name": "millerhull",
-      "vertical": "business",
-      "domains": [
-        "millerhull.com"
-      ],
-      "typos": [
-        "millerhul",
-        "milerhull",
-        "millerhullpartnership",
-        "themillerhull"
       ]
     },
     {
@@ -140,66 +146,6 @@
         "coinbas3",
         "coinbase-pro",
         "coinbase-wallet"
-      ]
-    },
-    {
-      "name": "binance",
-      "vertical": "crypto",
-      "domains": [
-        "binance.com"
-      ],
-      "typos": [
-        "binanse",
-        "binance-us",
-        "b1nance",
-        "binancee",
-        "binnance",
-        "binannce",
-        "bianance"
-      ]
-    },
-    {
-      "name": "kucoin",
-      "vertical": "crypto",
-      "domains": [
-        "kucoin.com"
-      ],
-      "typos": [
-        "kucoinn",
-        "kiucoin",
-        "kucoine",
-        "kucion",
-        "kucin",
-        "kucoim",
-        "kucoun",
-        "kucoon",
-        "kucuie",
-        "kuc0in",
-        "kucoiin",
-        "ku-coin",
-        "kucoin-pro",
-        "kuc01n",
-        "kucoin-exchange",
-        "kucoin-login",
-        "kucoin-trade",
-        "kuicoin",
-        "kuccoin",
-        "kucoln",
-        "kukoin",
-        "kucoin",
-        "kuciin",
-        "kucpoin",
-        "kucoi",
-        "kucooin",
-        "kukcoin",
-        "kuecoin",
-        "kuccon",
-        "kucoin-",
-        "kucoinlogin",
-        "kucconloggn",
-        "kuco1n",
-        "kucoins",
-        "kucoiereilgie"
       ]
     },
     {
@@ -250,31 +196,6 @@
         "metamask-wallet",
         "meta-mask",
         "metmask"
-      ]
-    },
-    {
-      "name": "ledger",
-      "vertical": "crypto",
-      "domains": [
-        "ledger.com"
-      ],
-      "typos": [
-        "ledger-live",
-        "ledgerwallet",
-        "my-ledger",
-        "ledger-nano",
-        "leddger",
-        "ledgger",
-        "ledgerr",
-        "ledge",
-        "leder",
-        "lldger",
-        "ledgerlive",
-        "lledger",
-        "ledgre",
-        "ledgr",
-        "ledger-com",
-        "io--ledgre--com"
       ]
     },
     {
@@ -374,39 +295,6 @@
       ]
     },
     {
-      "name": "netcoins",
-      "vertical": "crypto",
-      "domains": [
-        "netcoins.ca",
-        "netcoins.com"
-      ],
-      "typos": [
-        "neetcoins",
-        "netcoin",
-        "netcoins-app",
-        "netcoins-auth",
-        "netkoins",
-        "netcoinslogin"
-      ]
-    },
-    {
-      "name": "atomicwallet",
-      "vertical": "crypto",
-      "domains": [
-        "atomicwallet.io"
-      ],
-      "typos": [
-        "atomicwllet",
-        "atomicwallett",
-        "atomcwallet",
-        "atomiwallet",
-        "atoremwallet",
-        "atomicwalet",
-        "atomicwallets",
-        "atomikwallet"
-      ]
-    },
-    {
       "name": "gemini",
       "vertical": "crypto",
       "domains": [
@@ -448,22 +336,6 @@
         "bitmartexchange",
         "bitmartlogin",
         "bitmartapp"
-      ]
-    },
-    {
-      "name": "coinsquare",
-      "vertical": "crypto",
-      "domains": [
-        "coinsquare.com"
-      ],
-      "typos": [
-        "coinnsquare",
-        "coinsqware",
-        "coinssquare",
-        "coinnsqqware",
-        "coinsquarelogi",
-        "coinsquar",
-        "coinsquarre"
       ]
     },
     {
@@ -530,6 +402,142 @@
         "gat3",
         "gatte",
         "gate-io"
+      ]
+    },
+    {
+      "name": "binance",
+      "vertical": "crypto",
+      "domains": [
+        "binance.com",
+        "binance.us"
+      ],
+      "typos": [
+        "binanse",
+        "binance-us",
+        "b1nance",
+        "binancee",
+        "binnance",
+        "binannce",
+        "bianance"
+      ]
+    },
+    {
+      "name": "kucoin",
+      "vertical": "crypto",
+      "domains": [
+        "kucoin.com"
+      ],
+      "typos": [
+        "kucoinn",
+        "kiucoin",
+        "kucoine",
+        "kucion",
+        "kucin",
+        "kucoim",
+        "kucoun",
+        "kucoon",
+        "kucuie",
+        "kuc0in",
+        "kucoiin",
+        "ku-coin",
+        "kucoin-pro",
+        "kuc01n",
+        "kucoin-exchange",
+        "kucoin-login",
+        "kucoin-trade",
+        "kuicoin",
+        "kuccoin",
+        "kucoln",
+        "kukoin",
+        "kucoin",
+        "kuciin",
+        "kucpoin",
+        "kucoi",
+        "kucooin",
+        "kukcoin",
+        "kuecoin",
+        "kuccon",
+        "kucoin-",
+        "kucoinlogin",
+        "kucconloggn",
+        "kuco1n",
+        "kucoins",
+        "kucoiereilgie"
+      ]
+    },
+    {
+      "name": "ledger",
+      "vertical": "crypto",
+      "domains": [
+        "ledger.com",
+        "ledgerwallet.com"
+      ],
+      "typos": [
+        "ledger-live",
+        "ledgerwallet",
+        "my-ledger",
+        "ledger-nano",
+        "leddger",
+        "ledgger",
+        "ledgerr",
+        "ledge",
+        "leder",
+        "lldger",
+        "ledgerlive",
+        "lledger",
+        "ledgre",
+        "ledgr",
+        "ledger-com",
+        "io--ledgre--com"
+      ]
+    },
+    {
+      "name": "netcoins",
+      "vertical": "crypto",
+      "domains": [
+        "netcoins.ca",
+        "netcoins.com"
+      ],
+      "typos": [
+        "neetcoins",
+        "netcoin",
+        "netcoins-app",
+        "netcoins-auth",
+        "netkoins",
+        "netcoinslogin"
+      ]
+    },
+    {
+      "name": "atomicwallet",
+      "vertical": "crypto",
+      "domains": [
+        "atomicwallet.io"
+      ],
+      "typos": [
+        "atomicwllet",
+        "atomicwallett",
+        "atomcwallet",
+        "atomiwallet",
+        "atoremwallet",
+        "atomicwalet",
+        "atomicwallets",
+        "atomikwallet"
+      ]
+    },
+    {
+      "name": "coinsquare",
+      "vertical": "crypto",
+      "domains": [
+        "coinsquare.com"
+      ],
+      "typos": [
+        "coinnsquare",
+        "coinsqware",
+        "coinssquare",
+        "coinnsqqware",
+        "coinsquarelogi",
+        "coinsquar",
+        "coinsquarre"
       ]
     },
     {
@@ -616,27 +624,6 @@
       ]
     },
     {
-      "name": "netflix",
-      "vertical": "ecommerce",
-      "domains": [
-        "netflix.com"
-      ],
-      "typos": [
-        "netfl1x",
-        "netflixx",
-        "netflix-login",
-        "net-flix",
-        "netflik",
-        "netflx",
-        "netflicks",
-        "netflix-clone",
-        "netflex",
-        "neflix",
-        "netfix",
-        "neftlix"
-      ]
-    },
-    {
       "name": "steam",
       "vertical": "ecommerce",
       "domains": [
@@ -684,23 +671,6 @@
         "ups-tracking",
         "my-ups",
         "upss"
-      ]
-    },
-    {
-      "name": "usps",
-      "vertical": "ecommerce",
-      "domains": [
-        "usps.com"
-      ],
-      "typos": [
-        "usps-tracking",
-        "usps-delivery",
-        "uspss",
-        "ussp",
-        "u5ps",
-        "uspos",
-        "uspds",
-        "usp5"
       ]
     },
     {
@@ -957,21 +927,43 @@
       ]
     },
     {
-      "name": "spotify",
-      "vertical": "entertainment",
+      "name": "netflix",
+      "vertical": "ecommerce",
       "domains": [
-        "spotify.com",
-        "open.spotify.com"
+        "netflix.com"
       ],
       "typos": [
-        "spotif",
-        "spotiphy",
-        "spotfiy",
-        "spottify",
-        "spotiy",
-        "spotfy",
-        "spotifi",
-        "spotiffy"
+        "netfl1x",
+        "netflixx",
+        "netflix-login",
+        "net-flix",
+        "netflik",
+        "netflx",
+        "netflicks",
+        "netflix-clone",
+        "netflex",
+        "neflix",
+        "netfix",
+        "neftlix"
+      ]
+    },
+    {
+      "name": "usps",
+      "vertical": "ecommerce",
+      "domains": [
+        "usps.com",
+        "tools.usps.com",
+        "informeddelivery.usps.com"
+      ],
+      "typos": [
+        "usps-tracking",
+        "usps-delivery",
+        "uspss",
+        "ussp",
+        "u5ps",
+        "uspos",
+        "uspds",
+        "usp5"
       ]
     },
     {
@@ -1031,6 +1023,24 @@
         "huulu",
         "hul0",
         "huluu"
+      ]
+    },
+    {
+      "name": "spotify",
+      "vertical": "entertainment",
+      "domains": [
+        "spotify.com",
+        "open.spotify.com"
+      ],
+      "typos": [
+        "spotif",
+        "spotiphy",
+        "spotfiy",
+        "spottify",
+        "spotiy",
+        "spotfy",
+        "spotifi",
+        "spotiffy"
       ]
     },
     {
@@ -1595,7 +1605,10 @@
       "name": "bet365",
       "vertical": "gambling",
       "domains": [
-        "bet365.com"
+        "bet365.com",
+        "bet365.es",
+        "bet365.it",
+        "bet365.dk"
       ],
       "typos": [
         "bet356",
@@ -1711,65 +1724,6 @@
       ]
     },
     {
-      "name": "cloudflare",
-      "vertical": "general",
-      "domains": [
-        "cloudflare.com"
-      ],
-      "typos": [
-        "cloudfIare",
-        "cloudflare-login",
-        "cloudflair",
-        "cloudflaire",
-        "cloudflar",
-        "cIoudflare"
-      ]
-    },
-    {
-      "name": "adobe",
-      "vertical": "general",
-      "domains": [
-        "adobe.com"
-      ],
-      "typos": [
-        "ad0be",
-        "adobee",
-        "adobe-login",
-        "adobefiles",
-        "adobepdf",
-        "adobereader",
-        "adobeviewer",
-        "adobedocs",
-        "adobo",
-        "adope",
-        "addobe",
-        "abode",
-        "adone",
-        "adobe-verify",
-        "adoobe",
-        "adobe-pdf",
-        "adobbe",
-        "adbe",
-        "adb0e",
-        "adobb",
-        "adob3"
-      ]
-    },
-    {
-      "name": "linkedin",
-      "vertical": "general",
-      "domains": [
-        "linkedin.com"
-      ],
-      "typos": [
-        "linkedln",
-        "linke-din",
-        "linkediin",
-        "linkendin",
-        "linkdin"
-      ]
-    },
-    {
       "name": "twitter",
       "vertical": "general",
       "domains": [
@@ -1780,59 +1734,6 @@
         "tw1tter",
         "twltter",
         "twitterr"
-      ]
-    },
-    {
-      "name": "facebook",
-      "vertical": "general",
-      "domains": [
-        "facebook.com",
-        "fb.com"
-      ],
-      "typos": [
-        "faceb00k",
-        "facebok",
-        "face-book",
-        "facbook",
-        "fecebook",
-        "faceboook",
-        "facebbok",
-        "facebock",
-        "faccebook"
-      ]
-    },
-    {
-      "name": "instagram",
-      "vertical": "general",
-      "domains": [
-        "instagram.com"
-      ],
-      "typos": [
-        "lnstagram",
-        "instagramm",
-        "instagrarn",
-        "instagam",
-        "instgram",
-        "insstagrram",
-        "instagrm",
-        "instqgram",
-        "1nstagram",
-        "instegram",
-        "instagarm",
-        "instragram",
-        "instagrem",
-        "instaqram",
-        "instagran",
-        "intagram",
-        "insta-gram",
-        "insatgram",
-        "insragram",
-        "instagrom",
-        "lnstagrarn",
-        "lnstgrm",
-        "instaqrarn",
-        "inst4gram",
-        "instaram"
       ]
     },
     {
@@ -1858,6 +1759,20 @@
         "web-mail",
         "webm4il",
         "webmai1"
+      ]
+    },
+    {
+      "name": "linkedin",
+      "vertical": "general",
+      "domains": [
+        "linkedin.com"
+      ],
+      "typos": [
+        "linkedln",
+        "linke-din",
+        "linkediin",
+        "linkendin",
+        "linkdin"
       ]
     },
     {
@@ -2436,6 +2351,37 @@
       ]
     },
     {
+      "name": "adobe",
+      "vertical": "productivity",
+      "domains": [
+        "adobe.com",
+        "acrobat.com"
+      ],
+      "typos": [
+        "ad0be",
+        "adobee",
+        "adobe-login",
+        "adobefiles",
+        "adobepdf",
+        "adobereader",
+        "adobeviewer",
+        "adobedocs",
+        "adobo",
+        "adope",
+        "addobe",
+        "abode",
+        "adone",
+        "adobe-verify",
+        "adoobe",
+        "adobe-pdf",
+        "adobbe",
+        "adbe",
+        "adb0e",
+        "adobb",
+        "adob3"
+      ]
+    },
+    {
       "name": "meta-business",
       "vertical": "social",
       "domains": [
@@ -2450,36 +2396,6 @@
         "fb-business",
         "facebook-business",
         "meta-business"
-      ]
-    },
-    {
-      "name": "meta",
-      "vertical": "social",
-      "domains": [
-        "facebook.com",
-        "meta.com",
-        "instagram.com"
-      ],
-      "typos": [
-        "marketing-partner",
-        "member-invite",
-        "partner-invite",
-        "business-partner",
-        "meta-partner",
-        "metta",
-        "m3ta",
-        "faceb00k",
-        "facebok",
-        "facebbok",
-        "faceboook",
-        "fecebook",
-        "facebookk",
-        "agency-partner-apply",
-        "business-partner-apply",
-        "creator-partner-apply",
-        "partner-application",
-        "business-application",
-        "meta-partner-apply"
       ]
     },
     {
@@ -2569,54 +2485,89 @@
       ]
     },
     {
-      "name": "microsoft",
-      "vertical": "sso",
+      "name": "facebook",
+      "vertical": "social",
       "domains": [
-        "microsoft.com",
-        "microsoftonline.com",
-        "live.com",
-        "outlook.com",
-        "office.com",
-        "azure.com"
+        "facebook.com",
+        "fb.com",
+        "messenger.com"
       ],
       "typos": [
-        "rnicros0ft",
-        "micros0ft",
-        "microsoft-login",
-        "microsofft",
-        "mlcrosoft",
-        "micorsoft",
-        "microsft",
-        "micrsoft",
-        "microsot",
-        "micr0soft",
-        "microsooft",
-        "micosoft",
-        "mircosoft",
-        "microsofy",
-        "microsoftaccount",
-        "ms-account",
-        "resolve-issue",
-        "micro-soft",
-        "microsoff"
+        "faceb00k",
+        "facebok",
+        "face-book",
+        "facbook",
+        "fecebook",
+        "faceboook",
+        "facebbok",
+        "facebock",
+        "faccebook"
       ]
     },
     {
-      "name": "google",
-      "vertical": "sso",
+      "name": "instagram",
+      "vertical": "social",
       "domains": [
-        "google.com",
-        "googleapis.com"
+        "instagram.com",
+        "ig.me"
       ],
       "typos": [
-        "g00gle",
-        "gooogle",
-        "googie",
-        "google-signin",
-        "googl3",
-        "googIe",
-        "googel",
-        "goog1e"
+        "lnstagram",
+        "instagramm",
+        "instagrarn",
+        "instagam",
+        "instgram",
+        "insstagrram",
+        "instagrm",
+        "instqgram",
+        "1nstagram",
+        "instegram",
+        "instagarm",
+        "instragram",
+        "instagrem",
+        "instaqram",
+        "instagran",
+        "intagram",
+        "insta-gram",
+        "insatgram",
+        "insragram",
+        "instagrom",
+        "lnstagrarn",
+        "lnstgrm",
+        "instaqrarn",
+        "inst4gram",
+        "instaram"
+      ]
+    },
+    {
+      "name": "meta",
+      "vertical": "social",
+      "domains": [
+        "facebook.com",
+        "meta.com",
+        "instagram.com",
+        "whatsapp.com"
+      ],
+      "typos": [
+        "marketing-partner",
+        "member-invite",
+        "partner-invite",
+        "business-partner",
+        "meta-partner",
+        "metta",
+        "m3ta",
+        "faceb00k",
+        "facebok",
+        "facebbok",
+        "faceboook",
+        "fecebook",
+        "facebookk",
+        "agency-partner-apply",
+        "business-partner-apply",
+        "creator-partner-apply",
+        "partner-application",
+        "business-application",
+        "meta-partner-apply"
       ]
     },
     {
@@ -2745,6 +2696,59 @@
       ]
     },
     {
+      "name": "microsoft",
+      "vertical": "sso",
+      "domains": [
+        "microsoft.com",
+        "microsoftonline.com",
+        "live.com",
+        "outlook.com",
+        "office.com",
+        "azure.com"
+      ],
+      "typos": [
+        "rnicros0ft",
+        "micros0ft",
+        "microsoft-login",
+        "microsofft",
+        "mlcrosoft",
+        "micorsoft",
+        "microsft",
+        "micrsoft",
+        "microsot",
+        "micr0soft",
+        "microsooft",
+        "micosoft",
+        "mircosoft",
+        "microsofy",
+        "microsoftaccount",
+        "ms-account",
+        "resolve-issue",
+        "micro-soft",
+        "microsoff"
+      ]
+    },
+    {
+      "name": "google",
+      "vertical": "sso",
+      "domains": [
+        "google.com",
+        "googleapis.com",
+        "accounts.google.com",
+        "gmail.com"
+      ],
+      "typos": [
+        "g00gle",
+        "gooogle",
+        "googie",
+        "google-signin",
+        "googl3",
+        "googIe",
+        "googel",
+        "goog1e"
+      ]
+    },
+    {
       "name": "microsoftonedrive",
       "vertical": "technology",
       "domains": [
@@ -2830,6 +2834,22 @@
         "protonmall",
         "protonmeil",
         "pr0tonmail"
+      ]
+    },
+    {
+      "name": "cloudflare",
+      "vertical": "technology",
+      "domains": [
+        "cloudflare.com",
+        "challenges.cloudflare.com"
+      ],
+      "typos": [
+        "cloudfIare",
+        "cloudflare-login",
+        "cloudflair",
+        "cloudflaire",
+        "cloudflar",
+        "cIoudflare"
       ]
     },
     {
