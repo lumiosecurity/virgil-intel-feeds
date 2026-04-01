@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T05:36:11.837Z",
+    "compiledAt": "2026-04-01T06:18:30.370Z",
     "brandCount": 107,
     "signalCount": 1,
     "patternCount": 306,
@@ -4910,7 +4910,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T04:59:46.946Z",
+      "compiledAt": "2026-04-01T05:36:09.905Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
