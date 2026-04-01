@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T20:50:01.488Z",
+    "compiledAt": "2026-04-01T20:55:58.194Z",
     "brandCount": 187,
     "signalCount": 1,
-    "patternCount": 897,
+    "patternCount": 918,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -6646,6 +6646,28 @@
       "note": "Job applications requesting SSN, date of birth, bank account, or passport information are employment scams harvesting PII for identity theft. Legitimate employers don't collect SSN or banking details in initial applications."
     },
     {
+      "id": "oauth-consent-broad-permissions",
+      "group": "credentialHarvesting",
+      "description": "OAuth consent requesting broad permissions — malicious app authorization",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:permissions?|access)\\s*(?:requested|required)[\\s\\S]{0,500}(?:read\\s*(?:your\\s*)?(?:email|contacts|calendar|files)|send\\s*(?:email|mail)\\s*(?:on\\s*your|as\\s*you)|full\\s*access|offline\\s*access)[\\s\\S]{0,300}(?:allow|accept|authorize|grant|consent)",
+      "patternFlags": "i",
+      "note": "Fake OAuth consent pages requesting broad permissions trick users into authorizing malicious apps with persistent account access."
+    },
+    {
+      "id": "microsoft-graph-consent-phish",
+      "group": "credentialHarvesting",
+      "description": "Microsoft Graph API consent phishing — M365 data access requests",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:graph\\.microsoft\\.com|Microsoft\\s*Graph|Microsoft\\s*365)[\\s\\S]{0,500}(?:Mail\\.Read|Mail\\.Send|Contacts\\.Read|Files\\.ReadWrite|User\\.Read\\.All)[\\s\\S]{0,300}(?:consent|allow|accept|authorize)",
+      "patternFlags": "i",
+      "note": "Microsoft Graph API permission scope names (Mail.Read, Mail.Send, etc.) in a consent page are definitive consent phishing indicators."
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -6896,6 +6918,17 @@
       "patternString": "cdn\\.discordapp\\.com\\/attachments\\/\\d{17,20}\\/\\d{17,20}\\/",
       "patternFlags": "i",
       "note": "Discord CDN attachment URLs (cdn.discordapp.com/attachments/) are abused to host phishing page assets, malware payloads, and images. The CDN inherits Discord's trusted reputation."
+    },
+    {
+      "id": "file-hosting-shared-link-phish",
+      "group": "hostingPatterns",
+      "description": "File hosting shared link leading to credential page — Google Drive, OneDrive, Dropbox abuse",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:drive\\.google\\.com/file|docs\\.google\\.com|onedrive\\.live\\.com|1drv\\.ms|dropbox\\.com/s/|box\\.com/s/|wetransfer\\.com/downloads)[\\s\\S]{0,2000}(?:password|sign.?in|log.?in|verify)",
+      "patternFlags": "i",
+      "note": "File hosting service links on pages with credential text. 26% of phishing links use file hosting services."
     },
     {
       "id": "unicode-brand-obfuscation",
@@ -10958,6 +10991,72 @@
       "note": "Creating an anchor element with a download attribute and blob:/data: href then programmatically clicking it triggers an automatic file download without user interaction. This is the delivery mechanism for HTML smuggling payloads."
     },
     {
+      "id": "clickfix-clipboard-powershell-inject",
+      "group": "phishkitSignatures",
+      "description": "ClickFix clipboard injection — copies PowerShell/mshta command to clipboard behind fake CAPTCHA",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "js",
+      "patternString": "(?:execCommand\\(['\"]copy['\"]\\)|clipboard\\.writeText|clipboardData\\.setData)[\\s\\S]{0,500}(?:powershell|mshta|cmd\\.exe|wscript|cscript|certutil|iex|Invoke-Expression|Start-Process)",
+      "patternFlags": "i",
+      "note": "ClickFix copies malicious PowerShell/mshta/cmd commands to clipboard when user clicks fake CAPTCHA. Microsoft documented ClickFix in 47% of attacks observed. The clipboard write + system command keywords is the definitive signature."
+    },
+    {
+      "id": "clickfix-mshta-command-pattern",
+      "group": "phishkitSignatures",
+      "description": "ClickFix mshta command pattern — mshta URL for remote HTA execution",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "js",
+      "patternString": "mshta\\s+(?:https?://|hxxps?://)[^\\s'\"]{10,}",
+      "patternFlags": "i",
+      "note": "mshta followed by a URL is the most common ClickFix payload. mshta executes remote HTA files downloading malware. Used by campaigns distributing Lumma Stealer and NetSupport RAT."
+    },
+    {
+      "id": "svg-foreignobject-html-form",
+      "group": "phishkitSignatures",
+      "description": "SVG with foreignObject containing HTML form — credential harvesting in SVG",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<foreignObject[\\s\\S]{0,500}<(?:form|input)[\\s\\S]{0,500}(?:password|email|login|submit)",
+      "patternFlags": "i",
+      "note": "SVG foreignObject elements embed full HTML forms. Surging since Microsoft macro-blocking pushed attackers to SVG."
+    },
+    {
+      "id": "svg-onload-script-exec",
+      "group": "phishkitSignatures",
+      "description": "SVG onload event executing JavaScript — script execution on SVG render",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "<svg[^>]*onload=['\"][^'\"]*(?:location|redirect|document\\.write|eval|fetch|window\\.open)",
+      "patternFlags": "i",
+      "note": "SVG onload events execute JavaScript when rendered. Phishing SVGs use onload to redirect to credential pages."
+    },
+    {
+      "id": "svg-xlink-href-external",
+      "group": "phishkitSignatures",
+      "description": "SVG xlink:href pointing to external URL — SVG-based redirect",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "xlink:href=['\"]https?://[^'\"]+['\"][\\s\\S]{0,500}(?:password|login|sign.?in|verify)",
+      "patternFlags": "i",
+      "note": "SVG xlink:href attributes redirect to phishing pages when users interact with SVG elements."
+    },
+    {
+      "id": "qr-code-dynamic-credential-url",
+      "group": "phishkitSignatures",
+      "description": "QR code generated dynamically with credential page URL — quishing payload generation",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:qrcode|QRCode|qr-code)[\\s\\S]{0,300}(?:toCanvas|toDataURL|make|render|generate)[\\s\\S]{0,300}(?:login|password|sign.?in|verify|authenticate)",
+      "patternFlags": "i",
+      "note": "Dynamic QR code generation containing credential page URLs. 12% of all phishing attacks now contain QR codes."
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -11837,6 +11936,105 @@
       "note": "Job offers requiring upfront payments for training, equipment, background checks, or registration are advance fee employment scams. Legitimate employers never charge employees to start working."
     },
     {
+      "id": "clickfix-run-dialog-instructions",
+      "group": "socialEngineering",
+      "description": "ClickFix Run dialog instructions — tells user to press Win+R and paste command",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "(?:Windows\\s*\\+\\s*R|Win\\s*\\+\\s*R|press\\s*Windows\\s*R|open\\s*(?:Run|Terminal|PowerShell|Command\\s*Prompt))[\\s\\S]{0,300}(?:paste|Ctrl\\s*\\+\\s*V|right.?click)[\\s\\S]{0,200}(?:Enter|execute|run|verify)",
+      "patternFlags": "i",
+      "note": "ClickFix instructions telling user to press Win+R, paste, and press Enter. No legitimate CAPTCHA ever asks a user to open the Run dialog."
+    },
+    {
+      "id": "clickfix-verification-step-lure",
+      "group": "socialEngineering",
+      "description": "ClickFix fake verification steps — numbered steps combining CAPTCHA with command execution",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:Step\\s*1|Step\\s*2|Step\\s*3)[\\s\\S]{0,300}(?:verify|verification|human|CAPTCHA|fix)[\\s\\S]{0,300}(?:Step\\s*2|Step\\s*3)[\\s\\S]{0,300}(?:paste|terminal|Run|command|PowerShell|press)",
+      "patternFlags": "i",
+      "note": "ClickFix uses numbered steps progressing from verification language to command execution language. This step progression is unique to ClickFix."
+    },
+    {
+      "id": "callback-phishing-phone-cancel",
+      "group": "socialEngineering",
+      "description": "Callback phishing — subscription/invoice with phone number to call for cancellation",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:subscription|renewal|invoice|order|charge|transaction)\\s*(?:confirmation|receipt|notice)[\\s\\S]{0,500}(?:cancel|dispute|refund|unauthorized|didn.?t\\s*(?:order|authorize))[\\s\\S]{0,300}(?:call|phone|dial|\\d{3}[\\s-]\\d{3}[\\s-]\\d{4})",
+      "patternFlags": "i",
+      "note": "Callback phishing shows fake subscription/invoice and tells victim to CALL a phone number to cancel. Phone connects to scammers who install remote access software. CrowdStrike reported 442% vishing growth."
+    },
+    {
+      "id": "callback-phishing-amount-phone",
+      "group": "socialEngineering",
+      "description": "Large dollar amount with phone number as only action — callback scam indicator",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "\\$\\s*(?:[1-9]\\d{2}|[1-9]\\d{3})\\.\\d{2}[\\s\\S]{0,500}(?:call|phone|dial|contact)[\\s\\S]{0,200}(?:\\+?1[\\s-]?\\(?\\d{3}\\)?[\\s-]?\\d{3}[\\s-]?\\d{4}|\\d{3}[\\s-]\\d{3}[\\s-]\\d{4})",
+      "patternFlags": "i",
+      "note": "Large dollar amount ($100-$9999) with phone number and no online cancellation is the callback phishing layout."
+    },
+    {
+      "id": "qr-code-mfa-enrollment-fake",
+      "group": "socialEngineering",
+      "description": "Fake MFA enrollment QR code — impersonates authenticator app setup",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:scan\\s*(?:this\\s*)?QR\\s*code|QR\\s*code\\s*(?:below|above))[\\s\\S]{0,500}(?:authenticator|MFA|two.?factor|2FA|multi.?factor|Microsoft\\s*Authenticator|Google\\s*Authenticator)",
+      "patternFlags": "i",
+      "note": "Fake MFA enrollment QR codes. Nearly 1 in 4 campaigns use QR codes as MFA prompts per Hoxhunt."
+    },
+    {
+      "id": "recruitment-fake-job-pii-harvest",
+      "group": "socialEngineering",
+      "description": "Fake job offer collecting sensitive PII — recruitment phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:job\\s*(?:offer|opportunity|opening)|career|we.?re\\s*hiring|apply\\s*now)[\\s\\S]{0,500}(?:social\\s*security|SSN|date\\s*of\\s*birth|bank\\s*account|direct\\s*deposit|driver.?s\\s*license)[\\s\\S]{0,300}(?:submit|apply|continue)",
+      "patternFlags": "i",
+      "note": "Fake job offers collecting SSN, DOB, bank details. Legitimate apps never ask for SSN in initial forms."
+    },
+    {
+      "id": "hr-portal-credential-phish",
+      "group": "socialEngineering",
+      "description": "HR portal impersonation — performance review, salary, benefits, W-2 phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:performance\\s*review|salary\\s*(?:update|adjustment)|benefits\\s*enrollment|employee\\s*(?:portal|self.?service)|W-?2\\s*(?:form|download)|tax\\s*(?:form|document))[\\s\\S]{0,500}(?:sign.?in|log.?in|password|verify|SSO|credential)",
+      "patternFlags": "i",
+      "note": "HR portal impersonation pages are among the top AI-generated lure categories in 2025-2026."
+    },
+    {
+      "id": "calendar-invite-credential-phish",
+      "group": "socialEngineering",
+      "description": "Fake meeting invite with login requirement — calendar-based phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:meeting\\s*invite|calendar\\s*(?:invite|event)|you.?ve\\s*been\\s*invited|join\\s*(?:this\\s*)?meeting|RSVP)[\\s\\S]{0,500}(?:sign.?in|log.?in|password|verify|join\\s*now)[\\s\\S]{0,300}(?:Teams|Zoom|Google\\s*Meet|WebEx|GoTo)",
+      "patternFlags": "i",
+      "note": "Fake meeting invites requiring login to 'join'. Calendar phishing is an emerging bypass for email security."
+    },
+    {
+      "id": "docusign-signature-phish",
+      "group": "socialEngineering",
+      "description": "Fake DocuSign/electronic signature page requiring login — document signing phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:DocuSign|document\\s*(?:to\\s*)?sign|e-?signature|review\\s*and\\s*sign)[\\s\\S]{0,500}(?:sign.?in|log.?in|password|verify|email|view\\s*document)",
+      "patternFlags": "i",
+      "note": "Fake DocuSign pages requiring login to 'view' or 'sign' documents. DocuSign is one of the most impersonated brands in ClickFix campaigns."
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -12651,12 +12849,45 @@
       "patternString": "(?:href|action|src)=['\"]https?://[a-z0-9.-]+\\.xin[/'\"]",
       "patternFlags": "i",
       "note": "The .xin TLD (Chinese for 'new/faith', managed by Elegant Leader Limited in Hong Kong) is specifically used by Smishing Triad for toll phishing domains. Resecurity identified thousands of toll phishing domains registered under .xin."
+    },
+    {
+      "id": "google-translate-redirect-phish",
+      "group": "urlHeuristics",
+      "description": "Google Translate URL rewrite hiding phishing destination — trusted domain redirect",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "translate\\.google\\.com/translate[\\s\\S]{0,200}(?:u=|url=|q=)https?://",
+      "patternFlags": "i",
+      "note": "Google Translate URL rewrite makes phishing load through Google's domain. 48% of phishing links use URL redirection."
+    },
+    {
+      "id": "google-amp-cache-redirect",
+      "group": "urlHeuristics",
+      "description": "Google AMP cache URL hiding phishing page — CDN-cached redirect abuse",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:cdn\\.ampproject\\.org|ampproject\\.org)/[\\s\\S]{0,100}(?:s/|c/s/)",
+      "patternFlags": "i",
+      "note": "Google AMP cache serves phishing pages through Google's CDN, inheriting Google's domain reputation."
+    },
+    {
+      "id": "trusted-domain-open-redirect",
+      "group": "urlHeuristics",
+      "description": "Open redirect through trusted service — redirect parameter abuse on major platforms",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:login\\.microsoftonline\\.com|linkedin\\.com|slack\\.com|youtube\\.com)/[\\s\\S]{0,100}(?:redirect|url=|next=|goto=|dest=|return=|continue=|redir=)https?://",
+      "patternFlags": "i",
+      "note": "Open redirect parameters on trusted services bounce victims from a trusted domain to the phishing page."
     }
   ],
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T20:40:42.225Z",
+      "compiledAt": "2026-04-01T20:49:59.860Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
