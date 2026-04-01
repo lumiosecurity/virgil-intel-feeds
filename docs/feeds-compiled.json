@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T17:01:38.727Z",
+    "compiledAt": "2026-04-01T17:06:07.024Z",
     "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 444,
+    "patternCount": 495,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2338,6 +2338,28 @@
       "note": "Using WebRTC to discover the victim's real IP address (bypassing VPN/proxy) is a fingerprinting technique used by phishing kits to detect security researchers who browse via VPN or corporate proxy."
     },
     {
+      "id": "window-onerror-suppress",
+      "group": "botEvasion",
+      "description": "Global error handler suppresses all JavaScript errors — hides phishing kit debug output",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "js",
+      "patternString": "window\\.onerror\\s*=\\s*function[\\s\\S]{0,100}return\\s+true",
+      "patternFlags": "i",
+      "note": "Setting window.onerror to always return true suppresses all JavaScript errors from appearing in the console. Phishing kits use this to prevent error messages from revealing the kit's internal operation."
+    },
+    {
+      "id": "enterprise-email-filter",
+      "group": "botEvasion",
+      "description": "Email domain validation filtering out personal email providers — enterprise-targeted phishing",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:gmail\\.com|yahoo\\.com|hotmail\\.com|outlook\\.com|aol\\.com)[\\s\\S]{0,200}(?:reject|block|invalid|redirect|error|denied)",
+      "patternFlags": "i",
+      "note": "Rejecting free email providers (Gmail, Yahoo, Hotmail, AOL) and only accepting corporate email addresses is a Sneaky 2FA technique that specifically targets enterprise users. This filtering is a definitive phishing signal."
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -3155,6 +3177,61 @@
       "patternFlags": "i"
     },
     {
+      "id": "fake-cloudflare-challenge-js",
+      "group": "cdnGating",
+      "description": "Fake Cloudflare 'checking your browser' challenge page created in JavaScript — impersonation of CDN security",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:checking\\s+your\\s+browser|verify\\s+you\\s+are\\s+human|browser\\s+verification|DDoS\\s+protection)[\\s\\S]{0,300}(?:setTimeout|setInterval)[\\s\\S]{0,200}(?:style\\.display|innerHTML|location)",
+      "patternFlags": "i",
+      "note": "Fake Cloudflare-style browser checks with timed reveals are used by phishing kits to gate content from scanners. The 'checking your browser' + setTimeout + reveal pattern is characteristic of fake CDN interstitials."
+    },
+    {
+      "id": "fake-cloudflare-ray-id",
+      "group": "cdnGating",
+      "description": "Fake Cloudflare Ray ID displayed to impersonate CDN protection page",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:ray\\s*id|cf-ray|cloudflare\\s*ray)[\\s\\S]{0,100}(?:checking|verify|protection|security\\s+check)[\\s\\S]{0,300}(?:<form|<input|<button)",
+      "patternFlags": "i",
+      "note": "Displaying a fake Cloudflare Ray ID alongside a 'security check' form is a phishing technique that impersonates CDN protection while actually gating a credential harvesting form."
+    },
+    {
+      "id": "fake-ddos-protection-gate",
+      "group": "cdnGating",
+      "description": "Fake DDoS protection page with spinning/loading animation before revealing form",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:ddos|DDoS)\\s+(?:protection|guard|shield)[\\s\\S]{0,300}(?:spinner|loading|rotating|@keyframes)[\\s\\S]{0,500}(?:<form|password|sign\\s*in)",
+      "patternFlags": "i",
+      "note": "Fake DDoS protection pages with CSS animations that resolve to a login form are phishing gating techniques. Real DDoS protection never leads to a login form."
+    },
+    {
+      "id": "fake-cdn-security-check",
+      "group": "cdnGating",
+      "description": "Fake CDN security check page impersonating Cloudflare, Sucuri, or similar WAF",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:security\\s+(?:check|verification)|access\\s+denied|please\\s+wait)[\\s\\S]{0,300}(?:cloudflare|sucuri|incapsula|akamai)[\\s\\S]{0,300}(?:redirect|location|submit|continue)",
+      "patternFlags": "i",
+      "note": "Fake security check pages impersonating CDN/WAF providers are used to gate phishing content. The page shows a branded 'verification' page that resolves to a redirect to the actual phishing form."
+    },
+    {
+      "id": "js-challenge-fake-compute",
+      "group": "cdnGating",
+      "description": "Fake JavaScript challenge with computed proof-of-work before revealing content",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:challenge|proof|compute|solve)[\\s\\S]{0,200}(?:crypto\\.subtle|Math\\.random|sha256|hash)[\\s\\S]{0,300}(?:style\\.display|innerHTML|location\\.href)",
+      "patternFlags": "i",
+      "note": "Fake proof-of-work JavaScript challenges that appear to compute something before revealing content are phishing gates. They impersonate the behavior of real CDN JS challenges but the 'computation' is just a timer."
+    },
+    {
       "id": "email-userid-label",
       "group": "credentialHarvesting",
       "description": "Email Address/User ID label pattern common in email phishing",
@@ -3730,6 +3807,17 @@
       "note": "Attaching an input event listener to password fields that immediately sends each keystroke to an external endpoint is real-time credential streaming. This is more aggressive than form submission interception."
     },
     {
+      "id": "password-visibility-toggle-phish",
+      "group": "credentialHarvesting",
+      "description": "Custom password visibility toggle with eye icon — polished phishing kit UI element",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "js",
+      "patternString": "(?:togglePassword|showPassword|toggleVisibility|eyeIcon|eye-icon)[\\s\\S]{0,200}(?:type\\s*=\\s*['\"]text['\"]|type\\s*=\\s*['\"]password['\"])",
+      "patternFlags": "i",
+      "note": "Custom password visibility toggle implementations (show/hide password eye icon) in inline JavaScript indicate a phishing kit recreating the login UI rather than using the native browser feature. Very low weight as supporting signal."
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -3782,6 +3870,171 @@
       "patternString": "firebasestorage\\.googleapis\\.com\\/v0\\/b\\/[\\w.-]+\\.appspot\\.com",
       "patternFlags": "i",
       "note": "Firebase storage is heavily abused to host phishing page assets. Low weight because Firebase has many legitimate uses, but presence on a login page stacks with other hosting signals."
+    },
+    {
+      "id": "vercel-app-login-hosting",
+      "group": "hostingPatterns",
+      "description": "Login form resources loaded from Vercel app hosting — commonly abused free hosting platform",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "[a-z0-9-]+\\.vercel\\.app",
+      "patternFlags": "i",
+      "note": "Vercel.app subdomains are heavily abused for hosting phishing pages and fake CAPTCHA gates. Low weight because Vercel has massive legitimate usage, but stacks with other signals on non-development pages."
+    },
+    {
+      "id": "netlify-app-login-hosting",
+      "group": "hostingPatterns",
+      "description": "Page or resources hosted on Netlify — commonly abused free hosting platform",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "[a-z0-9-]+\\.netlify\\.app",
+      "patternFlags": "i",
+      "note": "Netlify.app subdomains are abused for phishing fake CAPTCHA pages. Low weight as supporting signal — Netlify has huge legitimate developer usage."
+    },
+    {
+      "id": "render-hosting-login",
+      "group": "hostingPatterns",
+      "description": "Page hosted on Render.com — free hosting abused for phishing",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "[a-z0-9-]+\\.onrender\\.com",
+      "patternFlags": "i",
+      "note": "Render.com free tier is abused for hosting phishing pages. Low weight as supporting signal due to legitimate developer usage."
+    },
+    {
+      "id": "azure-blob-storage-hosting",
+      "group": "hostingPatterns",
+      "description": "Content loaded from Azure Blob Storage — abused cloud storage for phishing page hosting",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "[a-z0-9]+\\.blob\\.core\\.windows\\.net",
+      "patternFlags": "i",
+      "note": "Azure Blob Storage is heavily abused by Tycoon 2FA and other phishing kits. Phishing pages hosted on blob.core.windows.net inherit Microsoft's trusted reputation. Moderate weight because it also has legitimate uses."
+    },
+    {
+      "id": "cloudflare-workers-hosting",
+      "group": "hostingPatterns",
+      "description": "Content served from Cloudflare Workers — serverless hosting abused for phishing",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "[a-z0-9-]+\\.workers\\.dev",
+      "patternFlags": "i",
+      "note": "Cloudflare Workers (.workers.dev) provide serverless hosting that is abused for phishing proxies and page hosting. Low weight as supporting signal."
+    },
+    {
+      "id": "cloudflare-pages-hosting",
+      "group": "hostingPatterns",
+      "description": "Content served from Cloudflare Pages — static hosting abused for phishing",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "[a-z0-9-]+\\.pages\\.dev",
+      "patternFlags": "i",
+      "note": "Cloudflare Pages (.pages.dev) free hosting is abused for phishing sites. Low weight because of massive legitimate usage."
+    },
+    {
+      "id": "surge-sh-hosting",
+      "group": "hostingPatterns",
+      "description": "Content hosted on Surge.sh — free static hosting abused for phishing",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "[a-z0-9-]+\\.surge\\.sh",
+      "patternFlags": "i",
+      "note": "Surge.sh is a free static hosting service with no abuse controls, making it popular for phishing deployment. Higher weight than Vercel/Netlify because Surge has less legitimate mainstream usage."
+    },
+    {
+      "id": "google-amp-phish-redirect",
+      "group": "hostingPatterns",
+      "description": "Google AMP URL used as phishing redirect proxy — abuses Google's trusted domain",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:google\\.com/amp/s/|ampproject\\.org/c/s/)[a-z0-9]",
+      "patternFlags": "i",
+      "note": "Google AMP URLs proxy content through Google's domain, inheriting trust and bypassing domain-based filters. Phishing campaigns use AMP as a redirect layer."
+    },
+    {
+      "id": "r2-cloudflare-storage",
+      "group": "hostingPatterns",
+      "description": "Content hosted on Cloudflare R2 storage — object storage abused for phishing assets",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "[a-z0-9]+\\.r2\\.dev",
+      "patternFlags": "i",
+      "note": "Cloudflare R2 storage (.r2.dev) is an S3-compatible object store abused for hosting phishing page assets. Moderate weight as it has less legitimate public-facing usage than R2 custom domains."
+    },
+    {
+      "id": "weebly-hosted-phish",
+      "group": "hostingPatterns",
+      "description": "Page hosted on Weebly website builder — commonly abused for phishing",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "[a-z0-9-]+\\.weebly\\.com",
+      "patternFlags": "i",
+      "note": "Weebly free sites are commonly used to host phishing pages. The drag-and-drop builder makes it easy to create convincing brand impersonation pages."
+    },
+    {
+      "id": "object-storage-gcp-hosting",
+      "group": "hostingPatterns",
+      "description": "Content loaded from Google Cloud Storage — abused cloud object storage",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "storage\\.googleapis\\.com\\/[a-z0-9._-]+\\/",
+      "patternFlags": "i",
+      "note": "Google Cloud Storage (storage.googleapis.com) is abused to host phishing page HTML and assets. The trusted Google domain helps phishing pages bypass reputation-based filters."
+    },
+    {
+      "id": "aws-s3-hosting",
+      "group": "hostingPatterns",
+      "description": "Content loaded from AWS S3 bucket — abused cloud storage for phishing",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:s3[.-](?:[a-z]+-[a-z]+-\\d\\.)?amazonaws\\.com|[a-z0-9.-]+\\.s3\\.amazonaws\\.com)/",
+      "patternFlags": "i",
+      "note": "AWS S3 buckets are used by Tycoon 2FA and other kits to host phishing pages, especially using regional endpoints like s3.ap-northeast-3.amazonaws.com. Trusted AWS infrastructure bypasses many filters."
+    },
+    {
+      "id": "linodeobjects-hosting",
+      "group": "hostingPatterns",
+      "description": "Content loaded from Linode Object Storage — abused cloud hosting",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "[a-z0-9-]+\\.linodeobjects\\.com",
+      "patternFlags": "i",
+      "note": "Linode Object Storage is heavily abused for hosting phishing pages, particularly Microsoft credential harvesting. Higher weight than major cloud providers because Linode objects have less legitimate public-facing web content."
+    },
+    {
+      "id": "ngrok-tunnel-hosting",
+      "group": "hostingPatterns",
+      "description": "Content served through ngrok tunnel — local phishing server exposed via tunnel",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "[a-z0-9-]+\\.ngrok(?:-free)?\\.(?:io|app|dev)",
+      "patternFlags": "i",
+      "note": "Ngrok tunnels expose local servers to the internet. Phishing kits use ngrok to run credential harvesting servers locally while making them accessible via a seemingly legitimate ngrok.io URL."
+    },
+    {
+      "id": "glitch-hosted-phish",
+      "group": "hostingPatterns",
+      "description": "Page hosted on Glitch.me — free hosting platform abused for phishing",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "[a-z0-9-]+\\.glitch\\.me",
+      "patternFlags": "i",
+      "note": "Glitch.me free hosting is abused for phishing pages. The platform allows rapid deployment of server-side code including PHP-like credential handlers."
     },
     {
       "id": "unicode-brand-obfuscation",
@@ -4071,6 +4324,28 @@
       "patternString": "<meta\\s+http-equiv=['\"]Content-Security-Policy['\"][^>]*content=['\"][^'\"]*unsafe-inline[^'\"]*unsafe-eval",
       "patternFlags": "i",
       "note": "A CSP meta tag explicitly allowing both unsafe-inline and unsafe-eval is common on phishing pages that need to execute inline obfuscated JavaScript. Legitimate sites typically restrict these capabilities."
+    },
+    {
+      "id": "hex-encoded-url-reconstruction",
+      "group": "obfuscation",
+      "description": "URL reconstructed from hex-encoded character pairs — hides exfiltration endpoint",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:parseInt|Number)\\([\\s\\S]{0,50}(?:16|0x)[\\s\\S]{0,100}String\\.fromCharCode[\\s\\S]{0,300}(?:fetch|XMLHttpRequest|location|href|src)",
+      "patternFlags": "i",
+      "note": "Reconstructing URLs by parsing hex pairs and converting to characters via fromCharCode hides the exfiltration destination from static analysis. The URL only exists at runtime."
+    },
+    {
+      "id": "xor-key-string-decode",
+      "group": "obfuscation",
+      "description": "XOR cipher with string key used to decode phishing page content at runtime",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "charCodeAt\\([\\s\\S]{0,100}\\^[\\s\\S]{0,100}charCodeAt\\([\\s\\S]{0,100}%\\s*(?:key|secret|pass|cipher)",
+      "patternFlags": "i",
+      "note": "XOR decryption using a repeating key string where each byte is XORed with the corresponding key byte (using modulo) is a signature obfuscation technique in Whisper 2FA and similar kits."
     },
     {
       "id": "base64-html-password-obfuscation",
@@ -5699,6 +5974,105 @@
       "note": "Regular fetch polling to an external URL is the modern equivalent of XHR polling for C2 communication. AiTM phishing kits poll the attacker server to synchronize the multi-step authentication flow."
     },
     {
+      "id": "qr-code-canvas-render",
+      "group": "phishkitSignatures",
+      "description": "QR code dynamically rendered on HTML5 canvas — phishing page with embedded QR redirect",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:qrcode|qr-code|QRCode)[\\s\\S]{0,300}(?:canvas|toDataURL|getContext)[\\s\\S]{0,200}(?:https?://|location|redirect)",
+      "patternFlags": "i",
+      "note": "Dynamically rendering QR codes on canvas that contain redirect URLs is a quishing (QR phishing) technique. The QR code pushes victims from desktop to mobile where security tools are weaker."
+    },
+    {
+      "id": "qr-code-library-load",
+      "group": "phishkitSignatures",
+      "description": "QR code generation library loaded on a page with login elements — quishing indicator",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:qrcode\\.min\\.js|qrcodejs|qr-code-generator|kjua\\.min\\.js|easy\\.qrcode\\.min\\.js)[\\s\\S]{0,2000}(?:password|sign\\s*in|log\\s*in)",
+      "patternFlags": "i",
+      "note": "Loading a QR code generation library on a page that also has login elements indicates a quishing attack. The page either generates a QR code for mobile redirect or uses it as a social engineering lure."
+    },
+    {
+      "id": "html-smuggling-blob-download",
+      "group": "phishkitSignatures",
+      "description": "HTML smuggling — Blob URL created for automatic file download from inline data",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "URL\\.createObjectURL\\(new\\s+Blob\\([\\s\\S]{0,300}(?:download|click\\(\\)|createElement\\(['\"]a['\"]\\))",
+      "patternFlags": "i",
+      "note": "Creating a Blob from inline data and triggering an automatic download by clicking an invisible anchor is the HTML smuggling technique. The malicious file is constructed entirely in the browser from encoded data, bypassing network-level file scanning."
+    },
+    {
+      "id": "html-smuggling-mhtml-construct",
+      "group": "phishkitSignatures",
+      "description": "MHTML content constructed in JavaScript for HTML smuggling delivery",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "(?:MIME-Version|Content-Type:\\s*multipart|application/x-mht)",
+      "patternFlags": "i",
+      "note": "MHTML content headers constructed in JavaScript indicate HTML smuggling that assembles an MHTML file in-browser for download. MHTML files can contain active content that executes on the victim's machine."
+    },
+    {
+      "id": "basin-io-exfil-endpoint",
+      "group": "phishkitSignatures",
+      "description": "UseBasin.com form backend used as credential exfiltration endpoint",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "both",
+      "patternString": "usebasin\\.com\\/f\\/[a-f0-9]{10,}",
+      "patternFlags": "i",
+      "note": "UseBasin.com is a form backend service abused for credential exfiltration. The hex ID in the URL identifies the attacker's endpoint."
+    },
+    {
+      "id": "formspark-exfil-endpoint",
+      "group": "phishkitSignatures",
+      "description": "Formspark.io form backend used as credential exfiltration endpoint",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "both",
+      "patternString": "submit-form\\.com\\/[a-zA-Z0-9]{8,}|formspark\\.io\\/f\\/[a-zA-Z0-9]{8,}",
+      "patternFlags": "i",
+      "note": "Formspark is a form submission service abused by phishing kits. Both submit-form.com and formspark.io domains are used."
+    },
+    {
+      "id": "sheetdb-exfil-endpoint",
+      "group": "phishkitSignatures",
+      "description": "SheetDB API used to exfiltrate credentials to Google Sheets",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "both",
+      "patternString": "sheetdb\\.io\\/api\\/v1\\/[a-z0-9]{10,}",
+      "patternFlags": "i",
+      "note": "SheetDB turns Google Sheets into an API. Phishing kits use it to write stolen credentials directly to the attacker's Google Sheet without any server-side code."
+    },
+    {
+      "id": "google-script-exfil",
+      "group": "phishkitSignatures",
+      "description": "Google Apps Script used as credential exfiltration endpoint — serverless exfil",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "both",
+      "patternString": "script\\.google\\.com\\/macros\\/s\\/[A-Za-z0-9_-]{30,}\\/exec",
+      "patternFlags": "i",
+      "note": "Google Apps Script endpoints (/macros/s/.../exec) are heavily abused as serverless credential exfiltration handlers. The script writes captured data to Google Sheets. The long deployment ID is specific to each attacker."
+    },
+    {
+      "id": "pipedream-webhook-exfil",
+      "group": "phishkitSignatures",
+      "description": "Pipedream webhook used as credential exfiltration endpoint",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "both",
+      "patternString": "(?:eo[a-z0-9]+\\.m\\.)?pipedream\\.net",
+      "patternFlags": "i",
+      "note": "Pipedream.net webhooks are automation endpoints abused for credential exfiltration. The service provides free webhook endpoints that can forward data to any destination."
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -5918,6 +6292,61 @@
       "note": "Voicemail notification lures ('You have a new voicemail. Sign in to listen.') are a prevalent phishing technique targeting business users. The combination of voicemail text with login prompts is highly specific to phishing."
     },
     {
+      "id": "french-banking-urgency",
+      "group": "socialEngineering",
+      "description": "French-language banking urgency text in phishing page — targets French-speaking users",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:votre\\s+(?:compte|session|acc[eè]s)\\s+(?:a\\s+[eé]t[eé]|est)\\s+(?:bloqu[eé]|suspendu|d[eé]sactiv[eé]|limit[eé])|veuillez\\s+(?:confirmer|v[eé]rifier)\\s+(?:votre|vos)\\s+(?:identit[eé]|donn[eé]es|informations))",
+      "patternFlags": "i",
+      "note": "French-language account suspension and verification urgency text ('votre compte a été bloqué', 'veuillez confirmer votre identité') targets French-speaking victims. This social engineering text combined with a login form is a strong phishing indicator."
+    },
+    {
+      "id": "portuguese-banking-urgency",
+      "group": "socialEngineering",
+      "description": "Portuguese-language banking urgency text in phishing page — targets Brazilian/Portuguese users",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:sua\\s+conta\\s+(?:foi|est[aá])\\s+(?:bloqueada|suspensa|limitada)|confirme\\s+(?:sua|seus)\\s+(?:identidade|dados)|atualize\\s+(?:seus\\s+)?dados\\s+(?:cadastrais|banc[aá]rios))",
+      "patternFlags": "i",
+      "note": "Portuguese-language account urgency text ('sua conta foi bloqueada', 'confirme sua identidade', 'atualize seus dados') targets Brazilian and Portuguese victims."
+    },
+    {
+      "id": "german-banking-urgency",
+      "group": "socialEngineering",
+      "description": "German-language banking urgency text — targets German-speaking users",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:Ihr\\s+Konto\\s+(?:wurde|ist)\\s+(?:gesperrt|eingeschr[aä]nkt|deaktiviert)|(?:Bitte\\s+)?(?:best[aä]tigen|verifizieren)\\s+Sie\\s+Ihre\\s+(?:Identit[aä]t|Daten|Kontodaten))",
+      "patternFlags": "i",
+      "note": "German-language account urgency text ('Ihr Konto wurde gesperrt', 'bestätigen Sie Ihre Identität') targets German-speaking banking phishing victims."
+    },
+    {
+      "id": "japanese-urgency-phishing",
+      "group": "socialEngineering",
+      "description": "Japanese-language urgency text in phishing page — targets Japanese users",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:アカウント[がは](?:停止|制限|ロック|無効)|(?:本人)?確認[がをの](?:必要|お願い)|情報[をの](?:更新|確認)(?:してください|が必要))",
+      "patternFlags": "i",
+      "note": "Japanese-language account urgency text ('アカウントが停止', '本人確認が必要', '情報を更新してください') targets Japanese users with account suspension and verification lures."
+    },
+    {
+      "id": "korean-urgency-phishing",
+      "group": "socialEngineering",
+      "description": "Korean-language urgency text in phishing page — targets Korean users",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:계정[이가]\\s*(?:정지|차단|제한)|본인\\s*확인[이을]\\s*(?:해주세요|필요합니다)|(?:비밀번호|정보)[를을]\\s*(?:변경|확인|업데이트))",
+      "patternFlags": "i",
+      "note": "Korean-language account urgency text ('계정이 정지', '본인 확인을 해주세요') targets Korean users with account suspension and identity verification phishing."
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -6068,6 +6497,72 @@
       "patternString": "document\\.title\\s*=\\s*['\"][^'\"]*(?:Sign\\s*[Ii]n|Log\\s*[Ii]n|Account\\s*Verification)[\\s\\S]{0,50}(?:Microsoft|Google|Apple|PayPal|Netflix|Amazon|Facebook|Instagram)",
       "patternFlags": "i",
       "note": "Setting document.title dynamically to include both a login prompt and a major brand name is a phishing indicator. Legitimate login pages set their title server-side."
+    },
+    {
+      "id": "zoom-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Page title impersonating Zoom meeting or sign-in page",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<title>[^<]*(?:Zoom\\s+(?:Meeting|Sign\\s*In|Login|Video)|Join\\s+(?:a\\s+)?Zoom)[^<]*</title>",
+      "patternFlags": "i",
+      "note": "Zoom meeting join and login page title impersonation on non-Zoom domains. Zoom phishing is prevalent for business credential theft."
+    },
+    {
+      "id": "wetransfer-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Page title impersonating WeTransfer file download page",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<title>[^<]*WeTransfer[^<]*(?:Download|File|Transfer|Shared)[^<]*</title>",
+      "patternFlags": "i",
+      "note": "WeTransfer title impersonation is used in file-sharing phishing campaigns that trick users into entering credentials to 'download' shared files."
+    },
+    {
+      "id": "dhl-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Page title impersonating DHL tracking or delivery page",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<title>[^<]*DHL[^<]*(?:Track|Delivery|Ship|Parcel|Package|Express)[^<]*</title>",
+      "patternFlags": "i",
+      "note": "DHL tracking page impersonation is a top logistics phishing vector. Fake delivery notification pages harvest personal and payment information."
+    },
+    {
+      "id": "usps-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Page title impersonating USPS tracking or redelivery page",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<title>[^<]*(?:USPS|United\\s+States\\s+Postal)[^<]*(?:Track|Deliver|Redelivery|Package|Schedul)[^<]*</title>",
+      "patternFlags": "i",
+      "note": "USPS impersonation is one of the most common logistics phishing campaigns, especially targeting US users with fake redelivery fee pages."
+    },
+    {
+      "id": "fedex-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Page title impersonating FedEx tracking or delivery page",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<title>[^<]*FedEx[^<]*(?:Track|Delivery|Ship|Package|Express)[^<]*</title>",
+      "patternFlags": "i",
+      "note": "FedEx tracking page impersonation targets users with fake delivery notifications that harvest personal or payment information."
+    },
+    {
+      "id": "linkedin-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Page title impersonating LinkedIn login or notification page",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<title>[^<]*LinkedIn[^<]*(?:Sign\\s*In|Log\\s*In|Login|Message|Notification|Connect)[^<]*</title>",
+      "patternFlags": "i",
+      "note": "LinkedIn login impersonation targets business professionals. Credential theft from LinkedIn accounts enables BEC and social engineering attacks."
     },
     {
       "id": "ndax-auth-typosquat",
@@ -6424,12 +6919,78 @@
       "patternString": "venmo[^/]*(?:/signin/[a-zA-Z0-9]{8,})?/[^/]*(?:ven-log|venmo-log|v-log)\\.php",
       "patternFlags": "i",
       "note": "Specific to Venmo phishkits using PHP backends with characteristic naming conventions - legitimate Venmo never uses PHP endpoints"
+    },
+    {
+      "id": "base64-email-url-param",
+      "group": "urlHeuristics",
+      "description": "Base64-encoded email address detected in URL parameter within page links",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:href|action|src)=['\"][^'\"]*[?&](?:email|user|login|id|token)=[A-Za-z0-9+/]{20,}={0,2}['\"]",
+      "patternFlags": "i",
+      "note": "Base64-encoded values in URL parameters named email/user/login/id/token indicate personalized phishing where the victim's email is encoded in the URL for tracking or form pre-fill."
+    },
+    {
+      "id": "suspicious-tld-in-form-action",
+      "group": "urlHeuristics",
+      "description": "Form action URL pointing to a suspicious TLD domain — exfiltration to cheap/free domains",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<form[^>]*action=['\"]https?://[^'\"]+\\.(?:top|xyz|buzz|live|icu|tk|ml|ga|cf|gq|rest|cfd|sbs|click|link)[/'\"\\s>]",
+      "patternFlags": "i",
+      "note": "Form actions pointing to domains on suspicious TLDs (.top, .xyz, .buzz, .live, .icu, .tk, etc.) indicate credential exfiltration to cheap/free domain infrastructure. These TLDs are disproportionately used for phishing."
+    },
+    {
+      "id": "redirect-chain-suspicious-tld",
+      "group": "urlHeuristics",
+      "description": "JavaScript redirect to suspicious TLD — phishing redirect chain endpoint",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:window\\.location|location\\.href|location\\.replace)\\s*(?:=|\\()\\s*['\"]https?://[^'\"]+\\.(?:top|xyz|buzz|live|icu|rest|cfd|sbs|click)[/'\"\\s]",
+      "patternFlags": "i",
+      "note": "JavaScript redirects to suspicious TLDs indicate the page is part of a phishing redirect chain that bounces through multiple domains."
+    },
+    {
+      "id": "multiple-redirect-chain",
+      "group": "urlHeuristics",
+      "description": "Multiple sequential redirects in JavaScript — phishing redirect chain",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "location\\.(?:href|replace)\\s*(?:=|\\()[\\s\\S]{0,500}location\\.(?:href|replace)\\s*(?:=|\\()",
+      "patternFlags": "i",
+      "note": "Two or more redirect assignments in the same script indicate a redirect chain. Phishing kits bounce through multiple intermediary pages before landing on the final credential harvesting page."
+    },
+    {
+      "id": "url-shortener-in-redirect",
+      "group": "urlHeuristics",
+      "description": "URL shortener used in JavaScript redirect — obscured phishing destination",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:window\\.location|location\\.href|location\\.replace)\\s*(?:=|\\()\\s*['\"]https?://(?:bit\\.ly|tinyurl\\.com|t\\.co|rb\\.gy|is\\.gd|ow\\.ly|cutt\\.ly|shorturl\\.at|tiny\\.cc)/[^'\"]+['\"]",
+      "patternFlags": "i",
+      "note": "Redirecting through URL shorteners in JavaScript hides the final phishing destination from both users and URL-based detection. No legitimate login page redirects through shortener services."
+    },
+    {
+      "id": "duckdns-dynamic-domain",
+      "group": "urlHeuristics",
+      "description": "DuckDNS dynamic DNS domain in page links — free DNS commonly abused for phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "[a-z0-9-]+\\.duckdns\\.org",
+      "patternFlags": "i",
+      "note": "DuckDNS is a free dynamic DNS service heavily abused for phishing infrastructure. The .duckdns.org subdomain indicates attacker-controlled dynamic DNS infrastructure."
     }
   ],
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T16:56:36.929Z",
+      "compiledAt": "2026-04-01T17:01:37.099Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
