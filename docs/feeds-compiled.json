@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T16:56:40.125Z",
+    "compiledAt": "2026-04-01T17:01:38.727Z",
     "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 390,
+    "patternCount": 444,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2129,6 +2129,215 @@
       "note": "Hidden fields specifically named 'botcheck' or 'honeypot' are phishing kit bot detection mechanisms. If a bot fills these invisible fields, the kit discards the submission. Legitimate sites use standard CAPTCHA services."
     },
     {
+      "id": "dom-self-removal-script",
+      "group": "botEvasion",
+      "description": "Script element removes itself from DOM after execution — DOM vanishing technique used by Tycoon 2FA",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:parentNode|parentElement)\\.removeChild\\([\\s\\S]{0,100}(?:currentScript|script)",
+      "patternFlags": "i",
+      "note": "The DOM Vanishing Act technique has scripts remove themselves from the DOM after execution, leaving no trace for security tools that inspect the page's source post-render. This is a signature Tycoon 2FA technique."
+    },
+    {
+      "id": "selenium-webdriver-detect",
+      "group": "botEvasion",
+      "description": "Detection of Selenium, WebDriver, or Puppeteer automation frameworks",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:__selenium|__webdriver|_Selenium_IDE|callSelenium|_phantom|callPhantom|__nightmare|_puppeteer|__puppeteer)",
+      "patternFlags": "i",
+      "note": "Phishing kits check for Selenium/WebDriver/Puppeteer/PhantomJS/Nightmare automation framework globals to detect security scanners. If detected, the page redirects to a benign site. Multiple framework checks in one page is highly specific to anti-analysis code."
+    },
+    {
+      "id": "burp-suite-detect",
+      "group": "botEvasion",
+      "description": "Detection of Burp Suite penetration testing proxy — anti-analyst evasion",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:burp|portswigger|burpsuite|BurpSuite)",
+      "patternFlags": "i",
+      "note": "Checking for Burp Suite strings is a definitive anti-analyst behavior. No legitimate website checks for the presence of security testing tools. This is used by Tycoon 2FA and Whisper 2FA to detect researcher environments."
+    },
+    {
+      "id": "about-blank-redirect-evasion",
+      "group": "botEvasion",
+      "description": "Redirect to about:blank when security tool or sandbox is detected — Tycoon 2FA evasion",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:location\\.href|window\\.location|location\\.replace)\\s*(?:=|\\()\\s*['\"]about:blank['\"]",
+      "patternFlags": "i",
+      "note": "Redirecting to about:blank when a security tool is detected is a Tycoon 2FA signature behavior. When the kit detects debugger, Selenium, or Burp Suite, it sends the browser to a blank page to prevent analysis."
+    },
+    {
+      "id": "debugger-timing-detect",
+      "group": "botEvasion",
+      "description": "Timing-based debugger detection — measures execution delay to detect breakpoints",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:Date\\.now|performance\\.now|new\\s+Date)[\\s\\S]{0,100}debugger[\\s\\S]{0,200}(?:Date\\.now|performance\\.now|new\\s+Date)[\\s\\S]{0,200}(?:>\\s*(?:100|0\\.1|10)|redirect|location)",
+      "patternFlags": "i",
+      "note": "Tycoon 2FA measures time before and after a debugger statement. If the debugger pauses execution for more than 0.1 seconds, it assumes a researcher is present and redirects to google.com. This timing+debugger+redirect chain is definitive anti-analysis."
+    },
+    {
+      "id": "google-redirect-on-fail",
+      "group": "botEvasion",
+      "description": "Redirect to google.com or other major site when bot/sandbox check fails — phishing kit bailout",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "(?:location\\.href|window\\.location|location\\.replace)\\s*(?:=|\\()\\s*['\"]https?://(?:www\\.)?(?:google|bing|rakuten|tesla)\\.com/?['\"]",
+      "patternFlags": "i",
+      "note": "Redirecting to Google, Bing, Rakuten, or Tesla when anti-bot checks fail is a common phishing kit bailout. Tycoon 2FA redirects to google.com on debugger detection; other kits use Rakuten or Tesla. The redirect to a benign popular site hides the phishing from analysts."
+    },
+    {
+      "id": "copy-event-hijack",
+      "group": "botEvasion",
+      "description": "Copy event listener intercepting clipboard operations — prevents copying page content for analysis",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "addEventListener\\(['\"]copy['\"][\\s\\S]{0,200}(?:preventDefault|clipboardData|clipboard)",
+      "patternFlags": "i",
+      "note": "Intercepting the copy event prevents analysts from copying page content for investigation. Phishing kits block copy operations to prevent URL, text, or source code from being easily shared with security teams."
+    },
+    {
+      "id": "paste-event-hijack",
+      "group": "botEvasion",
+      "description": "Paste event listener intercepting paste operations — prevents password manager paste",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "addEventListener\\(['\"]paste['\"][\\s\\S]{0,200}preventDefault",
+      "patternFlags": "i",
+      "note": "Blocking paste operations prevents password managers from filling in credentials. Phishing kits do this because password managers often detect that the current domain doesn't match the saved credential's domain."
+    },
+    {
+      "id": "select-event-block",
+      "group": "botEvasion",
+      "description": "Text selection event blocked via selectstart listener — prevents content analysis",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "addEventListener\\(['\"]selectstart['\"][\\s\\S]{0,100}preventDefault",
+      "patternFlags": "i",
+      "note": "Blocking text selection via the selectstart event prevents analysts from selecting and copying text content. Combined with copy blocking and right-click disabling, this creates a full anti-analysis lock on page content."
+    },
+    {
+      "id": "visibility-change-wipe",
+      "group": "botEvasion",
+      "description": "Page content hidden or wiped when tab loses focus — anti-tab-switching analysis technique",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "addEventListener\\(['\"]visibilitychange['\"][\\s\\S]{0,300}(?:document\\.hidden|visibilityState)[\\s\\S]{0,200}(?:innerHTML|display|visibility|opacity|remove)",
+      "patternFlags": "i",
+      "note": "Detecting tab visibility changes and hiding/wiping content when the user switches tabs prevents screenshot tools and analysis in other tabs from capturing the phishing page. This is advanced anti-forensics."
+    },
+    {
+      "id": "print-css-hide-content",
+      "group": "botEvasion",
+      "description": "Print stylesheet hides page content — prevents printing phishing page for evidence",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "@media\\s+print\\s*\\{[^}]*(?:display:\\s*none|visibility:\\s*hidden)[^}]*\\}",
+      "patternFlags": "i",
+      "note": "Print-specific CSS that hides all content prevents users and analysts from printing the phishing page as evidence. Legitimate sites don't hide their entire content when printing."
+    },
+    {
+      "id": "drag-drop-disable",
+      "group": "botEvasion",
+      "description": "Drag and drop events disabled across page — prevents content extraction via dragging",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "js",
+      "patternString": "addEventListener\\(['\"](?:dragstart|drag|drop)['\"][\\s\\S]{0,100}preventDefault",
+      "patternFlags": "i",
+      "note": "Disabling drag/drop prevents analysts from dragging page content into other applications for analysis. This is a supporting anti-analysis signal that stacks with copy/paste/select blocking."
+    },
+    {
+      "id": "window-blur-redirect",
+      "group": "botEvasion",
+      "description": "Page redirects or hides when window loses focus — anti-analysis tab-switching detection",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "addEventListener\\(['\"]blur['\"][\\s\\S]{0,200}(?:window\\.location|location\\.href|document\\.body\\.innerHTML)",
+      "patternFlags": "i",
+      "note": "Detecting window blur (losing focus) and redirecting or wiping content is an anti-analysis technique. When an analyst switches to another window to take notes or use tools, the phishing page destroys itself."
+    },
+    {
+      "id": "console-clear-antidebug",
+      "group": "botEvasion",
+      "description": "Console repeatedly cleared to hide debugging output — anti-analysis technique",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "(?:setInterval|setTimeout)\\([\\s\\S]{0,100}console\\.clear\\(",
+      "patternFlags": "i",
+      "note": "Repeatedly clearing the console via setInterval prevents analysts from seeing debug output, network errors, or console warnings that might reveal the phishing kit's behavior."
+    },
+    {
+      "id": "mutation-observer-dom-watch",
+      "group": "botEvasion",
+      "description": "MutationObserver watching for DOM changes by security tools — anti-tampering defense",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "MutationObserver\\([\\s\\S]{0,300}(?:childList|subtree)[\\s\\S]{0,300}(?:removedNodes|addedNodes)[\\s\\S]{0,200}(?:remove|location|redirect)",
+      "patternFlags": "i",
+      "note": "Using MutationObserver to detect DOM modifications and self-destruct or redirect is an anti-tampering technique. If a security tool injects elements into the page, the observer detects it and triggers evasion."
+    },
+    {
+      "id": "errorimage-devtools-detect",
+      "group": "botEvasion",
+      "description": "Image error handler used to detect DevTools open state — covert debugging detection",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "new\\s+Image\\(\\)[\\s\\S]{0,100}Object\\.defineProperty\\([\\s\\S]{0,200}(?:id|toString|get)[\\s\\S]{0,200}(?:devtools|debugger|redirect|location)",
+      "patternFlags": "i",
+      "note": "Creating an Image object and overriding its id/toString property with Object.defineProperty to detect DevTools is a known Whisper 2FA technique. When DevTools tries to display the object, the getter fires and detects the open console."
+    },
+    {
+      "id": "outerwidth-devtools-detect",
+      "group": "botEvasion",
+      "description": "Window size comparison used to detect DevTools panel — outerWidth vs innerWidth check",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "(?:outerWidth|outerHeight)\\s*-\\s*(?:innerWidth|innerHeight)\\s*>\\s*\\d{2,}",
+      "patternFlags": "i",
+      "note": "Comparing outerWidth/outerHeight to innerWidth/innerHeight detects whether DevTools is docked to the side or bottom of the browser window (the difference exceeds a threshold). This is a stealthier alternative to debugger-based detection."
+    },
+    {
+      "id": "performance-entries-detect",
+      "group": "botEvasion",
+      "description": "Performance API entries checked for debugging or sandboxed environment markers",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "performance\\.getEntries\\(\\)[\\s\\S]{0,300}(?:length|name|duration)[\\s\\S]{0,200}(?:redirect|location|about:blank)",
+      "patternFlags": "i",
+      "note": "Analyzing performance entries to detect sandboxed or instrumented environments is an advanced anti-analysis technique. Automated tools often leave distinctive performance entry patterns."
+    },
+    {
+      "id": "webrtc-leak-fingerprint",
+      "group": "botEvasion",
+      "description": "WebRTC used to discover victim's real IP address — sandbox/VPN detection fingerprint",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "RTCPeerConnection\\([\\s\\S]{0,200}createDataChannel[\\s\\S]{0,200}createOffer",
+      "patternFlags": "i",
+      "note": "Using WebRTC to discover the victim's real IP address (bypassing VPN/proxy) is a fingerprinting technique used by phishing kits to detect security researchers who browse via VPN or corporate proxy."
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -2820,6 +3029,28 @@
       "note": "The Clearbit Logo API lets phishing kits dynamically load any company's logo based on the victim's email domain, enabling mass personalization. Legitimate login pages use their own static assets, not third-party logo APIs."
     },
     {
+      "id": "aadcdn-logo-dynamic-load",
+      "group": "brandImpersonation",
+      "description": "Azure AD CDN used to dynamically load branding based on victim email domain — personalized phishing",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "both",
+      "patternString": "aadcdn\\.msauth\\.net[\\s\\S]{0,500}(?:background|logo|banner|branding)",
+      "patternFlags": "i",
+      "note": "Tycoon 2FA and other Microsoft-targeting kits dynamically load logos and backgrounds from Microsoft's AADCDN based on the victim's email domain. This makes the phishing page match the victim's organization's real login branding. The AADCDN + branding/logo combination on a non-Microsoft domain is highly suspicious."
+    },
+    {
+      "id": "css-var-brand-color-impersonation",
+      "group": "brandImpersonation",
+      "description": "CSS custom properties set to exact brand colors of major companies — pixel-perfect impersonation",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "--(?:brand|primary|accent|theme)-color\\s*:\\s*#(?:0078d4|1877f2|ea4335|ff9900|00a1f1|0067b8|171515|5865f2)",
+      "patternFlags": "i",
+      "note": "CSS custom properties using exact hex values for Microsoft (#0078d4), Facebook (#1877f2), Google (#ea4335), Amazon (#ff9900), etc. indicate brand color impersonation. Low weight because legitimate brand-themed sites exist, but stacks as a supporting signal."
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -2901,6 +3132,17 @@
       "patternString": "google\\.com/recaptcha/api\\.js\\?[^'\"]*render=",
       "patternFlags": "i",
       "note": "reCAPTCHA with render parameter indicates invisible reCAPTCHA which auto-verifies. Used by phishing kits as a lightweight bot filter. Very low weight because this is also extremely common on legitimate sites."
+    },
+    {
+      "id": "canvas-captcha-render",
+      "group": "captchaGating",
+      "description": "Custom CAPTCHA rendered via HTML5 canvas element — custom anti-bot gate replacing third-party CAPTCHAs",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:canvas|getContext\\(['\"]2d['\"]\\))[\\s\\S]{0,500}(?:fillText|strokeText)[\\s\\S]{0,300}(?:captcha|verify|check|challenge)",
+      "patternFlags": "i",
+      "note": "Tycoon 2FA and similar kits have shifted from Cloudflare Turnstile to custom canvas-rendered CAPTCHAs to avoid fingerprinting. Drawing randomized text on canvas with noise/distortion for CAPTCHA verification is a phishing kit signature."
     },
     {
       "id": "cookie-gate-reload-phishkit",
@@ -3378,6 +3620,116 @@
       "note": "The trio of card number + expiry + CVV fields appearing together indicates a financial data harvesting form. Moderate weight because legitimate e-commerce sites have similar forms, but this stacks with other signals."
     },
     {
+      "id": "postmessage-cross-origin-exfil",
+      "group": "credentialHarvesting",
+      "description": "postMessage used for cross-origin credential exfiltration between phishing frames",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "postMessage\\([\\s\\S]{0,300}(?:password|passwd|pwd|credential|token|session)[\\s\\S]{0,200}(?:origin|targetOrigin|\\*)",
+      "patternFlags": "i",
+      "note": "Using postMessage to send credential data between frames or windows is an AiTM phishing exfiltration technique. The phishing page communicates stolen credentials to a parent/child frame on the attacker's domain."
+    },
+    {
+      "id": "websocket-credential-stream",
+      "group": "credentialHarvesting",
+      "description": "WebSocket connection used for real-time credential streaming to attacker server",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "new\\s+WebSocket\\([\\s\\S]{0,300}(?:\\.send|onmessage)[\\s\\S]{0,500}(?:password|passwd|pwd|credential|token|otp|mfa)",
+      "patternFlags": "i",
+      "note": "WebSocket connections for real-time credential streaming are used by AiTM phishing kits that need to relay credentials and MFA tokens to the attacker's server instantly. Legitimate login pages don't send passwords over WebSockets."
+    },
+    {
+      "id": "fetch-api-non-origin-exfil",
+      "group": "credentialHarvesting",
+      "description": "Fetch API call to absolute URL with credentials in body — cross-origin exfiltration",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "fetch\\(['\"]https?://[^'\"]{10,}['\"][\\s\\S]{0,300}(?:password|passwd|pwd)\\.value",
+      "patternFlags": "i",
+      "note": "A fetch() call to an absolute external URL that includes password field values in the request body is cross-origin credential exfiltration. Legitimate login pages fetch to relative URLs on their own domain."
+    },
+    {
+      "id": "indexeddb-credential-staging",
+      "group": "credentialHarvesting",
+      "description": "IndexedDB used to persist credentials between phishing page stages",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:indexedDB\\.open|objectStore)[\\s\\S]{0,500}(?:password|passwd|pwd|credential|email|username)",
+      "patternFlags": "i",
+      "note": "Using IndexedDB to persist credential data between phishing page stages is a more sophisticated alternative to localStorage. Multi-step phishing flows store email from step 1 to use in step 2."
+    },
+    {
+      "id": "sessionstorage-cred-persist",
+      "group": "credentialHarvesting",
+      "description": "Credentials stored in sessionStorage for multi-step phishing flow",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "sessionStorage\\.setItem\\([\\s\\S]{0,100}(?:password|passwd|pwd|credential|email|username)",
+      "patternFlags": "i",
+      "note": "SessionStorage is used by multi-step phishing kits to persist credential data within a browser session. Unlike localStorage, sessionStorage clears when the tab closes, leaving less forensic evidence."
+    },
+    {
+      "id": "double-submit-prevention",
+      "group": "credentialHarvesting",
+      "description": "Submit button disabled after first click with credential extraction — single-capture phishing",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "\\.disabled\\s*=\\s*true[\\s\\S]{0,300}(?:getElementById|querySelector)[\\s\\S]{0,200}(?:password|passwd|pwd)",
+      "patternFlags": "i",
+      "note": "Disabling the submit button immediately after credential capture prevents the victim from resubmitting or testing different credentials. The phishing kit captures once then redirects."
+    },
+    {
+      "id": "js-redirect-after-submit",
+      "group": "credentialHarvesting",
+      "description": "JavaScript redirect triggered after form submission handler — post-harvest navigation",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:addEventListener|onsubmit)[\\s\\S]{0,100}(?:submit|click)[\\s\\S]{0,500}setTimeout\\([\\s\\S]{0,200}(?:window\\.location|location\\.href|location\\.replace)",
+      "patternFlags": "i",
+      "note": "A form submit handler that triggers a delayed redirect via setTimeout is the standard phishkit flow: capture credentials, show a brief loading state, then redirect to the real brand site."
+    },
+    {
+      "id": "crypto-wallet-seed-capture",
+      "group": "credentialHarvesting",
+      "description": "Seed phrase or recovery phrase input fields — cryptocurrency wallet theft",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:seed\\s*phrase|recovery\\s*phrase|mnemonic|secret\\s*phrase|backup\\s*phrase)[\\s\\S]{0,500}<(?:input|textarea)",
+      "patternFlags": "i",
+      "note": "Input fields labeled for seed/recovery/mnemonic phrases are cryptocurrency wallet theft forms. No legitimate service asks users to enter their full seed phrase into a web form."
+    },
+    {
+      "id": "private-key-input-capture",
+      "group": "credentialHarvesting",
+      "description": "Private key input field — cryptocurrency or authentication key theft",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:private\\s*key|secret\\s*key|wallet\\s*key)[\\s\\S]{0,300}<(?:input|textarea)[^>]*(?:type=['\"](?:text|password)['\"])?",
+      "patternFlags": "i",
+      "note": "Input fields for private keys are definitive crypto theft indicators. No legitimate wallet service asks users to paste their private key into a web form."
+    },
+    {
+      "id": "input-event-realtime-capture",
+      "group": "credentialHarvesting",
+      "description": "Input event listener on password field capturing keystrokes in real-time",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "addEventListener\\(['\"]input['\"][\\s\\S]{0,200}(?:password|passwd|pwd)[\\s\\S]{0,300}(?:fetch\\(|XMLHttpRequest|sendBeacon|postMessage)",
+      "patternFlags": "i",
+      "note": "Attaching an input event listener to password fields that immediately sends each keystroke to an external endpoint is real-time credential streaming. This is more aggressive than form submission interception."
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -3631,6 +3983,94 @@
       "patternString": "\\.split\\(['\"]['\"]\\)\\.reverse\\(\\)\\.join\\(['\"]['\"]\\)",
       "patternFlags": "i",
       "note": "Splitting a string into characters, reversing, and joining is a basic phishkit obfuscation technique. Strings like 'moc.elgoog' become 'google.com' after this operation. Simple but still widely used."
+    },
+    {
+      "id": "lz-string-decompress-payload",
+      "group": "obfuscation",
+      "description": "LZ-string library used to decompress obfuscated JavaScript payload — Tycoon 2FA signature technique",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "LZString\\.decompress(?:FromUTF16|FromBase64|FromEncodedURIComponent)?\\s*\\(",
+      "patternFlags": "i",
+      "note": "LZ-string compression is the payload delivery mechanism used by Tycoon 2FA phishing kit. The initial page includes a base64 payload compressed with LZ-string, which is decompressed at runtime to reveal the phishing page. Legitimate sites rarely use LZ-string for page rendering."
+    },
+    {
+      "id": "invisible-unicode-obfuscation",
+      "group": "obfuscation",
+      "description": "Invisible Unicode characters (Hangul fillers) used for JavaScript obfuscation — Tycoon 2FA evasion technique",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "[\\u3164\\uFFA0]{8,}",
+      "patternFlags": "",
+      "note": "Tycoon 2FA uses Hangul Filler (U+3164) and Halfwidth Hangul Filler (U+FFA0) characters to encode binary data invisibly. Eight or more consecutive invisible Unicode characters in JavaScript is a definitive obfuscation signal. No legitimate code uses these characters."
+    },
+    {
+      "id": "dynamic-iframe-phish-load",
+      "group": "obfuscation",
+      "description": "Iframe dynamically created and injected to load phishing content from external source — GhostFrame technique",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "createElement\\(['\"]iframe['\"]\\)[\\s\\S]{0,300}\\.src\\s*=\\s*[\\s\\S]{0,100}(?:https?://|atob|decodeURI)",
+      "patternFlags": "i",
+      "note": "Dynamically creating an iframe and setting its src to an external URL (or decoded URL) is the GhostFrame phishing technique. The outer HTML appears harmless while the iframe loads the actual phishing content."
+    },
+    {
+      "id": "proxy-js-variable-obfuscation",
+      "group": "obfuscation",
+      "description": "JavaScript Proxy objects used for property access obfuscation — advanced evasion technique",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "new\\s+Proxy\\([\\s\\S]{0,200}(?:get|apply|handler)\\s*:[\\s\\S]{0,300}(?:atob|fromCharCode|charCodeAt)",
+      "patternFlags": "i",
+      "note": "JavaScript Proxy objects combined with decoding functions create a dynamic property access layer that hides the actual code being executed. Tycoon 2FA uses this with invisible Unicode characters for multi-layer obfuscation."
+    },
+    {
+      "id": "source-mapping-url-decoy",
+      "group": "obfuscation",
+      "description": "Fake or empty sourceMappingURL used to confuse debuggers",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "js",
+      "patternString": "//[#@]\\s*sourceMappingURL=data:application/json;base64,",
+      "patternFlags": "i",
+      "note": "Embedding a fake or malformed sourceMappingURL confuses browser DevTools by pointing to non-existent or garbage source maps. This is a minor evasion technique that makes debugging more difficult."
+    },
+    {
+      "id": "recursive-settimeout-obfuscation",
+      "group": "obfuscation",
+      "description": "Recursive setTimeout chain used to delay and stage payload execution",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "setTimeout\\([\\s\\S]{0,100}setTimeout\\([\\s\\S]{0,100}setTimeout\\(",
+      "patternFlags": "i",
+      "note": "Three or more nested setTimeout calls create a delayed execution chain that stages payload delivery over time. This evades scanners that only analyze the initial page state and miss delayed content injection."
+    },
+    {
+      "id": "html-entity-encoded-brand",
+      "group": "obfuscation",
+      "description": "Brand names encoded as HTML entities to evade text-based detection — obfuscation technique",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "&#(?:77|109);&#(?:105|73);&#(?:99|67);&#(?:114|82);&#(?:111|79);&#(?:115|83);&#(?:111|79);&#(?:102|70);&#(?:116|84);",
+      "patternFlags": "i",
+      "note": "Encoding 'Microsoft' as HTML entity sequences (&#77;&#105;&#99;&#114;&#111;&#115;&#111;&#102;&#116;) evades text-based brand detection. The browser renders it as 'Microsoft' but string matching on the source fails."
+    },
+    {
+      "id": "csp-meta-disable",
+      "group": "obfuscation",
+      "description": "Content Security Policy meta tag with permissive values to enable inline scripts",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "<meta\\s+http-equiv=['\"]Content-Security-Policy['\"][^>]*content=['\"][^'\"]*unsafe-inline[^'\"]*unsafe-eval",
+      "patternFlags": "i",
+      "note": "A CSP meta tag explicitly allowing both unsafe-inline and unsafe-eval is common on phishing pages that need to execute inline obfuscated JavaScript. Legitimate sites typically restrict these capabilities."
     },
     {
       "id": "base64-html-password-obfuscation",
@@ -5138,6 +5578,127 @@
       "note": "Extracting a phone number field value and sending it to an external endpoint is phishkit data harvesting for voice phishing (vishing) follow-up attacks."
     },
     {
+      "id": "clipboard-overwrite-attack",
+      "group": "phishkitSignatures",
+      "description": "Clipboard content silently overwritten with attacker-controlled data — credential/command injection",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "navigator\\.clipboard\\.writeText\\([\\s\\S]{0,200}(?:atob|decodeURI|unescape|fromCharCode)",
+      "patternFlags": "i",
+      "note": "Silently writing decoded/deobfuscated content to the clipboard via navigator.clipboard.writeText is used in ClickFix and credential-swapping attacks. The combination of clipboard write with decoding functions indicates the written content is intentionally hidden."
+    },
+    {
+      "id": "service-worker-registration-phish",
+      "group": "phishkitSignatures",
+      "description": "Service worker registration on phishing page — persistence and offline caching technique",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "navigator\\.serviceWorker\\.register\\([\\s\\S]{0,200}(?:\\.js|\\.php|sw\\.js|worker\\.js)",
+      "patternFlags": "i",
+      "note": "Registering a service worker on a phishing page enables caching of the phishing content for offline access and persistence. This is an advanced technique that keeps the phishing page available even if the domain is taken down."
+    },
+    {
+      "id": "cache-busting-hash-filename",
+      "group": "phishkitSignatures",
+      "description": "JavaScript file loaded with cache-busting hash in filename — BlackForce kit signature",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<script[^>]*src=['\"][^'\"]*index-[a-f0-9]{8,}[\\._-]?[a-f0-9]*\\.js['\"]",
+      "patternFlags": "i",
+      "note": "JavaScript files with cache-busting hashes in filenames like index-a1b2c3d4.js are characteristic of BlackForce phishing kit. The hashes force browsers to load fresh copies, bypassing cached security analysis."
+    },
+    {
+      "id": "formsubmit-co-exfil-endpoint",
+      "group": "phishkitSignatures",
+      "description": "FormSubmit.co service used as credential exfiltration endpoint",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "both",
+      "patternString": "formsubmit\\.co\\/[a-f0-9]{24,}|formsubmit\\.co\\/ajax\\/",
+      "patternFlags": "i",
+      "note": "FormSubmit.co is a form-to-email service heavily abused by phishing kits for credential exfiltration. The 24+ character hex ID in the URL identifies the attacker's submission endpoint. Legitimate sites rarely use FormSubmit.co for login forms."
+    },
+    {
+      "id": "getform-io-exfil-endpoint",
+      "group": "phishkitSignatures",
+      "description": "Getform.io service used as credential exfiltration endpoint",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "both",
+      "patternString": "getform\\.io\\/f\\/[a-f0-9-]{20,}",
+      "patternFlags": "i",
+      "note": "Getform.io is another form backend service abused by phishing kits. The long hex ID in the URL is the attacker's endpoint. Like FormSubmit.co, this is a fire-and-forget credential exfiltration method."
+    },
+    {
+      "id": "web3forms-exfil-endpoint",
+      "group": "phishkitSignatures",
+      "description": "Web3Forms service used as credential exfiltration endpoint",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "both",
+      "patternString": "api\\.web3forms\\.com\\/submit",
+      "patternFlags": "i",
+      "note": "Web3Forms is a form submission API abused for credential exfiltration. The api.web3forms.com/submit endpoint receives form data without requiring server-side code, making it popular with phishing kits."
+    },
+    {
+      "id": "fabform-exfil-endpoint",
+      "group": "phishkitSignatures",
+      "description": "Fabform.io service used as credential exfiltration endpoint",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "both",
+      "patternString": "fabform\\.io\\/f\\/[A-Za-z0-9_-]{10,}",
+      "patternFlags": "i",
+      "note": "Fabform.io is a form backend service that is abused by phishing kits as an exfiltration endpoint. No server-side code needed — the kit submits credentials directly to the service."
+    },
+    {
+      "id": "beacon-api-tracking-pixel",
+      "group": "phishkitSignatures",
+      "description": "Beacon API used to track page load events to attacker endpoint — phishing campaign telemetry",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "navigator\\.sendBeacon\\(['\"]https?://[^'\"]+['\"]\\s*,\\s*JSON\\.stringify",
+      "patternFlags": "i",
+      "note": "Using sendBeacon to POST JSON data to an external endpoint is a phishing kit telemetry pattern. The kit tracks page loads, user interactions, and campaign metrics via fire-and-forget beacon calls."
+    },
+    {
+      "id": "window-name-data-channel",
+      "group": "phishkitSignatures",
+      "description": "Window.name used as covert data channel between pages — phishing redirect data passing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "window\\.name\\s*=\\s*(?:btoa|JSON\\.stringify|encodeURI)\\([\\s\\S]{0,200}(?:password|email|token|credential)",
+      "patternFlags": "i",
+      "note": "Setting window.name with encoded credential data is a covert data-passing technique. window.name persists across page navigations, so phishing kits use it to transfer stolen data between domains without URL parameters."
+    },
+    {
+      "id": "xhr-polling-c2-check",
+      "group": "phishkitSignatures",
+      "description": "XMLHttpRequest polling at regular intervals — phishing kit command-and-control communication",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "setInterval\\([\\s\\S]{0,200}XMLHttpRequest\\([\\s\\S]{0,200}\\.open\\(['\"](?:GET|POST)['\"]",
+      "patternFlags": "i",
+      "note": "Periodic XHR polling via setInterval is used by phishing kits that communicate with a C2 server to receive instructions (e.g., 'show MFA prompt now' or 'redirect to brand site'). This is characteristic of real-time AiTM phishing flows."
+    },
+    {
+      "id": "fetch-polling-c2-check",
+      "group": "phishkitSignatures",
+      "description": "Fetch API polling at regular intervals — phishing kit C2 communication pattern",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "setInterval\\([\\s\\S]{0,200}fetch\\(['\"]https?://[^'\"]+['\"][\\s\\S]{0,200}(?:json\\(\\)|text\\(\\)|response)",
+      "patternFlags": "i",
+      "note": "Regular fetch polling to an external URL is the modern equivalent of XHR polling for C2 communication. AiTM phishing kits poll the attacker server to synchronize the multi-step authentication flow."
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -5322,6 +5883,39 @@
       "patternString": "(?:setInterval|setTimeout)[\\s\\S]{0,300}(?:countdown|timer|remaining|expires?|minutes?\\s*:|seconds?\\s*:)[\\s\\S]{0,500}(?:getElementById|querySelector)\\([\\s\\S]{0,50}(?:count|time|clock)",
       "patternFlags": "i",
       "note": "Countdown timers on credential capture pages create artificial urgency ('Your session expires in 5:00'). This social engineering technique pressures victims into entering credentials quickly without scrutinizing the page."
+    },
+    {
+      "id": "error-page-brand-phish",
+      "group": "socialEngineering",
+      "description": "Fake error message combined with brand login prompt — error-based social engineering",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:error|problem|issue|trouble)[\\s\\S]{0,200}(?:sign\\s*in|log\\s*in|verify|authenticate)[\\s\\S]{0,300}(?:microsoft|google|apple|outlook|office\\s*365|onedrive|sharepoint)",
+      "patternFlags": "i",
+      "note": "Fake error messages paired with login prompts and brand names create urgency ('There was a problem with your Microsoft account. Please sign in to verify.'). This social engineering pattern is used across many phishing campaigns."
+    },
+    {
+      "id": "shared-document-lure",
+      "group": "socialEngineering",
+      "description": "Shared document or file notification lure text in page source",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:shared\\s+(?:a\\s+)?(?:document|file|folder|spreadsheet|presentation)|has\\s+shared|document\\s+shared)[\\s\\S]{0,300}(?:sign\\s*in|log\\s*in|view|access|open)[\\s\\S]{0,200}(?:microsoft|google|dropbox|onedrive|sharepoint)",
+      "patternFlags": "i",
+      "note": "Shared document lure text ('Someone has shared a document with you. Sign in to view.') is the #1 phishing email-to-page conversion technique for business email compromise. This text on a login page is a strong phishing indicator."
+    },
+    {
+      "id": "voicemail-notification-lure",
+      "group": "socialEngineering",
+      "description": "Voicemail notification lure text combined with login prompt — voicemail phishing campaign",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:voicemail|voice\\s*message|missed\\s*call|audio\\s*message)[\\s\\S]{0,300}(?:sign\\s*in|log\\s*in|listen|play|access)[\\s\\S]{0,200}(?:password|credential|authenticate)",
+      "patternFlags": "i",
+      "note": "Voicemail notification lures ('You have a new voicemail. Sign in to listen.') are a prevalent phishing technique targeting business users. The combination of voicemail text with login prompts is highly specific to phishing."
     },
     {
       "id": "numeric-domain-pattern",
@@ -5835,7 +6429,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T15:59:15.548Z",
+      "compiledAt": "2026-04-01T16:56:36.929Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
