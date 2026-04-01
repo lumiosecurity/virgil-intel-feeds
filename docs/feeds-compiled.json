@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T20:55:58.194Z",
+    "compiledAt": "2026-04-01T21:00:48.405Z",
     "brandCount": 187,
     "signalCount": 1,
-    "patternCount": 918,
+    "patternCount": 930,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -4746,6 +4746,17 @@
       "note": "Any US toll system brand name (EZPass, SunPass, FasTrak, I-Pass, TxTag, PeachPass, ExpressToll, NTTA, EZDrive, Good To Go, RiverLink, PikePass) on a page with credit card input fields is toll service impersonation."
     },
     {
+      "id": "social-icons-no-links",
+      "group": "brandImpersonation",
+      "description": "Social media icons rendered without actual social media URLs — decorative-only social proof",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "(?:facebook|instagram|twitter|youtube|linkedin|tiktok)\\s+icon[\\s\\S]{0,200}(?:facebook|instagram|twitter|youtube|linkedin|tiktok)\\s+icon",
+      "patternFlags": "i",
+      "note": "Social media icon elements (CSS class names like 'facebook icon', 'twitter icon') rendered without actual href links to social media profiles are decorative brand impersonation. Phishing kits clone the social icons from footers but don't link them to real profiles."
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -6666,6 +6677,50 @@
       "patternString": "(?:graph\\.microsoft\\.com|Microsoft\\s*Graph|Microsoft\\s*365)[\\s\\S]{0,500}(?:Mail\\.Read|Mail\\.Send|Contacts\\.Read|Files\\.ReadWrite|User\\.Read\\.All)[\\s\\S]{0,300}(?:consent|allow|accept|authorize)",
       "patternFlags": "i",
       "note": "Microsoft Graph API permission scope names (Mail.Read, Mail.Send, etc.) in a consent page are definitive consent phishing indicators."
+    },
+    {
+      "id": "phishing-typo-submit-button",
+      "group": "credentialHarvesting",
+      "description": "Common phishing kit typos in HTML — misspelled submit buttons and form labels",
+      "severity": "medium",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "(?:type=['\"]sumbit['\"]|type=['\"]sbumit['\"]|type=['\"]submt['\"]|>Sing\\s*[Ii]n<|>Log\\s*[Oo]n<|>Singin<|>Sigin<|>Submitt<)",
+      "patternFlags": "i",
+      "note": "Common typos in phishing kits: 'sumbit' instead of 'submit', 'Sing In' instead of 'Sign In', 'Singin' instead of 'Sign in'. Legitimate production sites never have typos in their submit buttons. These typos persist because phishers clone pages hastily and don't QA."
+    },
+    {
+      "id": "password-show-hide-toggle-phish",
+      "group": "credentialHarvesting",
+      "description": "Password show/hide toggle with type change from password to text — credential field inspection feature",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "js",
+      "patternString": "(?:getElementById|querySelector)\\([\\s\\S]{0,50}(?:password|pass|pwd)[\\s\\S]{0,200}\\.type\\s*(?:==|===)\\s*['\"]password['\"][\\s\\S]{0,200}\\.type\\s*=\\s*['\"]text['\"]",
+      "patternFlags": "i",
+      "note": "Password show/hide toggle JavaScript that switches input type between 'password' and 'text' is a common feature cloned from legitimate login pages. While not malicious alone, its presence on a page with other phishing indicators confirms a cloned login page."
+    },
+    {
+      "id": "form-post-php-no-path",
+      "group": "credentialHarvesting",
+      "description": "Form action to bare PHP filename without path — local phishing kit credential collector",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<form[^>]*action=['\"](?:post|login|submit|process|save|send|check|verify|auth|validate|data|go|next|result|handler|action|gate|panel|recv|log)\\.php['\"]",
+      "patternFlags": "i",
+      "note": "A form posting to a bare PHP filename (post.php, login.php, submit.php, process.php) without any path indicates a locally-hosted phishing kit. The PHP file names are generic credential collectors. Legitimate services use API endpoints, not bare PHP filenames."
+    },
+    {
+      "id": "remember-me-checkbox-phish",
+      "group": "credentialHarvesting",
+      "description": "Remember me checkbox on phishing page — cloned UX element that serves no backend function",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "<input[^>]*type=['\"]checkbox['\"][^>]*>[\\s\\S]{0,50}(?:Remember\\s*me|Keep\\s*me\\s*(?:signed|logged)\\s*in|Stay\\s*signed\\s*in)[\\s\\S]{0,1000}(?:action=['\"][^'\"]*\\.php|api\\.telegram|discord|webhook)",
+      "patternFlags": "i",
+      "note": "A 'Remember me' checkbox on a page that posts to a PHP file or sends to Telegram/Discord is a cloned UX element. The checkbox has no backend function on a phishing page — it's visual theater to make the form look legitimate."
     },
     {
       "id": "suspicious-subdomain-financial",
@@ -11057,6 +11112,61 @@
       "note": "Dynamic QR code generation containing credential page URLs. 12% of all phishing attacks now contain QR codes."
     },
     {
+      "id": "telegram-script-src-tracking",
+      "group": "phishkitSignatures",
+      "description": "Telegram bot API loaded as script src — GET-based visitor tracking pixel firing on every page load",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "html",
+      "patternString": "<script[^>]*src=['\"]https?://api\\.telegram\\.org/bot[^'\"]+/send(?:Message|Photo|Document)",
+      "patternFlags": "i",
+      "note": "Loading api.telegram.org/bot.../sendMessage as a <script src> tag fires a GET request on every page load, acting as a visitor tracking pixel. Every visitor's IP and browser info is sent to the attacker's Telegram before they even interact with the page. This is a novel exfil method not covered by our fetch/XHR-based Telegram patterns."
+    },
+    {
+      "id": "telegram-multiple-bot-tokens",
+      "group": "phishkitSignatures",
+      "description": "Multiple different Telegram bot tokens on same page — dual-purpose tracking and exfiltration",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "both",
+      "patternString": "\\d{8,10}:[A-Za-z0-9_-]{35}[\\s\\S]{50,}\\d{8,10}:[A-Za-z0-9_-]{35}",
+      "patternFlags": "",
+      "note": "Two different Telegram bot tokens on the same page indicates dual-purpose operation: one token for visitor tracking (fires on page load) and another for credential exfiltration (fires on form submit). This dual-token pattern is common in phishing kits that separate reconnaissance from harvesting."
+    },
+    {
+      "id": "inline-token-variable-exposed",
+      "group": "phishkitSignatures",
+      "description": "API token or bot token stored in inline JavaScript variable — exposed credential in page source",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:var|let|const)\\s+(?:token|bot_token|botToken|api_token|apiToken|tg_token|tgToken|webhook_url|webhookUrl)\\s*=\\s*['\"][^'\"]{20,}['\"]",
+      "patternFlags": "",
+      "note": "An API/bot token stored in a plaintext JavaScript variable (var token='...', let botToken='...') exposes the exfiltration credential in page source. Legitimate applications never expose API tokens in client-side code. The variable name + long string value is a phishing kit signature."
+    },
+    {
+      "id": "relative-path-kit-structure",
+      "group": "phishkitSignatures",
+      "description": "Phishing kit directory structure — relative paths to res/, assets/, img/, css/ with brand resources",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "(?:src|href)=['\"](?:\\./)?res/(?:css|js|img|images|fonts)/[^'\"]+['\"][\\s\\S]{0,2000}(?:src|href)=['\"](?:\\./)?res/(?:css|js|img|images|fonts)/",
+      "patternFlags": "i",
+      "note": "Multiple resources loaded from a res/ subdirectory (res/css/, res/js/, res/img/) indicates a self-contained phishing kit with a cloned directory structure. Legitimate sites load resources from CDNs or absolute URLs, not relative res/ paths."
+    },
+    {
+      "id": "telegram-sendmessage-url-params",
+      "group": "phishkitSignatures",
+      "description": "Telegram sendMessage with data in URL query parameters — GET-based exfiltration via URL encoding",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "both",
+      "patternString": "api\\.telegram\\.org/bot[\\w:]+/sendMessage\\?chat_id=\\d+&text=",
+      "patternFlags": "i",
+      "note": "Telegram sendMessage called via GET with chat_id and text in URL query parameters is the simplest possible Telegram exfiltration — no fetch/XHR needed, just a URL load. Data is passed as URL-encoded text parameter. This fires as a script src, image src, or iframe src."
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -12253,6 +12363,17 @@
       "note": "LinkedIn login impersonation targets business professionals. Credential theft from LinkedIn accounts enables BEC and social engineering attacks."
     },
     {
+      "id": "brand-only-lowercase-title",
+      "group": "titleImpersonation",
+      "description": "Page title is just a brand name in lowercase with no context — lazy phishing kit title",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<title>\\s*(?:chase|paypal|netflix|amazon|apple|microsoft|facebook|instagram|outlook|gmail|yahoo|wells\\s*fargo|bank\\s*of\\s*america|citibank|usaa|coinbase|binance)\\s*</title>",
+      "patternFlags": "i",
+      "note": "A page title that is ONLY a brand name in lowercase ('chase', 'paypal', 'netflix') with no additional context is a lazy phishing kit indicator. Legitimate login pages always have descriptive titles like 'Sign in to Chase Online Banking | Chase.com'."
+    },
+    {
       "id": "ndax-auth-typosquat",
       "group": "typosquat",
       "description": "NDAX authentication typosquat patterns",
@@ -12882,6 +13003,17 @@
       "patternString": "(?:login\\.microsoftonline\\.com|linkedin\\.com|slack\\.com|youtube\\.com)/[\\s\\S]{0,100}(?:redirect|url=|next=|goto=|dest=|return=|continue=|redir=)https?://",
       "patternFlags": "i",
       "note": "Open redirect parameters on trusted services bounce victims from a trusted domain to the phishing page."
+    },
+    {
+      "id": "mixed-http-resource-loading",
+      "group": "urlHeuristics",
+      "description": "Page loads resources from multiple unrelated domains — phishing kit with scattered asset hosting",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "patternString": "(?:fonts\\.googleapis\\.com|fonts\\.gstatic\\.com|cdnjs\\.cloudflare\\.com)[\\s\\S]{0,2000}(?:action=['\"][^'\"]*\\.php|api\\.telegram|discord\\.com/api/webhooks)",
+      "patternFlags": "i",
+      "note": "Loading legitimate CDN resources (Google Fonts, cdnjs) on a page that posts to a PHP credential collector or Telegram/Discord webhook indicates a phishing kit using legitimate CDNs for visual polish while exfiltrating through attacker infrastructure."
     }
   ],
   "domHashes": [],
