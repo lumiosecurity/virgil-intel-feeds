@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T04:59:48.245Z",
+    "compiledAt": "2026-04-01T05:36:11.837Z",
     "brandCount": 107,
     "signalCount": 1,
     "patternCount": 306,
@@ -1097,6 +1097,35 @@
       "vertical": "financial"
     },
     {
+      "name": "adobe",
+      "vertical": "financial",
+      "domains": [
+        "adobe.com"
+      ],
+      "typos": [
+        "ad0be",
+        "adobee",
+        "adobe-login",
+        "adobefiles",
+        "adobepdf",
+        "adobereader",
+        "adobeviewer",
+        "adobedocs",
+        "adoobe",
+        "adob3",
+        "adobo",
+        "adobb",
+        "adobbe",
+        "addobe",
+        "adobe-pdf",
+        "abode",
+        "adb0e",
+        "adone",
+        "adbe",
+        "adope"
+      ]
+    },
+    {
       "name": "bet365",
       "domains": [
         "bet365.com"
@@ -1151,35 +1180,6 @@
         "cloudflaire",
         "cloudflar",
         "cIoudflare"
-      ]
-    },
-    {
-      "name": "adobe",
-      "vertical": "general",
-      "domains": [
-        "adobe.com"
-      ],
-      "typos": [
-        "ad0be",
-        "adobee",
-        "adobe-login",
-        "adobefiles",
-        "adobepdf",
-        "adobereader",
-        "adobeviewer",
-        "adobedocs",
-        "adoobe",
-        "adob3",
-        "adobo",
-        "adobb",
-        "adobbe",
-        "addobe",
-        "adobe-pdf",
-        "abode",
-        "adb0e",
-        "adone",
-        "adbe",
-        "adope"
       ]
     },
     {
@@ -4910,7 +4910,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T04:53:33.556Z",
+      "compiledAt": "2026-04-01T04:59:46.946Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
