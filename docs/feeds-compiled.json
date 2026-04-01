@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T02:58:01.095Z",
+    "compiledAt": "2026-04-01T03:06:36.056Z",
     "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 289,
+    "patternCount": 292,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2457,6 +2457,17 @@
       "patternFlags": "i"
     },
     {
+      "id": "spanish-banking-login-form",
+      "group": "brandImpersonation",
+      "description": "Spanish banking login page with document type selectors (NIF/CIF/NIE) and Banca Online branding",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "Banca\\s+Online[\\s\\S]{0,3000}(?:NIF|CIF|NIE)[\\s\\S]{0,500}(?:Clave\\s+de\\s+acceso|contrase[ñn]a)",
+      "patternFlags": "i",
+      "note": "Spanish banking phishkits reuse distinctive UI: Banca Online header with NIF/CIF/NIE document type selector and Clave de acceso password field. This combination is specific to Spanish bank impersonation kits — legitimate Spanish banks serve from their own domains, not random TLDs. 14+ literal chars in Banca Online and Clave de acceso anchors."
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -2695,6 +2706,17 @@
       "source": "html",
       "patternString": "Outlook[^<]{0,500}password[^<]{0,500}(user\\s*name|username)\\s+(or|and)\\s+password[^<]{0,300}(isn.t correct|incorrect|wrong)",
       "patternFlags": "i"
+    },
+    {
+      "id": "spanish-id-document-type-selector",
+      "group": "credentialHarvesting",
+      "description": "Form with Spanish national document type options (NIF, CIF, NIE, Pasaporte) used in banking credential phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:select|option|radio|button)[^>]*>[\\s\\S]{0,200}NIF[\\s\\S]{0,200}CIF[\\s\\S]{0,200}NIE[\\s\\S]{0,200}Pasaporte",
+      "patternFlags": "i",
+      "note": "Spanish banking phishkits include a document type dropdown with NIF/CIF/NIE/Pasaporte options. This exact combination of all four Spanish ID types in a form selector is unique to Spanish bank login impersonation. Legitimate Spanish banks serve from .es domains or their own branded domains, not arbitrary TLDs. Multiple 3-9 char anchors (NIF, CIF, NIE, Pasaporte)."
     },
     {
       "id": "suspicious-subdomain-financial",
@@ -4127,6 +4149,17 @@
       "patternFlags": "i"
     },
     {
+      "id": "phishkit-steps-auth-path",
+      "group": "phishkitSignatures",
+      "description": "Phishkit directory structure with Steps/auth path leading to PHP login handler",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:action|href|src)\\s*=\\s*['\"][^'\"]*(?:/Steps/|/step[s]?/)[^'\"]*(?:auth|login|verify)[^'\"]*\\.php",
+      "patternFlags": "i",
+      "note": "Phishkits commonly use a /Steps/auth/ or /steps/ directory layout with PHP endpoints. The combination of Steps path + auth subdirectory + .php extension is a strong kit fingerprint. Over 15 literal chars across Steps, auth, and .php anchors."
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -4715,7 +4748,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-03-31T22:45:58.692Z",
+      "compiledAt": "2026-04-01T02:57:58.376Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
