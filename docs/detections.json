@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-01-04:48",
-    "generatedAt": "2026-04-01T04:48:37.697Z",
+    "version": "2026-04-01-04:53",
+    "generatedAt": "2026-04-01T04:53:35.152Z",
     "brandCount": 107,
-    "patternCount": 302
+    "patternCount": 304
   },
   "brandEntries": [
     {
@@ -1248,6 +1248,10 @@
         "insatgram",
         "insragram",
         "instagrom",
+        "lnstagrarn",
+        "lnstgrm",
+        "instaqrarn",
+        "inst4gram",
         "instaram"
       ]
     },
@@ -12909,6 +12913,18 @@
     },
     {
       "domHashes": [],
+      "id": "react-spa-minimal-skeleton",
+      "group": "botEvasion",
+      "description": "Minimal HTML skeleton with single root div and external bundled JavaScript assets typical of React SPA phishing pages",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<body>\\s*<div\\s+id=['\"]root['\"]></div>\\s*</body>[\\s\\S]{0,500}<script[^>]*src=['\"][^'\"]*assets/index-[A-Za-z0-9_-]{8,}\\.js['\"]",
+      "patternFlags": "i",
+      "note": "React SPA skeleton commonly used to evade content-based detection by loading phishing UI via external bundles"
+    },
+    {
+      "domHashes": [],
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -13998,6 +14014,18 @@
       "patternString": "^https?://[a-z0-9]{12,}\\.(?:bank|financial|secure|payment|trust|verify|account)(?:bank|pay|login|verify|secure|online)?\\.(?:xyz|top|info|online|site|click|live|icu)/",
       "patternFlags": "i",
       "note": ""
+    },
+    {
+      "domHashes": [],
+      "id": "vite-build-pattern-phishing",
+      "group": "hostingPatterns",
+      "description": "Vite build pattern with hashed asset names and minimal HTML commonly used for phishing SPAs on legitimate platforms",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "html",
+      "patternString": "crossorigin\\s+src=['\"][^'\"]*assets/index-[A-Za-z0-9_-]{8,}\\.(js|css)['\"][\\s\\S]{0,200}link[^>]*stylesheet[^>]*crossorigin[^>]*assets/index-[A-Za-z0-9_-]{8,}\\.css",
+      "patternFlags": "i",
+      "note": "Vite bundler output pattern with hashed filenames - low weight as legitimate sites use this too, but useful as corroborating signal"
     },
     {
       "domHashes": [],
