@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-01-04:53",
-    "generatedAt": "2026-04-01T04:53:35.152Z",
+    "version": "2026-04-01-04:59",
+    "generatedAt": "2026-04-01T04:59:48.258Z",
     "brandCount": 107,
-    "patternCount": 304
+    "patternCount": 306
   },
   "brandEntries": [
     {
@@ -14005,6 +14005,18 @@
     },
     {
       "domHashes": [],
+      "id": "hidden-field-credential-mirror",
+      "group": "credentialHarvesting",
+      "description": "JavaScript handlers copy visible form input values to hidden fields with matching credential field names",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "querySelectorAll\\(['\"]input\\[type=['\"]hidden['\"]\\]\\[name=['\"](?:username|email|user)['\"]\\]\\s*\\)[\\s\\S]{0,200}\\.forEach[\\s\\S]{0,500}querySelectorAll\\(['\"]input\\[type=['\"]hidden['\"]\\]\\[name=['\"](?:pass|password)['\"]\\]",
+      "patternFlags": "i",
+      "note": ""
+    },
+    {
+      "domHashes": [],
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -15885,6 +15897,18 @@
       "source": "html",
       "patternString": "scheduled your ad account[\\s\\S]{0,300}for deletion[\\s\\S]{0,300}appeal",
       "patternFlags": "is",
+      "note": ""
+    },
+    {
+      "domHashes": [],
+      "id": "pdf-verification-social-engineering",
+      "group": "socialEngineering",
+      "description": "Social engineering text claiming email login required for protected file access as rightful recipient",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:required to login|rightful recipient)[\\s\\S]{0,300}(?:protected file|secure document|unauthorized access is prohibited)",
+      "patternFlags": "i",
       "note": ""
     },
     {

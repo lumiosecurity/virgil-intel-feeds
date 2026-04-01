@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T04:53:35.139Z",
+    "compiledAt": "2026-04-01T04:59:48.245Z",
     "brandCount": 107,
     "signalCount": 1,
-    "patternCount": 304,
+    "patternCount": 306,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2817,6 +2817,16 @@
       "note": "Phishkit behavior: converting password presence to boolean flag for hidden field tracking - legitimate forms validate actual password values, not just presence"
     },
     {
+      "id": "hidden-field-credential-mirror",
+      "group": "credentialHarvesting",
+      "description": "JavaScript handlers copy visible form input values to hidden fields with matching credential field names",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "querySelectorAll\\(['\"]input\\[type=['\"]hidden['\"]\\]\\[name=['\"](?:username|email|user)['\"]\\]\\s*\\)[\\s\\S]{0,200}\\.forEach[\\s\\S]{0,500}querySelectorAll\\(['\"]input\\[type=['\"]hidden['\"]\\]\\[name=['\"](?:pass|password)['\"]\\]",
+      "patternFlags": "i"
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -4390,6 +4400,16 @@
       "patternFlags": "is"
     },
     {
+      "id": "pdf-verification-social-engineering",
+      "group": "socialEngineering",
+      "description": "Social engineering text claiming email login required for protected file access as rightful recipient",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:required to login|rightful recipient)[\\s\\S]{0,300}(?:protected file|secure document|unauthorized access is prohibited)",
+      "patternFlags": "i"
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -4890,7 +4910,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T04:48:36.187Z",
+      "compiledAt": "2026-04-01T04:53:33.556Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
