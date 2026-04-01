@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-01T21:08:48.319Z",
+    "compiledAt": "2026-04-01T21:38:39.197Z",
     "brandCount": 187,
     "signalCount": 1,
-    "patternCount": 943,
+    "patternCount": 945,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -4539,13 +4539,13 @@
     {
       "id": "adobe-pdf-verification-impersonation",
       "group": "brandImpersonation",
-      "description": "Adobe PDF document verification page requesting login credentials to access protected files",
+      "description": "Adobe PDF file verification impersonation with credential harvesting form",
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "Adobe[\\s-]*PDF[\\s\\S]{0,1000}(?:File\\s+Verification|protected\\s+file)[\\s\\S]{0,1000}<input[^>]*type=['\"]password['\"]",
+      "patternString": "File\\s+Verification\\s+for\\s+Adobe\\s+PDF[\\s\\S]{0,2000}<input[^>]*type=['\"]password['\"][\\s\\S]{0,1000}rightful\\s+recipient",
       "patternFlags": "i",
-      "note": "Combines Adobe PDF branding with file verification pretext and password collection - legitimate Adobe services don't require arbitrary logins for PDF access"
+      "note": "Specific impersonation of Adobe PDF verification combined with social engineering about being rightful recipient - distinctive phishing theme"
     },
     {
       "id": "microsoft-signin-ui-impersonation",
@@ -6743,6 +6743,28 @@
       "patternString": "<input[^>]*type=['\"]checkbox['\"][^>]*>[\\s\\S]{0,50}(?:Remember\\s*me|Keep\\s*me\\s*(?:signed|logged)\\s*in|Stay\\s*signed\\s*in)[\\s\\S]{0,1000}(?:action=['\"][^'\"]*\\.php|api\\.telegram|discord|webhook)",
       "patternFlags": "i",
       "note": "A 'Remember me' checkbox on a page that posts to a PHP file or sends to Telegram/Discord is a cloned UX element. The checkbox has no backend function on a phishing page — it's visual theater to make the form look legitimate."
+    },
+    {
+      "id": "hidden-field-credential-sync",
+      "group": "credentialHarvesting",
+      "description": "JavaScript handlers sync visible credential inputs to hidden form fields for collection",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "document\\.querySelectorAll\\(['\"]input\\[type=['\"]hidden['\"]\\]\\[name=['\"](?:username|user|email)['\"]\\]['\"]\\)[\\s\\S]{0,200}\\.forEach\\([\\s\\S]{0,300}input\\.value\\s*=\\s*valueToCollect",
+      "patternFlags": "i",
+      "note": "Phishing technique where visible login fields are synced to hidden inputs via querySelectorAll forEach loops - not seen in legitimate login flows"
+    },
+    {
+      "id": "password-entry-detection-flag",
+      "group": "credentialHarvesting",
+      "description": "JavaScript that detects password entry and sets hidden tracking flags",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "const\\s+pwEntered\\s*=\\s*event\\.target\\.value\\.trim\\(\\)\\.length\\s*>\\s*0\\s*\\?\\s*['\"]1['\"]\\s*:\\s*['\"]0['\"][\\s\\S]{0,300}pass_entered",
+      "patternFlags": "i",
+      "note": "Tracks whether passwords were entered via hidden flags - legitimate forms don't need to detect password entry status"
     },
     {
       "id": "suspicious-subdomain-financial",
@@ -13162,7 +13184,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T21:00:46.837Z",
+      "compiledAt": "2026-04-01T21:08:45.592Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
