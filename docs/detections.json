@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-01-20:40",
-    "generatedAt": "2026-04-01T20:40:44.659Z",
+    "version": "2026-04-01-20:50",
+    "generatedAt": "2026-04-01T20:50:01.508Z",
     "brandCount": 187,
-    "patternCount": 881
+    "patternCount": 897
   },
   "brandEntries": [
     {
@@ -17967,6 +17967,30 @@
     },
     {
       "domHashes": [],
+      "id": "subscription-cancel-credential-harvest",
+      "group": "credentialHarvesting",
+      "description": "Subscription cancellation form requesting login — credential harvest via cancel flow",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:cancel|unsubscribe|manage|downgrade)\\s*(?:your\\s*)?(?:subscription|membership|plan|renewal|auto-?renew)[\\s\\S]{0,500}(?:sign\\s*in|log\\s*in|email|password|verify\\s*(?:your\\s*)?(?:identity|account))",
+      "patternFlags": "i",
+      "note": "Cancel subscription flows that require sign-in or identity verification harvest credentials under the guise of cancellation. The victim wants to cancel an unwanted charge, so they eagerly enter their credentials."
+    },
+    {
+      "domHashes": [],
+      "id": "job-offer-personal-info-harvest",
+      "group": "credentialHarvesting",
+      "description": "Job offer or application form collecting excessive personal information — employment scam PII harvest",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:job\\s*(?:offer|application|opportunity)|apply\\s*(?:now|here)|employment|position|hiring|recruitment)[\\s\\S]{0,500}(?:social\\s*security|ssn|date\\s*of\\s*birth|bank\\s*account|routing\\s*number|passport|driver.?s?\\s*license)",
+      "patternFlags": "i",
+      "note": "Job applications requesting SSN, date of birth, bank account, or passport information are employment scams harvesting PII for identity theft. Legitimate employers don't collect SSN or banking details in initial applications."
+    },
+    {
+      "domHashes": [],
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -22731,6 +22755,102 @@
     },
     {
       "domHashes": [],
+      "id": "bitb-fake-popup-window",
+      "group": "phishkitSignatures",
+      "description": "Browser-in-the-Browser fake popup — HTML/CSS simulating a browser window with fake URL bar",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "(?:title-bar|window-header|address-bar|url-bar|browser-frame|popup-window|login-popup|sign-in-popup)[\\s\\S]{0,500}(?:position:\\s*fixed|position:\\s*absolute|z-index:\\s*\\d{3,})[\\s\\S]{0,500}(?:iframe|login|sign.?in|password)",
+      "patternFlags": "i",
+      "note": "BitB attacks create fake browser windows using HTML/CSS with class names like title-bar, address-bar, browser-frame, popup-window. Combined with fixed/absolute positioning, high z-index, and an iframe or login form, this is a definitive BitB signature."
+    },
+    {
+      "domHashes": [],
+      "id": "bitb-fake-address-display",
+      "group": "phishkitSignatures",
+      "description": "Fake URL/address bar showing legitimate domain — BitB spoofed address bar element",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "(?:https://accounts\\.google\\.com|https://login\\.microsoftonline\\.com|https://www\\.facebook\\.com|https://login\\.live\\.com|https://appleid\\.apple\\.com)[\\s\\S]{0,300}(?:padlock|lock|secure|🔒|&#128274;|ssl|https-icon)",
+      "patternFlags": "i",
+      "note": "A legitimate auth URL (accounts.google.com, login.microsoftonline.com, etc.) displayed as TEXT alongside a lock/padlock icon is a BitB fake address bar. The real URL is the page's URL, not the text displayed in the fake bar."
+    },
+    {
+      "domHashes": [],
+      "id": "bitb-draggable-titlebar",
+      "group": "phishkitSignatures",
+      "description": "Draggable title bar with close/minimize buttons — BitB fake window chrome controls",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:close-btn|minimize-btn|maximize-btn|window-controls|title-bar-buttons|window-actions)[\\s\\S]{0,300}(?:✕|✖|×|&#10005;|&#10006;|&#215;|close|_|□|&#9634;)[\\s\\S]{0,500}(?:drag|mousedown|move)",
+      "patternFlags": "i",
+      "note": "Fake window chrome with close/minimize/maximize buttons (✕, _, □) that support dragging via mousedown events simulates a real browser popup window. BitB kits implement draggable title bars to make the fake window feel interactive."
+    },
+    {
+      "domHashes": [],
+      "id": "bitb-oauth-popup-iframe",
+      "group": "phishkitSignatures",
+      "description": "Fake SSO/OAuth popup containing iframe to phishing page — the core BitB credential theft mechanism",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "(?:popup|modal|overlay|dialog|window)[\\s\\S]{0,500}(?:box-shadow|border-radius|border:\\s*1px)[\\s\\S]{0,500}<iframe[^>]*(?:src=['\"]https?://|srcdoc=)[\\s\\S]{0,300}(?:login|sign|auth|password|credential)",
+      "patternFlags": "i",
+      "note": "A styled popup/modal/overlay containing an iframe that loads a login/auth page is the core BitB mechanism. The popup simulates a browser window and the iframe loads the actual phishing form from the attacker's server."
+    },
+    {
+      "domHashes": [],
+      "id": "bitb-os-detect-theme",
+      "group": "phishkitSignatures",
+      "description": "OS detection for BitB window theming — adapts fake popup to match victim's operating system",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:navigator\\.platform|navigator\\.userAgent|navigator\\.appVersion)[\\s\\S]{0,200}(?:Win|Mac|Linux|Chrome\\s*OS)[\\s\\S]{0,300}(?:class|style|theme|window|popup|titlebar|chrome)",
+      "patternFlags": "i",
+      "note": "Detecting the victim's OS via navigator.platform/userAgent to apply matching window chrome styling (Windows title bar vs macOS traffic lights vs Linux decorations) is a BitB kit feature that makes the fake popup match the victim's real OS."
+    },
+    {
+      "domHashes": [],
+      "id": "bitb-onclick-false-href",
+      "group": "phishkitSignatures",
+      "description": "Link with onclick returning false to hide real destination — BitB hover URL deception",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<a[^>]*href=['\"]https?://(?:accounts\\.google|login\\.microsoft|facebook|apple)[^'\"]*['\"][^>]*onclick=['\"][^'\"]*return\\s*false[^'\"]*['\"]",
+      "patternFlags": "i",
+      "note": "A link with href to a legitimate auth URL but onclick returning false prevents navigation to the real URL. When hovered, the browser shows the legitimate URL, but clicking triggers the BitB popup instead. This is mr.d0x's original BitB href deception."
+    },
+    {
+      "domHashes": [],
+      "id": "html-smuggling-download-trigger",
+      "group": "phishkitSignatures",
+      "description": "HTML smuggling download constructed from base64 blob in-browser — malware delivery via HTML file",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "(?:atob|Uint8Array|ArrayBuffer|Blob)[\\s\\S]{0,300}(?:createObjectURL|download|saveAs|msSaveBlob)[\\s\\S]{0,200}(?:\\.zip|\\.iso|\\.img|\\.js|\\.exe|\\.msi|\\.hta|\\.vbs|\\.bat|\\.cmd|\\.ps1)",
+      "patternFlags": "i",
+      "note": "Constructing a file from base64/ArrayBuffer/Blob and triggering a download with a dangerous extension (.zip, .iso, .js, .exe, .msi, .hta) is HTML smuggling — malware delivery constructed entirely in the browser from an HTML attachment."
+    },
+    {
+      "domHashes": [],
+      "id": "html-smuggling-click-download",
+      "group": "phishkitSignatures",
+      "description": "Auto-click on dynamically created download link — HTML smuggling automatic file delivery",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "createElement\\(['\"]a['\"]\\)[\\s\\S]{0,200}(?:download\\s*=|href\\s*=\\s*['\"]blob:|href\\s*=\\s*['\"]data:)[\\s\\S]{0,200}\\.click\\(\\)",
+      "patternFlags": "i",
+      "note": "Creating an anchor element with a download attribute and blob:/data: href then programmatically clicking it triggers an automatic file download without user interaction. This is the delivery mechanism for HTML smuggling payloads."
+    },
+    {
+      "domHashes": [],
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -23628,6 +23748,78 @@
       "patternString": "(?:font-size:\\s*0|display:\\s*none|visibility:\\s*hidden|opacity:\\s*0)[^>]*>[^<]*(?:scanned|verified|secured|protected|safe|clean|threat\\s*protection|virus\\s*free|malware\\s*free|trusted|authenticated)",
       "patternFlags": "i",
       "note": "Hidden text claiming 'Scanned and secured by Advanced Threat Protection' or similar fake security assurances appears in email previews, making the message look legitimate. SANS ISC documented this as a 'new spin' on ZeroFont in September 2023, still active."
+    },
+    {
+      "domHashes": [],
+      "id": "shared-document-view-prompt",
+      "group": "socialEngineering",
+      "description": "Shared document viewing prompt requiring sign-in — document lure phishing landing page",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:shared|sent)\\s*(?:a\\s*)?(?:document|file|folder|spreadsheet|presentation|PDF|report)\\s*(?:with\\s*you|for\\s*(?:your\\s*)?review|to\\s*view)[\\s\\S]{0,500}(?:sign\\s*in|log\\s*in|view\\s*document|open|access|download)",
+      "patternFlags": "i",
+      "note": "Pages claiming 'Someone shared a document with you' followed by a sign-in prompt are the most common enterprise phishing lure. The victim thinks they need to authenticate to view a shared file, but the login form harvests their credentials."
+    },
+    {
+      "domHashes": [],
+      "id": "shared-document-preview-blur",
+      "group": "socialEngineering",
+      "description": "Blurred or partially visible document preview behind login overlay — document lure visual trick",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:blur|filter:\\s*blur|opacity:\\s*0\\.[2-5]|background.*document|background.*preview)[\\s\\S]{0,500}(?:sign\\s*in|log\\s*in|authenticate|verify|password)[\\s\\S]{0,300}(?:view|access|download|open)",
+      "patternFlags": "i",
+      "note": "A blurred or partially transparent document preview behind a login overlay is the visual trick that makes shared document phishing convincing. The victim can see enough of the document to believe it's real, but must 'sign in' to view it clearly."
+    },
+    {
+      "domHashes": [],
+      "id": "voicemail-listen-prompt",
+      "group": "socialEngineering",
+      "description": "Voicemail notification with listen/play button requiring sign-in — voicemail phishing landing page",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:voicemail|voice\\s*mail|voice\\s*message|missed\\s*call|audio\\s*message)[\\s\\S]{0,500}(?:listen|play|hear|open|view|download)[\\s\\S]{0,300}(?:sign\\s*in|log\\s*in|password|authenticate|verify)",
+      "patternFlags": "i",
+      "note": "Voicemail notification pages with play/listen buttons that require sign-in are a top enterprise phishing lure. Microsoft voicemail notifications are frequently impersonated, with the login form harvesting M365 credentials."
+    },
+    {
+      "domHashes": [],
+      "id": "voicemail-audio-player-fake",
+      "group": "socialEngineering",
+      "description": "Fake audio player UI for voicemail — visual audio waveform or player controls on phishing page",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "(?:audio|player|waveform|play-button|progress-bar|duration|timeline)[\\s\\S]{0,300}(?:voicemail|voice\\s*mail|message\\s*from|caller|missed)[\\s\\S]{0,300}(?:\\d{1,2}:\\d{2}|seconds|minutes|duration)",
+      "patternFlags": "i",
+      "note": "A fake audio player UI showing waveform, play button, progress bar, and duration (e.g., '0:45') for a voicemail message is the visual component of voicemail phishing. The player doesn't actually play audio — it's just HTML/CSS that gates a login form."
+    },
+    {
+      "domHashes": [],
+      "id": "subscription-auto-renew-alert",
+      "group": "socialEngineering",
+      "description": "Subscription auto-renewal charge notification — payment method update or cancellation phishing",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:subscription|membership|plan|service)\\s*(?:has\\s*been|was|will\\s*be)\\s*(?:auto-?renewed|renewed|charged|billed)[\\s\\S]{0,300}(?:\\$\\d{2,3}\\.\\d{2}|amount|charge)[\\s\\S]{0,300}(?:cancel|update|manage|review|dispute)",
+      "patternFlags": "i",
+      "note": "Subscription auto-renewal alerts claiming 'Your subscription has been renewed for $XXX' with options to cancel or update payment are a top consumer phishing lure. Norton, McAfee, Geek Squad, and streaming services are commonly impersonated."
+    },
+    {
+      "domHashes": [],
+      "id": "job-offer-urgency-deposit",
+      "group": "socialEngineering",
+      "description": "Job offer requiring upfront payment or equipment deposit — advance fee employment scam",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:job|position|employment|offer|hired|selected|congratulations)[\\s\\S]{0,500}(?:training\\s*fee|equipment\\s*(?:fee|deposit)|background\\s*check\\s*fee|registration\\s*fee|start-?up\\s*(?:fee|cost))[\\s\\S]{0,300}(?:pay|payment|transfer|card|\\$)",
+      "patternFlags": "i",
+      "note": "Job offers requiring upfront payments for training, equipment, background checks, or registration are advance fee employment scams. Legitimate employers never charge employees to start working."
     },
     {
       "domHashes": [],
