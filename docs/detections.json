@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-02-16:49",
-    "generatedAt": "2026-04-02T16:49:51.533Z",
+    "version": "2026-04-02-17:14",
+    "generatedAt": "2026-04-02T17:14:39.888Z",
     "brandCount": 187,
-    "patternCount": 1029
+    "patternCount": 1065
   },
   "brandEntries": [
     {
@@ -15070,6 +15070,39 @@
       "patternFlags": "i"
     },
     {
+      "id": "navigator-language-geo-filter",
+      "group": "botEvasion",
+      "description": "Checks navigator.language or timezone to geo-filter victims",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "note": "Phishkits filter victims by browser language to serve phishing only to target demographics and redirect others. Low-moderate weight.",
+      "patternString": "navigator\\.language[\\s\\S]{0,200}(?:includes|indexOf|match|===)[\\s\\S]{0,100}(?:location\\.(?:href|replace)|window\\.location|document\\.write)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "timezone-offset-victim-filter",
+      "group": "botEvasion",
+      "description": "Uses getTimezoneOffset to geo-filter or fingerprint victims",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "js",
+      "note": "Checking timezone offset and conditionally redirecting is a victim-filtering technique. Very low weight because some legitimate geo-targeting sites use this.",
+      "patternString": "getTimezoneOffset\\(\\)[\\s\\S]{0,200}(?:===?|!==?|>|<)[\\s\\S]{0,100}(?:location|redirect|document\\.write|innerHTML)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "window-opener-null-check",
+      "group": "botEvasion",
+      "description": "Checks window.opener to verify page was opened from a link, not direct navigation",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "js",
+      "note": "Checking window.opener ensures the page was opened from another page (like a phishing email). Direct navigation gets blocked. Very low weight.",
+      "patternString": "window\\.opener\\s*(?:===?\\s*null|!==?\\s*null)[\\s\\S]{0,200}(?:location|redirect|close|document\\.write)",
+      "patternFlags": "i"
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -16530,6 +16563,17 @@
       "condition": "0 & 1 & 2 & 3"
     },
     {
+      "id": "external-font-brand-match",
+      "group": "brandImpersonation",
+      "description": "Brand-specific web font loaded from non-brand CDN — indicates cloned brand page",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "note": "Loading brand-specific fonts (Product Sans for Google, Segoe UI for Microsoft, Amazon Ember for Amazon) on a non-brand domain suggests a cloned page. Very low weight alone.",
+      "patternString": "(?:fonts\\.googleapis\\.com|fonts\\.gstatic\\.com)[^\"']*(?:Product Sans|Segoe UI|SF Pro|Amazon Ember|Roboto[\\s\\S]{0,50}wght@[34]00)",
+      "patternFlags": "i"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -16857,6 +16901,28 @@
       "source": "js",
       "note": "Phishkits hide the credential form behind a reCAPTCHA challenge, revealing it only after verification to evade automated scanners.",
       "patternString": "grecaptcha\\.(?:execute|render)[\\s\\S]{0,500}(?:display|visibility|style)[\\s\\S]{0,200}(?:block|visible|show)[\\s\\S]{0,300}(?:password|credential|login-form)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "recaptcha-sitekey-on-phish-page",
+      "group": "captchaGating",
+      "description": "Google reCAPTCHA sitekey used on a page with credential harvesting indicators",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "note": "reCAPTCHA used alongside password fields. Phishkits abuse reCAPTCHA to add legitimacy and filter bots. Low-moderate weight since legitimate login pages also use reCAPTCHA.",
+      "patternString": "data-sitekey=[\"'][0-9A-Za-z_-]{40}[\"'][\\s\\S]{0,2000}<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "hcaptcha-on-credential-page",
+      "group": "captchaGating",
+      "description": "hCaptcha widget on a page with credential form",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "note": "hCaptcha on a page with password fields. Phishkits use hCaptcha to add legitimacy and block automated analysis. Low-moderate weight.",
+      "patternString": "hcaptcha\\.com/1/api\\.js[\\s\\S]{0,2000}<input[^>]*type=[\"']password[\"']",
       "patternFlags": "i"
     },
     {
@@ -19308,6 +19374,83 @@
       "patternFlags": "i"
     },
     {
+      "id": "credential-form-to-different-origin",
+      "group": "credentialHarvesting",
+      "description": "Form with password field posting to a different domain origin",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "note": "A login form posting credentials to a different domain than expected. Excludes common legitimate auth providers. High weight because cross-origin password submission is a strong phishing signal.",
+      "patternString": "<form[^>]*action=[\"']https?://(?!(?:[\\w.-]*\\.)?(?:google|microsoft|apple|amazon|facebook|github|okta|auth0)\\.com)[\\w.-]+\\.[a-z]{2,}[^\"']*[\"'][^>]*>[\\s\\S]{0,500}<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "multiple-hidden-inputs-data-harvest",
+      "group": "credentialHarvesting",
+      "description": "Multiple hidden input fields collecting browser/system metadata alongside credentials",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Phishkits collect victim metadata (IP, browser, OS, location) in hidden form fields alongside credentials. Multiple such fields together are a strong signal.",
+      "patternString": "(?:<input[^>]*type=[\"']hidden[\"'][^>]*name=[\"'](?:ip|browser|os|country|city|timezone|screen|useragent|user_agent|resolution)[\"'][^>]*>[\\s\\S]{0,200}){3,}",
+      "patternFlags": "i"
+    },
+    {
+      "id": "php-form-action-with-brand",
+      "group": "credentialHarvesting",
+      "description": "Form posting to PHP script with brand name in the filename",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "note": "Form posting to a PHP file containing a brand name (e.g., microsoft-login.php, paypal_verify.php) is a near-definitive phishkit signature.",
+      "patternString": "action=[\"'][^\"']*(?:microsoft|outlook|office|apple|paypal|amazon|netflix|google|facebook|instagram)[^\"']*\\.php[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "password-length-validation-phishkit",
+      "group": "credentialHarvesting",
+      "description": "Client-side password minimum length check typical of phishkit validation",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "note": "Phishkits validate password length client-side and show error messages. While legitimate sites also validate, the specific pattern of checking and showing inline errors is common in kits.",
+      "patternString": "(?:password|passwd|pwd)\\.(?:value\\.)?length\\s*(?:<|<=|>=)\\s*[1-9]\\d?[\\s\\S]{0,200}(?:alert|innerHTML|textContent|className)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "suspicious-form-method-get-password",
+      "group": "credentialHarvesting",
+      "description": "Login form using GET method to send passwords — exposes credentials in URL",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "note": "A login form using GET instead of POST sends the password in the URL query string. No legitimate site does this — it's a phishkit mistake that exposes the harvesting.",
+      "patternString": "<form[^>]*method=[\"']get[\"'][^>]*>[\\s\\S]{0,500}<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "autocomplete-off-entire-form",
+      "group": "credentialHarvesting",
+      "description": "Login form with autocomplete disabled — prevents browser from warning about saved credentials",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "note": "Disabling autocomplete on a login form prevents browsers from offering saved passwords, hiding the fact that the user has no saved credentials for this fake domain. Very low weight.",
+      "patternString": "<form[^>]*autocomplete=[\"']off[\"'][^>]*>[\\s\\S]{0,500}<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "localstorage-attempt-counter",
+      "group": "credentialHarvesting",
+      "description": "localStorage used to count credential submission attempts across page reloads",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "note": "Phishkits use localStorage to persist attempt counters across page reloads. After N attempts, they redirect to the real site. This pattern is near-exclusive to phishkits.",
+      "patternString": "localStorage\\.(?:getItem|setItem)\\([\"'](?:attempt|tries|count|submit|login_count|pass_count)[\"']\\)",
+      "patternFlags": "i"
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -19613,6 +19756,83 @@
       "source": "html",
       "note": "BlackForce phishkit uses a single script tag loading index-[hash].js as its entire entry point. The cache-busting hash forces fresh downloads of the malicious bundle.",
       "patternString": "<script[^>]*src=[\"'][^\"']*index-[a-f0-9]{8,}[^\"']*\\.js[\"'][^>]*>[\\s]*</script>\\s*</body>",
+      "patternFlags": "i"
+    },
+    {
+      "id": "pages-dev-login-form",
+      "group": "hostingPatterns",
+      "description": "Cloudflare Pages hosting a page with credential form",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Cloudflare Pages/Workers domains hosting login forms is a common phishing infrastructure pattern. Moderate weight because some legitimate dev sites use these.",
+      "patternString": "(?:pages\\.dev|workers\\.dev)[\\s\\S]{0,2000}<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "glitch-me-credential-form",
+      "group": "hostingPatterns",
+      "description": "Glitch.me hosting a page with credential fields",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "html",
+      "note": "Glitch.me free hosting is frequently abused for phishing. A password field on a Glitch-hosted page is suspicious.",
+      "patternString": "glitch\\.me[\\s\\S]{0,2000}<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "replit-dev-credential-form",
+      "group": "hostingPatterns",
+      "description": "Replit.dev hosting a page with credential fields",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "html",
+      "note": "Replit free hosting frequently abused for credential phishing. Password field on Replit is suspicious.",
+      "patternString": "replit\\.(?:dev|app|co)[\\s\\S]{0,2000}<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "weebly-credential-phishing",
+      "group": "hostingPatterns",
+      "description": "Weebly hosting a page with credential harvesting indicators",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Weebly free sites are a common phishing infrastructure. Login forms on Weebly are suspicious since most Weebly sites are content pages, not auth portals.",
+      "patternString": "weebly\\.com[\\s\\S]{0,2000}(?:sign.?in|log.?in|password)[\\s\\S]{0,500}<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "r2-dev-file-hosting",
+      "group": "hostingPatterns",
+      "description": "Cloudflare R2 storage URL used to host page assets",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "html",
+      "note": "Cloudflare R2 storage with random hex bucket names is used by phishkits for hosting. Low weight as R2 has legitimate uses.",
+      "patternString": "[a-f0-9]{32}\\.r2\\.dev",
+      "patternFlags": "i"
+    },
+    {
+      "id": "cloudflare-worker-phish-proxy",
+      "group": "hostingPatterns",
+      "description": "Cloudflare Worker URL pattern used as phishing reverse proxy",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "note": "Cloudflare Workers with subdomain patterns used as reverse proxies for credential phishing. Common in Tycoon 2FA infrastructure.",
+      "patternString": "[a-z0-9-]+\\.[a-z0-9-]+\\.workers\\.dev[\\s\\S]{0,500}(?:login|signin|password|credential)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "amazon-s3-bucket-phishing",
+      "group": "hostingPatterns",
+      "description": "Amazon S3 bucket hosting phishing page content",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Amazon S3 buckets hosting phishing pages are a well-documented infrastructure pattern, especially for Tycoon 2FA campaigns.",
+      "patternString": "[a-z0-9.-]+\\.s3(?:\\.amazonaws\\.com|\\.(?:us|eu|ap)-(?:east|west|south|north|central|southeast|northeast)-\\d\\.amazonaws\\.com)[\\s\\S]{0,1000}(?:<form|<input[^>]*password|sign.?in|log.?in)",
       "patternFlags": "i"
     },
     {
@@ -21233,6 +21453,39 @@
       "source": "js",
       "note": "Decoding base64 and injecting into innerHTML is a phishkit technique to hide page content from static analysis. The decoded content typically contains the credential form.",
       "patternString": "atob\\([\"'][A-Za-z0-9+/=]{50,}[\"']\\)[\\s\\S]{0,300}\\.innerHTML\\s*=",
+      "patternFlags": "i"
+    },
+    {
+      "id": "base64-data-uri-full-page",
+      "group": "obfuscation",
+      "description": "Full page content embedded as base64 data URI in iframe or script",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "note": "Embedding an entire HTML page as a base64 data URI is a technique used by GhostFrame and similar kits to hide phishing content from scanners that only check the outer page.",
+      "patternString": "(?:src|href)=[\"']data:text/html;base64,[A-Za-z0-9+/=]{200,}[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "blob-url-credential-form",
+      "group": "obfuscation",
+      "description": "Blob URL used to render credential form content — evades static URL analysis",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "note": "Creating a Blob URL with HTML containing credential forms is an advanced evasion technique — the phishing content has no static URL to scan.",
+      "patternString": "URL\\.createObjectURL\\(new\\s+Blob\\([\\s\\S]{0,500}(?:password|credential|login|<form)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "innerhtml-password-injection",
+      "group": "obfuscation",
+      "description": "Password input field injected via innerHTML at runtime",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "js",
+      "note": "Injecting password fields via innerHTML hides the credential form from static HTML analysis. The form only exists after JavaScript execution.",
+      "patternString": "\\.innerHTML\\s*(?:=|\\+=)[\\s\\S]{0,300}type=[\\\\\"']+password[\\\\\"']",
       "patternFlags": "i"
     },
     {
@@ -24977,6 +25230,61 @@
       "patternFlags": "i"
     },
     {
+      "id": "svg-phishing-foreign-object",
+      "group": "phishkitSignatures",
+      "description": "SVG file with foreignObject containing HTML form — SVG-based phishing attack",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "note": "SVG files with embedded foreignObject HTML containing login forms are a growing phishing vector. SVG attachments bypass many email filters.",
+      "patternString": "<svg[\\s\\S]{0,500}foreignObject[\\s\\S]{0,1000}<(?:form|input)[^>]*(?:password|email|login)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "svg-script-redirect",
+      "group": "phishkitSignatures",
+      "description": "SVG file with embedded JavaScript redirect to phishing URL",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "note": "SVG files with embedded script redirects are used in phishing email attachments. The SVG opens in the browser and immediately redirects to the phishing page.",
+      "patternString": "<svg[\\s\\S]{0,500}<script[\\s\\S]{0,500}(?:window\\.location|document\\.location|location\\.href)\\s*=",
+      "patternFlags": "i"
+    },
+    {
+      "id": "meta-csp-relaxed-for-exfil",
+      "group": "phishkitSignatures",
+      "description": "Overly permissive Content-Security-Policy allowing all external connections",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "html",
+      "note": "A meta CSP that allows connect-src * or default-src * unsafe-inline unsafe-eval is overly permissive and enables exfiltration to any destination. Very low weight alone.",
+      "patternString": "<meta[^>]*content-security-policy[^>]*content=[\"'][^\"']*(?:connect-src\\s+\\*|default-src\\s+\\*\\s+[\"']unsafe-inline[\"']\\s+[\"']unsafe-eval[\"'])",
+      "patternFlags": "i"
+    },
+    {
+      "id": "data-attributes-victim-tracking",
+      "group": "phishkitSignatures",
+      "description": "Custom data attributes used for victim tracking or campaign identification",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "note": "Phishkits use custom data attributes to track victims, campaigns, or sessions. Names like data-victim, data-campaign, data-track with long values are characteristic.",
+      "patternString": "data-(?:victim|target|campaign|uid|session-id|track)=[\"'][^\"']{8,}[\"']",
+      "patternFlags": "i"
+    },
+    {
+      "id": "html-smuggling-anchor-download",
+      "group": "phishkitSignatures",
+      "description": "HTML smuggling technique — dynamically creates and clicks download link",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "note": "HTML smuggling: creates an anchor element, sets href to a data/blob URL, sets download attribute, then programmatically clicks it to deliver a malicious file. Near-definitive attack technique.",
+      "patternString": "createElement\\([\"']a[\"']\\)[\\s\\S]{0,300}\\.href\\s*=\\s*[\"'](?:data:|blob:)[\\s\\S]{0,200}\\.download\\s*=[\\s\\S]{0,100}\\.click\\(\\)",
+      "patternFlags": "i"
+    },
+    {
       "id": "facebook-arabic-security-alert",
       "group": "socialEngineering",
       "description": "Arabic Facebook security alert phishing lure",
@@ -27013,6 +27321,39 @@
       "patternFlags": "i"
     },
     {
+      "id": "double-password-incorrect-lure",
+      "group": "socialEngineering",
+      "description": "Shows 'incorrect password' error after first submission to harvest multiple password attempts",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "note": "Classic phishkit technique: show 'incorrect password' after first submission to harvest multiple password attempts, then redirect to the real site. The attempt counter variable is the distinctive signal.",
+      "patternString": "(?:incorrect|wrong|invalid)\\s+(?:password|credential|login)[\\s\\S]{0,300}(?:try again|re-enter|please enter)[\\s\\S]{0,200}(?:count|attempt|tries|submission)\\s*(?:\\+\\+|\\+=|=\\s*\\w+\\s*\\+)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "qr-code-generator-on-page",
+      "group": "socialEngineering",
+      "description": "QR code generated dynamically on phishing page to redirect victims to mobile",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "note": "Phishing pages generating QR codes alongside credential fields push victims to less-protected mobile devices. Low-moderate weight.",
+      "patternString": "(?:QRCode|qrcode|toDataURL)[\\s\\S]{0,300}(?:password|credential|login|verify|authenticate)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "docusign-envelope-phishing",
+      "group": "socialEngineering",
+      "description": "DocuSign-style envelope/document review language combined with credential form",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "note": "DocuSign-impersonation phishing with credential forms is extremely common. Real DocuSign pages don't ask for email passwords.",
+      "patternString": "(?:Review Document|Complete with|Powered by)\\s+DocuSign[\\s\\S]{0,1000}<input[^>]*type=[\"'](?:password|email)[\"']",
+      "patternFlags": "i"
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -27262,6 +27603,61 @@
         }
       ],
       "condition": "1"
+    },
+    {
+      "id": "title-account-verification-generic",
+      "group": "titleImpersonation",
+      "description": "Generic account verification or security alert title — common phishing lure",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Generic urgency titles like 'Account Verification' or 'Unusual Sign-in Activity' without brand names. Moderate weight because some legitimate services use similar titles.",
+      "patternString": "<title>[^<]*(?:Account Verification|Security Alert|Verify Your (?:Account|Identity)|Action Required|Unusual (?:Activity|Sign-in))[^<]*</title>",
+      "patternFlags": "i"
+    },
+    {
+      "id": "title-document-shared-lure",
+      "group": "titleImpersonation",
+      "description": "Document sharing lure in page title — impersonates SharePoint/OneDrive/Google Drive",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Document sharing lures in the page title are extremely common in phishing. Moderate weight — legitimate share notifications have similar titles but load on brand domains.",
+      "patternString": "<title>[^<]*(?:has shared a (?:document|file|folder)|shared (?:a )?document with you|View Shared (?:Document|File))[^<]*</title>",
+      "patternFlags": "i"
+    },
+    {
+      "id": "title-voicemail-notification",
+      "group": "titleImpersonation",
+      "description": "Voicemail notification lure in page title — credential harvesting technique",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "note": "Voicemail notification phishing is a major trend in 2025. Pages claiming to have voicemails in their title that also require login are almost always phishing.",
+      "patternString": "<title>[^<]*(?:New Voicemail|Voice Message|Voicemail Notification|Missed Voice(?:mail)? Message)[^<]*</title>",
+      "patternFlags": "i"
+    },
+    {
+      "id": "title-invoice-payment-lure",
+      "group": "titleImpersonation",
+      "description": "Invoice or payment notification lure in page title",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Invoice and payment-themed titles are common phishing lures, especially those impersonating DocuSign or similar services.",
+      "patternString": "<title>[^<]*(?:Invoice #?\\d|Payment (?:Required|Due|Confirmation)|Overdue Invoice|Review (?:and )?Sign)[^<]*</title>",
+      "patternFlags": "i"
+    },
+    {
+      "id": "title-fax-document-lure",
+      "group": "titleImpersonation",
+      "description": "Fax or scanned document lure in page title",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "note": "Fax document phishing lures are a classic attack vector targeting enterprise users. Nearly no legitimate service uses 'New Fax' as a web page title in 2025.",
+      "patternString": "<title>[^<]*(?:(?:New|Incoming) Fax|eFax|Fax (?:Document|Message|Notification)|Scanned Document)[^<]*</title>",
+      "patternFlags": "i"
     },
     {
       "id": "ndax-auth-typosquat",
