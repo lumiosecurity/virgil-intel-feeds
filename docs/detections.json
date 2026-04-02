@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-02-04:27",
-    "generatedAt": "2026-04-02T04:27:38.930Z",
+    "version": "2026-04-02-05:00",
+    "generatedAt": "2026-04-02T05:00:08.476Z",
     "brandCount": 187,
-    "patternCount": 962
+    "patternCount": 975
   },
   "brandEntries": [
     {
@@ -14900,6 +14900,50 @@
       "patternFlags": "i"
     },
     {
+      "id": "bullet-hosting-shield",
+      "group": "botEvasion",
+      "description": "Anti-bot SDK structure (PerimeterX, etc.)",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "js",
+      "note": "Anti-bot SDKs — observation level, used by legitimate ecommerce sites",
+      "patternString": "areyouahuman|distil_r_captcha|perimeterx",
+      "patternFlags": "i"
+    },
+    {
+      "id": "ip-geolocation-check",
+      "group": "botEvasion",
+      "description": "IP geolocation API called — visitor profiling",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "js",
+      "note": "IP geolocation — observation level, analytics and localization use this too",
+      "patternString": "(?:ip-api\\.com|ipapi\\.co|ipinfo\\.io|geoip\\.nekudo\\.com|extreme-ip-lookup\\.com)\\/(?:json|ip)",
+      "patternFlags": ""
+    },
+    {
+      "id": "headless-chrome-detect",
+      "group": "botEvasion",
+      "description": "Headless Chrome detection code",
+      "severity": "low",
+      "weight": 0.05,
+      "source": "js",
+      "note": "Observation level — legitimate bot protection uses same checks",
+      "patternString": "HeadlessChrome|navigator\\.plugins\\.length\\s*===?\\s*0\\s*(?:&&|\\|\\||[?:]).*(?:redirect|location|replace|exit|block|about:blank)",
+      "patternFlags": ""
+    },
+    {
+      "id": "sandbox-environment-check",
+      "group": "botEvasion",
+      "description": "Sandbox/VM environment detection",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "note": "VM/sandbox screen resolution and CPU count detection",
+      "patternString": "screen\\.(?:width|height)\\s*===?\\s*(?:0|800|1024).*screen\\.(?:height|width)\\s*===?\\s*(?:0|600|768)|navigator\\.hardwareConcurrency\\s*===?\\s*[12]\\b",
+      "patternFlags": ""
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -16732,6 +16776,28 @@
       "note": "Fake cookie consent banners that must be clicked before the phishing form appears act as bot filters. Automated scanners that don't click the consent button never see the credential harvesting page.",
       "patternString": "(?:cookie-?(?:consent|banner|notice|popup)|accept-?cookies)[\\s\\S]{0,500}(?:accept|agree|continue)[\\s\\S]{0,500}(?:style\\.display|classList|visibility)[\\s\\S]{0,300}(?:form|password|sign\\s*in)",
       "patternFlags": "i"
+    },
+    {
+      "id": "cf-clearance-cookie-script",
+      "group": "cdnGating",
+      "description": "Script setting cf_clearance cookie programmatically",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "js",
+      "note": "CF clearance tokens in JS — observation level, common on CF-protected sites",
+      "patternString": "cf_clearance|__cf_bm|cfuvid",
+      "patternFlags": ""
+    },
+    {
+      "id": "ddos-guard-shield",
+      "group": "cdnGating",
+      "description": "DDoS-Guard challenge page — alternative CDN used as phishkit shield",
+      "severity": "low",
+      "weight": 0.1,
+      "source": "html",
+      "note": "DDoS-Guard CDN — observation level, legitimate sites use it too",
+      "patternString": "ddos-guard\\.net\\/bl\\/|\\.ddos-guard\\.net",
+      "patternFlags": ""
     },
     {
       "id": "email-userid-label",
@@ -18893,6 +18959,17 @@
       "source": "html",
       "note": "A hidden field named 'pass_entered' that stores 1 or 0 (boolean) instead of the actual password value is a phishing simulation or engagement tracking metric. It tracks WHETHER a password was entered, not what it was. This is distinctive to phishing platforms that measure user compliance.",
       "patternString": "(?:name=['\"]pass_entered['\"]|name=['\"]password_entered['\"]|name=['\"]pw_entered['\"]|name=['\"]pwd_submitted['\"])[\\s\\S]{0,200}(?:value\\s*=\\s*['\"][01]['\"]|'1'\\s*:\\s*'0')",
+      "patternFlags": "i"
+    },
+    {
+      "id": "credential-log-variable",
+      "group": "credentialHarvesting",
+      "description": "Variables named for credential logging",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "note": "Phishkit JS variable naming for credential accumulation",
+      "patternString": "(?:var|let|const)\\s+(?:logs?|creds?|captured?|stolen?|harvest)\\s*=",
       "patternFlags": "i"
     },
     {
@@ -24277,6 +24354,72 @@
       "note": "Programmatic typos of 'browser' in JavaScript variable or function names (broswerLanguageDetection, borwserCheck, etc.) indicate hastily written or auto-generated phishing template code. These typos persist in template frameworks because the code still functions — JavaScript doesn't check spelling.",
       "patternString": "(?:broswerLanguage|borwser|bowser[A-Z]|brwoser|browsr[A-Z]|brower[A-Z])",
       "patternFlags": ""
+    },
+    {
+      "id": "telegram-exfil-comment",
+      "group": "phishkitSignatures",
+      "description": "Telegram bot token or channel ID in HTML comment",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "note": "Telegram bot API token in HTML comment — near-definitive phishkit signal",
+      "patternString": "<!--.*(?:bot_token|bottoken|bot_id|chat_id|telegram).*\\d{8,}",
+      "patternFlags": "i"
+    },
+    {
+      "id": "php-mailer-endpoint",
+      "group": "phishkitSignatures",
+      "description": "PHP credential mailer script in form action or JS",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "both",
+      "note": "send.php, mailer.php, grab.php — canonical phishkit backend filenames",
+      "patternString": "(?:send|mail|post|grab|log|save|recv|gate|panel|check|verify|process|handler|submit|login|auth|data|next|go|result)\\.php",
+      "patternFlags": "i"
+    },
+    {
+      "id": "blackeye-signature",
+      "group": "phishkitSignatures",
+      "description": "BlackEye phishkit signature detected",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "html",
+      "note": "BlackEye kit with ~38 brand templates — definitive phishkit signal",
+      "patternString": "blackeye|black-eye.*(?:phish|kit)|spyfy\\.me|hacker\\.ca",
+      "patternFlags": "i"
+    },
+    {
+      "id": "zphisher-signature",
+      "group": "phishkitSignatures",
+      "description": "ZPhisher kit signature detected",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "html",
+      "note": "ZPhisher — one of the most deployed open-source phishing frameworks",
+      "patternString": "zphisher|z-phisher|(?:made|coded)\\s+by\\s+(?:htr-tech|htrmohammad)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "modlishka-pattern",
+      "group": "phishkitSignatures",
+      "description": "Modlishka reverse proxy phishing pattern",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "note": "Modlishka transparent reverse proxy phishing tool",
+      "patternString": "modlishka|trackingParam|credentialEndpoint",
+      "patternFlags": "i"
+    },
+    {
+      "id": "kit-author-comment",
+      "group": "phishkitSignatures",
+      "description": "Phishkit author comment or credits in HTML source",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "note": "Author credits in HTML comments — phishkit operators sign their work",
+      "patternString": "<!--\\s*(?:coded|made|created|built|designed)\\s+by\\s+\\w+\\s*(?:@|\\||#)|<!--.*(?:telegram|t\\.me|@\\w{4,})\\s*(?:kit|scam|phish|grab|log)|<!--\\s*v\\d+\\.\\d+.*(?:scam|phish|kit|panel|stealer)",
+      "patternFlags": "i"
     },
     {
       "id": "facebook-arabic-security-alert",
