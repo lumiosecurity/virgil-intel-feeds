@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-02-03:38",
-    "generatedAt": "2026-04-02T03:38:56.177Z",
+    "version": "2026-04-02-03:50",
+    "generatedAt": "2026-04-02T03:50:34.595Z",
     "brandCount": 187,
     "patternCount": 962
   },
@@ -14907,9 +14907,23 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "note": "",
-      "patternString": "amazon\\.(?:com|in)[\\s\\S]{0,5000}Account[^<]{0,200}Cart[^<]{0,200}Orders",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "amazon",
+          "fast_pattern": true
+        },
+        {
+          "content": "Account"
+        },
+        {
+          "content": "Cart"
+        },
+        {
+          "content": "Orders"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "instagram-login-impersonation",
@@ -14918,9 +14932,25 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "note": "",
-      "patternString": "Instagram[^<]{0,500}Login[\\s\\S]{0,3000}Log[\\s\\S]{0,50}in[\\s\\S]{0,200}with[\\s\\S]{0,200}Facebook[\\s\\S]{0,3000}<input[^>]*type=[\"']password[\"']",
-      "patternFlags": "is"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "Instagram",
+          "fast_pattern": true
+        },
+        {
+          "content": "Login",
+          "nocase": true
+        },
+        {
+          "content": "Facebook"
+        },
+        {
+          "pattern": "<input[^>]*type=[\"']password[\"']",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 3"
     },
     {
       "id": "spotify-title-offsite",
@@ -14995,9 +15025,24 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "note": "",
-      "patternString": "nav-signin[\\s\\S]{0,2000}nav-cart[\\s\\S]{0,2000}search-input[\\s\\S]{0,3000}Hello,\\s*sign in",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "nav-signin",
+          "fast_pattern": true
+        },
+        {
+          "content": "nav-cart"
+        },
+        {
+          "content": "search-input"
+        },
+        {
+          "content": "Hello, sign in",
+          "nocase": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "sign-dollar-substitution",
@@ -15072,9 +15117,27 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "note": "",
-      "patternString": "(?:entrar|esqueceu[\\s\\S]{0,10}senha)[\\s\\S]{0,5000}instagram[\\s\\S]{0,5000}<form[^>]{0,500}(?:type=[\"']?password|senha)",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "instagram",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "content": "entrar",
+          "nocase": true
+        },
+        {
+          "content": "senha",
+          "nocase": true
+        },
+        {
+          "pattern": "<form",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & (1 | 2) & 3"
     },
     {
       "id": "microsoft-signin-redirect-pattern",
@@ -15105,9 +15168,33 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "note": "",
-      "patternString": "webflow\\.io[\\s\\S]{0,5000}(?:crypto[\\s\\S]{0,200}exchange|wallet[\\s\\S]{0,200}login)[\\s\\S]{0,5000}(?:password|seed[\\s\\S]{0,20}phrase|private[\\s\\S]{0,10}key)",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "webflow.io",
+          "fast_pattern": true
+        },
+        {
+          "content": "password"
+        },
+        {
+          "content": "crypto",
+          "nocase": true
+        },
+        {
+          "content": "wallet",
+          "nocase": true
+        },
+        {
+          "content": "seed phrase",
+          "nocase": true
+        },
+        {
+          "content": "private key",
+          "nocase": true
+        }
+      ],
+      "condition": "0 & (2 | 3) & (1 | 4 | 5)"
     },
     {
       "id": "netflix-phishing-indicators",
@@ -15116,9 +15203,38 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "note": "",
-      "patternString": "netflix[\\s\\S]{0,3000}(?:restart[\\s\\S]{0,100}membership|get[\\s\\S]{0,100}started|unlimited[\\s\\S]{0,100}movies)[\\s\\S]{0,3000}(?:type=[\"']?password|sign.?in|credential|billing[\\s\\S]{0,50}(?:update|verify))",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "netflix",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "content": "restart",
+          "nocase": true
+        },
+        {
+          "content": "membership",
+          "nocase": true
+        },
+        {
+          "content": "unlimited",
+          "nocase": true
+        },
+        {
+          "content": "password"
+        },
+        {
+          "content": "sign in",
+          "nocase": true
+        },
+        {
+          "content": "billing",
+          "nocase": true
+        }
+      ],
+      "condition": "0 & ((1 & 2) | 3) & (4 | 5 | 6)"
     },
     {
       "id": "gemini-chinese-impersonation",
@@ -15138,9 +15254,38 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "note": "",
-      "patternString": "(?:adobe|acrobat|pdf[\\s\\S]{0,10}reader)[\\s\\S]{0,3000}(?:\\.msi|install|download)[\\s\\S]{0,3000}(?:secured[\\s\\S]{0,20}pdf|pdf[\\s\\S]{0,20}viewer|reader[\\s\\S]{0,20}software)",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "adobe",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "content": ".msi"
+        },
+        {
+          "content": "install",
+          "nocase": true
+        },
+        {
+          "content": "download",
+          "nocase": true
+        },
+        {
+          "content": "secured pdf",
+          "nocase": true
+        },
+        {
+          "content": "pdf viewer",
+          "nocase": true
+        },
+        {
+          "content": "reader software",
+          "nocase": true
+        }
+      ],
+      "condition": "0 & (1 | 2 | 3) & (4 | 5 | 6)"
     },
     {
       "id": "coinsquare-char-substitution",
@@ -15204,9 +15349,24 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "note": "",
-      "patternString": "<title>[\\s\\S]{0,20}Webmail[\\s\\S]{0,20}</title>[\\s\\S]{0,3000}background-color:\\s*#eeeeee[\\s\\S]{0,3000}font-family:\\s*Helvetica\\s+Neue[\\s\\S]{0,3000}<input[^>]*type=[\"']password[\"']",
-      "patternFlags": "is"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "Webmail",
+          "fast_pattern": true
+        },
+        {
+          "content": "<title"
+        },
+        {
+          "content": "Helvetica Neue"
+        },
+        {
+          "pattern": "<input[^>]*type=[\"']password[\"']",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "ledger-start-impersonation",
@@ -15248,9 +15408,20 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "note": "",
-      "patternString": "(?:女优厅|太阳厅|台湾厅|赌神厅|性感厅)[\\s\\S]{0,2000}电子游戏[\\s\\S]{0,2000}彩票游戏[\\s\\S]{0,2000}棋牌游戏",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "电子游戏",
+          "fast_pattern": true
+        },
+        {
+          "content": "彩票游戏"
+        },
+        {
+          "content": "棋牌游戏"
+        }
+      ],
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "microsoft-ciam-legitimate-infra",
@@ -15490,9 +15661,24 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "note": "",
-      "patternString": "<title>[^<]{0,20}Outlook[^<]{0,20}</title>[\\s\\S]{0,5000}type=[\"']password[\"'][\\s\\S]{0,3000}sign\\s*in",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "Outlook",
+          "fast_pattern": true
+        },
+        {
+          "content": "<title"
+        },
+        {
+          "content": "password"
+        },
+        {
+          "content": "sign in",
+          "nocase": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "spanish-banking-login-form",
@@ -15831,9 +16017,25 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "note": "",
-      "patternString": "rification[^<]{0,50}(?:CAPTCHA|s[eé]curit[eé])[\\s\\S]{0,5000}<form[^>]{0,300}action=[\"'][^\"']{1,60}\\.php",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "rification",
+          "fast_pattern": true
+        },
+        {
+          "content": "CAPTCHA",
+          "nocase": true
+        },
+        {
+          "content": ".php"
+        },
+        {
+          "pattern": "<form[^>]*action=",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "turnstile-non-cloudflare-domain",
@@ -16150,9 +16352,34 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "note": "",
-      "patternString": "netflix[^\"']{0,200}\\.(?:png|svg|jpg|webp)[\\s\\S]{0,5000}<form[\\s\\S]{0,2000}<input[^>]*type=[\"'](?:email|text)[\"'][\\s\\S]{0,3000}(?:get\\s*started|sign\\s*in|sign\\s*up)",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "netflix",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<form"
+        },
+        {
+          "pattern": "<input[^>]*type=[\"'](?:email|text)[\"']",
+          "flags": "i"
+        },
+        {
+          "content": "get started",
+          "nocase": true
+        },
+        {
+          "content": "sign in",
+          "nocase": true
+        },
+        {
+          "content": "sign up",
+          "nocase": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & (3 | 4 | 5)"
     },
     {
       "id": "fake-paypal-openid-endpoint",
@@ -19970,9 +20197,37 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "note": "",
-      "patternString": "NETFLIX[\\s\\S]{0,1000}(?:sign\\s*in|verify|update|confirm|suspend|locked)[\\s\\S]{0,3000}<form[^>]{0,300}>[\\s\\S]{0,2000}<input[^>]+type=[\"'](?:email|password)[\"']",
-      "patternFlags": "is"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "NETFLIX",
+          "fast_pattern": true
+        },
+        {
+          "content": "verify",
+          "nocase": true
+        },
+        {
+          "content": "confirm",
+          "nocase": true
+        },
+        {
+          "content": "suspend",
+          "nocase": true
+        },
+        {
+          "content": "locked",
+          "nocase": true
+        },
+        {
+          "pattern": "<form"
+        },
+        {
+          "pattern": "<input[^>]+type=[\"'](?:email|password)[\"']",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & (1 | 2 | 3 | 4) & 5 & 6"
     },
     {
       "id": "dana-indonesian-phishkit",
@@ -20179,9 +20434,22 @@
       "severity": "medium",
       "weight": 0.3,
       "source": "html",
-      "note": "",
-      "patternString": "<title>Webmail</title>[\\s\\S]{0,3000}<form[^>]{0,200}action=[\"'][^\"']{0,200}(?:log|auth|verify|next)[^\"']{0,200}[\"'][\\s\\S]{0,1000}<input[^>]{0,200}type=[\"']password[\"']",
-      "patternFlags": "is"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "<title>Webmail</title>",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<form[^>]*action=[\"'][^\"']*(log|auth|verify|next)",
+          "flags": "i"
+        },
+        {
+          "pattern": "<input[^>]*type=[\"']password[\"']",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "css-phishkit-birthdate",
@@ -20300,9 +20568,31 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "note": "",
-      "patternString": "I am not a robot.*verify.*human.*form-container.*display:\\s*none",
-      "patternFlags": "is"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "I am not a robot",
+          "fast_pattern": true
+        },
+        {
+          "content": "verify",
+          "nocase": true
+        },
+        {
+          "content": "human",
+          "nocase": true
+        },
+        {
+          "content": "form-container"
+        },
+        {
+          "content": "display: none"
+        },
+        {
+          "content": "display:none"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3 & (4 | 5)"
     },
     {
       "id": "microsoft-login-phishkit",
@@ -20311,9 +20601,25 @@
       "severity": "high",
       "weight": 0.5,
       "source": "html",
-      "note": "",
-      "patternString": "Copyright.*Microsoft Corporation.*All rights reserved.*Sign in to your Microsoft account.*<input[^>]*(?:password|email)",
-      "patternFlags": "is"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "Microsoft Corporation",
+          "fast_pattern": true
+        },
+        {
+          "content": "All rights reserved"
+        },
+        {
+          "content": "Sign in to your Microsoft account",
+          "nocase": true
+        },
+        {
+          "pattern": "<input[^>]*(?:password|email)",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "microsoft-cdn-spoofing",
@@ -20795,9 +21101,29 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "note": "",
-      "patternString": "\\{\\{.*phone.*\\}\\}.*WhatsApp|連結.*裝置.*\\{\\{.*item.*\\}\\}",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "WhatsApp",
+          "fast_pattern": true
+        },
+        {
+          "content": "phone"
+        },
+        {
+          "content": "{{"
+        },
+        {
+          "content": "}}"
+        },
+        {
+          "content": "連結"
+        },
+        {
+          "content": "裝置"
+        }
+      ],
+      "condition": "(0 & 1 & 2 & 3) | (4 & 5 & 2 & 3)"
     },
     {
       "id": "phishkit-user-time-tracker",
@@ -22709,9 +23035,23 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "note": "",
-      "patternString": "تنبيه أمني[\\s\\S]{0,300}إدارة النظام[\\s\\S]{0,300}تأكيد هويتك[\\s\\S]{0,300}محتوى مقيد|(?:facebook|meta)[^<]{0,200}security[^<]{0,200}alert[^<]{0,200}verify[^<]{0,200}identity[^<]{0,200}restricted",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "تنبيه أمني",
+          "fast_pattern": true
+        },
+        {
+          "content": "إدارة النظام"
+        },
+        {
+          "content": "تأكيد هويتك"
+        },
+        {
+          "content": "محتوى مقيد"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "wallet-interface-image-phish",
@@ -22753,9 +23093,32 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "note": "",
-      "patternString": "WhatsApp[\\s\\S]{0,300}安全[\\s\\S]{0,300}中心[\\s\\S]{0,300}驗證|系統[\\s\\S]{0,300}帳號[\\s\\S]{0,300}風險[\\s\\S]{0,300}驗證|自動[\\s\\S]{0,300}帳號[\\s\\S]{0,300}封禁[\\s\\S]{0,300}註銷",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "WhatsApp",
+          "fast_pattern": true
+        },
+        {
+          "content": "安全"
+        },
+        {
+          "content": "中心"
+        },
+        {
+          "content": "驗證"
+        },
+        {
+          "content": "帳號"
+        },
+        {
+          "content": "封禁"
+        },
+        {
+          "content": "風險"
+        }
+      ],
+      "condition": "(0 & 1 & 2 & 3) | (4 & 6 & 3) | (4 & 5)"
     },
     {
       "id": "apple-support-vishing-alert",
@@ -24436,9 +24799,21 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "note": "",
-      "patternString": "duckdns\\.org[^\"]{0,200}[\\s\\S]{0,50000}<form[^>]{0,500}action=[\"'][^\"']{1,100}\\.php",
-      "patternFlags": "i"
+      "note": " [converted to multi-match for performance]",
+      "match": [
+        {
+          "content": "duckdns.org",
+          "fast_pattern": true
+        },
+        {
+          "content": ".php"
+        },
+        {
+          "pattern": "<form[^>]*action=",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "venmo-log-php-endpoint",
