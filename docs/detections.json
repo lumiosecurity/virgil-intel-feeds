@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-02-03:01",
-    "generatedAt": "2026-04-02T03:01:30.227Z",
+    "version": "2026-04-02-03:38",
+    "generatedAt": "2026-04-02T03:38:56.177Z",
     "brandCount": 187,
     "patternCount": 962
   },
@@ -14036,10 +14036,10 @@
       "group": "botEvasion",
       "description": "Reversed strings used to build ISP/org blocklist for bot evasion — matches split().reverse().join() pattern checking against org names",
       "severity": "high",
-      "weight": 0.4,
+      "weight": 0.35,
       "source": "js",
-      "note": "",
-      "patternString": "split\\([\"'][\"']\\)\\.reverse\\(\\)\\.join\\([\"'][\"']\\)",
+      "note": "String reversal to hide ISP blocklist entries. Requires ISP/VPN context — bare split/reverse/join is common legitimate JS.",
+      "patternString": "split\\([\"'][\"']\\)\\.reverse\\(\\)\\.join\\([\"'][\"']\\)[\\s\\S]{0,500}(?:isp|vpn|proxy|provider|comcast|verizon|spectrum|att\\.net|cox|charter)",
       "patternFlags": "i"
     },
     {
@@ -16951,10 +16951,10 @@
       "group": "credentialHarvesting",
       "description": "Fake passkey/WebAuthn prompt with password fallback — phishing attack on passwordless auth",
       "severity": "high",
-      "weight": 0.3,
+      "weight": 0.25,
       "source": "js",
-      "note": "Fake passkey prompts that 'fail' and fall back to password entry are designed to phish users who normally use passwordless authentication. The passkey 'error' is fabricated to force password entry.",
-      "patternString": "(?:passkey|webauthn|credential)[\\s\\S]{0,300}(?:not\\s*(?:available|supported|found)|failed|error|try\\s*another)[\\s\\S]{0,300}(?:password|enter\\s*(?:your|a)\\s*password|sign\\s*in\\s*with\\s*password)",
+      "note": "Passkey downgrade attack: WebAuthn error steering victim to password login. Requires password/login context — without it, could be legitimate WebAuthn error handling.",
+      "patternString": "(?:passkey|webauthn|credential)[\\s\\S]{0,300}(?:not\\s*(?:available|supported|found)|failed|error|try\\s*another)[\\s\\S]{0,300}(?:password|sign.?in|log.?in)",
       "patternFlags": "i"
     },
     {
@@ -17448,8 +17448,8 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "note": "Extracting specific session/auth cookie names from document.cookie via string parsing is targeted session token theft. The phishing kit knows exactly which cookies to steal for session replay on the target service.",
-      "patternString": "document\\.cookie[\\s\\S]{0,200}(?:split|match|indexOf|includes)\\([\\s\\S]{0,100}(?:session|auth|token|sid|JSESSIONID|PHPSESSID|connect\\.sid|_ga_|csrftoken)",
+      "note": "AiTM cookie extraction targeting session tokens + exfil. Requires fetch/XHR/beacon/postMessage after extraction — without exfil, it is just cookie reading.",
+      "patternString": "document\\.cookie[\\s\\S]{0,200}(?:split|match|indexOf|includes)\\([\\s\\S]{0,100}(?:session|auth|token|sid|JSESSIONID|PHPSESSID)[\\s\\S]{0,500}(?:fetch\\(|XMLHttpRequest|sendBeacon|new\\s+Image|postMessage)",
       "patternFlags": "i"
     },
     {
@@ -17501,10 +17501,10 @@
       "group": "credentialHarvesting",
       "description": "postMessage listener capturing data from embedded auth iframe — cross-origin credential relay",
       "severity": "high",
-      "weight": 0.35,
+      "weight": 0.3,
       "source": "js",
-      "note": "A postMessage event listener specifically looking for token/cookie/credential/auth data from embedded iframes is the cross-origin AiTM relay pattern. The parent page receives authentication data from the embedded legitimate login iframe.",
-      "patternString": "addEventListener\\(['\"]message['\"][\\s\\S]{0,300}(?:data|event\\.data)[\\s\\S]{0,300}(?:token|cookie|credential|session|auth|code|access)",
+      "note": "postMessage listener extracting password/credential/SSN/card data. Narrowed from generic auth/token terms to definitive credential indicators.",
+      "patternString": "addEventListener\\(['\"]message['\"][\\s\\S]{0,300}(?:data|event\\.data)[\\s\\S]{0,300}(?:password|credential|ssn|credit.?card|cvv)",
       "patternFlags": "i"
     },
     {
@@ -18461,10 +18461,10 @@
       "group": "obfuscation",
       "description": "Heavy hex escape sequences in JavaScript — used to hide phishing keywords from static scanners",
       "severity": "medium",
-      "weight": 0.25,
+      "weight": 0.2,
       "source": "js",
-      "note": "Five or more consecutive hex escape sequences (\\x41\\x42...) indicate heavy string obfuscation. Phishing kits use this to encode brand names, URLs, and credential field selectors to evade pattern matching.",
-      "patternString": "\\\\x[0-9a-fA-F]{2}\\\\x[0-9a-fA-F]{2}\\\\x[0-9a-fA-F]{2}\\\\x[0-9a-fA-F]{2}\\\\x[0-9a-fA-F]{2}",
+      "note": "Heavy hex escape obfuscation — 10+ consecutive hex escapes. Raised from 5 — minified JS commonly has short hex runs.",
+      "patternString": "(?:\\\\x[0-9a-fA-F]{2}){10,}",
       "patternFlags": "i"
     },
     {
@@ -18527,10 +18527,10 @@
       "group": "obfuscation",
       "description": "Number.toString with custom radix used for string obfuscation — hides phishing content",
       "severity": "medium",
-      "weight": 0.25,
+      "weight": 0.2,
       "source": "js",
-      "note": "Repeated use of .toString(16) or .toString(36) to convert numbers to hexadecimal or base-36 strings is an obfuscation technique for hiding URLs, brand names, and other phishing indicators in numeric form.",
-      "patternString": "\\.toString\\((?:16|36)\\)[\\s\\S]{0,100}\\.toString\\((?:16|36)\\)",
+      "note": "Radix obfuscation — 3+ toString(16/36) calls in close proximity. Raised from 2 — analytics code commonly uses hex conversion.",
+      "patternString": "(?:\\.toString\\((?:16|36)\\)[\\s\\S]{0,50}){3,}",
       "patternFlags": "i"
     },
     {
@@ -18890,9 +18890,9 @@
       "group": "obfuscation",
       "description": "javascript-obfuscator self-defending — Function.toString() integrity check preventing code modification",
       "severity": "high",
-      "weight": 0.35,
+      "weight": 0.15,
       "source": "js",
-      "note": "The self-defending mechanism uses Function('return this')() to get a global reference, then checks toString/toSource integrity. If code has been modified (e.g., beautified or deobfuscated), the integrity check fails and the code breaks or loops.",
+      "note": "Function(\"return this\")() + toString — used by some legitimate polyfills. Lowered weight — weak obfuscation indicator, not definitive.",
       "patternString": "(?:Function|constructor)\\(['\"](return\\s*this)['\"]\\)\\s*\\(\\s*\\)[\\s\\S]{0,200}(?:toString|toSource|apply|call)",
       "patternFlags": "i"
     },
@@ -21158,8 +21158,8 @@
       "severity": "high",
       "weight": 0.45,
       "source": "js",
-      "note": "Keypress event handlers that accumulate keystrokes into a string or array are credential keyloggers. They capture everything typed including passwords without requiring form submission. Definitive phishing signal.",
-      "patternString": "(?:addEventListener|onkeypress|onkeydown|onkeyup)\\([\\s\\S]{0,200}(?:key|keyCode|which)[\\s\\S]{0,300}(?:\\+=\\s*(?:e\\.key|String\\.fromCharCode)|push\\()",
+      "note": "Keystroke accumulation + exfil destination. Requires fetch/XHR/beacon/Image after accumulation — without exfil context, this is just a keyboard handler.",
+      "patternString": "(?:addEventListener|onkeypress|onkeydown|onkeyup)\\([\\s\\S]{0,200}(?:key|keyCode|which)[\\s\\S]{0,300}(?:\\+=\\s*(?:e\\.key|String\\.fromCharCode|charCode)|push\\(|concat\\()[\\s\\S]{0,500}(?:fetch|XMLHttpRequest|sendBeacon|new\\s+Image)",
       "patternFlags": "i"
     },
     {
@@ -23345,10 +23345,10 @@
       "group": "socialEngineering",
       "description": "Double login prompt — 'incorrect password' error after first submission forcing second credential entry",
       "severity": "high",
-      "weight": 0.3,
+      "weight": 0.25,
       "source": "js",
-      "note": "Showing 'incorrect password' after the first credential submission and prompting re-entry is the AiTM double login pattern. The first submission is relayed to the real site; if it succeeds, a fake error captures the password again for the attacker's records.",
-      "patternString": "(?:incorrect|invalid|wrong|failed|error)[\\s\\S]{0,300}(?:password|credential|authentication)[\\s\\S]{0,500}(?:try\\s*again|re-?enter|retry|one\\s*more)",
+      "note": "AiTM double credential prompt: shows error to collect password twice. Requires form submission context — generic error messages alone are too broad.",
+      "patternString": "(?:incorrect|invalid|wrong)\\s+(?:password|credential)[\\s\\S]{0,200}(?:try\\s*again|re.?enter|submit)[\\s\\S]{0,300}(?:action=|formData|fetch\\(|XMLHttpRequest)",
       "patternFlags": "i"
     },
     {
