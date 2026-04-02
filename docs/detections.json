@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-02-20:04",
-    "generatedAt": "2026-04-02T20:04:00.141Z",
+    "version": "2026-04-02-20:28",
+    "generatedAt": "2026-04-02T20:28:46.798Z",
     "brandCount": 187,
-    "patternCount": 1074,
+    "patternCount": 1076,
     "networkPatternCount": 17
   },
   "brandEntries": [
@@ -16575,6 +16575,17 @@
       "patternFlags": "i"
     },
     {
+      "id": "microsoft-product-portfolio-mimic",
+      "group": "brandImpersonation",
+      "description": "Page mimics Microsoft product portfolio with multiple Microsoft product names and navigation",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "note": "Detects comprehensive Microsoft product mimicry - bounded wildcards prevent performance issues",
+      "patternString": "Microsoft[\\s\\S]{0,2000}(?:Teams|Surface|Xbox|Office)[\\s\\S]{0,2000}(?:Teams|Surface|Xbox|Office|365)",
+      "patternFlags": "i"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -27757,6 +27768,17 @@
       "source": "html",
       "note": "Fax document phishing lures are a classic attack vector targeting enterprise users. Nearly no legitimate service uses 'New Fax' as a web page title in 2025.",
       "patternString": "<title>[^<]*(?:(?:New|Incoming) Fax|eFax|Fax (?:Document|Message|Notification)|Scanned Document)[^<]*</title>",
+      "patternFlags": "i"
+    },
+    {
+      "id": "microsoft-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Microsoft branding combined with login/account keywords in page title or main headers on non-Microsoft domain",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "note": "Requires Microsoft brand AND login/account context in title to reduce FP on legitimate tech sites; bounded quantifiers for performance",
+      "patternString": "<title[^>]{0,100}>Microsoft[^<]{0,80}(?:sign.?in|log.?in|account|password|verify|secure)[^<]{0,80}</title>|<title[^>]{0,100}>(?:sign.?in|log.?in|account|password|verify|secure)[^<]{0,80}Microsoft[^<]{0,80}</title>",
       "patternFlags": "i"
     },
     {

@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T20:04:00.117Z",
+    "compiledAt": "2026-04-02T20:28:46.602Z",
     "brandCount": 187,
     "signalCount": 1,
-    "patternCount": 1074,
+    "patternCount": 1076,
     "networkPatternCount": 17,
     "domHashCount": 0,
     "metaRuleCount": 28
@@ -5608,6 +5608,17 @@
       "patternString": "(?:fonts\\.googleapis\\.com|fonts\\.gstatic\\.com)[^\"']*(?:Product Sans|Segoe UI|SF Pro|Amazon Ember|Roboto[\\s\\S]{0,50}wght@[34]00)",
       "patternFlags": "i",
       "note": "Loading brand-specific fonts (Product Sans for Google, Segoe UI for Microsoft, Amazon Ember for Amazon) on a non-brand domain suggests a cloned page. Very low weight alone."
+    },
+    {
+      "id": "microsoft-product-portfolio-mimic",
+      "group": "brandImpersonation",
+      "description": "Page mimics Microsoft product portfolio with multiple Microsoft product names and navigation",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "Microsoft[\\s\\S]{0,2000}(?:Teams|Surface|Xbox|Office)[\\s\\S]{0,2000}(?:Teams|Surface|Xbox|Office|365)",
+      "patternFlags": "i",
+      "note": "Detects comprehensive Microsoft product mimicry - bounded wildcards prevent performance issues"
     },
     {
       "id": "fake-captcha-gating",
@@ -16623,6 +16634,17 @@
       "note": "Fax document phishing lures are a classic attack vector targeting enterprise users. Nearly no legitimate service uses 'New Fax' as a web page title in 2025."
     },
     {
+      "id": "microsoft-title-impersonation",
+      "group": "titleImpersonation",
+      "description": "Microsoft branding combined with login/account keywords in page title or main headers on non-Microsoft domain",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<title[^>]{0,100}>Microsoft[^<]{0,80}(?:sign.?in|log.?in|account|password|verify|secure)[^<]{0,80}</title>|<title[^>]{0,100}>(?:sign.?in|log.?in|account|password|verify|secure)[^<]{0,80}Microsoft[^<]{0,80}</title>",
+      "patternFlags": "i",
+      "note": "Requires Microsoft brand AND login/account context in title to reduce FP on legitimate tech sites; bounded quantifiers for performance"
+    },
+    {
       "id": "ndax-auth-typosquat",
       "group": "typosquat",
       "description": "NDAX authentication typosquat patterns",
@@ -18683,7 +18705,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-02T17:29:37.585Z",
+      "compiledAt": "2026-04-02T20:03:57.190Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
