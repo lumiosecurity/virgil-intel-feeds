@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-02-15:37",
-    "generatedAt": "2026-04-02T15:37:28.380Z",
+    "version": "2026-04-02-16:04",
+    "generatedAt": "2026-04-02T16:04:04.458Z",
     "brandCount": 187,
     "patternCount": 977
   },
@@ -27561,6 +27561,267 @@
   "domHashes": [],
   "metaRules": [
     {
+      "id": "aitm-proxy-credential-relay",
+      "description": "Two or more AITM (adversary-in-the-middle) proxy signals on the same page — confirms an active session hijacking phishkit, not just a coincidental pattern match",
+      "conditions": {
+        "all": [
+          {
+            "signal_prefix": "source-aitm-"
+          }
+        ],
+        "any": [
+          {
+            "signal": "source-aitm-cookie-exfil-all-cookies"
+          },
+          {
+            "signal": "source-aitm-ms-estsauth-cookie-capture"
+          },
+          {
+            "signal": "source-aitm-session-cookie-intercept"
+          },
+          {
+            "signal": "source-aitm-oauth-code-intercept"
+          },
+          {
+            "signal": "source-aitm-websocket-credential-token-stream"
+          },
+          {
+            "signal": "source-aitm-cookie-extract-specific"
+          },
+          {
+            "signal": "source-aitm-set-cookie-relay-js"
+          },
+          {
+            "signal": "source-aitm-fake-mfa-after-password"
+          },
+          {
+            "signal": "source-aitm-postmessage-iframe-credential"
+          },
+          {
+            "signal": "source-aitm-service-worker-intercept"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.25,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "telegram-exfil-plus-brand",
+      "description": "Telegram exfiltration code combined with brand impersonation — confirmed credential harvesting phishkit exfiltrating to Telegram",
+      "conditions": {
+        "all": [
+          {
+            "signal_group": "brandImpersonation"
+          }
+        ],
+        "any": [
+          {
+            "signal": "source-telegram-bot-exfil"
+          },
+          {
+            "signal": "source-telegram-bot-exfil-token"
+          },
+          {
+            "signal": "source-telegram-bot-exfil-obfuscated"
+          },
+          {
+            "signal": "source-telegram-api-fetch-post"
+          },
+          {
+            "signal": "source-telegram-xhr-exfil-call"
+          },
+          {
+            "signal": "source-telegram-send-document-exfil"
+          },
+          {
+            "signal": "source-telegram-send-photo-exfil"
+          },
+          {
+            "signal": "source-telegram-sendmessage-url-params"
+          },
+          {
+            "signal": "source-telegram-bot-message-format"
+          },
+          {
+            "signal": "source-telegram-multipart-form-exfil"
+          },
+          {
+            "signal": "source-telegram-exfil-comment"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "phishkit-multi-stage-auth-external",
+      "description": "Multi-step authentication flow with external form submission or CAPTCHA gating — confirms a credential harvesting phishkit, not a legitimate multi-step login",
+      "conditions": {
+        "all": [
+          {
+            "has_external_form": true
+          }
+        ],
+        "any": [
+          {
+            "signal": "source-multi-step-auth-phish"
+          },
+          {
+            "signal": "source-tycoon-email-first-then-password"
+          },
+          {
+            "signal": "source-aitm-multi-step-page-state"
+          },
+          {
+            "signal": "source-mfa-otp-capture-field"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.25,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "hosting-platform-brand-form",
+      "description": "Free hosting platform + brand impersonation + password form — classic phishing deployment on free infrastructure",
+      "conditions": {
+        "all": [
+          {
+            "signal_group": "brandImpersonation"
+          },
+          {
+            "has_password_form": true
+          }
+        ],
+        "any": [
+          {
+            "signal": "source-firebase-hosted-login"
+          },
+          {
+            "signal": "source-vercel-app-login-hosting"
+          },
+          {
+            "signal": "source-netlify-app-login-hosting"
+          },
+          {
+            "signal": "source-cloudflare-pages-hosting"
+          },
+          {
+            "signal": "source-cloudflare-workers-hosting"
+          },
+          {
+            "signal": "source-surge-sh-hosting"
+          },
+          {
+            "signal": "source-glitch-hosted-phish"
+          },
+          {
+            "signal": "source-render-hosting-login"
+          },
+          {
+            "signal": "source-weebly-hosted-phish"
+          },
+          {
+            "signal": "free-subdomain-host"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.25,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "clickfix-kit-plus-lure",
+      "description": "ClickFix phishkit signature combined with social engineering lure — confirmed malware delivery via clipboard injection",
+      "conditions": {
+        "any": [
+          {
+            "signal": "source-clickfix-clipboard-inject"
+          },
+          {
+            "signal": "source-clickfix-clipboard-powershell-inject"
+          },
+          {
+            "signal": "source-mm-clickfix-paste-and-run"
+          }
+        ],
+        "all": [
+          {
+            "signal": "source-clickfix-run-dialog-instructions"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "document-lure-brand-login",
+      "description": "Document/shared-file social engineering lure combined with brand impersonation and a login form — classic 'view this document' phishing flow",
+      "conditions": {
+        "all": [
+          {
+            "has_login_form": true
+          }
+        ],
+        "any": [
+          {
+            "signal": "source-shared-document-lure"
+          },
+          {
+            "signal": "source-blurred-document-preview-login"
+          },
+          {
+            "signal": "source-view-document-button-password"
+          },
+          {
+            "signal": "source-login-to-view-file-button"
+          },
+          {
+            "signal": "source-shared-document-view-prompt"
+          },
+          {
+            "signal": "source-shared-document-preview-blur"
+          },
+          {
+            "signal": "source-document-notification-generic-login"
+          },
+          {
+            "signal": "source-document-image-login-overlay"
+          },
+          {
+            "signal": "source-secure-message-view-login"
+          },
+          {
+            "signal": "source-fax-voicemail-document-lure"
+          },
+          {
+            "signal": "source-voicemail-notification-lure"
+          },
+          {
+            "signal": "source-pdf-verification-social-engineering"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      }
+    },
+    {
       "id": "new-domain-credential-harvester",
       "description": "Domain < 7 days old with a password form posting to an external endpoint — nearly definitive credential phishing",
       "conditions": {
@@ -27810,6 +28071,369 @@
         "scope": "downscore",
         "weight": 0.05,
         "severity": "low"
+      }
+    },
+    {
+      "id": "zerofont-cluster-dedup",
+      "description": "Multiple zerofont obfuscation patterns fired — they all detect the same email evasion technique. Replace accumulated weight with a single calibrated signal.",
+      "conditions": {
+        "all": [
+          {
+            "signal": "source-zerofont-span-text-split"
+          }
+        ],
+        "any": [
+          {
+            "signal": "source-zerofont-display-none-text-block"
+          },
+          {
+            "signal": "source-zerofont-opacity-zero-container"
+          },
+          {
+            "signal": "source-zerofont-multi-property-hide"
+          },
+          {
+            "signal": "source-zerofont-color-match-background"
+          },
+          {
+            "signal": "source-zerofont-maxheight-zero-clip"
+          },
+          {
+            "signal": "source-zerofont-width-zero-clip"
+          },
+          {
+            "signal": "source-zerofont-lineheight-zero-collapse"
+          },
+          {
+            "signal": "source-zerofont-mso-hide-outlook"
+          },
+          {
+            "signal": "source-zerofont-interleaved-junk-chars"
+          },
+          {
+            "signal": "source-zerofont-font-tag-size-zero"
+          },
+          {
+            "signal": "source-zerofont-absolute-offscreen"
+          }
+        ]
+      },
+      "action": {
+        "scope": "replace",
+        "weight": 0.35,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "jsobs-cluster-dedup",
+      "description": "Multiple javascript-obfuscator.io patterns fired — they all detect the same obfuscation tool. Replace accumulated weight with a single calibrated signal.",
+      "conditions": {
+        "all": [
+          {
+            "signal_prefix": "source-jsobs-"
+          }
+        ],
+        "any": [
+          {
+            "signal": "source-jsobs-string-array-rotation"
+          },
+          {
+            "signal": "source-jsobs-string-array-accessor"
+          },
+          {
+            "signal": "source-jsobs-control-flow-flatten"
+          },
+          {
+            "signal": "source-jsobs-rc4-string-decode"
+          },
+          {
+            "signal": "source-jsobs-string-array-calls-function"
+          },
+          {
+            "signal": "source-jsobs-parseint-hex-chain"
+          },
+          {
+            "signal": "source-jsobs-string-array-b64-decode"
+          },
+          {
+            "signal": "source-jsobs-self-defending-counter"
+          },
+          {
+            "signal": "source-jsobs-identifier-prefix-density"
+          },
+          {
+            "signal": "source-jsobs-string-array-large"
+          },
+          {
+            "signal": "source-jsobs-wrapper-iife-structure"
+          },
+          {
+            "signal": "source-jsobs-self-defending-tostring"
+          },
+          {
+            "signal": "source-jsobs-debug-protection-interval"
+          },
+          {
+            "signal": "source-jsobs-console-disable"
+          },
+          {
+            "signal": "source-jsobs-domain-lock-check"
+          }
+        ]
+      },
+      "action": {
+        "scope": "replace",
+        "weight": 0.4,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "tycoon-kit-cluster-dedup",
+      "description": "Multiple Tycoon 2FA phishkit patterns fired — they all identify the same kit. Replace with a single high-confidence phishkit identification signal.",
+      "conditions": {
+        "all": [
+          {
+            "signal": "source-tycoon-email-first-then-password"
+          }
+        ],
+        "any": [
+          {
+            "signal": "source-tycoon-org-branding-fetch"
+          },
+          {
+            "signal": "source-tycoon-post-phish-ms-redirect"
+          },
+          {
+            "signal": "source-tycoon-ms-error-message-adaptation"
+          },
+          {
+            "signal": "source-tycoon-stage-progression-signals"
+          },
+          {
+            "signal": "source-tycoon-navigator-webdriver-check"
+          },
+          {
+            "signal": "source-tycoon-phantomjs-detect"
+          },
+          {
+            "signal": "source-tycoon-clipboard-overwrite-oncopy"
+          },
+          {
+            "signal": "source-tycoon-redirect-rakuten-antibot"
+          },
+          {
+            "signal": "source-tycoon-f12-devtools-block"
+          },
+          {
+            "signal": "source-tycoon-canvas-captcha-noise"
+          },
+          {
+            "signal": "source-tycoon-captcha-verify-fetch-payload"
+          },
+          {
+            "signal": "source-tycoon-iconcaptcha-integration"
+          },
+          {
+            "signal": "source-tycoon-whitespace-obfuscation-variants"
+          },
+          {
+            "signal": "source-tycoon-aes-payload-decrypt"
+          },
+          {
+            "signal": "source-mm-tycoon-multi-stage"
+          }
+        ]
+      },
+      "action": {
+        "scope": "replace",
+        "weight": 0.5,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "delivery-scam-signal-cap",
+      "description": "Multiple delivery/toll scam patterns fired across socialEngineering, credentialHarvesting, and brandImpersonation — they all detect the same delivery scam campaign. Replace with calibrated weight.",
+      "conditions": {
+        "all": [
+          {
+            "has_form": true
+          }
+        ],
+        "any": [
+          {
+            "signal": "source-toll-unpaid-balance-urgency"
+          },
+          {
+            "signal": "source-toll-account-suspension-warning"
+          },
+          {
+            "signal": "source-toll-violation-number-display"
+          },
+          {
+            "signal": "source-toll-dmv-registration-threat"
+          },
+          {
+            "signal": "source-toll-collections-escalation"
+          },
+          {
+            "signal": "source-toll-small-amount-card-harvest"
+          },
+          {
+            "signal": "source-toll-otp-after-card"
+          },
+          {
+            "signal": "source-toll-wallet-link-attempt"
+          },
+          {
+            "signal": "source-toll-license-plate-lookup"
+          },
+          {
+            "signal": "source-toll-page-no-login-direct-pay"
+          },
+          {
+            "signal": "source-toll-brand-name-payment-form"
+          },
+          {
+            "signal": "source-delivery-redelivery-fee"
+          },
+          {
+            "signal": "source-address-update-for-delivery"
+          },
+          {
+            "signal": "source-small-fee-card-harvest"
+          },
+          {
+            "signal": "source-delivery-preference-update-phish"
+          },
+          {
+            "signal": "source-customs-duty-fee-payment-form"
+          },
+          {
+            "signal": "source-tariff-fee-delivery-scam"
+          },
+          {
+            "signal": "source-tracking-number-display-payment"
+          },
+          {
+            "signal": "source-package-held-urgency-text"
+          },
+          {
+            "signal": "source-delivery-scheduling-fee"
+          },
+          {
+            "signal": "source-postage-due-payment"
+          },
+          {
+            "signal": "source-fake-delivery-status-tracker"
+          },
+          {
+            "signal": "source-courier-tracking-input-form"
+          },
+          {
+            "signal": "source-delivery-otp-verification-page"
+          },
+          {
+            "signal": "source-delivery-exception-address-update"
+          }
+        ]
+      },
+      "action": {
+        "scope": "replace",
+        "weight": 0.5,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "microsoft-impersonation-cluster-cap",
+      "description": "Multiple Microsoft-specific impersonation patterns fired — they all detect the same brand impersonation. Cap the cluster to prevent score explosion on Microsoft phishing pages.",
+      "conditions": {
+        "all": [
+          {
+            "signal_prefix": "source-microsoft-"
+          }
+        ],
+        "any": [
+          {
+            "signal": "source-microsoft-signin-redirect-pattern"
+          },
+          {
+            "signal": "source-microsoft-cdn-impersonation"
+          },
+          {
+            "signal": "source-microsoft-login-impersonation"
+          },
+          {
+            "signal": "source-microsoft-login-phishkit"
+          },
+          {
+            "signal": "source-microsoft-cdn-spoofing"
+          },
+          {
+            "signal": "source-microsoft-visual-impersonation"
+          },
+          {
+            "signal": "source-microsoft-convergedsignin-pageid"
+          },
+          {
+            "signal": "source-microsoft-favicon-thirdparty-exfil"
+          },
+          {
+            "signal": "source-microsoft-copyright-impersonation"
+          },
+          {
+            "signal": "source-microsoft-login-title-impersonation"
+          },
+          {
+            "signal": "source-microsoft-segoeui-fontface-phishkit"
+          },
+          {
+            "signal": "source-microsoft-signin-ui-impersonation"
+          },
+          {
+            "signal": "source-microsoft-signin-flow-text-impersonation"
+          },
+          {
+            "signal": "source-microsoft-create-account-signin-impersonation"
+          },
+          {
+            "signal": "source-microsoft-login-font-fingerprint"
+          },
+          {
+            "signal": "source-ms-auth-flow-approve-signin-text"
+          },
+          {
+            "signal": "source-ms-login-other-ways-signin"
+          },
+          {
+            "signal": "source-ms-stay-signed-in-prompt"
+          },
+          {
+            "signal": "source-ms-oauth-params-in-base64-url"
+          },
+          {
+            "signal": "source-ms-oauth-params-nonms-domain"
+          },
+          {
+            "signal": "source-sso-keyword-domain-microsoft-impersonation"
+          },
+          {
+            "signal": "source-office365-subdomain-impersonation"
+          },
+          {
+            "signal": "source-office365-logo-credential-form"
+          },
+          {
+            "signal": "source-outlook-title-password-signin"
+          },
+          {
+            "signal": "source-b64-param-microsoft-login-redirect"
+          }
+        ]
+      },
+      "action": {
+        "scope": "replace",
+        "weight": 0.55,
+        "severity": "high"
       }
     }
   ]
