@@ -1,9 +1,10 @@
 {
   "_meta": {
-    "version": "2026-04-02-17:29",
-    "generatedAt": "2026-04-02T17:29:40.356Z",
+    "version": "2026-04-02-20:04",
+    "generatedAt": "2026-04-02T20:04:00.141Z",
     "brandCount": 187,
-    "patternCount": 1065
+    "patternCount": 1074,
+    "networkPatternCount": 17
   },
   "brandEntries": [
     {
@@ -17036,6 +17037,105 @@
       "patternFlags": "i"
     },
     {
+      "id": "axios-cookie-exfil-post",
+      "group": "phishkitSignatures",
+      "description": "Axios library used to POST document.cookie to an external endpoint — AiTM session cookie theft",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "js",
+      "note": "AiTM phishing kits (Salty 2FA, Tycoon2FA variants) inject Axios to silently POST stolen session cookies to drop servers. No legitimate login page uses Axios to exfiltrate document.cookie.",
+      "patternString": "axios\\.post\\([^)]{5,200}document\\.cookie",
+      "patternFlags": "i"
+    },
+    {
+      "id": "fetch-cookie-exfil-to-external",
+      "group": "phishkitSignatures",
+      "description": "fetch() call sending document.cookie value in request body",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "note": "Phishkits use fetch to POST stolen cookies to attacker-controlled endpoints. The pattern requires both fetch and document.cookie in proximity.",
+      "patternString": "fetch\\([^)]{5,200}document\\.cookie",
+      "patternFlags": "is"
+    },
+    {
+      "id": "cookie-grab-variable-assignment",
+      "group": "credentialHarvesting",
+      "description": "document.cookie assigned to a variable named with exfil-related keywords",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "note": "Phishkit source code often assigns document.cookie to descriptively named variables before exfiltrating. Legitimate sites never use these variable names for cookies.",
+      "patternString": "(?:stolen|grabbed|hijacked|captured|victim|exfil|harvest|collect)[\\w]*\\s*=\\s*document\\.cookie",
+      "patternFlags": "i"
+    },
+    {
+      "id": "cookie-in-telegram-exfil-payload",
+      "group": "phishkitSignatures",
+      "description": "document.cookie included in a Telegram bot API exfiltration payload",
+      "severity": "high",
+      "weight": 0.5,
+      "source": "js",
+      "note": "Phishkits exfiltrate stolen session cookies alongside credentials via Telegram Bot API. The bidirectional pattern catches both orderings.",
+      "patternString": "(?:telegram\\.org|sendMessage)[\\s\\S]{0,2000}document\\.cookie|document\\.cookie[\\s\\S]{0,2000}(?:telegram\\.org|sendMessage)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "cookie-json-stringify-exfil",
+      "group": "credentialHarvesting",
+      "description": "JSON.stringify payload construction including document.cookie for exfiltration",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "note": "Phishkits build JSON payloads containing stolen cookies for exfiltration via fetch/XHR. Legitimate sites rarely serialize document.cookie into JSON payloads.",
+      "patternString": "JSON\\.stringify\\([^)]{0,500}(?:cookie|document\\.cookie)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "antibot-cookie-check-pattern",
+      "group": "botEvasion",
+      "description": "Cookie-based antibot check — sets tracking cookie then validates on subsequent requests",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "note": "Phishkits implement cookie-based bot detection to evade security scanners. The pattern matches common antibot cookie variable names paired with cookie reading.",
+      "patternString": "(?:antibot|bot_check|humancheck|visitor_check|isBot|isHuman)\\s*[=:]\\s*(?:getCookie|document\\.cookie)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "cookie-to-hidden-input-exfil",
+      "group": "credentialHarvesting",
+      "description": "document.cookie value injected into a hidden form input for submission",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "note": "Phishkits stuff stolen cookies into hidden form fields so they get submitted alongside harvested credentials. Legitimate forms don't put document.cookie into hidden inputs.",
+      "patternString": "(?:type=[\"']hidden[\"'][^>]{0,200}value\\s*=|value\\s*=)[^>]{0,100}document\\.cookie",
+      "patternFlags": "i"
+    },
+    {
+      "id": "setcookie-campaign-tracking",
+      "group": "phishkitSignatures",
+      "description": "JavaScript setting cookies with phishkit campaign tracking names",
+      "severity": "medium",
+      "weight": 0.35,
+      "source": "js",
+      "note": "Phishkits set tracking cookies with distinctive names to correlate victim sessions with campaigns. No legitimate site uses cookie names like victim_id or phish_id.",
+      "patternString": "document\\.cookie\\s*=\\s*[\"'](?:campaign_id|victim_id|v_id|phish_id|kit_ver|track_id|lure_id|op_id|target_id)\\s*=",
+      "patternFlags": "i"
+    },
+    {
+      "id": "xhr-cookie-exfil-send",
+      "group": "credentialHarvesting",
+      "description": "XMLHttpRequest sending document.cookie in the request body",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "note": "Phishkits use XHR.send() to exfiltrate stolen session cookies. The pattern requires document.cookie within the send() call arguments.",
+      "patternString": "\\.send\\([^)]{0,300}document\\.cookie",
+      "patternFlags": "i"
+    },
+    {
       "id": "email-userid-label",
       "group": "credentialHarvesting",
       "description": "Email Address/User ID label pattern common in email phishing",
@@ -28524,6 +28624,212 @@
       "note": "Detects logistics brands hosted on suspicious TLDs commonly used for delivery scams",
       "patternString": "(?:dpd|ups|fedex|dhl|usps|royal-?mail|hermes|yodel)\\.[\\w-]+\\.(?:bond|top|click|download|stream|science|work|fun|party|review|loan)",
       "patternFlags": "i"
+    }
+  ],
+  "networkPatterns": [
+    {
+      "id": "network-post-session-cookie-exfil",
+      "group": "credentialHarvesting",
+      "description": "POST body contains well-known session cookie name=value pairs being exfiltrated",
+      "severity": "high",
+      "weight": 0.45,
+      "target": "body",
+      "transport": "any",
+      "patternString": "(?:PHPSESSID|JSESSIONID|ASP\\.NET_SessionId|connect\\.sid|laravel_session|ESTSAUTHPERSIST|ESTSAUTH|SSOCOOKIE)=[\\w.%+/-]{10,}",
+      "patternFlags": "",
+      "note": "Phishkits exfiltrate stolen session cookies in POST bodies. These session cookie names belong to known frameworks/services (PHP, Java, .NET, Node.js, Laravel, Microsoft). Seeing them in a POST body to a cross-origin destination is definitive session theft."
+    },
+    {
+      "id": "network-post-cookie-field-name",
+      "group": "credentialHarvesting",
+      "description": "POST body field name explicitly labeled as cookie data being exfiltrated",
+      "severity": "high",
+      "weight": 0.45,
+      "target": "fieldNames",
+      "transport": "any",
+      "patternString": "\\b(?:stolen_cookie|victim_cookie|session_cookie|captured_cookie|hijacked_session|auth_cookie|grabbed_cookie|cookie_data|session_token)\\b",
+      "patternFlags": "i",
+      "note": "Phishkits label exfiltrated cookie data with descriptive field names. No legitimate application uses field names like stolen_cookie or victim_cookie."
+    },
+    {
+      "id": "network-beacon-cookie-exfil",
+      "group": "phishkitSignatures",
+      "description": "sendBeacon transmitting cookie-shaped data on page unload — session theft",
+      "severity": "high",
+      "weight": 0.45,
+      "target": "body",
+      "transport": "beacon",
+      "patternString": "(?:PHPSESSID|JSESSIONID|ASP\\.NET_SessionId|ESTSAUTHPERSIST|ESTSAUTH|connect\\.sid)=[\\w.%+/-]{10,}",
+      "patternFlags": "",
+      "note": "sendBeacon fires on page unload, making it ideal for last-chance cookie exfil that survives tab close. Session cookies in beacon payloads are definitive theft signals."
+    },
+    {
+      "id": "network-post-full-cookie-header",
+      "group": "credentialHarvesting",
+      "description": "POST body contains what appears to be a full document.cookie string dump",
+      "severity": "high",
+      "weight": 0.4,
+      "target": "body",
+      "transport": "any",
+      "patternString": "(?:cookie|cookies|document_cookie|doc_cookie)(?:=|%3D|\": ?\")(?:[\\w-]+=.{3,};\\s*){2,}",
+      "patternFlags": "i",
+      "note": "Phishkits dump the full document.cookie string into a POST body field. The pattern matches a field named cookie/cookies containing multiple semicolon-separated key=value pairs — the signature shape of a cookie dump."
+    },
+    {
+      "id": "network-post-estsauth-token",
+      "group": "phishkitSignatures",
+      "description": "POST body contains Microsoft ESTSAUTH/ESTSAUTHPERSIST token — AiTM session hijack",
+      "severity": "high",
+      "weight": 0.5,
+      "target": "body",
+      "transport": "any",
+      "patternString": "ESTSAUTH(?:PERSISTENT|PERSIST)?=(?:0\\.|eyJ)[\\w.+/=-]{50,}",
+      "patternFlags": "",
+      "note": "ESTSAUTH and ESTSAUTHPERSIST are Microsoft authentication cookies used by Azure AD/Entra ID. Finding these in an outbound POST body is near-definitive AiTM session hijacking (Evilginx, Tycoon2FA, EvilProxy). These tokens start with 0. or eyJ (JWT)."
+    },
+    {
+      "id": "network-post-drop-server-cookie",
+      "group": "phishkitSignatures",
+      "description": "POST to attacker drop server endpoint with cookie payload",
+      "severity": "high",
+      "weight": 0.45,
+      "target": "url",
+      "transport": "any",
+      "patternString": "/(?:collector|drop|exfil|harvest|grab|receive|steal|loot|snag)/.*(?:cookie|session|token)",
+      "patternFlags": "i",
+      "note": "Phishkits POST stolen cookies to drop server endpoints with descriptive paths. Legitimate APIs don't use endpoint paths containing words like collector, drop, exfil, or steal combined with cookie/session/token."
+    },
+    {
+      "id": "network-phishkit-collector-php",
+      "group": "credentialHarvesting",
+      "description": "POST to PHP endpoint with phishkit-convention filename (send, grab, log, next, rezult, post)",
+      "severity": "high",
+      "weight": 0.4,
+      "target": "url",
+      "transport": "any",
+      "patternString": "/(?:send|grab|log|rezult|next|post|save|steal|receive|handler|proc)(?:_?(?:mail|data|info|login|cred))?(?:er)?\\.php",
+      "patternFlags": "i",
+      "note": "Matches the destination URL of outbound requests, not page source. These PHP filenames are strong phishkit conventions. Legitimate WordPress admin-ajax.php and wp-login.php are excluded by pattern specificity."
+    },
+    {
+      "id": "network-phishkit-field-names",
+      "group": "credentialHarvesting",
+      "description": "POST body contains phishkit-convention field names (victim, rezult, passw, usr_pass)",
+      "severity": "high",
+      "weight": 0.45,
+      "target": "fieldNames",
+      "transport": "any",
+      "patternString": "\\b(?:victim|rezult|usr_pass|passw[^o]|stolen|phish|cred_data|login_data|card_info|grab_data)\\b",
+      "patternFlags": "i",
+      "note": "Matches extracted field name keys from POST body. These names are phishkit conventions never used by legitimate applications. The passw pattern excludes 'password' (legitimate)."
+    },
+    {
+      "id": "network-formspree-credential-post",
+      "group": "credentialHarvesting",
+      "description": "POST to formspree.io — legitimate form backend commonly abused by phishkits",
+      "severity": "high",
+      "weight": 0.4,
+      "target": "url",
+      "transport": "any",
+      "patternString": "formspree\\.io/f/[a-zA-Z0-9]+",
+      "patternFlags": "i",
+      "note": "Formspree is a legitimate form backend but commonly abused by phishkits. This fires only when a POST actually goes to formspree — paired with other page signals, this is strong evidence."
+    },
+    {
+      "id": "network-base64-credential-blob",
+      "group": "credentialHarvesting",
+      "description": "POST body contains base64-encoded string alongside multiple credential field names",
+      "severity": "medium",
+      "weight": 0.3,
+      "target": "body",
+      "transport": "any",
+      "patternString": "(?:(?:password|passwd|pass|email|login)=[^&]+&[^&]*){2,}[A-Za-z0-9+/]{80,}={0,2}",
+      "patternFlags": "i",
+      "note": "Phishkits sometimes base64-encode the entire credential payload before exfiltrating. The pattern requires at least 2 credential-like fields AND a long base64 string."
+    },
+    {
+      "id": "network-getform-credential-post",
+      "group": "credentialHarvesting",
+      "description": "POST to getform.io — form backend abused for credential exfiltration",
+      "severity": "high",
+      "weight": 0.4,
+      "target": "url",
+      "transport": "any",
+      "patternString": "getform\\.io/f/[a-zA-Z0-9-]+",
+      "patternFlags": "i",
+      "note": "getform.io is a form endpoint service frequently abused by phishkits for credential collection."
+    },
+    {
+      "id": "network-telegram-bot-post",
+      "group": "phishkitSignatures",
+      "description": "POST to Telegram Bot API sendMessage endpoint — credential exfiltration in progress",
+      "severity": "high",
+      "weight": 0.5,
+      "target": "url",
+      "transport": "any",
+      "patternString": "api\\.telegram\\.org/bot[\\w:]{20,}/sendMessage",
+      "patternFlags": "i",
+      "note": "This is the actual exfil POST happening, not just the URL in source code. Near-definitive signal — no legitimate login page POSTs to Telegram."
+    },
+    {
+      "id": "network-discord-webhook-post",
+      "group": "phishkitSignatures",
+      "description": "POST to Discord webhook endpoint — credential exfiltration in progress",
+      "severity": "high",
+      "weight": 0.5,
+      "target": "url",
+      "transport": "any",
+      "patternString": "discord(?:app)?\\.com/api/webhooks/\\d{17,19}/[\\w-]{60,}",
+      "patternFlags": "i",
+      "note": "Discord webhooks with full tokens in the URL are definitive phishkit exfil. Legitimate Discord integrations use OAuth, not raw webhook URLs on login pages."
+    },
+    {
+      "id": "network-sendgrid-exfil",
+      "group": "phishkitSignatures",
+      "description": "POST to SendGrid mail API — client-side email exfiltration of stolen credentials",
+      "severity": "high",
+      "weight": 0.45,
+      "target": "url",
+      "transport": "any",
+      "patternString": "api\\.sendgrid\\.com/v3/mail/send",
+      "patternFlags": "i",
+      "note": "Phishkits use SendGrid to email stolen credentials to the attacker. Legitimate pages don't call SendGrid's mail API from client-side JavaScript."
+    },
+    {
+      "id": "network-slack-webhook-exfil",
+      "group": "phishkitSignatures",
+      "description": "POST to Slack incoming webhook — credential exfiltration channel",
+      "severity": "high",
+      "weight": 0.45,
+      "target": "url",
+      "transport": "any",
+      "patternString": "hooks\\.slack\\.com/services/T[A-Z0-9]+/B[A-Z0-9]+/[a-zA-Z0-9]+",
+      "patternFlags": "",
+      "note": "Slack incoming webhooks with full token path are not called from legitimate login pages. Phishkits use them to post stolen credentials to attacker Slack channels."
+    },
+    {
+      "id": "network-beacon-credential-exfil",
+      "group": "phishkitSignatures",
+      "description": "sendBeacon transmitting credential-shaped data on page unload",
+      "severity": "high",
+      "weight": 0.4,
+      "target": "body",
+      "transport": "beacon",
+      "patternString": "(?:password|passwd|pass|pwd)(?:=|%3D|\": ?\")[^&\"\\s]{3,}",
+      "patternFlags": "i",
+      "note": "sendBeacon fires on page unload, ideal for last-chance credential exfil that survives tab close. Legitimate sites use beacons for analytics payloads, not credential data."
+    },
+    {
+      "id": "network-mailgun-exfil",
+      "group": "phishkitSignatures",
+      "description": "POST to Mailgun API — client-side email exfiltration of stolen credentials",
+      "severity": "high",
+      "weight": 0.45,
+      "target": "url",
+      "transport": "any",
+      "patternString": "api\\.mailgun\\.net/v3/.+/messages",
+      "patternFlags": "i",
+      "note": "Mailgun's send API called from client-side code is a definitive phishkit signal. Legitimate integrations call Mailgun server-side."
     }
   ],
   "domHashes": [],
