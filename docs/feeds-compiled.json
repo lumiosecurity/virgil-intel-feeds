@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T03:50:34.574Z",
+    "compiledAt": "2026-04-02T03:57:53.795Z",
     "brandCount": 187,
     "signalCount": 1,
     "patternCount": 962,
@@ -3956,8 +3956,25 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "html",
-      "patternString": "Your Library[\\s\\S]{0,3000}(?:loginbtn|Log in)[\\s\\S]{0,3000}Spotify",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "Spotify",
+          "fast_pattern": true
+        },
+        {
+          "content": "Your Library"
+        },
+        {
+          "pattern": "loginbtn|Log in",
+          "flags": "i"
+        },
+        {
+          "content": "spotify.com",
+          "negated": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
+      "note": "Spotify UI elements with login — but NOT on real spotify.com. Added FP exclusion."
     },
     {
       "id": "amazon-logo-hotlink",
@@ -4068,8 +4085,21 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "instagram-logo\\.(?:png|jpg|svg)[\\s\\S]{0,5000}<input[^>]*type=[\"']password[\"']",
-      "patternFlags": "is"
+      "match": [
+        {
+          "content": "instagram-logo",
+          "fast_pattern": true
+        },
+        {
+          "content": "password"
+        },
+        {
+          "content": "instagram.com",
+          "negated": true
+        }
+      ],
+      "condition": "0 & 1 & 2",
+      "note": "Instagram logo image + password field, NOT on instagram.com. Added FP exclusion."
     },
     {
       "id": "instagram-credential-placeholder",
@@ -4164,8 +4194,26 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "instagramGradient[^<]{0,2000}stop-color:#FED373[^<]{0,2000}stop-color:#F15245[^<]{0,2000}stop-color:#D92E7F",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "instagramGradient",
+          "fast_pattern": true
+        },
+        {
+          "content": "#FED373",
+          "nocase": true
+        },
+        {
+          "content": "#F15245",
+          "nocase": true
+        },
+        {
+          "content": "#D92E7F",
+          "nocase": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
+      "note": ""
     },
     {
       "id": "instagram-portuguese-phishing",
@@ -4388,8 +4436,29 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "whatsapp[^<]{0,300}中文版[^<]{0,300}下载|whatsapp[^<]{0,300}chinese[^<]{0,300}download[^<]{0,300}中文|whatsapp[^<]{0,300}pc[^<]{0,300}中文版",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "whatsapp",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "content": "中文版"
+        },
+        {
+          "content": "下载"
+        },
+        {
+          "content": "chinese",
+          "nocase": true
+        },
+        {
+          "content": "download",
+          "nocase": true
+        }
+      ],
+      "condition": "0 & ((1 & 2) | (3 & 4 & 1) | (1))",
+      "note": "WhatsApp + Chinese language indicators. Simplified from three alternation branches."
     },
     {
       "id": "generic-webmail-phishkit",
@@ -4734,9 +4803,18 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:support|secure|login|signin|account|help|verify)\\.[a-zA-Z0-9-]*(?:paypal|venmo|chase|wellsfargo|bankofamerica|amazon|apple|microsoft|google)\\.[a-zA-Z0-9-]+\\.(?:org|net|info|biz|top|tk|ml|ga|cf)",
-      "patternFlags": "i",
-      "note": "Detects impersonation through brand-named subdomains on suspicious TLDs - legitimate brands use their own domains"
+      "match": [
+        {
+          "content": ".",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:support|secure|login|signin|account|help|verify)\\\\.[a-zA-Z0-9-]*(?:paypal|venmo|chase|wellsfargo|bankofamerica|amazon|apple|microsoft|google)\\\\.[a-zA-Z0-9-]+\\\\.(?:org|net|info|biz|top|tk|ml|ga|cf)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1",
+      "note": "Kept as regex — subdomain pattern matching needs regex. Auto-extracts literal."
     },
     {
       "id": "adobe-pdf-verification-impersonation",
@@ -4888,9 +4966,22 @@
       "severity": "medium",
       "weight": 0.15,
       "source": "html",
-      "patternString": "(?:©|&copy;|copyright)[\\s\\S]{0,50}(?:20[12]\\d)[\\s\\S]{0,50}(?:Microsoft|Google|Apple|PayPal|Amazon|Netflix|Facebook|Meta|Adobe|Dropbox|LinkedIn|Twitter|Zoom)",
-      "patternFlags": "i",
-      "note": "Copyright text claiming ownership by a major brand (Microsoft, Google, Apple, etc.) on a page hosted on a different domain is a simple but effective brand impersonation indicator. Phishers copy the copyright footer from the real site."
+      "match": [
+        {
+          "content": "copyright",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "20[12]\\\\d"
+        },
+        {
+          "pattern": "(?:Microsoft|Google|Apple|PayPal|Amazon|Netflix|Facebook|Meta|Adobe|Dropbox|LinkedIn|Twitter|Zoom)",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2",
+      "note": "Also matches © and &copy; since they appear in the HTML source alongside copyright text."
     },
     {
       "id": "outdated-copyright-year",
@@ -4932,8 +5023,57 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "(?:<img[^>]*(?:dhl|fedex|ups|usps|royal.?mail|evri|hermes|dpd|la.?poste|correos|canada.?post|aus.?post)|(?:DHL|FedEx|UPS|USPS|Royal\\s*Mail|Evri|Hermes|DPD)\\s*(?:Express|Parcel|eCommerce)?)[\\s\\S]{0,2000}(?:<form|<input[^>]*type=['\"](?:text|email|tel|password|number))",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "form",
+          "fast_pattern": true
+        },
+        {
+          "content": "dhl",
+          "nocase": true
+        },
+        {
+          "content": "fedex",
+          "nocase": true
+        },
+        {
+          "content": "ups",
+          "nocase": true
+        },
+        {
+          "content": "usps",
+          "nocase": true
+        },
+        {
+          "content": "royal mail",
+          "nocase": true
+        },
+        {
+          "content": "evri",
+          "nocase": true
+        },
+        {
+          "content": "dpd",
+          "nocase": true
+        },
+        {
+          "content": "la poste",
+          "nocase": true
+        },
+        {
+          "content": "correos",
+          "nocase": true
+        },
+        {
+          "content": "canada post",
+          "nocase": true
+        },
+        {
+          "pattern": "<input[^>]*type=[\\x27\\\"](?:text|email|tel|password|number)",
+          "flags": "i"
+        }
+      ],
+      "condition": "(1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10) & 11",
       "note": "A courier brand name or logo in the page header followed by a form with input fields is the basic layout of every delivery phishing page. This structural pattern catches the simplest delivery phish that have no obfuscation or JavaScript."
     },
     {
@@ -4943,8 +5083,21 @@
       "severity": "high",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:E-?Z-?Pass|SunPass|FasTrak|I-?Pass|TxTag|Peach\\s*Pass|ExpressToll|NTTA|EZDrive|Good\\s*To\\s*Go|RiverLink|PikePass|Toll\\s*(?:by\\s*Plate|Services|Authority|Agency))[\\s\\S]{0,2000}(?:<input[^>]*(?:card|cc|credit|cvv|expir|cvc))",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "password",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:E-?Z-?Pass|SunPass|FasTrak|I-?Pass|TxTag|Peach\\\\s*Pass|ExpressToll|NTTA|EZDrive|Good\\\\s*To\\\\s*Go|RiverLink|PikePass)",
+          "flags": "i"
+        },
+        {
+          "pattern": "<input[^>]*(?:card|credit|cvv|expir|ccnum)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Any US toll system brand name (EZPass, SunPass, FasTrak, I-Pass, TxTag, PeachPass, ExpressToll, NTTA, EZDrive, Good To Go, RiverLink, PikePass) on a page with credit card input fields is toll service impersonation."
     },
     {
@@ -4965,8 +5118,37 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "(?:OneDrive|SharePoint|Google\\s*Drive|Dropbox|Box|WeTransfer)[\\s\\S]{0,2000}(?:sign.?in\\s*with\\s*(?:your\\s*)?(?:email|Microsoft|Google|Office|Yahoo|Outlook)|<img[^>]*(?:microsoft|google|outlook|office365)[^>]*>)[\\s\\S]{0,500}<input[^>]*type=['\"]password['\"]",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "password",
+          "fast_pattern": true
+        },
+        {
+          "content": "OneDrive",
+          "nocase": true
+        },
+        {
+          "content": "SharePoint",
+          "nocase": true
+        },
+        {
+          "content": "Google Drive",
+          "nocase": true
+        },
+        {
+          "content": "Dropbox",
+          "nocase": true
+        },
+        {
+          "content": "WeTransfer",
+          "nocase": true
+        },
+        {
+          "pattern": "sign.?in|log.?in",
+          "flags": "i"
+        }
+      ],
+      "condition": "(1 | 2 | 3 | 4 | 5) & 6 & 0",
       "note": "A page showing a OneDrive/SharePoint/Google Drive sharing notification but presenting a generic Microsoft/Google/email login form is cross-brand document phishing. The sharing notification is fake — it's just lure text above a credential harvest form."
     },
     {
@@ -4976,9 +5158,26 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:Adobe|Acrobat|PDF\\s*(?:Viewer|Reader))[\\s\\S]{0,1000}(?:sign.?in\\s*(?:to|with)|log.?in|enter\\s*(?:your\\s*)?(?:email|password|credentials))[\\s\\S]{0,500}(?:<input[^>]*type=['\"](?:password|email)['\"])",
-      "patternFlags": "i",
-      "note": "Adobe/Acrobat/PDF Viewer themed pages with a login form are among the most prevalent document lure phishing templates. Cyble documented these extensively — they use a blurred invoice background with an Adobe-branded login modal on top."
+      "match": [
+        {
+          "content": "Adobe",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "content": "password"
+        },
+        {
+          "pattern": "sign.?in|log.?in|enter\\\\s*(?:your\\\\s*)?(?:email|password)",
+          "flags": "i"
+        },
+        {
+          "content": "adobe.com",
+          "negated": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
+      "note": "Adobe-themed login page NOT on adobe.com. Added FP exclusion for real Adobe."
     },
     {
       "id": "netflix-brand-github-impersonation",
@@ -5676,8 +5875,24 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "patternString": "(?:then|success|onload|onreadystatechange)[\\s\\S]{0,500}(?:window\\.location|location\\.href|location\\.replace)\\s*(?:=|\\()\\s*['\"]https?://(?:www\\.)?(?:microsoft|google|apple|amazon|paypal|netflix|wellsfargo|chase|bankofamerica|facebook|instagram|linkedin)\\.com",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "location",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:then|success|onload|onreadystatechange)",
+          "flags": "i"
+        },
+        {
+          "pattern": "(?:window\\\\.location|location\\\\.href|location\\\\.replace)"
+        },
+        {
+          "pattern": "(?:microsoft|google|apple|amazon|paypal|netflix|wellsfargo|chase)\\\\.com",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "Redirecting to the real brand's legitimate site after a successful data exfiltration (in a .then(), success callback, or onload) is the classic phishkit concealment pattern. The victim thinks they were logged out and tries again on the real site."
     },
     {
@@ -6985,8 +7200,23 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "<form[^>]*action=['\"](?:post|login|submit|process|save|send|check|verify|auth|validate|data|go|next|result|handler|action|gate|panel|recv|log)\\.php['\"]",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": ".php",
+          "fast_pattern": true
+        },
+        {
+          "content": "<form"
+        },
+        {
+          "content": "action="
+        },
+        {
+          "pattern": "(?:post|login|submit|process|save|send|check|verify|auth|validate|data|go|next|result|handler|action|gate|panel|recv|log)\\\\.php",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
       "note": "A form posting to a bare PHP filename (post.php, login.php, submit.php, process.php) without any path indicates a locally-hosted phishing kit. The PHP file names are generic credential collectors. Legitimate services use API endpoints, not bare PHP filenames."
     },
     {
@@ -6996,8 +7226,22 @@
       "severity": "low",
       "weight": 0.1,
       "source": "html",
-      "patternString": "<input[^>]*type=['\"]checkbox['\"][^>]*>[\\s\\S]{0,50}(?:Remember\\s*me|Keep\\s*me\\s*(?:signed|logged)\\s*in|Stay\\s*signed\\s*in)[\\s\\S]{0,1000}(?:action=['\"][^'\"]*\\.php|api\\.telegram|discord|webhook)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "Remember me",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "checkbox",
+          "flags": "i"
+        },
+        {
+          "pattern": "\\\\.php|api\\\\.telegram|discord|webhook",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2",
       "note": "A 'Remember me' checkbox on a page that posts to a PHP file or sends to Telegram/Discord is a cloned UX element. The checkbox has no backend function on a phishing page — it's visual theater to make the form look legitimate."
     },
     {
@@ -9348,8 +9592,20 @@
       "severity": "high",
       "weight": 0.45,
       "source": "js",
-      "patternString": "<title>Adobe-PDF\\s+Online</title>[\\s\\S]{0,3000}File\\s+Verification\\s+for\\s+Adobe\\s+PDF[\\s\\S]{0,3000}<form[^>]+action=\"/site/submit\"",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "Adobe-PDF",
+          "fast_pattern": true
+        },
+        {
+          "content": "File Verification"
+        },
+        {
+          "content": "/site/submit"
+        }
+      ],
+      "condition": "0 & 1 & 2",
+      "note": "Adobe PDF phishkit — three exact literal matches, no regex needed. 100x faster."
     },
     {
       "id": "adobe-pdf-fake-verification",
@@ -12008,8 +12264,30 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "(?:unauthorized|did not authorize)[\\s\\S]{0,600}\\b(?:purchase|transaction|payment)\\b[\\s\\S]{0,600}\\bcall\\b[\\s\\S]{0,400}\\b(?:support|immediately)\\b[\\s\\S]{0,400}\\+?1[\\s-]?\\(?\\d{3}\\)?[\\s-]?\\d{3}[\\s-]?\\d{4}",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "unauthorized",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:purchase|transaction|payment)",
+          "flags": "i"
+        },
+        {
+          "content": "call",
+          "nocase": true
+        },
+        {
+          "pattern": "(?:support|immediately)",
+          "flags": "i"
+        },
+        {
+          "pattern": "\\+?1[\\s-]?\\(?\\d{3}\\)?[\\s-]?\\d{3}[\\s-]?\\d{4}"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3 & 4",
+      "note": ""
     },
     {
       "id": "fear-urgency-domain-in-html",
@@ -12949,8 +13227,41 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:invoice|remittance\\s*advice|purchase\\s*order|payment\\s*(?:advice|notification|confirmation)|quotation\\s*request|RFQ|statement\\s*of\\s*account)[\\s\\S]{0,2000}(?:<input[^>]*type=['\"]password['\"]|sign.?in\\s*(?:to|with)\\s*(?:view|access|download)|enter\\s*(?:your\\s*)?(?:email|password|credentials))",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "password",
+          "fast_pattern": true
+        },
+        {
+          "content": "invoice",
+          "nocase": true
+        },
+        {
+          "content": "remittance",
+          "nocase": true
+        },
+        {
+          "content": "purchase order",
+          "nocase": true
+        },
+        {
+          "content": "payment advice",
+          "nocase": true
+        },
+        {
+          "content": "quotation request",
+          "nocase": true
+        },
+        {
+          "content": "statement of account",
+          "nocase": true
+        },
+        {
+          "pattern": "<input[^>]*type=[\\x27\\\"]password[\\x27\\\"]",
+          "flags": "i"
+        }
+      ],
+      "condition": "(1 | 2 | 3 | 4 | 5 | 6) & 7",
       "note": "Invoice/remittance/PO/RFQ document text combined with a login prompt or password field on the same page is BEC document lure phishing. Real invoices are attached as PDFs or viewed in accounting software — they don't require signing in on the same page."
     },
     {
@@ -13004,8 +13315,21 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "(?:from|sent\\s*by|shared\\s*by)\\s*(?::|\\s)[\\s\\S]{0,100}(?:@[a-z0-9.-]+\\.[a-z]{2,})[\\s\\S]{0,1000}(?:View|Open|Access|Review|Download)\\s*(?:Document|File|PDF|Message)[\\s\\S]{0,1000}(?:sign.?in|password|credential|email)[\\s\\S]{0,500}(?:<input|<form)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "password",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:from|sent\\\\s*by|shared\\\\s*by)\\\\s*(?::|\\\\s)[\\\\s\\\\S]{0,100}@[a-z0-9.-]+\\\\.[a-z]{2,}",
+          "flags": "i"
+        },
+        {
+          "pattern": "(?:View|Open|Access|Review|Download)\\\\s*(?:Document|File|PDF|Message)",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2",
       "note": "Showing the sender's name and email address in a document sharing notification adds perceived legitimacy (the victim recognizes the sender). Combined with a View Document button and a login form, this is a personalized document lure. The sender info is often extracted from the victim's email."
     },
     {
@@ -13402,8 +13726,18 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "(?:^|\\.)(?:txdmv|dmv|irs|ssa|uscis|uscis|dol|hud|dps|txdot|txdps)\\.[a-z0-9-]+\\.(?:life|top|xyz|click|shop|online|site|store|fun|icu|buzz|cc|pw|tk|ml|ga|cf|gq)(?:/|$)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": ".",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:txdmv|dmv|irs|ssa|uscis|dol|hud|dps|txdot|txdps)\\\\.[a-z0-9-]+\\\\.(?:life|top|xyz|click|shop|online|site|store|fun|icu|buzz|cc|pw|tk|ml|ga|cf|gq)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1",
+      "note": "Kept as regex — the domain pattern matching is inherently regex. fast_pattern auto-selects."
     },
     {
       "id": "bmo-hostname-typosquat",
@@ -13542,8 +13876,27 @@
       "severity": "high",
       "weight": 0.45,
       "source": "url",
-      "patternString": "https?://[^/\"'\\s]{0,80}(?:adidas|nike|puma|zara|gucci|amazon|walmart|target|costco|apple|google|meta|microsoft)[^/\"'\\s]{0,20}[-_](?:jobs?|careers?|hiring|recruit|hr|employment|apply|onboarding)[^/\"'\\s]{0,40}(?:/|\\?|$)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "job",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:adidas|nike|puma|zara|gucci|amazon|walmart|target|costco|apple|google|meta|microsoft)",
+          "flags": "i"
+        },
+        {
+          "pattern": "(?:jobs?|careers?|hiring|recruit|hr|employment|apply|onboarding)",
+          "flags": "i"
+        },
+        {
+          "pattern": "\\\\.(?:com|org|net|info)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
+      "note": ""
     },
     {
       "id": "constantcontact-landing-page-abuse",
@@ -13833,8 +14186,20 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "<form[^>]*action=['\"]https?://[^'\"]+\\.(?:xyz|top|tk|ml|ga|cf|gq|buzz|work|click|link|surf|icu|monster|rest|quest|cfd|sbs|boats|bond|hair|makeup|christmas)[/'\"]",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "<form",
+          "fast_pattern": true
+        },
+        {
+          "content": "action="
+        },
+        {
+          "pattern": "\\\\.(?:xyz|top|tk|ml|ga|cf|gq|buzz|work|click|link|surf|icu|monster|rest|quest|cfd|sbs)[/\\x27\\\"]",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2",
       "note": "Form actions posting to cheap or commonly-abused TLDs (.xyz, .top, .tk, .ml, .ga, .cf, .gq, .icu, etc.) are strong phishing indicators. These TLDs are disproportionately used for phishing due to low cost or free registration."
     },
     {
@@ -13940,7 +14305,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-02T03:38:52.855Z",
+      "compiledAt": "2026-04-02T03:50:33.179Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
