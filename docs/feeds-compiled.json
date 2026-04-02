@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T04:04:45.114Z",
+    "compiledAt": "2026-04-02T04:06:03.734Z",
     "brandCount": 187,
     "signalCount": 1,
     "patternCount": 962,
@@ -4172,8 +4172,21 @@
       "severity": "medium",
       "weight": 0.3,
       "source": "html",
-      "patternString": "google\\.com/s2/favicons[\\s\\S]{0,500}form[^>]*>[\\s\\S]{0,500}display:\\s*none",
-      "patternFlags": "is"
+      "match": [
+        {
+          "content": "google.com/s2/favicons",
+          "fast_pattern": true
+        },
+        {
+          "content": "form"
+        },
+        {
+          "pattern": "display:\\s*none",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2",
+      "note": ""
     },
     {
       "id": "networksolutions-webmail-reference",
@@ -6490,8 +6503,25 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "js",
-      "patternString": "(?:step|page|stage|wizard)\\s*(?:=|\\+=)\\s*(?:\\d|step|page)[\\s\\S]{0,300}(?:classList|style\\.display|visibility)[\\s\\S]{0,300}(?:password|card|ssn|social|dob|birth)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "step",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:step|page|stage|wizard)\\s*(?:=|\\+=)",
+          "flags": "i"
+        },
+        {
+          "pattern": "classList|style\\.display|visibility"
+        },
+        {
+          "pattern": "password|card|ssn|social|dob|birth",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "Multi-step form wizards that progressively collect credentials, then personal info (SSN, DOB), then payment details across separate 'steps' are comprehensive data harvesting phishing pages."
     },
     {
@@ -6732,8 +6762,20 @@
       "severity": "high",
       "weight": 0.3,
       "source": "js",
-      "patternString": "getCurrentPosition\\([\\s\\S]{0,300}(?:latitude|longitude|coords)[\\s\\S]{0,500}(?:fetch|XMLHttpRequest|sendBeacon|telegram|password|email|credential)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "getCurrentPosition",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "latitude|longitude|coords"
+        },
+        {
+          "pattern": "fetch|XMLHttpRequest|sendBeacon|telegram|password|email|credential",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2",
       "note": "Requesting fine GPS location alongside credential capture gives attackers the victim's exact physical location. This data enables physical attacks (home break-in, stalking) or verifies victim identity for targeted fraud."
     },
     {
@@ -6831,8 +6873,22 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "patternString": "(?:discord|webhook)[\\s\\S]{0,300}(?:content)[\\s\\S]{0,200}(?:(?:email|user|login|password|pass|card)\\s*(?::|=|->))",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "discord",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "content": "webhook",
+          "nocase": true
+        },
+        {
+          "pattern": "(?:email|user|login|password|pass|card)\\s*(?::|=|->)",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2",
       "note": "Simple Discord webhook messages with plaintext content containing 'email:', 'password:', etc. are basic credential exfiltration. Not all phishkits use embeds — many just send a plain text message with credential key:value pairs."
     },
     {
@@ -7161,8 +7217,21 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "js",
-      "patternString": "(?:step|state|phase|stage)\\s*(?:=|===?)\\s*(?:['\"](?:email|password|mfa|otp|verify|code)['\"]|[012345])[\\s\\S]{0,500}(?:style\\.display|classList|visibility|innerHTML)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "step",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:step|state|phase|stage)\\s*(?:=|===?)\\s*(?:[\\x27\\\"](?:email|password|mfa|otp|verify|code)[\\x27\\\"]|[012345])",
+          "flags": "i"
+        },
+        {
+          "pattern": "style\\.display|classList|visibility|innerHTML"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "A JavaScript state machine managing email→password→MFA step progression by showing/hiding page sections is the AiTM multi-step authentication flow controller. Each step captures different credentials and the kit advances through the auth flow."
     },
     {
@@ -7238,8 +7307,26 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "(?:delivery\\s*preference|notification\\s*setting|shipping\\s*preference|communication\\s*preference)[\\s\\S]{0,500}(?:email|phone|mobile|sms|password|sign\\s*in|log\\s*in|account)[\\s\\S]{0,300}(?:update|save|confirm|submit)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "preference",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "delivery\\s*preference|notification\\s*setting|shipping\\s*preference|communication\\s*preference",
+          "flags": "i"
+        },
+        {
+          "pattern": "email|phone|mobile|password|sign\\s*in|log\\s*in|account",
+          "flags": "i"
+        },
+        {
+          "pattern": "card|payment|billing|address",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "Delivery preference/notification settings pages that ask for email, phone, or account credentials harvest contact information and login details under the guise of updating delivery preferences."
     },
     {
@@ -9569,8 +9656,25 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "<title[^>]*>[^<]*Binance[^<]*</title>[\\s\\S]{0,2000}<meta[^>]*keywords[^>]*(?:Bitcoin|Cryptocurrency|BTC|ETH|crypto)",
-      "patternFlags": "is"
+      "match": [
+        {
+          "content": "Binance",
+          "fast_pattern": true
+        },
+        {
+          "content": "<title"
+        },
+        {
+          "pattern": "Bitcoin|Cryptocurrency|BTC|ETH|crypto",
+          "flags": "i"
+        },
+        {
+          "content": "binance.com",
+          "negated": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
+      "note": "Binance title + crypto keywords NOT on binance.com. Added FP exclusion."
     },
     {
       "id": "telegram-bot-exfil-obfuscated",
@@ -10223,8 +10327,18 @@
       "severity": "medium",
       "weight": 0.35,
       "source": "both",
-      "patternString": "^https?://[^/]*(?:(?:auth|login|wallet|live)[^/]*(?:ledger|metamask|coinbase|binance)|(?:ledger|metamask|coinbase|binance)[^/]*(?:auth|login|wallet|live))[^/]*\\.webflow\\.io",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "webflow.io",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:auth|login|wallet|live).*(?:ledger|metamask|coinbase|binance)|(?:ledger|metamask|coinbase|binance).*(?:auth|login|wallet|live)",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1",
+      "note": ""
     },
     {
       "id": "nim-cred-sim-classes",
@@ -12974,8 +13088,26 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "(?:shared\\s+(?:a\\s+)?(?:document|file|folder|spreadsheet|presentation)|has\\s+shared|document\\s+shared)[\\s\\S]{0,300}(?:sign\\s*in|log\\s*in|view|access|open)[\\s\\S]{0,200}(?:microsoft|google|dropbox|onedrive|sharepoint)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "shared",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "shared\\s+(?:a\\s+)?(?:document|file|folder|spreadsheet)|has\\s+shared|document\\s+shared",
+          "flags": "i"
+        },
+        {
+          "pattern": "sign\\s*in|log\\s*in|view|access|open",
+          "flags": "i"
+        },
+        {
+          "pattern": "microsoft|google|office|outlook|onedrive|sharepoint",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "Shared document lure text ('Someone has shared a document with you. Sign in to view.') is the #1 phishing email-to-page conversion technique for business email compromise. This text on a login page is a strong phishing indicator."
     },
     {
@@ -13387,8 +13519,26 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:mobile\\s*(?:account|billing|payment)|carrier\\s*(?:account|billing)|phone\\s*(?:plan|account|billing))[\\s\\S]{0,500}(?:verify|update|confirm|past\\s*due|outstanding)[\\s\\S]{0,300}(?:payment|credit\\s*card|debit|billing)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "billing",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "mobile\\s*(?:account|billing|payment)|carrier\\s*(?:account|billing)|phone\\s*(?:plan|account|billing)",
+          "flags": "i"
+        },
+        {
+          "pattern": "verify|update|confirm|past\\s*due|outstanding",
+          "flags": "i"
+        },
+        {
+          "pattern": "pay|card|\\$|amount|charge|credit|debit",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "Mobile carrier billing/account verification pages that request payment updates are used in carrier impersonation phishing targeting T-Mobile, Verizon, AT&T, and other providers."
     },
     {
@@ -13409,8 +13559,26 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "(?:status.?bar|signal.?(?:bar|strength|icon)|battery.?(?:icon|level|indicator)|wifi.?(?:icon|signal))[\\s\\S]{0,300}(?:(?:4G|5G|LTE)|\\d{1,2}:\\d{2}|\\d+%)[\\s\\S]{0,200}(?:position:\\s*fixed|top:\\s*0)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "status",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "status.?bar|signal.?(?:bar|strength)|battery.?(?:icon|level)|wifi.?(?:icon|signal)",
+          "flags": "i"
+        },
+        {
+          "pattern": "4G|5G|LTE|\\d{1,2}:\\d{2}|\\d+%",
+          "flags": "i"
+        },
+        {
+          "pattern": "position:\\s*fixed",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "Rendering a fake mobile status bar (signal bars, battery, time, 4G/5G) in HTML positioned at the top of the page makes the phishing page look like it's running inside a native app rather than a browser."
     },
     {
@@ -13442,8 +13610,24 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "js",
-      "patternString": "(?:setInterval|setTimeout)[\\s\\S]{0,300}(?:hour|minute|second|hr|min|sec|countdown|timer|remain|expire|left)[\\s\\S]{0,200}(?:innerHTML|textContent|innerText|display)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "countdown",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "setInterval|setTimeout"
+        },
+        {
+          "pattern": "hour|minute|second|countdown|timer|remain|expire|left",
+          "flags": "i"
+        },
+        {
+          "pattern": "innerHTML|textContent|innerText|display"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "JavaScript countdown timers showing 'X minutes remaining' or 'expires in...' create artificial urgency on phishing pages. The timer pressures victims to enter credentials quickly before 'time runs out'."
     },
     {
@@ -13453,8 +13637,19 @@
       "severity": "low",
       "weight": 0.1,
       "source": "html",
-      "patternString": "mailto:[^@'\"]+@(?:gmail|yahoo|hotmail|outlook|protonmail|mail)\\.com[\\s\\S]{0,1000}<input[^>]*type=['\"]password['\"]",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "mailto:",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "mailto:[^@\\x27\\\"]+@(?:gmail|yahoo|hotmail|outlook|protonmail|mail)\\.com"
+        },
+        {
+          "content": "password"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "A mailto link to a free email provider (Gmail, Yahoo, Hotmail) on a login page is suspicious. Legitimate enterprise services use their own domain for support contacts, not free email accounts."
     },
     {
@@ -13615,8 +13810,22 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "(?:download|install)\\s*(?:our|the)?\\s*(?:new|updated|official)?\\s*(?:tracking|delivery|courier|shipping)?\\s*app[\\s\\S]{0,300}(?:track|manage|delivery|package)[\\s\\S]{0,300}(?:apk|download|install|play\\s*store|app\\s*store)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "download",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:download|install)\\s*(?:our|the)?\\s*(?:new|updated|official)?\\s*(?:tracking|delivery|courier|shipping)?\\s*app",
+          "flags": "i"
+        },
+        {
+          "pattern": "apk|download.*app|install.*app|play.*store|app.*store",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Fake courier app download prompts impersonate DHL, FedEx, USPS, etc. and direct users to install malicious APKs or fake apps. The 'tracking app' is actually malware that can intercept SMS (for OTP theft), access contacts, and steal banking credentials."
     },
     {
@@ -13742,8 +13951,22 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:shared|sent)\\s*(?:a\\s*)?(?:document|file|folder|spreadsheet|presentation|PDF|report)\\s*(?:with\\s*you|for\\s*(?:your\\s*)?review|to\\s*view)[\\s\\S]{0,500}(?:sign\\s*in|log\\s*in|view\\s*document|open|access|download)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "document",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:shared|sent)\\s*(?:a\\s*)?(?:document|file|folder|spreadsheet|PDF)",
+          "flags": "i"
+        },
+        {
+          "pattern": "sign\\s*in|log\\s*in|view\\s*(?:document|file)|enter.*password",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Pages claiming 'Someone shared a document with you' followed by a sign-in prompt are the most common enterprise phishing lure. The victim thinks they need to authenticate to view a shared file, but the login form harvests their credentials."
     },
     {
@@ -13786,8 +14009,26 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:subscription|membership|plan|service)\\s*(?:has\\s*been|was|will\\s*be)\\s*(?:auto-?renewed|renewed|charged|billed)[\\s\\S]{0,300}(?:\\$\\d{2,3}\\.\\d{2}|amount|charge)[\\s\\S]{0,300}(?:cancel|update|manage|review|dispute)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "renewed",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:subscription|membership|plan|service)\\s*(?:has\\s*been|was|will\\s*be)\\s*(?:auto-?renewed|renewed|charged|billed)",
+          "flags": "i"
+        },
+        {
+          "pattern": "\\$\\d{2,3}\\.\\d{2}|amount|charge",
+          "flags": "i"
+        },
+        {
+          "pattern": "cancel|refund|dispute|call",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "Subscription auto-renewal alerts claiming 'Your subscription has been renewed for $XXX' with options to cancel or update payment are a top consumer phishing lure. Norton, McAfee, Geek Squad, and streaming services are commonly impersonated."
     },
     {
@@ -13914,8 +14155,22 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:performance\\s*review|salary\\s*(?:update|adjustment)|benefits\\s*enrollment|employee\\s*(?:portal|self.?service)|W-?2\\s*(?:form|download)|tax\\s*(?:form|document))[\\s\\S]{0,500}(?:sign.?in|log.?in|password|verify|SSO|credential)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "employee",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "performance\\s*review|salary\\s*(?:update|adjustment)|benefits\\s*enrollment|employee\\s*(?:portal|self.?service)|W-?2\\s*(?:form|download)|tax\\s*(?:form|document)",
+          "flags": "i"
+        },
+        {
+          "pattern": "sign.?in|log.?in|password|credential|authenticate",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "HR portal impersonation pages are among the top AI-generated lure categories in 2025-2026."
     },
     {
@@ -13969,8 +14224,22 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:shared\\s*(?:a\\s*)?(?:document|file|folder)|sent\\s*you\\s*(?:a\\s*)?(?:document|file)|has\\s*shared|document\\s*(?:is\\s*)?ready|file\\s*available)[\\s\\S]{0,2000}(?:sign.?in\\s*(?:to|with)|log.?in\\s*to|enter\\s*(?:your\\s*)?(?:password|email|credentials)|verify\\s*(?:your\\s*)?(?:identity|email))",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "document",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "shared\\s*(?:a\\s*)?(?:document|file|folder)|sent\\s*you\\s*(?:a\\s*)?(?:document|file)|has\\s*shared|document\\s*(?:is\\s*)?ready|file\\s*available",
+          "flags": "i"
+        },
+        {
+          "pattern": "sign.?in|log.?in|enter.*password|email.*password",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Generic 'X has shared a document with you' notification text followed by a 'sign in to view' prompt is the standard document lure layout. Legitimate sharing notifications link to the hosting service's own authenticated view, not a generic login prompt."
     },
     {
@@ -14875,8 +15144,20 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "<form[^>]*action=['\"]https?://[^'\"]+\\.(?:top|xyz|buzz|live|icu|tk|ml|ga|cf|gq|rest|cfd|sbs|click|link)[/'\"\\s>]",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "<form",
+          "fast_pattern": true
+        },
+        {
+          "content": "action="
+        },
+        {
+          "pattern": "\\.(?:top|xyz|buzz|live|icu|tk|ml|ga|cf|gq|rest|cfd|sbs|click|link)[/\\x27\\\"\\s>]",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2",
       "note": "Form actions pointing to domains on suspicious TLDs (.top, .xyz, .buzz, .live, .icu, .tk, etc.) indicate credential exfiltration to cheap/free domain infrastructure. These TLDs are disproportionately used for phishing."
     },
     {
@@ -15167,15 +15448,26 @@
       "severity": "low",
       "weight": 0.1,
       "source": "html",
-      "patternString": "(?:fonts\\.googleapis\\.com|fonts\\.gstatic\\.com|cdnjs\\.cloudflare\\.com)[\\s\\S]{0,2000}(?:action=['\"][^'\"]*\\.php|api\\.telegram|discord\\.com/api/webhooks)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "googleapis.com",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "fonts\\.googleapis\\.com|fonts\\.gstatic\\.com|cdnjs\\.cloudflare\\.com"
+        },
+        {
+          "pattern": "\\.php|api\\.telegram|discord\\.com/api/webhooks"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Loading legitimate CDN resources (Google Fonts, cdnjs) on a page that posts to a PHP credential collector or Telegram/Discord webhook indicates a phishing kit using legitimate CDNs for visual polish while exfiltrating through attacker infrastructure."
     }
   ],
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-02T04:03:03.012Z",
+      "compiledAt": "2026-04-02T04:04:44.043Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
