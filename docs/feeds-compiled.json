@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T04:08:53.302Z",
+    "compiledAt": "2026-04-02T04:10:01.742Z",
     "brandCount": 187,
     "signalCount": 1,
     "patternCount": 962,
@@ -10077,8 +10077,24 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "File\\s+Verification\\s+for\\s+Adobe\\s+PDF[\\s\\S]{0,3000}<input[^>]{0,200}type=[\"']password[\"']",
-      "patternFlags": "is"
+      "match": [
+        {
+          "content": "Adobe",
+          "fast_pattern": true
+        },
+        {
+          "content": "Verification"
+        },
+        {
+          "content": "password"
+        },
+        {
+          "content": "adobe.com",
+          "negated": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
+      "note": "Adobe verification page + password NOT on adobe.com. Pure literals."
     },
     {
       "id": "netflix-impersonation-email",
@@ -12491,9 +12507,20 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "(?:accounts\\.google\\.com|gstatic\\.com/accounts|ssl\\.gstatic\\.com)[\\s\\S]{0,3000}(?:action=['\"]https?://(?!(?:accounts\\.google|google)\\.com))",
-      "patternFlags": "i",
-      "note": "Google auth domain references (accounts.google.com, gstatic.com) on a page whose form action points to a non-Google domain indicates a proxied Google login flow. The proxy relayed Google's real login page but the credentials post to the attacker."
+      "match": [
+        {
+          "content": "accounts.google.com",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "accounts\\.google\\.com|googleapis\\.com|gstatic\\.com"
+        },
+        {
+          "pattern": "action=[\\x27\\\"]https?://(?!(?:accounts\\.google|googleapis|gstatic)\\.)"
+        }
+      ],
+      "condition": "1 & 2",
+      "note": "Google auth references but form posts to non-Google domain. AiTM indicator."
     },
     {
       "id": "aitm-injected-script-alongside-real",
@@ -13534,8 +13561,22 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "(?:toll|ezpass|sunpass|peachpass|txtag|fastrak|ipass)[\\s\\S]{0,500}(?:outstanding|unpaid|overdue|balance|amount\\s*(?:due|owed))[\\s\\S]{0,300}\\$\\s*\\d{1,2}\\.\\d{2}",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "toll",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "toll|highway|turnpike|expressway|bridge",
+          "flags": "i"
+        },
+        {
+          "pattern": "card|payment|credit|debit|billing|amount|balance|fee|\\$",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Toll road payment pages showing small dollar amounts ($3-$12 typically) combined with toll brand names are the hallmark of the massive 2025-2026 Chinese smishing campaigns. The small amount makes victims less suspicious."
     },
     {
@@ -13628,8 +13669,22 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "(?:live-?chat|chat-?widget|support-?chat|help-?chat|chatbox)[\\s\\S]{0,500}(?:agent|operator|support|available|online)[\\s\\S]{0,300}(?:password|sign\\s*in|verify|account)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "chat",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "chat-widget|live-chat|support-chat|chat-bubble|chat-icon",
+          "flags": "i"
+        },
+        {
+          "pattern": "password|credential|card|payment|sign.?in|log.?in",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Fake live chat widgets on phishing pages create the illusion of a legitimate support channel. Scammers may guide victims through entering credentials or personal information via the fake chat."
     },
     {
@@ -13835,8 +13890,21 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:您的账[号户][已被](?:冻结|锁定|限制|暂停)|请(?:验证|确认)(?:您的|your)(?:身份|账户|信息)|立即(?:更新|验证|确认))",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "验证",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "验证|确认|更新|升级|紧急|立即|马上|安全|异常|冻结|锁定|解锁|账户",
+          "flags": "i"
+        },
+        {
+          "pattern": "密码|登录|信用卡|银行卡|身份|手机号",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Chinese-language account urgency text ('您的账号已被冻结', '请验证您的身份', '立即更新') targets Chinese-speaking users with account suspension and verification phishing."
     },
     {
@@ -14077,8 +14145,22 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "(?:tariff|de\\s*minimis|import\\s*tariff|additional\\s*(?:tariff|duty))[\\s\\S]{0,500}(?:must\\s*be\\s*paid|payment\\s*required|pay\\s*(?:before|to\\s*release)|stuck\\s*in\\s*customs)[\\s\\S]{0,300}(?:pay|submit|continue|card)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "tariff",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "tariff|customs\\s*(?:fee|duty|charge)|import\\s*(?:tax|duty|fee)|clearance\\s*(?:fee|charge)",
+          "flags": "i"
+        },
+        {
+          "pattern": "pay|card|\\$|€|£|amount|fee|charge",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Post-August 2025 tariff scams exploit consumer confusion about new US de minimis tariff rules on imports under $800. Scammers claim a tariff must be paid before delivery. The FCC specifically warned about this emerging scam vector."
     },
     {
@@ -14321,8 +14403,22 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "(?:vehicle\\s*registration|DMV|department\\s*of\\s*motor|license\\s*(?:plate|suspension)|registration\\s*(?:hold|suspension|revocation))[\\s\\S]{0,300}(?:toll|unpaid|outstanding|balance|violation)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "registration",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "registration|license|vehicle|DMV|plate",
+          "flags": "i"
+        },
+        {
+          "pattern": "suspend|revoke|cancel|hold|penalty|fine|fee",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Threatening DMV action, vehicle registration holds, or license plate suspension for unpaid tolls is the highest-pressure escalation in toll phishing. Real toll agencies follow lengthy legal processes, not instant SMS threats."
     },
     {
@@ -14410,8 +14506,26 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:blur|filter:\\s*blur|opacity:\\s*0\\.[2-5]|background.*document|background.*preview)[\\s\\S]{0,500}(?:sign\\s*in|log\\s*in|authenticate|verify|password)[\\s\\S]{0,300}(?:view|access|download|open)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "blur",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "filter:\\s*blur|blur\\(\\d+px\\)|backdrop-filter.*blur",
+          "flags": "i"
+        },
+        {
+          "pattern": "document|file|PDF|preview|invoice|report",
+          "flags": "i"
+        },
+        {
+          "pattern": "sign.?in|log.?in|password|verify|unlock|view",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "A blurred or partially transparent document preview behind a login overlay is the visual trick that makes shared document phishing convincing. The victim can see enough of the document to believe it's real, but must 'sign in' to view it clearly."
     },
     {
@@ -14537,8 +14651,21 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "(?:Windows\\s*\\+\\s*R|Win\\s*\\+\\s*R|press\\s*Windows\\s*R|open\\s*(?:Run|Terminal|PowerShell|Command\\s*Prompt))[\\s\\S]{0,300}(?:paste|Ctrl\\s*\\+\\s*V|right.?click)[\\s\\S]{0,200}(?:Enter|execute|run|verify)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "Run",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "Windows.*R|Win.*R|Run\\s*dialog|Run\\s*command",
+          "flags": "i"
+        },
+        {
+          "pattern": "paste|Ctrl.*V|clipboard|copy|PowerShell|cmd",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "ClickFix instructions telling user to press Win+R, paste, and press Enter. No legitimate CAPTCHA ever asks a user to open the Run dialog."
     },
     {
@@ -14714,8 +14841,25 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "(?:filter:\\s*blur|opacity:\\s*0\\.[2-6]|background[^;]*\\.(?:png|jpg|jpeg|gif|svg))[\\s\\S]{0,2000}(?:sign.?in|log.?in|password|enter\\s*(?:your\\s*)?(?:email|credentials))[\\s\\S]{0,500}(?:<input|<form)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "blur",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "filter:\\s*blur|blur\\(\\d+px\\)",
+          "flags": "i"
+        },
+        {
+          "content": "password"
+        },
+        {
+          "pattern": "sign.?in|log.?in|view|access|unlock",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "A blurred or semi-transparent document image behind a login form is the #1 document lure layout. The 'document' is just an image with CSS blur/opacity applied, and a credential modal sits on top. No legitimate document-sharing service blurs a real document behind a login wall."
     },
     {
@@ -15707,8 +15851,20 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "js",
-      "patternString": "(?:window\\.location|location\\.href|location\\.replace)\\s*(?:=|\\()\\s*['\"]https?://[^'\"]+\\.(?:top|xyz|buzz|live|icu|rest|cfd|sbs|click)[/'\"\\s]",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "location",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "location\\.(?:href|replace)|window\\.location|meta.*refresh"
+        },
+        {
+          "pattern": "\\.(?:tk|ml|ga|cf|gq|xyz|top|buzz|icu|click|link)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "JavaScript redirects to suspicious TLDs indicate the page is part of a phishing redirect chain that bounces through multiple domains."
     },
     {
@@ -15729,8 +15885,20 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "js",
-      "patternString": "(?:window\\.location|location\\.href|location\\.replace)\\s*(?:=|\\()\\s*['\"]https?://(?:bit\\.ly|tinyurl\\.com|t\\.co|rb\\.gy|is\\.gd|ow\\.ly|cutt\\.ly|shorturl\\.at|tiny\\.cc)/[^'\"]+['\"]",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "location",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "location\\.(?:href|replace)|window\\.location"
+        },
+        {
+          "pattern": "bit\\.ly|tinyurl|t\\.co|goo\\.gl|ow\\.ly|is\\.gd|v\\.gd|buff\\.ly|rb\\.gy|cutt\\.ly",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Redirecting through URL shorteners in JavaScript hides the final phishing destination from both users and URL-based detection. No legitimate login page redirects through shortener services."
     },
     {
@@ -15784,8 +15952,25 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "(?:href|action|src)=['\"]https?://[a-z0-9-]+\\.top[/'\"\\s>][\\s\\S]{0,500}(?:toll|usps|fedex|ups|dhl|ezpass|sunpass|payment|delivery|package)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": ".top",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "\\.top|\\.(xin|cyou|cfd|sbs|bond|hair)",
+          "flags": "i"
+        },
+        {
+          "pattern": "toll|package|delivery|parcel|post|customs|usps|fedex",
+          "flags": "i"
+        },
+        {
+          "pattern": "card|payment|fee|pay|amount|\\$",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "The Smishing Triad predominantly uses .TOP domains for their toll road, delivery, and payment phishing campaigns. Links to .top domains combined with logistics/toll/payment keywords are characteristic of this Chinese smishing group."
     },
     {
@@ -16042,7 +16227,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-02T04:04:44.043Z",
+      "compiledAt": "2026-04-02T04:08:52.234Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
