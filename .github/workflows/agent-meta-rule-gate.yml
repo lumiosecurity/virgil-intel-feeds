@@ -1,0 +1,42 @@
+name: Agent — Meta-Rule Quality Gate
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number in virgil-core-rules with meta rule proposals'
+        required: false
+      rules_json:
+        description: 'JSON string of meta rules to validate'
+        required: false
+      dry_run:
+        description: 'Dry run (no comments posted)'
+        type: boolean
+        default: false
+
+permissions:
+  issues: write
+  pull-requests: write
+  contents: read
+
+jobs:
+  meta-rule-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run meta-rule quality gate
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+          RULES_JSON: ${{ inputs.rules_json }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            ARGS="--dry-run"
+          fi
+          node agents/agent-meta-rule-gate.js $ARGS
