@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-02-06:17",
-    "generatedAt": "2026-04-02T06:17:16.508Z",
+    "version": "2026-04-02-15:37",
+    "generatedAt": "2026-04-02T15:37:28.380Z",
     "brandCount": 187,
     "patternCount": 977
   },
@@ -27558,5 +27558,259 @@
       "patternFlags": "i"
     }
   ],
-  "domHashes": []
+  "domHashes": [],
+  "metaRules": [
+    {
+      "id": "new-domain-credential-harvester",
+      "description": "Domain < 7 days old with a password form posting to an external endpoint — nearly definitive credential phishing",
+      "conditions": {
+        "all": [
+          {
+            "domain_age_days": {
+              "lt": 7
+            }
+          },
+          {
+            "has_password_form": true
+          },
+          {
+            "has_external_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.35,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "brand-title-plus-password-form",
+      "description": "Page title impersonates a known brand AND page has a password form — classic credential phishing page",
+      "conditions": {
+        "all": [
+          {
+            "signal_group": "titleImpersonation"
+          },
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.25,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "brand-title-plus-external-form",
+      "description": "Page title impersonates a known brand AND form submits to external domain — credential exfiltration",
+      "conditions": {
+        "all": [
+          {
+            "signal_group": "titleImpersonation"
+          },
+          {
+            "has_external_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.3,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "visual-hash-plus-new-domain",
+      "description": "Screenshot matches a known brand login page AND domain is < 30 days old — high-confidence brand impersonation phishing",
+      "conditions": {
+        "all": [
+          {
+            "visual_match_confidence": {
+              "gte": 0.5
+            }
+          },
+          {
+            "domain_age_days": {
+              "lt": 30
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "dom-hash-plus-external-form",
+      "description": "DOM structure matches a known phishkit template AND page has a form posting externally — confirmed phishkit deployment",
+      "conditions": {
+        "all": [
+          {
+            "has_dom_hash_match": true
+          },
+          {
+            "has_external_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "bot-evasion-plus-credential-harvesting",
+      "description": "Page uses bot evasion techniques AND has credential harvesting patterns — phishkit with anti-analysis",
+      "conditions": {
+        "all": [
+          {
+            "signal_group": "botEvasion"
+          },
+          {
+            "signal_group": "credentialHarvesting"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "obfuscation-plus-brand-impersonation",
+      "description": "Page has obfuscated JavaScript AND impersonates a known brand — phishkit hiding its payload",
+      "conditions": {
+        "all": [
+          {
+            "signal_group": "obfuscation"
+          },
+          {
+            "signal_group": "brandImpersonation"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "gating-plus-password-form",
+      "description": "Page uses CDN/CAPTCHA gating AND has a password form — scanner shield protecting a credential harvester",
+      "conditions": {
+        "all": [
+          {
+            "signal_group": "cdnGating"
+          },
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "medium"
+      }
+    },
+    {
+      "id": "domain-age-dedup",
+      "description": "Both WHOIS and CT fired for the same new domain — replace with a single calibrated age signal instead of double-counting",
+      "conditions": {
+        "all": [
+          {
+            "signal": "new-domain-whois"
+          },
+          {
+            "signal": "new-domain-ct-log"
+          }
+        ]
+      },
+      "action": {
+        "scope": "replace",
+        "weight": 0.45,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "multiple-brand-signal-cap",
+      "description": "Brand detected via typosquat AND subdomain AND path — these are all detecting the same brand impersonation, cap at 0.55",
+      "conditions": {
+        "all": [
+          {
+            "signal": "known-typosquat"
+          },
+          {
+            "signal": "brand-in-subdomain"
+          },
+          {
+            "signal": "brand-in-path"
+          }
+        ]
+      },
+      "action": {
+        "scope": "replace",
+        "weight": 0.55,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "hosting-platform-evasion-downscore",
+      "description": "Bot evasion signals on a free subdomain host are common on legitimate sites (Cloudflare challenges, etc.) — reduce combined weight",
+      "conditions": {
+        "all": [
+          {
+            "signal_group": "botEvasion"
+          },
+          {
+            "signal": "free-subdomain-host"
+          },
+          {
+            "not": {
+              "has_password_form": true
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "downscore",
+        "weight": 0.1,
+        "severity": "low"
+      }
+    },
+    {
+      "id": "social-engineering-without-form",
+      "description": "Social engineering language detected but no form on the page — likely a legitimate urgency message, not a phishing page",
+      "conditions": {
+        "all": [
+          {
+            "signal_group": "socialEngineering"
+          },
+          {
+            "not": {
+              "has_form": true
+            }
+          },
+          {
+            "not": {
+              "signal_group": "credentialHarvesting"
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "downscore",
+        "weight": 0.05,
+        "severity": "low"
+      }
+    }
+  ]
 }
