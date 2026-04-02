@@ -84,6 +84,34 @@ const LEGITIMATE_SAMPLES = [
   'const form = document.getElementById("loginForm")',
 ];
 
+// ── Legitimate network request samples for FP testing network patterns ────────
+// These represent real outbound requests from legitimate sites. Any network
+// pattern that matches these is a false positive risk.
+const LEGITIMATE_NETWORK_SAMPLES = [
+  // SSO / auth flows — legitimate cross-origin credential POSTs
+  { url: 'https://auth.okta.com/api/v1/authn', body: 'username=user@company.com&password=test123', transport: 'fetch' },
+  { url: 'https://accounts.google.com/signin/v2/sl/pwd', body: '{"email":"test@gmail.com","password":"test"}', transport: 'fetch' },
+  { url: 'https://login.microsoftonline.com/common/oauth2/v2.0/token', body: 'grant_type=authorization_code&code=abc123&redirect_uri=https://app.example.com/callback', transport: 'fetch' },
+  { url: 'https://appleid.apple.com/auth/authorize', body: '{"email":"test@icloud.com"}', transport: 'fetch' },
+  // Payment processors
+  { url: 'https://api.stripe.com/v1/payment_intents', body: 'amount=1000&currency=usd&payment_method=pm_card_visa', transport: 'xhr' },
+  { url: 'https://www.paypal.com/auth/validatecaptcha', body: '{"captcha_token":"abc123"}', transport: 'fetch' },
+  // Analytics / tracking beacons
+  { url: 'https://www.google-analytics.com/collect', body: 'v=1&t=pageview&dp=/home&dt=Home+Page', transport: 'beacon' },
+  { url: 'https://bat.bing.com/action/0', body: '{"evt":"pageLoad","page":"/home"}', transport: 'beacon' },
+  { url: 'https://analytics.tiktok.com/api/v2/pixel', body: '{"event":"ViewContent"}', transport: 'beacon' },
+  // Legitimate form submission backends
+  { url: 'https://api.hubspot.com/submissions/v3/integration/submit/12345/form-guid', body: '{"fields":[{"name":"email","value":"test@test.com"}]}', transport: 'fetch' },
+  { url: 'https://hooks.zapier.com/hooks/catch/12345/abcdef/', body: '{"email":"test@test.com","name":"Test User"}', transport: 'fetch' },
+  // WordPress / PHP legitimate
+  { url: 'https://example.com/wp-login.php', body: 'log=admin&pwd=password&redirect_to=%2Fwp-admin%2F', transport: 'fetch' },
+  { url: 'https://example.com/wp-admin/admin-ajax.php', body: 'action=heartbeat&_nonce=abc123&interval=15', transport: 'xhr' },
+  { url: 'https://example.com/wp-comments-post.php', body: 'comment=Great+article&author=John&email=john@test.com', transport: 'fetch' },
+  // Legitimate API calls
+  { url: 'https://api.github.com/repos/user/repo/issues', body: '{"title":"Bug report","body":"Description here"}', transport: 'fetch' },
+  { url: 'https://slack.com/api/chat.postMessage', body: '{"channel":"C123","text":"Hello"}', transport: 'fetch' },
+];
+
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 async function claude(system, user, maxTokens = 2000, model = 'claude-sonnet-4-6') {
@@ -355,6 +383,100 @@ function evaluateRules(rules) {
       if (rule.weight > maxSafeWeight && nonNegatedContent < minSpecificity) {
         eval_.issues.push(`Weight ${rule.weight} too high for ${nonNegatedContent} total content chars in ${rule.group} (max safe: ${maxSafeWeight} unless combined content has ≥${minSpecificity} literal chars)`);
       }
+
+    } else if (rule.id && rule.patternString && rule.target) {
+      // ── Network pattern evaluation ─────────────────────────────────────
+      // Matches against outbound HTTP request metadata (URLs, POST bodies, field names)
+      const VALID_TARGETS = new Set(['url', 'body', 'fieldNames', 'any']);
+      const VALID_TRANSPORTS = new Set(['any', 'fetch', 'xhr', 'beacon', 'websocket']);
+
+      // Validate target and transport
+      if (!VALID_TARGETS.has(rule.target)) {
+        eval_.issues.push(`Invalid target "${rule.target}" — must be one of: url, body, fieldNames, any`);
+      }
+      if (rule.transport && !VALID_TRANSPORTS.has(rule.transport)) {
+        eval_.issues.push(`Invalid transport "${rule.transport}" — must be one of: any, fetch, xhr, beacon, websocket`);
+      }
+
+      // Validate regex compiles
+      let compilesOk = false;
+      try {
+        new RegExp(rule.patternString, rule.patternFlags || '');
+        compilesOk = true;
+      } catch (e) {
+        eval_.issues.push(`Invalid regex: ${e.message}`);
+      }
+
+      if (compilesOk) {
+        const patternLength = rule.patternString.replace(/[.*+?^${}()|[\]\\]/g, '').length;
+
+        // ── Broadness check ─────────────────────────────────────────────
+        if (/^\.\*$/.test(rule.patternString)) eval_.issues.push('Pattern is just .* — matches everything');
+        if (patternLength < 4) eval_.issues.push(`Pattern too short (${patternLength} literal chars)`);
+
+        // ── Performance check ───────────────────────────────────────────
+        const ps = rule.patternString;
+        const hasNestedQuant = /[+*]\)[+*?]/.test(ps);
+        if (hasNestedQuant) {
+          eval_.issues.push('Nested quantifiers — catastrophic backtracking risk');
+        }
+
+        // ── FP test against legitimate network request samples ──────────
+        const pattern = new RegExp(rule.patternString, rule.patternFlags || '');
+        const fpHits = [];
+
+        for (const sample of LEGITIMATE_NETWORK_SAMPLES) {
+          // Build target string based on the rule's target field
+          let targetStr = '';
+          if (rule.target === 'url') {
+            targetStr = sample.url;
+          } else if (rule.target === 'body') {
+            targetStr = sample.body;
+          } else if (rule.target === 'fieldNames') {
+            // Extract field names from the body
+            const names = new Set();
+            if (sample.body.includes('=') && /^[^{[<]/.test(sample.body)) {
+              for (const pair of sample.body.split('&')) {
+                const key = decodeURIComponent((pair.split('=')[0] || '')).trim();
+                if (key) names.add(key.toLowerCase());
+              }
+            }
+            try {
+              const parsed = JSON.parse(sample.body);
+              if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+                for (const key of Object.keys(parsed)) names.add(key.toLowerCase());
+              }
+            } catch {}
+            targetStr = [...names].join(' ');
+          } else {
+            // 'any' — concatenate all
+            targetStr = [sample.url, sample.body].join('\n');
+          }
+
+          // Check transport filter
+          if (rule.transport && rule.transport !== 'any' && rule.transport !== sample.transport) continue;
+
+          pattern.lastIndex = 0;
+          if (targetStr && pattern.test(targetStr)) {
+            fpHits.push(sample.url.slice(0, 60));
+          }
+        }
+
+        if (fpHits.length > 0) {
+          const isPhishkitSig = rule.group === 'phishkitSignatures';
+          const bucket = isPhishkitSig ? 'issues' : 'warnings';
+          eval_[bucket].push(`Network pattern matches legitimate request(s) (${fpHits.length}): ${fpHits[0]}`);
+          eval_.fpMatches.push(...fpHits);
+        }
+
+        // ── Weight vs specificity ───────────────────────────────────────
+        const isPhishkitSig = rule.group === 'phishkitSignatures';
+        const maxSafeWeight = isPhishkitSig ? 0.30 : 0.40;
+        const minSpecificityForHighWeight = 8;
+        if (rule.weight > maxSafeWeight && patternLength < minSpecificityForHighWeight) {
+          eval_.issues.push(`Weight ${rule.weight} too high for ${patternLength}-char network pattern in ${rule.group} (max safe: ${maxSafeWeight} unless ≥${minSpecificityForHighWeight} literal chars)`);
+        }
+      }
     }
 
     evaluations.push(eval_);
@@ -392,15 +514,22 @@ CRITICAL: Rules in "phishkitSignatures" run against EVERY page source for EVERY 
 
 PERFORMANCE IS A HARD REQUIREMENT: Source patterns run against full page HTML (5-10MB). 340+ patterns and growing. Patterns with .* and alternation cause V8 to scan the entire string at every position.
 
+RULE TYPES:
+- Brand entries: typosquat variants of known brands
+- Source patterns: regex matched against page HTML/JS source code
+- Network patterns: regex matched against outbound HTTP request metadata (destination URLs, POST bodies, field names). These run in the content script's exfiltration interceptor against live network requests, NOT against page source. FP risk is different — SSO flows, analytics beacons, and legitimate form backends are the main FP vectors.
+
 PASS criteria:
 - Typosquats are plausibly related to the brand and not common English words
 - Source patterns are specific enough to not match legitimate sites
+- Network patterns don't match legitimate SSO, analytics, payment, or WordPress requests
 - Weights are proportional to pattern specificity
 - No critical issues found
 - Regex patterns are performance-safe: no unanchored .* with DOTALL, no nested quantifiers, no multiple sequential .* without bounded quantifiers
 
 FAIL criteria (any one = FAIL):
 - Pattern matches legitimate sites (FP risk)
+- Network pattern matches legitimate SSO/auth/analytics/payment requests
 - Regex too broad for common page structures
 - Generic typosquats unrelated to brand
 - Weight disproportionate to specificity
@@ -415,7 +544,8 @@ async function askClaudeToReview(rules, evaluations) {
   const evalSummary = evaluations.map(e => {
     const r = e.rule;
     const name = r.name || r.id;
-    return `### ${name} (${r.name ? 'brand entry' : 'source pattern'})
+    const ruleType = r.name ? 'brand entry' : r.target ? 'network pattern' : 'source pattern';
+    return `### ${name} (${ruleType})
 Issues: ${e.issues.length > 0 ? e.issues.join('; ') : 'none'}
 Warnings: ${e.warnings.length > 0 ? e.warnings.join('; ') : 'none'}
 Rule: ${JSON.stringify(r, null, 2)}`;
