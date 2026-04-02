@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T04:25:07.988Z",
+    "compiledAt": "2026-04-02T04:27:38.820Z",
     "brandCount": 187,
     "signalCount": 1,
     "patternCount": 962,
@@ -8996,7 +8996,7 @@
       "id": "jsobs-self-defending-tostring",
       "group": "obfuscation",
       "description": "javascript-obfuscator self-defending — Function.toString() integrity check preventing code modification",
-      "severity": "high",
+      "severity": "low",
       "weight": 0.15,
       "source": "js",
       "patternString": "(?:Function|constructor)\\(['\"](return\\s*this)['\"]\\)\\s*\\(\\s*\\)[\\s\\S]{0,200}(?:toString|toSource|apply|call)",
@@ -16229,7 +16229,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-02T04:22:40.840Z",
+      "compiledAt": "2026-04-02T04:25:04.346Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

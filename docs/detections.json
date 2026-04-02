@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-02-04:25",
-    "generatedAt": "2026-04-02T04:25:08.009Z",
+    "version": "2026-04-02-04:27",
+    "generatedAt": "2026-04-02T04:27:38.930Z",
     "brandCount": 187,
     "patternCount": 962
   },
@@ -19991,7 +19991,7 @@
       "id": "jsobs-self-defending-tostring",
       "group": "obfuscation",
       "description": "javascript-obfuscator self-defending — Function.toString() integrity check preventing code modification",
-      "severity": "high",
+      "severity": "low",
       "weight": 0.15,
       "source": "js",
       "note": "Function(\"return this\")() + toString — used by some legitimate polyfills. Lowered weight — weak obfuscation indicator, not definitive.",
