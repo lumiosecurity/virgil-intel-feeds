@@ -142,7 +142,7 @@ function evaluateRules(rules) {
       }
 
     } else if (rule.id && rule.patternString) {
-      // ── Source pattern evaluation ────────────────────────────────────────
+      // ── Source pattern evaluation (LEGACY — single regex) ────────────────
       const isPhishkitSig = rule.group === 'phishkitSignatures';
 
       let compilesOk = false;
@@ -224,6 +224,136 @@ function evaluateRules(rules) {
             eval_.issues.push('phishkitSignatures pattern lacks a specific anchor string (≥8 literal chars) — too broad');
           }
         }
+      }
+
+    } else if (rule.id && rule.match && Array.isArray(rule.match)) {
+      // ── Source pattern evaluation (MULTI-MATCH) ─────────────────────────
+      const isPhishkitSig = rule.group === 'phishkitSignatures';
+
+      // ── Validate match entries ──────────────────────────────────────────
+      if (rule.match.length === 0) {
+        eval_.issues.push('Multi-match rule has empty match[] array');
+      }
+
+      let hasFastPattern = false;
+      let hasContent = false;
+      let totalContentChars = 0;
+
+      for (let i = 0; i < rule.match.length; i++) {
+        const entry = rule.match[i];
+
+        // Must have content or pattern
+        if (entry.content === undefined && entry.pattern === undefined) {
+          eval_.issues.push(`match[${i}]: must have either 'content' or 'pattern'`);
+        }
+
+        // Validate regex entries compile
+        if (entry.pattern !== undefined) {
+          try {
+            new RegExp(entry.pattern, entry.flags || '');
+          } catch (e) {
+            eval_.issues.push(`match[${i}]: invalid regex '${entry.pattern}': ${e.message}`);
+          }
+        }
+
+        // Track fast_pattern
+        if (entry.fast_pattern) {
+          if (entry.content === undefined) {
+            eval_.issues.push(`match[${i}]: fast_pattern can only be set on 'content' entries, not 'pattern'`);
+          } else if (hasFastPattern) {
+            eval_.warnings.push(`match[${i}]: multiple fast_pattern entries — only the first will be used`);
+          } else {
+            hasFastPattern = true;
+            // Check fast_pattern specificity
+            if (entry.content.length < 4) {
+              eval_.issues.push(`match[${i}]: fast_pattern '${entry.content}' is too short (${entry.content.length} chars) — should be ≥4 chars`);
+            }
+            const genericFastPatterns = ['password', 'email', 'login', 'form', 'submit', 'input', 'button', 'click', 'http', 'https', 'script', 'function', 'document', 'window'];
+            if (genericFastPatterns.includes(entry.content.toLowerCase())) {
+              eval_.warnings.push(`match[${i}]: fast_pattern '${entry.content}' is very generic — appears on most web pages. Choose a more specific literal.`);
+            }
+          }
+        }
+
+        // Track content specificity
+        if (entry.content !== undefined) {
+          hasContent = true;
+          totalContentChars += entry.content.length;
+        }
+
+        // Validate within/relative
+        if (entry.within !== undefined && entry.relative === undefined) {
+          eval_.issues.push(`match[${i}]: 'within' requires 'relative' to specify which match entry to measure from`);
+        }
+        if (entry.relative !== undefined && entry.relative >= rule.match.length) {
+          eval_.issues.push(`match[${i}]: 'relative: ${entry.relative}' references non-existent match entry (max index: ${rule.match.length - 1})`);
+        }
+
+        // Warn about negated-only rules
+        if (entry.negated) {
+          const nonNegated = rule.match.filter(m => !m.negated);
+          if (nonNegated.length === 0) {
+            eval_.issues.push('All match entries are negated — rule would match every page that DOESN\'T contain these strings');
+          }
+        }
+      }
+
+      // Must have a fast_pattern
+      if (!hasFastPattern && hasContent) {
+        eval_.warnings.push('No explicit fast_pattern set — engine will auto-select the longest content string. Consider marking the most specific content with fast_pattern: true.');
+      }
+
+      // ── Validate condition expression ─────────────────────────────────
+      if (rule.condition) {
+        // Syntax: only digits, spaces, &, |, !, ()
+        if (!/^[\d\s&|!()]+$/.test(rule.condition)) {
+          eval_.issues.push(`Invalid condition syntax: '${rule.condition}' — must contain only digits, &, |, !, (, ), and spaces`);
+        } else {
+          // Check all referenced indices exist
+          const referencedIndices = [...rule.condition.matchAll(/\d+/g)].map(m => parseInt(m[0]));
+          for (const idx of referencedIndices) {
+            if (idx >= rule.match.length) {
+              eval_.issues.push(`Condition references index ${idx} but match[] only has ${rule.match.length} entries (max index: ${rule.match.length - 1})`);
+            }
+          }
+
+          // Check balanced parentheses
+          let depth = 0;
+          for (const ch of rule.condition) {
+            if (ch === '(') depth++;
+            if (ch === ')') depth--;
+            if (depth < 0) {
+              eval_.issues.push('Condition has unbalanced parentheses (extra closing paren)');
+              break;
+            }
+          }
+          if (depth > 0) {
+            eval_.issues.push('Condition has unbalanced parentheses (unclosed opening paren)');
+          }
+
+          // Try to parse the condition expression
+          try {
+            // Simple recursive descent validation (same logic as the worker parser)
+            const tokens = rule.condition.match(/[\d]+|[&|!()]/g) || [];
+            if (tokens.length === 0) {
+              eval_.issues.push('Condition is empty after parsing');
+            }
+          } catch (e) {
+            eval_.issues.push(`Condition parse error: ${e.message}`);
+          }
+        }
+      }
+
+      // ── Weight vs specificity for multi-match ───────────────────────────
+      // For multi-match, specificity is based on total content characters
+      // across all non-negated entries
+      const nonNegatedContent = rule.match
+        .filter(m => m.content !== undefined && !m.negated)
+        .reduce((sum, m) => sum + m.content.length, 0);
+      const maxSafeWeight = isPhishkitSig ? 0.25 : 0.35;
+      const minSpecificity = isPhishkitSig ? 15 : 10;
+      if (rule.weight > maxSafeWeight && nonNegatedContent < minSpecificity) {
+        eval_.issues.push(`Weight ${rule.weight} too high for ${nonNegatedContent} total content chars in ${rule.group} (max safe: ${maxSafeWeight} unless combined content has ≥${minSpecificity} literal chars)`);
       }
     }
 
@@ -440,6 +570,7 @@ function extractRulesFromComment(comment) {
     if (b.action === 'remove') return false;
     if (b.name && b.domains && b.typos) return !PLACEHOLDER_NAMES.has(b.name);
     if (b.id && b.patternString)        return !PLACEHOLDER_IDS.has(b.id);
+    if (b.id && b.match && Array.isArray(b.match)) return !PLACEHOLDER_IDS.has(b.id);
     return false;
   });
 }

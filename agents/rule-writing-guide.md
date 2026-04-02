@@ -38,7 +38,7 @@ Your `patternString` becomes `new RegExp(patternString, patternFlags)` and is te
 
 ## The JSON Schema
 
-### Source Pattern
+### Source Pattern (Legacy — Single Regex)
 
 ```json
 {
@@ -51,6 +51,143 @@ Your `patternString` becomes `new RegExp(patternString, patternFlags)` and is te
   "patternString": "api\\.telegram\\.org\\/bot[\\w:]{20,}\\/sendMessage",
   "patternFlags": "i",
   "note": "Direct Telegram Bot API calls to exfiltrate credentials — definitive phishkit signal"
+}
+```
+
+### Source Pattern (Multi-Match — Content Literals + Conditions)
+
+The multi-match format replaces a single regex with multiple match conditions combined by a boolean condition expression. Use this format when you need:
+
+- **FP exclusion** via negated matches (impossible with regex alone)
+- **OR variant detection** — multiple indicators where any one suffices
+- **Performance** — content literals are 100x faster than regex
+- **Complex logic** — two independent detection paths in one rule
+
+```json
+{
+  "id": "mm-fake-microsoft-login",
+  "group": "brandImpersonation",
+  "description": "Microsoft login impersonation on non-Microsoft domain",
+  "severity": "high",
+  "weight": 0.35,
+  "source": "html",
+  "match": [
+    { "content": "microsoft", "nocase": true, "fast_pattern": true },
+    { "content": "password" },
+    { "pattern": "<form|<input", "flags": "i" },
+    { "content": "login.microsoftonline.com", "negated": true },
+    { "content": "microsoft.com", "negated": true }
+  ],
+  "condition": "0 & 1 & 2 & 3 & 4",
+  "note": "Fires on pages mentioning Microsoft + password + form, but NOT on real Microsoft domains"
+}
+```
+
+#### Match Entry Fields
+
+Each entry in the `match` array can have:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `content` | string | **Literal string match** — uses fast `indexOf`. Use this for exact strings. |
+| `pattern` | string | **Regex match** — uses `RegExp.test()`. Use only when literal isn't sufficient. |
+| `flags` | string | Regex flags for `pattern` (e.g., `"i"` for case-insensitive). |
+| `fast_pattern` | boolean | **Marks this content as the pre-filter.** The engine checks this string first via `indexOf`; if not found, the entire rule is skipped without evaluating other entries. **Required on exactly one `content` entry per rule.** |
+| `nocase` | boolean | Case-insensitive `content` matching. |
+| `negated` | boolean | **Must NOT be present.** Use for FP exclusion — if this string is found in the page source, the match entry evaluates to `false`. |
+| `depth` | integer | Only check the first N characters of the target. Use for patterns that appear in page headers/metadata. |
+| `within` | integer | Must appear within N characters of a previous match position. |
+| `relative` | integer | Index of the match entry whose position `within` is relative to. |
+
+Each entry must have either `content` OR `pattern` (not both).
+
+#### The `condition` Field — Boolean Expressions
+
+The `condition` string is a boolean expression over match entry indices (0-based). If omitted, defaults to AND of all entries.
+
+**Operators (by precedence, highest first):**
+
+| Operator | Meaning | Example |
+|----------|---------|---------|
+| `!` | NOT | `!3` — match entry 3 must NOT match |
+| `&` | AND | `0 & 1` — both must match |
+| `\|` | OR | `1 \| 2` — either can match |
+| `( )` | Grouping | `0 & (1 \| 2)` — entry 0 AND either 1 or 2 |
+
+**Common patterns:**
+
+```
+"0 & 1"                     — simple AND (same as default)
+"0 & (1 | 2)"               — fast_pattern AND either variant
+"0 & 1 & !2"                — match AND FP exclusion
+"0 & (1 | 2) & !(3 & 4)"   — complex: match + variant + negated pair
+"(0 & 1) | (2 & 3)"        — two independent detection paths
+"0 & (1 | 2 | 3 | 4)"      — fast_pattern + any one of four variants
+```
+
+#### The `fast_pattern` Field — Performance Pre-Filter
+
+**Every multi-match rule MUST have exactly one `content` entry with `fast_pattern: true`.** This is the string the engine checks first — if it's not found in the page source, the entire rule is skipped without evaluating any other entries.
+
+**How to choose the fast_pattern:**
+
+- Pick the **most specific, rarest** literal string in the rule
+- Ideal: strings that ONLY appear on phishing pages (`api.telegram.org`, `sendMessage`, `discord.com/api/webhooks`)
+- Acceptable: moderately specific strings (`clipboard`, `captcha`, `foreignObject`)
+- **Avoid generic words** as fast_pattern: `password`, `email`, `login`, `form`, `submit` — these appear on every login page and defeat the pre-filtering
+
+If no `fast_pattern` is explicitly set, the engine auto-selects the longest non-negated `content` string. Explicit is better — you know your rule's specificity better than the engine does.
+
+#### When to Use Multi-Match vs Legacy Regex
+
+| Use Multi-Match When... | Use Legacy Regex When... |
+|---|---|
+| You need FP exclusion (`negated` matches) | The pattern is a single specific regex |
+| You're detecting variants (sendMessage OR sendDocument) | The pattern is already fast (specific literal anchor) |
+| The regex has expensive wildcards (`[\s\S]{0,2000}`) | The pattern needs backreferences or lookaheads |
+| You want to consolidate 3+ related rules into one | The pattern is simple and well-tested |
+| The detection logic is "A and B but not C" | You don't need negation or OR logic |
+
+**Do not convert working legacy rules just for the sake of it.** The engine auto-extracts literals from legacy regexes for pre-filtering. Only convert when multi-match provides a concrete advantage.
+
+#### Multi-Match Examples
+
+**Telegram exfil — any send method:**
+```json
+{
+  "match": [
+    { "content": "api.telegram.org", "fast_pattern": true },
+    { "pattern": "bot\\d{8,10}:[A-Za-z0-9_-]{35}" },
+    { "content": "sendMessage" },
+    { "content": "sendDocument" },
+    { "content": "sendPhoto" }
+  ],
+  "condition": "0 & 1 & (2 | 3 | 4)"
+}
+```
+
+**Brand impersonation with FP exclusion:**
+```json
+{
+  "match": [
+    { "content": "chase", "nocase": true, "fast_pattern": true },
+    { "content": "password" },
+    { "content": "chase.com", "negated": true }
+  ],
+  "condition": "0 & 1 & 2"
+}
+```
+
+**Two independent signatures in one rule:**
+```json
+{
+  "match": [
+    { "content": "captcha", "nocase": true, "fast_pattern": true },
+    { "content": "canvas" },
+    { "content": "IconCaptcha" },
+    { "pattern": "getContext\\(['\"]2d['\"]\\)" }
+  ],
+  "condition": "(0 & 1 & 3) | (0 & 2)"
 }
 ```
 
