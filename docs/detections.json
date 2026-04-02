@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-02-04:03",
-    "generatedAt": "2026-04-02T04:03:05.593Z",
+    "version": "2026-04-02-04:04",
+    "generatedAt": "2026-04-02T04:04:45.134Z",
     "brandCount": 187,
     "patternCount": 962
   },
@@ -14578,8 +14578,26 @@
       "weight": 0.3,
       "source": "js",
       "note": "Checking the email domain and rejecting free providers (Gmail, Yahoo, Hotmail) is the Sneaky 2FA enterprise targeting filter. The phishing page only works for corporate email addresses.",
-      "patternString": "(?:split\\(['\"]@['\"]\\)|email\\.(?:split|indexOf|includes))[\\s\\S]{0,300}(?:gmail|yahoo|hotmail|outlook|aol)[\\s\\S]{0,200}(?:error|invalid|reject|block|redirect|not\\s*(?:supported|allowed|valid))",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "gmail",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "split\\([\\x27\"]@[\\x27\"]\\)|email\\.(?:split|indexOf|includes)",
+          "flags": "i"
+        },
+        {
+          "pattern": "gmail|yahoo|hotmail|outlook|aol",
+          "flags": "i"
+        },
+        {
+          "pattern": "error|invalid|reject|block|redirect|not\\s*allowed",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "wordpress-logged-in-check",
@@ -15777,9 +15795,21 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "note": "Combination of Amazon-specific CSS classes and JavaScript files that only appear on Amazon impersonation sites",
-      "patternString": "amazon-header[\\s\\S]{0,1000}products-grid[\\s\\S]{0,500}(?:js-product-grid|amazon\\.js)",
-      "patternFlags": "i"
+      "note": "Amazon UI structure + negated amazon.com FP exclusion.",
+      "match": [
+        {
+          "content": "amazon-header",
+          "fast_pattern": true
+        },
+        {
+          "content": "products-grid"
+        },
+        {
+          "content": "amazon.com",
+          "negated": true
+        }
+      ],
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "brand-subdomain-impersonation",
@@ -16255,9 +16285,25 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "note": "Catches Netflix title impersonation combined with credential input fields, common on hosting platforms",
-      "patternString": "<title[^>]*>Netflix</title>[\\s\\S]{0,2000}<input[^>]*(?:email|mobile|username|login)[^>]*>",
-      "patternFlags": "i"
+      "note": "Netflix title + login form NOT on netflix.com. Added FP exclusion.",
+      "match": [
+        {
+          "content": "Netflix",
+          "fast_pattern": true
+        },
+        {
+          "content": "<title"
+        },
+        {
+          "pattern": "<input[^>]*(?:email|mobile|username|login)",
+          "flags": "i"
+        },
+        {
+          "content": "netflix.com",
+          "negated": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "fake-captcha-gating",
@@ -16769,9 +16815,19 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "note": "",
-      "patternString": "(?:keystrokes|clicks\\s{0,3}tracked|time\\s{0,3}on\\s{0,3}page)[\\s\\S]{0,2000}(?:keystrokes|clicks\\s{0,3}tracked|time\\s{0,3}on\\s{0,3}page)",
-      "patternFlags": "i"
+      "note": "Phishkits that display tracking counters to create urgency. Simplified — the literal is already very specific.",
+      "match": [
+        {
+          "content": "keystrokes",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "keystrokes|clicks\\s*tracked|time\\s*on\\s*page",
+          "flags": "i"
+        }
+      ],
+      "condition": "1"
     },
     {
       "id": "hidden-field-credential-relay",
@@ -17357,8 +17413,22 @@
       "weight": 0.3,
       "source": "html",
       "note": "Fake OAuth consent screens requesting broad permissions (email access, contacts, calendar, files) are used to trick users into granting malicious apps access to their data without stealing passwords.",
-      "patternString": "(?:oauth|authorize|consent|permission)[\\s\\S]{0,500}(?:access\\s+your\\s+(?:email|contacts|calendar|files|drive)|read\\s+(?:your|all)\\s+(?:emails?|messages?|contacts?))[\\s\\S]{0,300}(?:allow|accept|grant|approve)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "consent",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "oauth|authorize|consent|permission",
+          "flags": "i"
+        },
+        {
+          "pattern": "access\\s+your\\s+(?:email|contacts|calendar|files|drive)|read\\s+(?:your|all)\\s+(?:emails?|messages?|contacts?)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "css-keylogger-background-image",
@@ -18338,8 +18408,22 @@
       "weight": 0.25,
       "source": "html",
       "note": "Job applications requesting SSN, date of birth, bank account, or passport information are employment scams harvesting PII for identity theft. Legitimate employers don't collect SSN or banking details in initial applications.",
-      "patternString": "(?:job\\s*(?:offer|application|opportunity)|apply\\s*(?:now|here)|employment|position|hiring|recruitment)[\\s\\S]{0,500}(?:social\\s*security|ssn|date\\s*of\\s*birth|bank\\s*account|routing\\s*number|passport|driver.?s?\\s*license)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "job",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "job\\s*(?:offer|application|opportunity)|apply\\s*(?:now|here)|employment|position|hiring|recruitment",
+          "flags": "i"
+        },
+        {
+          "pattern": "social\\s*security|ssn|date\\s*of\\s*birth|bank\\s*account|routing\\s*number|direct\\s*deposit",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "oauth-consent-broad-permissions",
@@ -18349,8 +18433,22 @@
       "weight": 0.3,
       "source": "html",
       "note": "Fake OAuth consent pages requesting broad permissions trick users into authorizing malicious apps with persistent account access.",
-      "patternString": "(?:permissions?|access)\\s*(?:requested|required)[\\s\\S]{0,500}(?:read\\s*(?:your\\s*)?(?:email|contacts|calendar|files)|send\\s*(?:email|mail)\\s*(?:on\\s*your|as\\s*you)|full\\s*access|offline\\s*access)[\\s\\S]{0,300}(?:allow|accept|authorize|grant|consent)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "permission",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "permissions?\\s*(?:requested|required)",
+          "flags": "i"
+        },
+        {
+          "pattern": "read\\s*(?:your\\s*)?(?:email|contacts|calendar|files)|send\\s*(?:email|mail)\\s*(?:on\\s*your|as\\s*you)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "microsoft-graph-consent-phish",
@@ -18360,8 +18458,20 @@
       "weight": 0.3,
       "source": "html",
       "note": "Microsoft Graph API permission scope names (Mail.Read, Mail.Send, etc.) in a consent page are definitive consent phishing indicators.",
-      "patternString": "(?:graph\\.microsoft\\.com|Microsoft\\s*Graph|Microsoft\\s*365)[\\s\\S]{0,500}(?:Mail\\.Read|Mail\\.Send|Contacts\\.Read|Files\\.ReadWrite|User\\.Read\\.All)[\\s\\S]{0,300}(?:consent|allow|accept|authorize)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "graph.microsoft.com",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "Mail\\.Read|Mail\\.Send|Contacts\\.Read|Files\\.ReadWrite|User\\.Read\\.All"
+        },
+        {
+          "pattern": "consent|approve|allow|grant|accept",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "phishing-typo-submit-button",
@@ -22326,9 +22436,18 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "note": "Files with double extensions like document.pdf.exe are malware disguised as documents. The first extension appears legitimate while the actual executable extension is the one Windows uses to run the file.",
-      "patternString": "(?:href|download|src)=['\"][^'\"]+\\.(?:pdf|doc|xls|jpg|png)\\.(?:exe|scr|bat|cmd|js|vbs|ps1|hta|msi)['\"]",
-      "patternFlags": "i"
+      "note": "Double extension download links. Kept regex for the full pattern but .exe fast filter eliminates 99.9% of pages.",
+      "match": [
+        {
+          "content": ".exe",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:href|download|src)=[\\x27\\\"][^\\x27\\\"]+\\.(?:pdf|doc|xls|jpg|png)\\.(?:exe|scr|bat|cmd|js|vbs|ps1|hta|msi)[\\x27\\\"]",
+          "flags": "i"
+        }
+      ],
+      "condition": "1"
     },
     {
       "id": "autocapture-screenshot-phish",
@@ -23000,9 +23119,23 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "note": "Phishing kits using multiple exfiltration channels (Telegram + Discord, Telegram + email) provide redundancy — if one channel is taken down, credentials still flow through the other. Finding both Telegram and Discord references in the same script is a strong phishing indicator.",
-      "patternString": "(?:telegram|api\\.telegram)[\\s\\S]{0,2000}(?:discord|webhook)[\\s\\S]{0,500}(?:email|password|credential)",
-      "patternFlags": "i"
+      "note": "Both Telegram AND Discord referenced with credential terms — multi-platform exfil.",
+      "match": [
+        {
+          "content": "telegram",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "content": "discord",
+          "nocase": true
+        },
+        {
+          "pattern": "email|password|credential",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "jsobs-phish-page-combined",
@@ -24075,8 +24208,22 @@
       "weight": 0.25,
       "source": "html",
       "note": "Fake subscription renewal scams impersonating McAfee, Norton, and other software are a top phishing vector. They create urgency about 'expired protection' to harvest payment information.",
-      "patternString": "(?:subscription|license|protection|antivirus)\\s+(?:has\\s+)?(?:expired|expiring|lapsed|ending|renewal)[\\s\\S]{0,500}(?:renew|reactivat|restore|update\\s+(?:now|payment))[\\s\\S]{0,300}(?:credit|debit|card|payment|billing)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "subscription",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "expired|expiring|lapsed|ending|renewal",
+          "flags": "i"
+        },
+        {
+          "pattern": "renew|reactivat|restore|update.*(?:now|payment)|pay|card|\\$",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "fake-airdrop-claim-page",
@@ -24488,8 +24635,22 @@
       "weight": 0.25,
       "source": "html",
       "note": "Displaying a fake tracking number (that looks real but isn't) alongside a payment or action request is the core courier phishing pattern. The tracking number adds perceived legitimacy but the fee/verify request is the scam.",
-      "patternString": "(?:tracking\\s*(?:number|#|no|id|code)|shipment\\s*(?:number|#|id))[\\s\\S]{0,100}(?:[A-Z]{2}\\d{9}[A-Z]{2}|\\d{12,22}|[A-Z0-9]{10,20})[\\s\\S]{0,500}(?:pay|fee|charge|update|verify|schedule|reschedule)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "tracking",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "tracking\\s*(?:number|#|no|id|code)|shipment\\s*(?:number|#|id)",
+          "flags": "i"
+        },
+        {
+          "pattern": "pay|fee|charge|card|\\$|€|£",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "package-held-urgency-text",
@@ -24524,8 +24685,26 @@
       "weight": 0.25,
       "source": "html",
       "note": "Delivery scheduling/rescheduling fee forms claim a small charge ($0.99-$3.99) is required to reschedule a missed delivery. Real courier services don't charge rescheduling fees via SMS/email links. The fee is a pretext for card harvesting.",
-      "patternString": "(?:reschedule|schedule|re-?deliver|attempt)[\\s\\S]{0,300}(?:delivery|shipment|package)[\\s\\S]{0,300}(?:fee|charge|cost|\\$\\d|€\\d|£\\d|\\d\\.\\d{2})[\\s\\S]{0,300}(?:pay|card|credit|debit|submit)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "delivery",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "reschedule|schedule|re-?deliver|attempt",
+          "flags": "i"
+        },
+        {
+          "pattern": "fee|charge|cost|\\$\\d|€\\d|£\\d",
+          "flags": "i"
+        },
+        {
+          "pattern": "pay|card|credit|debit|billing",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "sms-delivery-notification-text",
@@ -24535,8 +24714,22 @@
       "weight": 0.2,
       "source": "html",
       "note": "Short notification-style text about a delivery status (delivered, attempted, held, delayed, missed) is the landing page for an SMS phishing link. The text matches what was in the original smishing SMS that brought the victim to this page.",
-      "patternString": "(?:your\\s+(?:package|parcel|shipment|order|delivery)\\s+(?:has\\s+been|was|is)\\s+(?:delivered|attempted|held|delayed|returned|unable)|unable\\s+to\\s+deliver|delivery\\s+attempt\\s+(?:failed|unsuccessful)|missed\\s+delivery)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "delivery",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "your\\s+(?:package|parcel|shipment|order|delivery)\\s+(?:has\\s+been|was|is)\\s+(?:delivered|attempted|held|delayed|returned|unable)|unable\\s+to\\s+deliver",
+          "flags": "i"
+        },
+        {
+          "pattern": "click|update|confirm|verify|track|reschedule|action",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "postage-due-payment",
@@ -24568,8 +24761,26 @@
       "weight": 0.3,
       "source": "html",
       "note": "The exact text pattern of toll phishing: 'unpaid toll balance' + threat of $25-$50 late fee/penalty + 'pay now to avoid'. This is the social engineering text on every Smishing Triad toll landing page. 60,000+ FBI complaints about this exact pattern.",
-      "patternString": "(?:unpaid|outstanding|overdue|past\\s*due)\\s*(?:toll|balance|amount)[\\s\\S]{0,300}(?:late\\s*fee|penalty|fine|\\$\\s*50|\\$\\s*25|additional\\s*(?:fee|charge))[\\s\\S]{0,300}(?:pay|settle|resolve|clear|avoid)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "unpaid",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:unpaid|outstanding|overdue|past\\s*due)\\s*(?:toll|balance|amount)",
+          "flags": "i"
+        },
+        {
+          "pattern": "late\\s*fee|penalty|fine|\\$\\s*50|\\$\\s*25|additional\\s*(?:fee|charge)",
+          "flags": "i"
+        },
+        {
+          "pattern": "pay|settle|clear|resolve|card",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "toll-account-suspension-warning",
@@ -24579,8 +24790,22 @@
       "weight": 0.3,
       "source": "html",
       "note": "Threatening toll account suspension/hold if payment isn't made is the escalation tactic used in toll phishing. Real toll agencies send physical mail for collections, not SMS threats of account suspension.",
-      "patternString": "(?:toll|ezpass|sunpass|fastrak|ipass|txtag|peachpass|expresstoll)[\\s\\S]{0,300}(?:account|service)\\s*(?:will\\s*be|has\\s*been|may\\s*be)\\s*(?:suspended|terminated|held|frozen|deactivated|blocked)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "suspended",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "toll|ezpass|sunpass|fastrak|ipass|txtag|peachpass|expresstoll",
+          "flags": "i"
+        },
+        {
+          "pattern": "(?:account|service)\\s*(?:will\\s*be|has\\s*been|may\\s*be)\\s*(?:suspended|terminated|deactivated|closed)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "toll-violation-number-display",
@@ -24758,8 +24983,30 @@
       "weight": 0.3,
       "source": "html",
       "note": "Callback phishing shows fake subscription/invoice and tells victim to CALL a phone number to cancel. Phone connects to scammers who install remote access software. CrowdStrike reported 442% vishing growth.",
-      "patternString": "(?:subscription|renewal|invoice|order|charge|transaction)\\s*(?:confirmation|receipt|notice)[\\s\\S]{0,500}(?:cancel|dispute|refund|unauthorized|didn.?t\\s*(?:order|authorize))[\\s\\S]{0,300}(?:call|phone|dial|\\d{3}[\\s-]\\d{3}[\\s-]\\d{4})",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "cancel",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "subscription|renewal|invoice|order|charge|transaction",
+          "flags": "i"
+        },
+        {
+          "pattern": "confirmation|receipt|notice",
+          "flags": "i"
+        },
+        {
+          "pattern": "cancel|dispute|refund|unauthorized",
+          "flags": "i"
+        },
+        {
+          "pattern": "call|phone|dial|\\+?1[\\s-]?\\(?\\d{3}\\)?",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "callback-phishing-amount-phone",
@@ -24923,8 +25170,22 @@
       "weight": 0.25,
       "source": "html",
       "note": "Fake 'secure message' or 'encrypted email' notifications that require signing in to view the message are a popular phishing lure. They impersonate services like Zix, Proofpoint Encryption, or Microsoft 365 Message Encryption. The login form harvests credentials.",
-      "patternString": "(?:secure\\s*message|encrypted\\s*(?:email|message)|confidential\\s*(?:document|message)|protected\\s*(?:document|message|file)|Zix\\s*Secure)[\\s\\S]{0,2000}(?:sign.?in|log.?in|password|enter\\s*(?:your\\s*)?(?:email|credentials)|view\\s*(?:secure\\s*)?(?:message|document))[\\s\\S]{0,500}(?:<input|<form)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "secure",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "secure\\s*message|encrypted\\s*(?:email|message)|confidential\\s*(?:document|message)|protected\\s*(?:document|message|file)|Zix\\s*Secure",
+          "flags": "i"
+        },
+        {
+          "pattern": "sign.?in|log.?in|password|credential",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "fax-voicemail-document-lure",
@@ -25442,9 +25703,18 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "note": "",
-      "patternString": "^https?://(dpd|dhl|ups|fedex|usps|royalmail|postnl)\\.[a-zA-Z0-9-]+\\.(bond|club|top|tk|ml|ga|cf|live|site)(/|$)",
-      "patternFlags": "i"
+      "note": "Kept as regex — URL pattern matching needs regex.",
+      "match": [
+        {
+          "content": ".",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "^https?://(dpd|dhl|ups|fedex|usps|royalmail|postnl)\\.[a-zA-Z0-9-]+\\.(bond|club|top|tk|ml|ga|cf|live|site)(/|$)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1"
     },
     {
       "id": "gov-agency-subdomain-on-nongov",
@@ -25930,9 +26200,25 @@
       "severity": "medium",
       "weight": 0.15,
       "source": "html",
-      "note": "A page with only a login form and no navigation menu, header links, or site structure is an isolated credential form. Legitimate login pages exist within a site with navigation to home, help, terms, etc. Phishing pages are stripped to just the form.",
-      "patternString": "<body[^>]*>[\\s\\S]{0,500}<(?:div|form|section)[\\s\\S]{0,3000}<input[^>]*type=['\"]password['\"][\\s\\S]{0,1000}</(?:div|form|section)>[\\s\\S]{0,500}</body>",
-      "patternFlags": "i"
+      "note": "Simplified from 5KB wildcard scan to content checks. Detects minimal login-only pages.",
+      "match": [
+        {
+          "content": "password",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<body"
+        },
+        {
+          "pattern": "<input[^>]*type=[\\x27\\\"]password[\\x27\\\"]",
+          "flags": "i"
+        },
+        {
+          "pattern": "</body>",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "cheap-tld-form-action-credential",
