@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T00:37:54.949Z",
+    "compiledAt": "2026-04-02T03:01:30.207Z",
     "brandCount": 187,
     "signalCount": 1,
-    "patternCount": 960,
+    "patternCount": 962,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -968,7 +968,12 @@
         "netflex",
         "neflix",
         "netfix",
-        "neftlix"
+        "neftlix",
+        "nettflix",
+        "netfliix",
+        "netf1ix",
+        "netflic",
+        "netvlix"
       ]
     },
     {
@@ -4777,6 +4782,17 @@
       "patternString": "(?:Adobe|Acrobat|PDF\\s*(?:Viewer|Reader))[\\s\\S]{0,1000}(?:sign.?in\\s*(?:to|with)|log.?in|enter\\s*(?:your\\s*)?(?:email|password|credentials))[\\s\\S]{0,500}(?:<input[^>]*type=['\"](?:password|email)['\"])",
       "patternFlags": "i",
       "note": "Adobe/Acrobat/PDF Viewer themed pages with a login form are among the most prevalent document lure phishing templates. Cyble documented these extensively — they use a blurred invoice background with an Adobe-branded login modal on top."
+    },
+    {
+      "id": "netflix-brand-github-impersonation",
+      "group": "brandImpersonation",
+      "description": "Netflix branding with credential input on GitHub Pages or similar hosting",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "<title[^>]*>Netflix</title>[\\s\\S]{0,2000}<input[^>]*(?:email|mobile|username|login)[^>]*>",
+      "patternFlags": "i",
+      "note": "Catches Netflix title impersonation combined with credential input fields, common on hosting platforms"
     },
     {
       "id": "fake-captcha-gating",
@@ -12643,6 +12659,17 @@
       "note": "Formal, legal-sounding language about access rights ('rightful recipient', 'unauthorized access is prohibited', 'protected file') combined with a login form creates false authority. This language discourages the victim from questioning the page's legitimacy. Real login pages don't lecture about unauthorized access."
     },
     {
+      "id": "netflix-signin-language-pattern",
+      "group": "socialEngineering",
+      "description": "Netflix-specific signin language with credential prompts",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "Enter your info to sign in[\\s\\S]{0,500}<input[^>]*(?:email|mobile)",
+      "patternFlags": "i",
+      "note": "This exact phrasing differs from legitimate Netflix login flow and indicates impersonation"
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -13517,7 +13544,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-01T21:42:41.826Z",
+      "compiledAt": "2026-04-02T00:37:51.814Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

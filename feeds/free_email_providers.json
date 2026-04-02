@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_email_providers.txt",
-    "syncedAt": "2026-04-02T00:37:51.171Z",
+    "syncedAt": "2026-04-02T03:01:26.218Z",
     "role": "free_email",
     "description": "Free email providers — suspicious as credential form POST destinations",
     "count": 22586

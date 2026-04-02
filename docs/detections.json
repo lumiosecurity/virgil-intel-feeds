@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-02-00:37",
-    "generatedAt": "2026-04-02T00:37:54.969Z",
+    "version": "2026-04-02-03:01",
+    "generatedAt": "2026-04-02T03:01:30.227Z",
     "brandCount": 187,
-    "patternCount": 960
+    "patternCount": 962
   },
   "brandEntries": [
     {
@@ -944,7 +944,12 @@
         "netflex",
         "neflix",
         "netfix",
-        "neftlix"
+        "neftlix",
+        "nettflix",
+        "netfliix",
+        "netf1ix",
+        "netflic",
+        "netvlix"
       ]
     },
     {
@@ -15765,6 +15770,17 @@
       "patternFlags": "i"
     },
     {
+      "id": "netflix-brand-github-impersonation",
+      "group": "brandImpersonation",
+      "description": "Netflix branding with credential input on GitHub Pages or similar hosting",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "note": "Catches Netflix title impersonation combined with credential input fields, common on hosting platforms",
+      "patternString": "<title[^>]*>Netflix</title>[\\s\\S]{0,2000}<input[^>]*(?:email|mobile|username|login)[^>]*>",
+      "patternFlags": "i"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -23806,6 +23822,17 @@
       "source": "html",
       "note": "Formal, legal-sounding language about access rights ('rightful recipient', 'unauthorized access is prohibited', 'protected file') combined with a login form creates false authority. This language discourages the victim from questioning the page's legitimacy. Real login pages don't lecture about unauthorized access.",
       "patternString": "(?:rightful\\s*(?:owner|recipient)|authorized\\s*(?:user|personnel|recipient)|unauthorized\\s*access\\s*(?:is\\s*)?(?:prohibited|forbidden|not\\s*(?:permitted|allowed))|protected\\s*(?:file|document|content)|access\\s*(?:is\\s*)?restricted|intended\\s*recipient)[\\s\\S]{0,500}(?:login|sign.?in|password|email|verify|<input|<form)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "netflix-signin-language-pattern",
+      "group": "socialEngineering",
+      "description": "Netflix-specific signin language with credential prompts",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "This exact phrasing differs from legitimate Netflix login flow and indicates impersonation",
+      "patternString": "Enter your info to sign in[\\s\\S]{0,500}<input[^>]*(?:email|mobile)",
       "patternFlags": "i"
     },
     {
