@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T04:07:19.961Z",
+    "compiledAt": "2026-04-02T04:08:53.302Z",
     "brandCount": 187,
     "signalCount": 1,
     "patternCount": 962,
@@ -3638,8 +3638,22 @@
       "severity": "high",
       "weight": 0.3,
       "source": "js",
-      "patternString": "(?:fetch|XMLHttpRequest)[\\s\\S]{0,200}(?:email|mail|user)[\\s\\S]{0,300}(?:valid|check|verify|exist|lookup)[\\s\\S]{0,300}(?:style\\.display|innerHTML|classList|location|redirect)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "validate",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:api|endpoint|validate|verify).*(?:email|mail)",
+          "flags": "i"
+        },
+        {
+          "pattern": "valid|invalid|error|reject|block|proceed|next",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Validating the victim's email via API before showing phishing content ensures only real corporate email users see the phishing page. Sneaky 2FA and similar enterprise-targeted kits use this to filter out security researchers."
     },
     {
@@ -4534,8 +4548,25 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "滙豐銀行[\\s\\S]{0,2000}個人網上理財[\\s\\S]{0,2000}#db0011[\\s\\S]{0,1000}action=[^\"'\\s]{0,200}\\.php",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "HSBC",
+          "fast_pattern": true
+        },
+        {
+          "content": "汇丰"
+        },
+        {
+          "pattern": "password|login|sign.?in|验证|密码",
+          "flags": "i"
+        },
+        {
+          "content": "hsbc.com",
+          "negated": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
+      "note": "HSBC + Chinese branding NOT on hsbc.com."
     },
     {
       "id": "bet365-fake-domains-pattern",
@@ -5622,8 +5653,25 @@
       "severity": "high",
       "weight": 0.3,
       "source": "js",
-      "patternString": "(?:captcha|verify|challenge)[\\s\\S]{0,300}(?:success|correct|pass|match)[\\s\\S]{0,500}fetch\\([\\s\\S]{0,200}(?:payload|page|content|template|next|stage|step)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "captcha",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "captcha|turnstile|hcaptcha|recaptcha",
+          "flags": "i"
+        },
+        {
+          "content": "fetch"
+        },
+        {
+          "pattern": "payload|body|JSON\\.stringify|FormData",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "After successful CAPTCHA verification, Tycoon fetches the actual phishing page payload from an attacker-controlled server. The CAPTCHA gate→success→fetch-payload chain ensures security scanners that can't solve the CAPTCHA never see the credential form."
     },
     {
@@ -6688,8 +6736,26 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "<input[^>]*(?:style=['\"][^'\"]*(?:opacity:\\s*0|position:\\s*absolute[^'\"]*(?:left|top):\\s*-\\d{3,}|height:\\s*0)|type=['\"]hidden['\"])[^>]*(?:autocomplete=['\"](?:cc-number|cc-exp|cc-csc|name|email|tel|street-address|postal-code))",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "autofill",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "autocomplete|autofill",
+          "flags": "i"
+        },
+        {
+          "pattern": "hidden|display:\\s*none|visibility:\\s*hidden|opacity:\\s*0",
+          "flags": "i"
+        },
+        {
+          "pattern": "credit|card|address|name|email|phone|password",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "Hidden input fields with autocomplete attributes trick browsers into auto-filling credit card, name, email, phone, and address data. The fields are invisible to the user but the browser fills them automatically, enabling silent PII harvesting."
     },
     {
@@ -6871,8 +6937,22 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "patternString": "(?:embeds|embed)[\\s\\S]{0,200}(?:fields|title|description)[\\s\\S]{0,300}(?:email|username|password|passwd|login|credential|card|ssn|ip.?address)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "discord",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "content": "embed",
+          "nocase": true
+        },
+        {
+          "pattern": "email|password|username|login|credential|token",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2",
       "note": "Discord webhook embeds with fields containing credential labels create formatted exfiltration reports. Each embed field displays a stolen credential (email, password, IP, etc.) in a structured Discord message."
     },
     {
@@ -7355,8 +7435,26 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:update|confirm|verify)\\s*(?:your\\s*)?(?:delivery|shipping|mailing)?\\s*address[\\s\\S]{0,500}(?:<input|<form)[\\s\\S]{0,500}(?:street|address|city|zip|postal|state|province)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "address",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:update|confirm|verify|enter).*(?:address|shipping|delivery)",
+          "flags": "i"
+        },
+        {
+          "pattern": "street|city|zip|postal|state|apartment|suite|unit",
+          "flags": "i"
+        },
+        {
+          "pattern": "card|payment|fee|charge|\\$",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "Address update forms claiming delivery failure due to incorrect/incomplete address harvest full physical addresses. The data enables identity theft, physical attacks, and targeted social engineering with the victim's real address."
     },
     {
@@ -7366,8 +7464,22 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "(?:\\$[0-3]\\.\\d{2}|€[0-3]\\.\\d{2}|£[0-3]\\.\\d{2}|\\$4\\.99|€4\\.99|£4\\.99)[\\s\\S]{0,500}(?:card\\s*number|cc-number|credit\\s*card|cvv|expir|cvc|security\\s*code)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "card",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "\\$\\s*(?:[0-3])\\.\\d{2}|(?:small|nominal|processing|handling|verification)\\s*(?:fee|charge|amount)",
+          "flags": "i"
+        },
+        {
+          "pattern": "card\\s*(?:number|#)|cvv|expir|billing|credit|debit",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Requesting full credit card details (card number, CVV, expiry) for a micro-payment of $0.30-$4.99 is the delivery fee scam signature. The small amount seems harmless but the goal is to capture the full card details for larger fraud."
     },
     {
@@ -9871,8 +9983,22 @@
       "severity": "medium",
       "weight": 0.3,
       "source": "html",
-      "patternString": "American Computer Development Inc-GCCH[\\s\\S]{0,2000}privacy statement[\\s\\S]{0,2000}Microsoft Terms of Use",
-      "patternFlags": "is"
+      "match": [
+        {
+          "content": "gcch",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "gcch|government\\s*community\\s*cloud|GCC\\s*High",
+          "flags": "i"
+        },
+        {
+          "content": "password"
+        }
+      ],
+      "condition": "1 & 2",
+      "note": ""
     },
     {
       "id": "brazilian-toll-phishkit",
@@ -11283,8 +11409,20 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "<link[^>]*rel=['\"]dns-prefetch['\"][^>]*href=['\"](?:https?:)?//[^'\"]*(?:\\.php|\\.asp|\\.top|\\.xyz|\\.buzz|\\.live|\\.icu|\\.tk|\\.ml|\\.ga|\\.cf|\\.gq)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "dns-prefetch",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "rel=[\\x27\\\"]dns-prefetch[\\x27\\\"]"
+        },
+        {
+          "pattern": "\\.(tk|ml|ga|cf|gq|xyz|top|buzz|icu|click)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "DNS prefetch hints to suspicious TLDs or PHP/ASP endpoints indicate the phishing page is preconnecting to its exfiltration infrastructure for faster credential stealing."
     },
     {
@@ -12712,8 +12850,25 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "(?:popup|modal|overlay|dialog|window)[\\s\\S]{0,500}(?:box-shadow|border-radius|border:\\s*1px)[\\s\\S]{0,500}<iframe[^>]*(?:src=['\"]https?://|srcdoc=)[\\s\\S]{0,300}(?:login|sign|auth|password|credential)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "iframe",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "position:\\s*(?:fixed|absolute).*z-index|z-index.*position:\\s*(?:fixed|absolute)",
+          "flags": "i"
+        },
+        {
+          "pattern": "login|sign.?in|oauth|authorize|google|microsoft|apple|facebook",
+          "flags": "i"
+        },
+        {
+          "pattern": "border-radius|box-shadow|backdrop",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "A styled popup/modal/overlay containing an iframe that loads a login/auth page is the core BitB mechanism. The popup simulates a browser window and the iframe loads the actual phishing form from the attacker's server."
     },
     {
@@ -12723,8 +12878,24 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "patternString": "(?:navigator\\.platform|navigator\\.userAgent|navigator\\.appVersion)[\\s\\S]{0,200}(?:Win|Mac|Linux|Chrome\\s*OS)[\\s\\S]{0,300}(?:class|style|theme|window|popup|titlebar|chrome)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "navigator.platform",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "navigator\\.(?:platform|userAgent)"
+        },
+        {
+          "pattern": "Windows|MacOS|Mac OS|Linux|dark|light|theme",
+          "flags": "i"
+        },
+        {
+          "pattern": "title-bar|window-controls|close|minimize|maximize",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
       "note": "Detecting the victim's OS via navigator.platform/userAgent to apply matching window chrome styling (Windows title bar vs macOS traffic lights vs Linux decorations) is a BitB kit feature that makes the fake popup match the victim's real OS."
     },
     {
@@ -13294,8 +13465,22 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:votre\\s+(?:compte|session|acc[eè]s)\\s+(?:a\\s+[eé]t[eé]|est)\\s+(?:bloqu[eé]|suspendu|d[eé]sactiv[eé]|limit[eé])|veuillez\\s+(?:confirmer|v[eé]rifier)\\s+(?:votre|vos)\\s+(?:identit[eé]|donn[eé]es|informations))",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "bancaire",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "carte\\s*bancaire|identifiants?\\s*bancaire|compte\\s*(?:bancaire|bloqué|suspendu)|sécurité\\s*(?:de\\s*votre|bancaire)",
+          "flags": "i"
+        },
+        {
+          "pattern": "mot\\s*de\\s*passe|identifiant|numéro\\s*de\\s*carte|code\\s*(?:secret|PIN|sécurité)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "French-language account suspension and verification urgency text ('votre compte a été bloqué', 'veuillez confirmer votre identité') targets French-speaking victims. This social engineering text combined with a login form is a strong phishing indicator."
     },
     {
@@ -13526,8 +13711,22 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:invoice|payment|wire\\s*transfer|bank\\s*transfer)[\\s\\S]{0,300}(?:urgent|immediate|overdue|past\\s*due|final\\s*notice)[\\s\\S]{0,300}(?:pay\\s*now|transfer|submit\\s*payment|update\\s*(?:payment|billing|bank))",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "invoice",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "invoice|purchase\\s*order|payment\\s*(?:request|due)|wire\\s*transfer|ACH|bank\\s*transfer",
+          "flags": "i"
+        },
+        {
+          "pattern": "routing|account\\s*number|IBAN|SWIFT|wire|beneficiary",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Invoice/payment urgency text combined with payment action prompts is characteristic of Business Email Compromise landing pages. These harvest banking details or redirect victims to payment fraud pages."
     },
     {
@@ -13993,8 +14192,22 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:postage\\s*due|insufficient\\s*postage|unpaid\\s*postage|additional\\s*postage|shipping\\s*(?:fee|charge)\\s*(?:due|unpaid|outstanding))[\\s\\S]{0,500}(?:pay|amount|\\$|€|£|card)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "postage",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "postage|shipping\\s*(?:fee|cost|charge)|handling\\s*(?:fee|charge)",
+          "flags": "i"
+        },
+        {
+          "pattern": "pay|card|\\$|€|£|amount|fee",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Postage due/insufficient postage payment pages claim additional shipping fees must be paid to receive a package. These are common in USPS, Royal Mail, and La Poste impersonation phishing."
     },
     {
@@ -14083,8 +14296,22 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:violation|invoice|notice|reference|citation)\\s*(?:#|number|no|id)?\\s*:?\\s*(?:[A-Z]{1,3}[-.]?\\d{4,8}|\\d{6,10})[\\s\\S]{0,500}(?:toll|balance|amount|pay|fee)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "violation",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:violation|infraction|citation)\\s*(?:#|number|no|id)",
+          "flags": "i"
+        },
+        {
+          "pattern": "pay|fine|fee|penalty|amount|\\$",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Displaying a fake violation/invoice number (like 'Violation #TX-89234' or 'Invoice: 7829341') alongside a toll balance adds perceived legitimacy. The number is generated per-visit and doesn't correspond to any real toll record."
     },
     {
@@ -14321,8 +14548,22 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "(?:Step\\s*1|Step\\s*2|Step\\s*3)[\\s\\S]{0,300}(?:verify|verification|human|CAPTCHA|fix)[\\s\\S]{0,300}(?:Step\\s*2|Step\\s*3)[\\s\\S]{0,300}(?:paste|terminal|Run|command|PowerShell|press)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "verify",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:Step|Press|Hold)\\s*(?:\\d|one|two|three)",
+          "flags": "i"
+        },
+        {
+          "pattern": "Windows|Run|PowerShell|cmd|command|terminal|dialog",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "ClickFix uses numbered steps progressing from verification language to command execution language. This step progression is unique to ClickFix."
     },
     {
@@ -14387,8 +14628,22 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:job\\s*(?:offer|opportunity|opening)|career|we.?re\\s*hiring|apply\\s*now)[\\s\\S]{0,500}(?:social\\s*security|SSN|date\\s*of\\s*birth|bank\\s*account|direct\\s*deposit|driver.?s\\s*license)[\\s\\S]{0,300}(?:submit|apply|continue)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "recruitment",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "recruitment|job\\s*(?:offer|opportunity)|position\\s*(?:available|open)|hiring|we.?re\\s*looking",
+          "flags": "i"
+        },
+        {
+          "pattern": "social\\s*security|SSN|passport|bank\\s*(?:account|details)|routing|direct\\s*deposit|date\\s*of\\s*birth",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Fake job offers collecting SSN, DOB, bank details. Legitimate apps never ask for SSN in initial forms."
     },
     {
@@ -15551,8 +15806,20 @@
       "severity": "medium",
       "weight": 0.15,
       "source": "html",
-      "patternString": "(?:footer|copyright|terms|privacy|contact|about|help)[\\s\\S]{0,200}<a[^>]*href=['\"](?:#|javascript:void|javascript:;|javascript:void\\(0\\))['\"][\\s\\S]{0,200}<a[^>]*href=['\"](?:#|javascript:void|javascript:;|javascript:void\\(0\\))['\"]",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "href",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "href=[\\x27\\\"](?:#|javascript:void|javascript:;)[\\x27\\\"]"
+        },
+        {
+          "pattern": "(?:Privacy|Terms|Contact|About|Support|Help|FAQ)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Two or more footer/navigation links pointing to # or javascript:void(0) indicates a phishing page with decorative non-functional links. Phishers copy the visual layout of legitimate sites but don't bother making footer links work."
     },
     {
@@ -15573,8 +15840,17 @@
       "severity": "low",
       "weight": 0.1,
       "source": "html",
-      "patternString": "<title>\\s*(?:Untitled|Document|Page|Home|Welcome|Login|Sign\\s*[Ii]n|Verify|Confirm|Update|Secure|Account|Authentication)?\\s*</title>",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "<title>",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<title>\\s*(?:Untitled|Document|Page|Home|Index|Loading|Please\\s*wait|Sign\\s*in|Log\\s*in|Verify)?\\s*</title>",
+          "flags": "i"
+        }
+      ],
+      "condition": "1",
       "note": "Phishing pages often have generic, blank, or single-word titles like 'Document', 'Login', 'Verify', 'Untitled'. Legitimate login pages always have branded titles (e.g., 'Sign in to Microsoft'). A generic title on a credential page is suspicious."
     },
     {
@@ -15678,8 +15954,22 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "js",
-      "patternString": "(?:location\\.href|window\\.location|location\\.replace)[\\s\\S]{0,100}(?:firebaseapp\\.com|blob\\.core\\.windows\\.net|wixsite\\.com|tiktok\\.com|docs\\.google\\.com|sites\\.google\\.com)[\\s\\S]{0,200}(?:redirect|next|url|goto|dest|target)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "redirect",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "location\\.(?:href|replace)|window\\.location|meta.*refresh",
+          "flags": "i"
+        },
+        {
+          "pattern": "token|id|ref|uid|hash|code",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Tycoon chains redirects through trusted services (Firebase, Azure Blob, Wix, TikTok, Google Docs/Sites) before landing on the phishing page. These trusted intermediate domains lend legitimacy to the redirect chain and bypass URL reputation checks."
     },
     {
