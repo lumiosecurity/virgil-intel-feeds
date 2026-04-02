@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T05:00:08.456Z",
+    "compiledAt": "2026-04-02T05:20:55.754Z",
     "brandCount": 187,
     "signalCount": 1,
-    "patternCount": 975,
+    "patternCount": 977,
     "domHashCount": 0
   },
   "brandEntries": [
@@ -2135,7 +2135,12 @@
       "typos": [
         "ddp",
         "dpd",
-        "dpdd"
+        "dpdd",
+        "dpd-delivery",
+        "dpd-parcel",
+        "dpd-track",
+        "mydpd",
+        "dpdlocal"
       ],
       "vertical": "logistics"
     },
@@ -15300,6 +15305,17 @@
       "note": "This exact phrasing differs from legitimate Netflix login flow and indicates impersonation"
     },
     {
+      "id": "delivery-exception-address-update",
+      "group": "socialEngineering",
+      "description": "Delivery exception with address verification failure and update prompt",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:delivery\\s+exception|address\\s+could\\s+not\\s+be\\s+verified)[\\s\\S]{0,1000}(?:update\\s+my\\s+address|verify\\s+address|confirm\\s+address)",
+      "patternFlags": "i",
+      "note": "Targets logistics delivery scams across DPD, UPS, FedEx campaigns using address verification social engineering"
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -16367,12 +16383,23 @@
       ],
       "condition": "1 & 2",
       "note": "Loading legitimate CDN resources (Google Fonts, cdnjs) on a page that posts to a PHP credential collector or Telegram/Discord webhook indicates a phishing kit using legitimate CDNs for visual polish while exfiltrating through attacker infrastructure."
+    },
+    {
+      "id": "logistics-brand-suspicious-tld",
+      "group": "urlHeuristics",
+      "description": "Logistics brand subdomain on suspicious TLD",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:dpd|ups|fedex|dhl|usps|royal-?mail|hermes|yodel)\\.[\\w-]+\\.(?:bond|top|click|download|stream|science|work|fun|party|review|loan)",
+      "patternFlags": "i",
+      "note": "Detects logistics brands hosted on suspicious TLDs commonly used for delivery scams"
     }
   ],
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-02T04:27:37.695Z",
+      "compiledAt": "2026-04-02T05:00:05.253Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

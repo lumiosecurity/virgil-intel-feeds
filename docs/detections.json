@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-02-05:00",
-    "generatedAt": "2026-04-02T05:00:08.476Z",
+    "version": "2026-04-02-05:20",
+    "generatedAt": "2026-04-02T05:20:55.777Z",
     "brandCount": 187,
-    "patternCount": 975
+    "patternCount": 977
   },
   "brandEntries": [
     {
@@ -2066,7 +2066,12 @@
       "typos": [
         "ddp",
         "dpd",
-        "dpdd"
+        "dpdd",
+        "dpd-delivery",
+        "dpd-parcel",
+        "dpd-track",
+        "mydpd",
+        "dpdlocal"
       ]
     },
     {
@@ -26425,6 +26430,17 @@
       "patternFlags": "i"
     },
     {
+      "id": "delivery-exception-address-update",
+      "group": "socialEngineering",
+      "description": "Delivery exception with address verification failure and update prompt",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "note": "Targets logistics delivery scams across DPD, UPS, FedEx campaigns using address verification social engineering",
+      "patternString": "(?:delivery\\s+exception|address\\s+could\\s+not\\s+be\\s+verified)[\\s\\S]{0,1000}(?:update\\s+my\\s+address|verify\\s+address|confirm\\s+address)",
+      "patternFlags": "i"
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -27529,6 +27545,17 @@
         }
       ],
       "condition": "1 & 2"
+    },
+    {
+      "id": "logistics-brand-suspicious-tld",
+      "group": "urlHeuristics",
+      "description": "Logistics brand subdomain on suspicious TLD",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Detects logistics brands hosted on suspicious TLDs commonly used for delivery scams",
+      "patternString": "(?:dpd|ups|fedex|dhl|usps|royal-?mail|hermes|yodel)\\.[\\w-]+\\.(?:bond|top|click|download|stream|science|work|fun|party|review|loan)",
+      "patternFlags": "i"
     }
   ],
   "domHashes": []
