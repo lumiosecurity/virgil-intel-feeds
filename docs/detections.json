@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-02-04:00",
-    "generatedAt": "2026-04-02T04:00:14.696Z",
+    "version": "2026-04-02-04:03",
+    "generatedAt": "2026-04-02T04:03:05.593Z",
     "brandCount": 187,
     "patternCount": 962
   },
@@ -15518,8 +15518,22 @@
       "weight": 0.45,
       "source": "html",
       "note": "",
-      "patternString": "(?:exodus|metamask|trezor|ledger|phantom|coinbase|trustwallet|atomic)[^<]{0,80}(?:login|signin|sign[\\-\\s]in|wallet[\\s_-]*connect)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "wallet",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "exodus|metamask|trezor|ledger|phantom|coinbase|trustwallet|atomic",
+          "flags": "i"
+        },
+        {
+          "pattern": "login|signin|sign[\\-\\s]in|wallet[\\s_-]*connect",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "godaddy-builder-crypto-impersonation",
@@ -15794,9 +15808,24 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "note": "Specific impersonation of Adobe PDF verification combined with social engineering about being rightful recipient - distinctive phishing theme",
-      "patternString": "File\\s+Verification\\s+for\\s+Adobe\\s+PDF[\\s\\S]{0,2000}<input[^>]*type=['\"]password['\"][\\s\\S]{0,1000}rightful\\s+recipient",
-      "patternFlags": "i"
+      "note": "Three exact literal matches + FP exclusion. Zero regex needed.",
+      "match": [
+        {
+          "content": "File Verification for Adobe PDF",
+          "fast_pattern": true
+        },
+        {
+          "content": "password"
+        },
+        {
+          "content": "rightful recipient"
+        },
+        {
+          "content": "adobe.com",
+          "negated": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "microsoft-signin-ui-impersonation",
@@ -15922,8 +15951,17 @@
       "weight": 0.15,
       "source": "html",
       "note": "Embedding brand logos as inline SVG avoids making external requests that could be tracked or blocked. Phishing kits inline SVG brand logos so the page looks legitimate without loading any external assets.",
-      "patternString": "<svg[\\s\\S]{0,500}(?:Microsoft|Google|Apple|PayPal|Amazon|Netflix|Facebook|LinkedIn|Dropbox|Adobe|Zoom|Slack)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "<svg",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "Microsoft|Google|Apple|PayPal|Amazon|Netflix|Facebook|LinkedIn|Dropbox|Adobe|Zoom|Slack",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1"
     },
     {
       "id": "theme-color-mobile-branding",
@@ -16125,9 +16163,22 @@
       "severity": "low",
       "weight": 0.1,
       "source": "html",
-      "note": "Social media icon elements (CSS class names like 'facebook icon', 'twitter icon') rendered without actual href links to social media profiles are decorative brand impersonation. Phishing kits clone the social icons from footers but don't link them to real profiles.",
-      "patternString": "(?:facebook|instagram|twitter|youtube|linkedin|tiktok)\\s+icon[\\s\\S]{0,200}(?:facebook|instagram|twitter|youtube|linkedin|tiktok)\\s+icon",
-      "patternFlags": "i"
+      "note": "Two or more social media icon references — phishkits include decorative social icons without real links.",
+      "match": [
+        {
+          "content": "icon",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:facebook|instagram|twitter|youtube|linkedin|tiktok)\\s+icon",
+          "flags": "i"
+        },
+        {
+          "pattern": "(?:facebook|instagram|twitter|youtube|linkedin|tiktok)\\s+icon",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "document-shared-brand-mismatch",
@@ -16964,8 +17015,20 @@
       "weight": 0.25,
       "source": "html",
       "note": "A meta refresh redirecting to a major brand's legitimate login page after a short delay is a strong indicator of a phishing landing page that has already captured credentials and is now sending the victim to the real site.",
-      "patternString": "meta\\s+http-equiv=['\"]refresh['\"]\\s+content=['\"]\\d{1,2};\\s*url=https?://(?:www\\.)?(?:microsoft|google|apple|amazon|paypal|netflix|wellsfargo|chase|bankofamerica|facebook|instagram|linkedin)\\.com",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "http-equiv",
+          "fast_pattern": true
+        },
+        {
+          "content": "refresh"
+        },
+        {
+          "pattern": "microsoft|google|apple|amazon|paypal|netflix|wellsfargo|chase|bankofamerica",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "visibility-hidden-password-field",
@@ -18108,8 +18171,22 @@
       "weight": 0.2,
       "source": "html",
       "note": "Surcharge pages claiming a package exceeds weight or size limits and requires additional payment are a delivery phishing variant. Real surcharges are handled by the sender, not collected via web pages from the recipient.",
-      "patternString": "(?:overweight|oversized|over.?sized|exceeds?\\s*(?:weight|dimension|size)|surcharge|additional\\s*(?:weight|size)\\s*(?:fee|charge))[\\s\\S]{0,500}(?:pay|card|\\$|€|£|amount|fee)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "overweight",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "overweight|oversized|over.?sized|exceeds?\\s*(?:weight|dimension|size)|surcharge|additional\\s*(?:weight|size)\\s*(?:fee|charge)",
+          "flags": "i"
+        },
+        {
+          "pattern": "pay|card|\\$|€|£|amount|fee|charge",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "courier-tracking-input-form",
@@ -18119,8 +18196,26 @@
       "weight": 0.2,
       "source": "html",
       "note": "A fake tracking number input that leads to personal info or credential fields is the track-to-harvest pipeline. The victim enters a tracking number (any number works), then is asked for personal details or payment to 'release' the package.",
-      "patternString": "(?:track|tracking)\\s*(?:your\\s*)?(?:package|parcel|shipment|order|number)[\\s\\S]{0,300}<input[^>]*(?:placeholder|name|id)=['\"][^'\"]*(?:track|number|code|id)['\"][\\s\\S]{0,1000}(?:email|phone|address|name|card|password|sign.?in)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "track",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "package|parcel|shipment|order",
+          "flags": "i"
+        },
+        {
+          "pattern": "<input[^>]*(?:track|number|code|id)",
+          "flags": "i"
+        },
+        {
+          "pattern": "card|payment|credit|address|billing",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "delivery-otp-verification-page",
@@ -18130,8 +18225,26 @@
       "weight": 0.25,
       "source": "html",
       "note": "Delivery OTP verification pages claim a code was sent to the victim's phone to verify delivery. This is an MFA interception technique — the victim enters the real OTP from their carrier account, which the attacker uses for account takeover.",
-      "patternString": "(?:delivery|package|parcel|shipment)[\\s\\S]{0,300}(?:verification\\s*code|one-?time\\s*(?:code|password|pin)|OTP|security\\s*code)[\\s\\S]{0,300}(?:enter|input|verify|confirm|submit)[\\s\\S]{0,300}(?:sent\\s*to|text|sms|phone|mobile)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "verification",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "delivery|package|parcel|shipment",
+          "flags": "i"
+        },
+        {
+          "pattern": "verification\\s*code|one-?time\\s*(?:code|password|pin)|OTP|security\\s*code",
+          "flags": "i"
+        },
+        {
+          "pattern": "<input",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "toll-small-amount-card-harvest",
@@ -22753,8 +22866,22 @@
       "weight": 0.35,
       "source": "js",
       "note": "Structured messages containing IP/UserAgent/Country/City/Browser metadata sent to Telegram are phishkit victim reports. The attacker receives a formatted intelligence brief on each victim alongside their credentials.",
-      "patternString": "(?:IP|ip.?address|User.?Agent|Browser|Country|City|Region|OS)[\\s\\S]{0,100}(?:IP|ip.?address|User.?Agent|Browser|Country|City|Region|OS)[\\s\\S]{0,300}(?:telegram|chat_id|sendMessage)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "telegram",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "IP|User.?Agent|Browser|Country|City",
+          "flags": "i"
+        },
+        {
+          "pattern": "telegram|discord|webhook|sendMessage",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "discord-webhook-url-full",
@@ -22962,9 +23089,20 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "note": "Microsoft auth CDN/login domain references (login.microsoftonline.com, aadcdn.msauth.net) appearing on a page whose form action points to a NON-Microsoft domain is a reverse proxy artifact. The proxy relays Microsoft's real page content but the form posts to the attacker's domain.",
-      "patternString": "(?:login\\.microsoftonline\\.com|login\\.live\\.com|aadcdn\\.msauth\\.net|logincdn\\.msauth\\.net)[\\s\\S]{0,3000}(?:action=['\"]https?://(?!(?:login\\.microsoftonline|login\\.live|microsoft)\\.com))",
-      "patternFlags": "i"
+      "note": "Microsoft auth CDN references but form posts to non-Microsoft domain. AiTM indicator.",
+      "match": [
+        {
+          "content": "microsoftonline.com",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "login\\.microsoftonline\\.com|login\\.live\\.com|aadcdn\\.msauth\\.net|logincdn\\.msauth\\.net"
+        },
+        {
+          "pattern": "action=[\\x27\\\"]https?://(?!(?:login\\.microsoftonline|login\\.live|login\\.microsoft)\\.)"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "aitm-domain-mixing-google",
@@ -23169,8 +23307,26 @@
       "weight": 0.3,
       "source": "js",
       "note": "After capturing credentials (reading .value, sending via fetch/XHR), redirecting to the REAL Microsoft login page (login.microsoftonline.com) is Tycoon's post-capture behavior. The victim lands at the real login, thinks they just need to sign in again.",
-      "patternString": "(?:\\.value|getElementById|querySelector)[\\s\\S]{0,1000}(?:fetch|XMLHttpRequest|sendBeacon)[\\s\\S]{0,1000}(?:location\\.href|window\\.location)\\s*=\\s*['\"]https?://(?:login\\.microsoftonline\\.com|login\\.live\\.com)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "location",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "\\.value|getElementById|querySelector"
+        },
+        {
+          "pattern": "fetch|XMLHttpRequest|sendBeacon"
+        },
+        {
+          "pattern": "location\\.href|window\\.location"
+        },
+        {
+          "pattern": "microsoft\\.com|office\\.com|outlook\\.com",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "tycoon-ms-error-message-adaptation",
@@ -23218,8 +23374,21 @@
       "weight": 0.35,
       "source": "html",
       "note": "Two or more different US state toll brand names appearing on the same page indicates a smishing kit that serves multiple toll system templates. The kit configuration or template selection logic is leaking brand names from other campaigns.",
-      "patternString": "(?:EZPass|E-ZPass|SunPass|FasTrak|I-Pass|TxTag|PeachPass|ExpressToll|EZDrive)[\\s\\S]{0,2000}(?:EZPass|E-ZPass|SunPass|FasTrak|I-Pass|TxTag|PeachPass|ExpressToll|EZDrive)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "Pass",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "EZPass|E-ZPass|SunPass|FasTrak|I-Pass|TxTag|PeachPass|ExpressToll|EZDrive",
+          "flags": "i"
+        },
+        {
+          "pattern": "card|payment|credit|debit|billing|amount|balance|fee",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "bitb-fake-popup-window",
@@ -23250,9 +23419,22 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "note": "Fake window chrome with close/minimize/maximize buttons (✕, _, □) that support dragging via mousedown events simulates a real browser popup window. BitB kits implement draggable title bars to make the fake window feel interactive.",
-      "patternString": "(?:close-btn|minimize-btn|maximize-btn|window-controls|title-bar-buttons|window-actions)[\\s\\S]{0,300}(?:✕|✖|×|&#10005;|&#10006;|&#215;|close|_|□|&#9634;)[\\s\\S]{0,500}(?:drag|mousedown|move)",
-      "patternFlags": "i"
+      "note": "Browser-in-the-Browser titlebar with draggable functionality.",
+      "match": [
+        {
+          "content": "close-btn",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "close-btn|minimize-btn|maximize-btn|window-controls|title-bar|window-actions",
+          "flags": "i"
+        },
+        {
+          "pattern": "draggable|mousedown.*move|drag",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "bitb-oauth-popup-iframe",
@@ -23295,8 +23477,23 @@
       "weight": 0.4,
       "source": "js",
       "note": "Constructing a file from base64/ArrayBuffer/Blob and triggering a download with a dangerous extension (.zip, .iso, .js, .exe, .msi, .hta) is HTML smuggling — malware delivery constructed entirely in the browser from an HTML attachment.",
-      "patternString": "(?:atob|Uint8Array|ArrayBuffer|Blob)[\\s\\S]{0,300}(?:createObjectURL|download|saveAs|msSaveBlob)[\\s\\S]{0,200}(?:\\.zip|\\.iso|\\.img|\\.js|\\.exe|\\.msi|\\.hta|\\.vbs|\\.bat|\\.cmd|\\.ps1)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "Blob",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "atob|Uint8Array|ArrayBuffer|Blob"
+        },
+        {
+          "pattern": "createObjectURL|download|saveAs|msSaveBlob"
+        },
+        {
+          "pattern": "\\.zip|\\.iso|\\.img|\\.js|\\.exe|\\.msi|\\.hta|\\.vbs|\\.bat|\\.cmd|\\.ps1|\\.lnk|\\.scr",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "html-smuggling-click-download",
@@ -23944,8 +24141,22 @@
       "weight": 0.35,
       "source": "html",
       "note": "Tech support scam pages showing fake virus/trojan/computer locked messages with a phone number to call. These pages often use requestFullscreen() to simulate a locked computer.",
-      "patternString": "(?:your\\s+(?:computer|pc|device|windows)\\s+(?:has\\s+been|is)\\s+(?:blocked|locked|infected|compromised)|virus\\s+(?:detected|found|alert)|trojan\\s+(?:detected|found))[\\s\\S]{0,500}(?:call|phone|dial|contact)[\\s\\S]{0,200}(?:\\+?1[\\s-]?\\(?\\d{3}\\)?[\\s-]?\\d{3}[\\s-]?\\d{4}|\\d{3}[\\s-]\\d{3}[\\s-]\\d{4})",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "blocked",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "your\\s+(?:computer|pc|device|windows)\\s+(?:has\\s+been|is)\\s+(?:blocked|locked|infected|compromised)",
+          "flags": "i"
+        },
+        {
+          "pattern": "call|phone|dial|contact|support|helpline|toll.free",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "fullscreen-lock-scam",
@@ -24401,8 +24612,26 @@
       "weight": 0.25,
       "source": "html",
       "note": "Threatening collections agency referral, legal action, or credit score impact for unpaid tolls is extreme-pressure toll phishing. Real toll debt follows months of physical mail notices before any collections referral.",
-      "patternString": "(?:collection|collections\\s*agency|legal\\s*action|court|attorney|judgment|credit\\s*(?:report|score|bureau))[\\s\\S]{0,300}(?:toll|unpaid|balance|violation|outstanding)[\\s\\S]{0,200}(?:pay|settle|resolve|avoid|prevent)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "collection",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "collection|legal\\s*action|court|attorney|judgment|credit\\s*(?:report|score|bureau)",
+          "flags": "i"
+        },
+        {
+          "pattern": "toll|unpaid|balance|violation|outstanding",
+          "flags": "i"
+        },
+        {
+          "pattern": "pay|card|fee|amount|charge|\\$",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "zerofont-preheader-fake-security",
@@ -24478,8 +24707,26 @@
       "weight": 0.25,
       "source": "html",
       "note": "Job offers requiring upfront payments for training, equipment, background checks, or registration are advance fee employment scams. Legitimate employers never charge employees to start working.",
-      "patternString": "(?:job|position|employment|offer|hired|selected|congratulations)[\\s\\S]{0,500}(?:training\\s*fee|equipment\\s*(?:fee|deposit)|background\\s*check\\s*fee|registration\\s*fee|start-?up\\s*(?:fee|cost))[\\s\\S]{0,300}(?:pay|payment|transfer|card|\\$)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "job",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "job|position|employment|offer|hired|selected|congratulations",
+          "flags": "i"
+        },
+        {
+          "pattern": "training\\s*fee|equipment\\s*(?:fee|deposit)|background\\s*check\\s*fee|registration\\s*fee|processing\\s*fee|onboarding\\s*(?:fee|cost)",
+          "flags": "i"
+        },
+        {
+          "pattern": "pay|card|transfer|wire|zelle|cashapp|venmo|bitcoin|crypto|gift\\s*card",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "clickfix-run-dialog-instructions",
@@ -24687,8 +24934,25 @@
       "weight": 0.25,
       "source": "html",
       "note": "Fake fax or voicemail notifications requiring login to 'listen' or 'view' the message are legacy communication lures. They impersonate services like eFax, RingCentral, or Microsoft 365 voicemail. The login form is the actual phishing payload.",
-      "patternString": "(?:(?:new\\s+)?(?:fax|voicemail|voice\\s*message)\\s*(?:received|notification|message|from)|you\\s*(?:have|received)\\s*(?:a\\s*)?(?:new\\s*)?(?:fax|voicemail|voice\\s*message))[\\s\\S]{0,2000}(?:sign.?in|log.?in|password|listen|view|play|download)[\\s\\S]{0,500}(?:<input|<form)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "password",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "fax|voicemail|voice\\s*message",
+          "flags": "i"
+        },
+        {
+          "pattern": "received|notification|new",
+          "flags": "i"
+        },
+        {
+          "pattern": "sign.?in|log.?in|password|credential",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "document-page-count-preview-lure",
@@ -24749,9 +25013,19 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "note": "A submit button text that combines a login action with a document access action ('Login To View File', 'Sign In to Access Document') is a document lure phishing compound button. Legitimate services separate authentication from document access — they don't combine them in a single button label.",
-      "patternString": "(?:value|>)\\s*['\"]?(?:Login\\s*To\\s*(?:View|Access|Open|Download)|Sign\\s*[Ii]n\\s*[Tt]o\\s*(?:View|Access|Open|Download)|Log\\s*[Ii]n\\s*[Tt]o\\s*(?:View|Access|Open|Download))\\s*(?:File|Document|PDF|Message|Attachment)",
-      "patternFlags": "i"
+      "note": "Button text like Login To View File — definitive phishing language. Kept regex for the phrase matching.",
+      "match": [
+        {
+          "content": "Login",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "Login\\s*To\\s*(?:View|Access|Open|Download)|Sign\\s*[Ii]n\\s*[Tt]o\\s*(?:View|Access|Open|Download)|Log\\s*[Ii]n\\s*[Tt]o\\s*(?:View|Access|Open|Download)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1"
     },
     {
       "id": "action-theater-radio-buttons",
@@ -25038,9 +25312,18 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "note": "A page title that is ONLY a brand name in lowercase ('chase', 'paypal', 'netflix') with no additional context is a lazy phishing kit indicator. Legitimate login pages always have descriptive titles like 'Sign in to Chase Online Banking | Chase.com'.",
-      "patternString": "<title>\\s*(?:chase|paypal|netflix|amazon|apple|microsoft|facebook|instagram|outlook|gmail|yahoo|wells\\s*fargo|bank\\s*of\\s*america|citibank|usaa|coinbase|binance)\\s*</title>",
-      "patternFlags": "i"
+      "note": "Title tag containing only a brand name — phishing pages use bare brand names as titles.",
+      "match": [
+        {
+          "content": "<title>",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<title>\\s*(?:chase|paypal|netflix|amazon|apple|microsoft|facebook|instagram|outlook|gmail|yahoo|wells\\s*fargo|bank\\s*of\\s*america|citibank|usaa|coinbase|binance)\\s*</title>",
+          "flags": "i"
+        }
+      ],
+      "condition": "1"
     },
     {
       "id": "ndax-auth-typosquat",
