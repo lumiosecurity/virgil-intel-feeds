@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T04:06:03.734Z",
+    "compiledAt": "2026-04-02T04:07:19.961Z",
     "brandCount": 187,
     "signalCount": 1,
     "patternCount": 962,
@@ -4586,8 +4586,21 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "application/ld\\+json[^>]*>[^<]{0,500}parentOrganization[^<]{0,200}(?:Bank of Montreal|BMO|Chase|Wells Fargo|TD Bank|RBC|Scotiabank|CIBC)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "application/ld+json",
+          "fast_pattern": true
+        },
+        {
+          "content": "parentOrganization"
+        },
+        {
+          "pattern": "Bank of Montreal|BMO|Chase|Wells Fargo|TD Bank|RBC|Scotiabank|CIBC",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2",
+      "note": ""
     },
     {
       "id": "gitbook-crypto-login-impersonation",
@@ -6481,8 +6494,20 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "js",
-      "patternString": "setTimeout\\([\\s\\S]{0,200}(?:window\\.location|location\\.href|location\\.replace)[\\s\\S]{0,100}(?:microsoft|google|apple|amazon|paypal)\\.com[\\s\\S]{0,100}(?:\\d{4,6}|\\d+\\s*\\*\\s*\\d+\\s*\\*\\s*\\d+)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "setTimeout",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "window\\.location|location\\.href|location\\.replace"
+        },
+        {
+          "pattern": "(?:microsoft|google|apple|amazon|paypal)\\.com",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2",
       "note": "A timed auto-redirect to a legitimate brand site after a delay (encoded as milliseconds like 300000 or 5*60*1000) is a self-destruct mechanism. The phishing page exists only temporarily, then becomes an innocent redirect."
     },
     {
@@ -6796,8 +6821,25 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "patternString": "fetch\\([\\s\\S]{0,200}telegram[\\s\\S]{0,200}(?:method:\\s*['\"]POST|POST)[\\s\\S]{0,300}(?:text|body|message)[\\s\\S]{0,200}(?:email|user|pass|login|password)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "telegram",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "content": "fetch"
+        },
+        {
+          "content": "POST",
+          "nocase": true
+        },
+        {
+          "pattern": "email|user|pass|login|password",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
       "note": "A fetch() POST to any URL containing 'telegram' with credential-related fields in the body is a direct Telegram exfiltration call. This catches both plain and partially obfuscated API URLs."
     },
     {
@@ -7151,8 +7193,20 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "patternString": "document\\.cookie[\\s\\S]{0,200}(?:split|match|indexOf|includes)\\([\\s\\S]{0,100}(?:session|auth|token|sid|JSESSIONID|PHPSESSID)[\\s\\S]{0,500}(?:fetch\\(|XMLHttpRequest|sendBeacon|new\\s+Image|postMessage)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "document.cookie",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "session|auth|token|sid|JSESSIONID|PHPSESSID",
+          "flags": "i"
+        },
+        {
+          "pattern": "fetch\\(|XMLHttpRequest|sendBeacon|postMessage"
+        }
+      ],
+      "condition": "0 & 1 & 2",
       "note": "AiTM cookie extraction targeting session tokens + exfil. Requires fetch/XHR/beacon/postMessage after extraction — without exfil, it is just cookie reading."
     },
     {
@@ -7184,8 +7238,24 @@
       "severity": "high",
       "weight": 0.3,
       "source": "js",
-      "patternString": "(?:password|passwd|pwd)[\\s\\S]{0,500}(?:style\\.display|classList|visibility)[\\s\\S]{0,500}(?:verification|authenticator|code|otp|mfa|2fa|two.?factor)[\\s\\S]{0,300}(?:input|form|field)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "password",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "style\\.display|classList|visibility"
+        },
+        {
+          "pattern": "verification|authenticator|code|otp|mfa|2fa|two.?factor",
+          "flags": "i"
+        },
+        {
+          "pattern": "input|form|field",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
       "note": "After capturing the password, showing a hidden MFA/verification code prompt is the two-stage AiTM credential+MFA harvest. The password is relayed to the real site, which triggers a real MFA challenge, then the phish captures the MFA code."
     },
     {
@@ -7430,8 +7500,22 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "(?:card|payment|credit|debit)[\\s\\S]{0,1000}(?:verification\\s*code|one-?time\\s*(?:code|password)|OTP|security\\s*code\\s*sent|code\\s*(?:sent|texted)\\s*to\\s*(?:your|the)\\s*(?:phone|mobile|number))",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "verification",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "card|payment|credit|debit",
+          "flags": "i"
+        },
+        {
+          "pattern": "verification\\s*code|one-?time\\s*(?:code|password)|OTP|security\\s*code",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Requesting an OTP/verification code AFTER the victim enters card details is the bank fraud escalation. The scammer initiates a real transaction with the stolen card and needs the victim's bank OTP to authorize it."
     },
     {
@@ -7492,8 +7576,22 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:cancel|unsubscribe|manage|downgrade)\\s*(?:your\\s*)?(?:subscription|membership|plan|renewal|auto-?renew)[\\s\\S]{0,500}(?:sign\\s*in|log\\s*in|email|password|verify\\s*(?:your\\s*)?(?:identity|account))",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "subscription",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "cancel|unsubscribe|manage|downgrade",
+          "flags": "i"
+        },
+        {
+          "pattern": "sign\\s*in|log\\s*in|email|password|verify",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2",
       "note": "Cancel subscription flows that require sign-in or identity verification harvest credentials under the guise of cancellation. The victim wants to cancel an unwanted charge, so they eagerly enter their credentials."
     },
     {
@@ -11083,8 +11181,22 @@
       "severity": "high",
       "weight": 0.45,
       "source": "js",
-      "patternString": "(?:addEventListener|onkeypress|onkeydown|onkeyup)\\([\\s\\S]{0,200}(?:key|keyCode|which)[\\s\\S]{0,300}(?:\\+=\\s*(?:e\\.key|String\\.fromCharCode|charCode)|push\\(|concat\\()[\\s\\S]{0,500}(?:fetch|XMLHttpRequest|sendBeacon|new\\s+Image)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "addEventListener",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "keypress|keydown|keyup"
+        },
+        {
+          "pattern": "\\+=\\s*(?:e\\.key|String\\.fromCharCode)|push\\(|concat\\("
+        },
+        {
+          "pattern": "fetch|XMLHttpRequest|sendBeacon|new\\s+Image"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
       "note": "Keystroke accumulation + exfil destination. Requires fetch/XHR/beacon/Image after accumulation — without exfil context, this is just a keyboard handler."
     },
     {
@@ -11675,8 +11787,17 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "<title>(?:Verify\\s+your\\s+(?:account|identity|credentials|informations|email|login)|Confirm\\s+your\\s+(?:account|identity|credentials|information|email|login)|Signin\\s+to\\s+your\\s+account)</title>",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "<title>",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<title>(?:Verify|Confirm|Signin|Update|Validate|Secure)\\s+(?:your\\s+)?(?:account|identity|credentials|email|login|information)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1",
       "note": "Sneaky 2FA randomly selects page titles from a specific list: 'Verify your account/identity/credentials/informations/email/login', 'Confirm your ...', 'Signin to your account'. The exact set of alternatives is a Sneaky 2FA signature."
     },
     {
@@ -12394,8 +12515,22 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "(?:thank\\s*you|success(?:ful(?:ly)?)?|completed|verified|your\\s+(?:account|information)\\s+(?:has\\s+been|is)\\s+(?:updated|verified|confirmed|secured))[\\s\\S]{0,500}(?:redirect|location\\.href|window\\.location|setTimeout)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "thank",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "thank\\s*you|success(?:ful)?|completed|verified",
+          "flags": "i"
+        },
+        {
+          "pattern": "redirect|location\\.href|location\\.replace|window\\.location",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "A generic 'Thank you, your account has been verified/updated' message followed by a redirect is the phishing completion page. After stealing credentials, the kit shows a success message then redirects to the real site."
     },
     {
@@ -12518,8 +12653,21 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "(?:title-bar|window-header|address-bar|url-bar|browser-frame|popup-window|login-popup|sign-in-popup)[\\s\\S]{0,500}(?:position:\\s*fixed|position:\\s*absolute|z-index:\\s*\\d{3,})[\\s\\S]{0,500}(?:iframe|login|sign.?in|password)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "title-bar",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "title-bar|window-header|address-bar|url-bar|browser-frame|popup-window|login-popup|sign-in-popup",
+          "flags": "i"
+        },
+        {
+          "pattern": "position:\\s*(?:fixed|absolute)|z-index:\\s*\\d{3,}",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "BitB attacks create fake browser windows using HTML/CSS with class names like title-bar, address-bar, browser-frame, popup-window. Combined with fixed/absolute positioning, high z-index, and an iframe or login form, this is a definitive BitB signature."
     },
     {
@@ -13077,8 +13225,26 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "(?:error|problem|issue|trouble)[\\s\\S]{0,200}(?:sign\\s*in|log\\s*in|verify|authenticate)[\\s\\S]{0,300}(?:microsoft|google|apple|outlook|office\\s*365|onedrive|sharepoint)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "error",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "error|problem|issue|trouble",
+          "flags": "i"
+        },
+        {
+          "pattern": "sign\\s*in|log\\s*in|verify|authenticate",
+          "flags": "i"
+        },
+        {
+          "pattern": "microsoft|google|apple|outlook|office\\s*365|onedrive|sharepoint",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "Fake error messages paired with login prompts and brand names create urgency ('There was a problem with your Microsoft account. Please sign in to verify.'). This social engineering pattern is used across many phishing campaigns."
     },
     {
@@ -13194,8 +13360,22 @@
       "severity": "high",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:redelivery|redeliver|reschedul|shipping\\s*fee|delivery\\s*fee|customs\\s*(?:fee|charge|duty))[\\s\\S]{0,500}(?:\\$\\s*\\d{1,2}\\.\\d{2}|(?:credit|debit)\\s*card|payment\\s*(?:method|info|details))",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "redelivery",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "redelivery|redeliver|reschedul|shipping\\s*fee|delivery\\s*fee|customs\\s*(?:fee|charge|duty)",
+          "flags": "i"
+        },
+        {
+          "pattern": "\\$\\s*\\d{1,2}\\.\\d{2}|(?:credit|debit)\\s*card|payment\\s*(?:method|info|detail)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Fake redelivery fees or customs charges are the hook for logistics phishing. USPS, DHL, FedEx, and UPS impersonation pages request small payment amounts to harvest credit card details."
     },
     {
@@ -13274,8 +13454,22 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "(?:browser|chrome|firefox|edge|safari)\\s+(?:is\\s+)?(?:out\\s+of\\s+date|needs?\\s+(?:to\\s+be\\s+)?(?:updated|update)|update\\s+(?:required|needed|available))[\\s\\S]{0,500}(?:download|install|update\\s+now|click\\s+here)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "update",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:browser|chrome|firefox|edge|safari)\\s+(?:is\\s+)?(?:out\\s+of\\s+date|needs?\\s+(?:to\\s+be\\s+)?(?:updated|update)|update\\s+(?:required|needed|available))",
+          "flags": "i"
+        },
+        {
+          "pattern": "download|install|update\\s*now|click\\s*here",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Fake browser update notifications are the primary delivery mechanism for SocGholish, ClearFake, FakeBat, and RogueRaticate malware. The 'browser out of date + download' combination on any website that isn't an official browser vendor is a definitive malware lure."
     },
     {
@@ -13940,8 +14134,21 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "(?:font-size:\\s*0|display:\\s*none|visibility:\\s*hidden|opacity:\\s*0)[^>]*>[^<]*(?:scanned|verified|secured|protected|safe|clean|threat\\s*protection|virus\\s*free|malware\\s*free|trusted|authenticated)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "font-size",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "font-size:\\s*0|display:\\s*none|visibility:\\s*hidden|opacity:\\s*0",
+          "flags": "i"
+        },
+        {
+          "pattern": "scanned|verified|secured|protected|safe|clean|threat\\s*protection|virus\\s*free|malware\\s*free|trusted",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Hidden text claiming 'Scanned and secured by Advanced Threat Protection' or similar fake security assurances appears in email previews, making the message look legitimate. SANS ISC documented this as a 'new spin' on ZeroFont in September 2023, still active."
     },
     {
@@ -13987,8 +14194,26 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:voicemail|voice\\s*mail|voice\\s*message|missed\\s*call|audio\\s*message)[\\s\\S]{0,500}(?:listen|play|hear|open|view|download)[\\s\\S]{0,300}(?:sign\\s*in|log\\s*in|password|authenticate|verify)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "voicemail",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "voicemail|voice\\s*mail|voice\\s*message|missed\\s*call|audio\\s*message",
+          "flags": "i"
+        },
+        {
+          "pattern": "listen|play|hear|open|view|download",
+          "flags": "i"
+        },
+        {
+          "pattern": "sign\\s*in|log\\s*in|password|authenticate",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "Voicemail notification pages with play/listen buttons that require sign-in are a top enterprise phishing lure. Microsoft voicemail notifications are frequently impersonated, with the login form harvesting M365 credentials."
     },
     {
@@ -13998,8 +14223,26 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "(?:audio|player|waveform|play-button|progress-bar|duration|timeline)[\\s\\S]{0,300}(?:voicemail|voice\\s*mail|message\\s*from|caller|missed)[\\s\\S]{0,300}(?:\\d{1,2}:\\d{2}|seconds|minutes|duration)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "voicemail",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "audio|player|waveform|play-button|progress-bar",
+          "flags": "i"
+        },
+        {
+          "pattern": "voicemail|voice\\s*mail|message\\s*from|caller|missed",
+          "flags": "i"
+        },
+        {
+          "pattern": "\\d{1,2}:\\d{2}|seconds|minutes",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "A fake audio player UI showing waveform, play button, progress bar, and duration (e.g., '0:45') for a voicemail message is the visual component of voicemail phishing. The player doesn't actually play audio — it's just HTML/CSS that gates a login form."
     },
     {
@@ -14180,8 +14423,22 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:meeting\\s*invite|calendar\\s*(?:invite|event)|you.?ve\\s*been\\s*invited|join\\s*(?:this\\s*)?meeting|RSVP)[\\s\\S]{0,500}(?:sign.?in|log.?in|password|verify|join\\s*now)[\\s\\S]{0,300}(?:Teams|Zoom|Google\\s*Meet|WebEx|GoTo)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "invite",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "meeting\\s*invite|calendar\\s*(?:invite|event)|you.?ve\\s*been\\s*invited|join\\s*(?:this\\s*)?meeting|RSVP",
+          "flags": "i"
+        },
+        {
+          "pattern": "sign.?in|log.?in|password|verify|join\\s*now",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Fake meeting invites requiring login to 'join'. Calendar phishing is an emerging bypass for email security."
     },
     {
@@ -14213,8 +14470,20 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:View\\s*(?:Document|File|PDF|Message|Attachment)|Open\\s*(?:Document|File|PDF)|Access\\s*(?:Document|File)|Review\\s*(?:Document|File)|Download\\s*(?:Document|PDF))[\\s\\S]{0,2000}<input[^>]*type=['\"]password['\"]",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "View",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:View|Open|Access|Review|Download)\\s*(?:Document|File|PDF|Message|Attachment)",
+          "flags": "i"
+        },
+        {
+          "content": "password"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "A 'View Document' or 'Open File' button/heading on the same page as a password input field is a document lure phishing layout. Legitimate file sharing shows the document directly or uses the hosting service's own login, not a generic password prompt on the same page."
     },
     {
@@ -14293,8 +14562,24 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "(?:background(?:-image)?\\s*:[^;]*url\\([^)]+\\)|<img[^>]*(?:invoice|document|pdf|file|preview|scan|fax))[\\s\\S]{0,2000}(?:position:\\s*(?:fixed|absolute)[^}]*(?:z-index|top|left))[\\s\\S]{0,1000}(?:password|email|sign.?in|log.?in)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "position",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "background(?:-image)?\\s*:[^;]*url|<img[^>]*(?:invoice|document|pdf|file|preview|scan|fax)",
+          "flags": "i"
+        },
+        {
+          "pattern": "position:\\s*(?:fixed|absolute)",
+          "flags": "i"
+        },
+        {
+          "content": "password"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "A static document/invoice/PDF image as background with a positioned login modal on top is the visual layout of image-based document lures. The 'document' is a screenshot or placeholder image, not real interactive content. The login modal steals credentials."
     },
     {
