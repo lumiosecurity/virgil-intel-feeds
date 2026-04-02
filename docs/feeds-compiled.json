@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T16:21:07.476Z",
+    "compiledAt": "2026-04-02T16:49:51.513Z",
     "brandCount": 187,
     "signalCount": 1,
-    "patternCount": 977,
+    "patternCount": 1029,
     "domHashCount": 0,
     "metaRuleCount": 28
   },
@@ -4023,6 +4023,127 @@
       "note": "VM/sandbox screen resolution and CPU count detection"
     },
     {
+      "id": "navigator-webdriver-redirect",
+      "group": "botEvasion",
+      "description": "Checks navigator.webdriver and redirects to benign site if bot detected",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "navigator\\.webdriver[\\s\\S]{0,200}(?:location\\.(?:href|replace)|window\\.location)\\s*=\\s*[\"']https?://(?:www\\.)?(?:amazon|google|overstock|rakuten|tesla)",
+      "patternFlags": "i",
+      "note": "Classic Tycoon 2FA evasion: detect webdriver and redirect to a legitimate site like Amazon or Rakuten to throw off analysis tools."
+    },
+    {
+      "id": "debugger-timing-anti-analysis",
+      "group": "botEvasion",
+      "description": "Anti-debugging loop using debugger statement with timing measurement to detect DevTools",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "setInterval[\\s\\S]{0,100}debugger[\\s\\S]{0,200}(?:Date\\.now|performance\\.now|new Date)",
+      "patternFlags": "i",
+      "note": "Phishkits measure time around debugger statements — if DevTools is open, the debugger pause creates >100ms delay, triggering a redirect. Legitimate sites don't use this pattern."
+    },
+    {
+      "id": "ctrl-shift-i-block",
+      "group": "botEvasion",
+      "description": "Blocks Ctrl+Shift+I keyboard shortcut to prevent DevTools access",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "(?:ctrlKey|metaKey)[\\s\\S]{0,100}(?:shiftKey)[\\s\\S]{0,100}(?:keyCode\\s*===?\\s*73|key\\s*===?\\s*[\"'](?:i|I)[\"'])[\\s\\S]{0,100}preventDefault",
+      "patternFlags": "i",
+      "note": "Blocking Ctrl+Shift+I is a common phishkit technique to prevent victims from inspecting the page source. Some legitimate sites also block this but rarely in combination with other evasion."
+    },
+    {
+      "id": "burpsuite-detection",
+      "group": "botEvasion",
+      "description": "Checks for Burp Suite proxy indicators in JavaScript",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "(?:BurpSuite|burp\\.suite|PortSwigger|burpcollaborator\\.net)",
+      "patternFlags": "i",
+      "note": "Checking for Burp Suite, PortSwigger, or burpcollaborator.net in client-side JS is a definitive anti-analysis technique used by Tycoon 2FA and other phishkits."
+    },
+    {
+      "id": "clipboard-overwrite-anti-copy",
+      "group": "botEvasion",
+      "description": "Overwrites clipboard on copy event to prevent data extraction",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "addEventListener\\([\"']copy[\"'][\\s\\S]{0,200}clipboardData\\.setData[\\s\\S]{0,100}preventDefault",
+      "patternFlags": "i",
+      "note": "Tycoon 2FA overwrites clipboard content when users try to copy text from the page. Low-moderate weight since some content protection sites do this."
+    },
+    {
+      "id": "about-blank-bot-redirect",
+      "group": "botEvasion",
+      "description": "Redirects to about:blank when bot or analysis tool is detected",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:navigator\\.webdriver|callPhantom|__selenium|BurpSuite)[\\s\\S]{0,300}(?:location\\.href|window\\.location)\\s*=\\s*[\"']about:blank[\"']",
+      "patternFlags": "i",
+      "note": "Tycoon 2FA and similar kits redirect to about:blank when they detect automation tools, preventing sandboxes from seeing the real phishing content."
+    },
+    {
+      "id": "isp-org-blocklist-evasion",
+      "group": "botEvasion",
+      "description": "IP geolocation org field checked against blocklist of security vendors and cloud providers",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:ipinfo|ip-api|ipapi)[\\s\\S]{0,500}\\.org[\\s\\S]{0,300}(?:google|amazon|microsoft|cloudflare|akamai|sucuri|forcepoint|barracuda|proofpoint|zscaler)",
+      "patternFlags": "i",
+      "note": "Phishkits check the visitor's ISP/org via IP geolocation and block requests from security vendors, CDNs, and cloud providers to evade automated scanning."
+    },
+    {
+      "id": "referrer-validation-gate",
+      "group": "botEvasion",
+      "description": "Checks document.referrer to ensure visitor came from email link, not direct navigation",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "document\\.referrer[\\s\\S]{0,200}(?:length\\s*===?\\s*0|===?\\s*[\"'][\"'])[\\s\\S]{0,200}(?:location\\.(?:href|replace)|window\\.location)",
+      "patternFlags": "i",
+      "note": "Phishkits validate the referrer to ensure the visitor came from the phishing email link, redirecting direct visitors away. Low-moderate weight."
+    },
+    {
+      "id": "console-clear-anti-forensics",
+      "group": "botEvasion",
+      "description": "Repeated console.clear calls to hide debugging output",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "setInterval\\([\\s\\S]{0,100}console\\.clear\\(\\)",
+      "patternFlags": "i",
+      "note": "Periodically clearing the console via setInterval prevents analysts from seeing error messages or debug output. Low weight — some legitimate apps do this too."
+    },
+    {
+      "id": "window-name-cloaking",
+      "group": "botEvasion",
+      "description": "Uses window.name to pass data between pages or detect sandbox environments",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "window\\.name\\s*[!=]==?\\s*[\"'][^\"']{10,}[\"'][\\s\\S]{0,200}(?:location|redirect|document\\.write)",
+      "patternFlags": "i",
+      "note": "Phishkits use window.name as a covert data channel between redirect pages. If window.name doesn't match the expected token, the page redirects away."
+    },
+    {
+      "id": "window-focus-anti-tab-switch",
+      "group": "botEvasion",
+      "description": "Monitors window focus/blur events to detect tab switching during credential entry",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "addEventListener\\([\"'](?:blur|visibilitychange)[\"'][\\s\\S]{0,300}(?:hidden|document\\.hidden)[\\s\\S]{0,200}(?:location\\.(?:href|replace)|window\\.close)",
+      "patternFlags": "i",
+      "note": "Phishkits detect when the victim switches tabs (to check the URL or search for the site) and redirect or close the window. Very low weight — some web apps detect tab focus legitimately."
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -5737,6 +5858,39 @@
       "note": "IconCaptcha is an icon-based CAPTCHA where users select the correct icon from a set. Tycoon 2FA rotates between custom canvas CAPTCHA, Google reCAPTCHA, and IconCaptcha to avoid signature-based detection of any single CAPTCHA type."
     },
     {
+      "id": "html5-canvas-captcha-phishkit",
+      "group": "captchaGating",
+      "description": "Custom CAPTCHA rendered via HTML5 canvas with random distortion — Tycoon 2FA style",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "canvas[\\s\\S]{0,300}getContext\\([\"']2d[\"']\\)[\\s\\S]{0,500}(?:fillText|strokeText)[\\s\\S]{0,300}(?:random|Math\\.random)[\\s\\S]{0,300}(?:verify|captcha|human|check)",
+      "patternFlags": "i",
+      "note": "Custom CAPTCHA rendered with canvas fillText plus randomization is a Tycoon 2FA technique to replace Cloudflare Turnstile and avoid fingerprinting."
+    },
+    {
+      "id": "turnstile-without-cf-domain",
+      "group": "captchaGating",
+      "description": "Cloudflare Turnstile widget loaded on a page that also contains credential fields but no Cloudflare challenge JS",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "challenges\\.cloudflare\\.com/turnstile[\\s\\S]{0,2000}<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "i",
+      "note": "Phishkits abuse Turnstile as a gating mechanism before showing credential forms. Moderate weight because Turnstile is used on some legitimate login pages."
+    },
+    {
+      "id": "grecaptcha-callback-hidden-form",
+      "group": "captchaGating",
+      "description": "reCAPTCHA callback that reveals a hidden credential form after verification",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "grecaptcha\\.(?:execute|render)[\\s\\S]{0,500}(?:display|visibility|style)[\\s\\S]{0,200}(?:block|visible|show)[\\s\\S]{0,300}(?:password|credential|login-form)",
+      "patternFlags": "i",
+      "note": "Phishkits hide the credential form behind a reCAPTCHA challenge, revealing it only after verification to evade automated scanners."
+    },
+    {
       "id": "cookie-gate-reload-phishkit",
       "group": "cdnGating",
       "description": "Detects phishkit gate pattern: sets a cookie with timestamp then reloads page to pass server-side check",
@@ -5833,6 +5987,17 @@
       "patternString": "ddos-guard\\.net\\/bl\\/|\\.ddos-guard\\.net",
       "patternFlags": "",
       "note": "DDoS-Guard CDN — observation level, legitimate sites use it too"
+    },
+    {
+      "id": "cookie-gate-timestamp-reload",
+      "group": "cdnGating",
+      "description": "Sets a cookie with timestamp then forces page reload to pass server-side validation",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "document\\.cookie\\s*=\\s*[\"'][^\"']*=[\"']\\s*\\+\\s*(?:Date\\.now|new Date|Math\\.floor)[\\s\\S]{0,200}location\\.(?:reload|href)",
+      "patternFlags": "i",
+      "note": "Phishkit gating: set a timestamped cookie, reload the page. The server checks for the cookie to distinguish real browsers from crawlers."
     },
     {
       "id": "email-userid-label",
@@ -7992,6 +8157,171 @@
       "note": "Phishkit JS variable naming for credential accumulation"
     },
     {
+      "id": "emailjs-api-exfil",
+      "group": "credentialHarvesting",
+      "description": "EmailJS API used to exfiltrate credentials via legitimate email service",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "api\\.emailjs\\.com[\\s\\S]{0,300}(?:password|credential|passwd|login)",
+      "patternFlags": "i",
+      "note": "EmailJS is a legitimate service increasingly abused by phishkits to exfiltrate stolen credentials via client-side JS. No legitimate login page sends passwords through EmailJS."
+    },
+    {
+      "id": "emailjs-send-credential-form",
+      "group": "credentialHarvesting",
+      "description": "EmailJS send function called with form reference containing credential fields",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "emailjs\\.send\\([\"'][^\"']+[\"'],\\s*[\"'][^\"']+[\"'],\\s*\\w+\\.current",
+      "patternFlags": "i",
+      "note": "Pattern matches emailjs.send(serviceId, templateId, formRef.current) — the exact API signature used in React-based phishkits for credential exfiltration via EmailJS."
+    },
+    {
+      "id": "emailjs-init-with-publickey",
+      "group": "credentialHarvesting",
+      "description": "EmailJS initialization with public key — used by phishkits for credential exfiltration",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "emailjs\\.init\\([\"'][A-Za-z0-9_-]{10,}[\"']\\)",
+      "patternFlags": "i",
+      "note": "EmailJS init with a public API key on a page with credentials suggests phishkit exfiltration. Moderate weight because EmailJS alone could be on legitimate contact forms."
+    },
+    {
+      "id": "formbold-credential-exfil",
+      "group": "credentialHarvesting",
+      "description": "Form submission to Formbold service with credential fields",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "action=[\"']https://formbold\\.com/s/[A-Za-z0-9]+[\"'][^>]*>[\\s\\S]{0,500}<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "i",
+      "note": "Formbold is a form backend service abused by phishkits. A form posting to Formbold with a password field is near-definitive phishing."
+    },
+    {
+      "id": "formspark-credential-exfil",
+      "group": "credentialHarvesting",
+      "description": "Form submission to Formspark service with credential fields",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "action=[\"']https://submit-form\\.com/[A-Za-z0-9]+[\"'][^>]*>[\\s\\S]{0,500}<input[^>]*type=[\"']password[\"']",
+      "patternFlags": "i",
+      "note": "submit-form.com is Formspark's endpoint. A form posting passwords to this third-party service is near-definitive phishing."
+    },
+    {
+      "id": "image-beacon-exfil",
+      "group": "credentialHarvesting",
+      "description": "Image beacon exfiltration — creates new Image with credential data in URL",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "new\\s+Image\\(\\)\\.src\\s*=\\s*[\"'`][^\"'`]*(?:password|passwd|pwd|credential|cred)[^\"'`]*[\"'`]",
+      "patternFlags": "i",
+      "note": "Image beacon is a classic exfiltration technique — creating an Image object with credential data encoded in the URL query string. No legitimate site does this."
+    },
+    {
+      "id": "formdata-post-to-php-endpoint",
+      "group": "credentialHarvesting",
+      "description": "FormData constructed and POSTed to a PHP endpoint — classic phishkit credential exfiltration",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "new\\s+FormData\\([^)]*\\)[\\s\\S]{0,500}fetch\\([\"'][^\"']*\\.php[\"']",
+      "patternFlags": "i",
+      "note": "Constructing FormData and POSTing to a .php file is a classic phishkit pattern. Modern legitimate sites rarely use PHP backends for login forms."
+    },
+    {
+      "id": "xmlhttprequest-credential-post",
+      "group": "credentialHarvesting",
+      "description": "XMLHttpRequest sending credential data via POST to external endpoint",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "XMLHttpRequest[\\s\\S]{0,300}(?:password|passwd|pwd)\\.value[\\s\\S]{0,300}\\.send\\(",
+      "patternFlags": "i",
+      "note": "XHR collecting password field values and sending them via POST is a direct credential exfiltration pattern found in numerous phishkits."
+    },
+    {
+      "id": "websocket-credential-exfil",
+      "group": "credentialHarvesting",
+      "description": "WebSocket used to exfiltrate credential data in real-time",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "new\\s+WebSocket\\([\"']wss?://[^\"']+[\"']\\)[\\s\\S]{0,500}(?:password|passwd|pwd|credential)",
+      "patternFlags": "i",
+      "note": "WebSocket-based exfiltration sends stolen credentials in real-time to the attacker. Used by advanced phishkits for immediate session hijacking."
+    },
+    {
+      "id": "submit-form-com-exfil",
+      "group": "credentialHarvesting",
+      "description": "Credential form posting to submit-form.com (Formspark) endpoint",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "action=[\"']https://submit-form\\.com/[A-Za-z0-9]+[\"']",
+      "patternFlags": "i",
+      "note": "submit-form.com is Formspark's submission endpoint. When used as a form action, credentials entered are sent to the attacker's Formspark account."
+    },
+    {
+      "id": "redirect-after-credential-submit",
+      "group": "credentialHarvesting",
+      "description": "Redirects to legitimate brand site after form submission — post-harvest redirect",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "(?:onsubmit|addEventListener\\([\"']submit)[\\s\\S]{0,1000}window\\.location[\\s\\S]{0,200}(?:microsoft\\.com|google\\.com|apple\\.com|dropbox\\.com|office\\.com|outlook\\.com)",
+      "patternFlags": "i",
+      "note": "Classic phishkit behavior: after stealing credentials, redirect the victim to the real brand site so they think the login failed or succeeded. Distinct from legitimate OAuth redirects."
+    },
+    {
+      "id": "double-submit-password-harvest",
+      "group": "credentialHarvesting",
+      "description": "Multi-step phishing form that collects password twice — email first, then password",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "(?:step|stage|phase)\\s*[=!]==?\\s*[\"']?[12][\"']?[\\s\\S]{0,500}(?:password|passwd)\\.value[\\s\\S]{0,300}(?:step|stage|phase)\\s*[=+]=?\\s*[\"']?[23]",
+      "patternFlags": "i",
+      "note": "Multi-stage phishing: collects email in step 1, password in step 2, sometimes MFA in step 3. The step counter variable is distinctive."
+    },
+    {
+      "id": "mfa-code-field-phishkit",
+      "group": "credentialHarvesting",
+      "description": "MFA/2FA/OTP code input field combined with credential harvesting signals",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:verification|authenticat|2fa|mfa|one-time|otp)[\\s\\S]{0,300}<input[^>]*(?:maxlength=[\"']6[\"']|pattern=[\"']\\[0-9\\])[^>]*>[\\s\\S]{0,500}(?:verify|submit|continue)",
+      "patternFlags": "i",
+      "note": "Phishing pages collecting MFA/2FA codes with 6-digit inputs and verify buttons. Distinct from legitimate MFA pages by context — this fires when other signals are also present."
+    },
+    {
+      "id": "input-keylogger-pattern",
+      "group": "credentialHarvesting",
+      "description": "Keypress event listener accumulating input characters for credential theft",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "addEventListener\\([\"']key(?:press|down|up)[\"'][\\s\\S]{0,300}(?:\\+=\\s*(?:e\\.key|String\\.fromCharCode|event\\.key)|push\\(e\\.key\\))",
+      "patternFlags": "i",
+      "note": "Keylogger pattern: attaches keypress/keydown listener and accumulates each keystroke into a string or array. Used by advanced phishkits to capture credentials character by character."
+    },
+    {
+      "id": "empty-form-action-self-submit",
+      "group": "credentialHarvesting",
+      "description": "Login form with empty or self-referential action combined with JS interception",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<form[^>]*action=[\"'](?:#|javascript:|about:blank)?[\"'][^>]*>[\\s\\S]{0,500}<input[^>]*type=[\"']password[\"'][\\s\\S]{0,500}(?:onsubmit|addEventListener)",
+      "patternFlags": "i",
+      "note": "Phishkits set the form action to #, javascript:, or empty so the form doesn't actually submit — instead, JS intercepts and exfiltrates the credentials."
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -8287,6 +8617,17 @@
       ],
       "condition": "(1 | 2 | 3 | 4 | 5) & 0 & 6",
       "note": "File hosting service links on pages with credential text. 26% of phishing links use file hosting services."
+    },
+    {
+      "id": "cache-bust-index-hash-js",
+      "group": "hostingPatterns",
+      "description": "Single-line HTML loading index-[hash].js — BlackForce phishkit entry point pattern",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<script[^>]*src=[\"'][^\"']*index-[a-f0-9]{8,}[^\"']*\\.js[\"'][^>]*>[\\s]*</script>\\s*</body>",
+      "patternFlags": "i",
+      "note": "BlackForce phishkit uses a single script tag loading index-[hash].js as its entire entry point. The cache-busting hash forces fresh downloads of the malicious bundle."
     },
     {
       "id": "mm-telegram-exfil-comprehensive",
@@ -9822,6 +10163,83 @@
       "patternString": "style=['\"][^'\"]*position:\\s*absolute[^'\"]*(?:left:\\s*-\\d{3,}|top:\\s*-\\d{3,}|right:\\s*-\\d{3,})[^'\"]*['\"][^>]*>[^<]{10,}",
       "patternFlags": "i",
       "note": "Positioning text absolutely far offscreen (left:-9999px, top:-10000px) hides it visually while keeping it in the DOM. Some email clients strip display:none but don't check for offscreen positioning, making this a fallback concealment method."
+    },
+    {
+      "id": "cryptojs-decrypt-payload",
+      "group": "obfuscation",
+      "description": "CryptoJS used to decrypt AES-encrypted payload at runtime — common in modern phishkits",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "CryptoJS\\.AES\\.decrypt\\([\\s\\S]{0,200}(?:document\\.write|innerHTML|outerHTML|insertAdjacentHTML)",
+      "patternFlags": "i",
+      "note": "Phishkits encrypt the phishing page with AES and decrypt at runtime using CryptoJS to evade static analysis. The decrypted content is then injected into the DOM."
+    },
+    {
+      "id": "javascript-proxy-obfuscation",
+      "group": "obfuscation",
+      "description": "JavaScript Proxy objects used to obfuscate function calls — seen in Tycoon 2FA",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "js",
+      "patternString": "new\\s+Proxy\\([\\s\\S]{0,300}apply\\s*:\\s*function[\\s\\S]{0,300}Reflect\\.apply",
+      "patternFlags": "i",
+      "note": "Tycoon 2FA uses Proxy objects with apply traps to obfuscate function calls. Moderate-low weight because Proxy is a legitimate JS feature."
+    },
+    {
+      "id": "aes-encrypted-c2-payload",
+      "group": "obfuscation",
+      "description": "AES encryption with hardcoded key and IV for C2 communication — phishkit data encryption pattern",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "CryptoJS\\.(?:AES|enc\\.Utf8)[\\s\\S]{0,300}(?:key|iv)\\s*[=:]\\s*CryptoJS\\.enc\\.",
+      "patternFlags": "i",
+      "note": "Tycoon 2FA and similar kits use CryptoJS AES with hardcoded keys/IVs for encrypting exfiltrated credentials and C2 payloads."
+    },
+    {
+      "id": "document-write-fullpage-inject",
+      "group": "obfuscation",
+      "description": "Entire page content injected via document.write after base64 or encrypted decode",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "(?:atob|decodeURIComponent|unescape|CryptoJS)[\\s\\S]{0,500}document\\.write\\([\\s\\S]{0,100}document\\.close\\(\\)",
+      "patternFlags": "i",
+      "note": "Phishkits decode obfuscated content and inject it as the full page via document.write/close. This hides the real content from static analysis."
+    },
+    {
+      "id": "hex-encoded-url-payload",
+      "group": "obfuscation",
+      "description": "Hex-encoded URL embedded in page parameters — characteristic of redirect-based phishkits",
+      "severity": "medium",
+      "weight": 0.3,
+      "source": "both",
+      "patternString": "68747470733a2f2f[0-9a-f]{20,}",
+      "patternFlags": "i",
+      "note": "The hex string 68747470733a2f2f decodes to 'https://'. Phishkits embed hex-encoded URLs in parameters to hide the true destination from email scanners."
+    },
+    {
+      "id": "xor-obfuscation-loop",
+      "group": "obfuscation",
+      "description": "XOR-based string decryption loop — common phishkit obfuscation technique",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "charCodeAt\\([^)]*\\)\\s*\\^\\s*(?:\\d+|\\w+\\.charCodeAt)[\\s\\S]{0,200}String\\.fromCharCode",
+      "patternFlags": "i",
+      "note": "XOR encryption loop: iterate characters, XOR with key, reconstruct via String.fromCharCode. Used by Whisper 2FA and other kits for payload obfuscation."
+    },
+    {
+      "id": "base64-html-injection-innerhtml",
+      "group": "obfuscation",
+      "description": "Base64-decoded content injected into DOM via innerHTML",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "js",
+      "patternString": "atob\\([\"'][A-Za-z0-9+/=]{50,}[\"']\\)[\\s\\S]{0,300}\\.innerHTML\\s*=",
+      "patternFlags": "i",
+      "note": "Decoding base64 and injecting into innerHTML is a phishkit technique to hide page content from static analysis. The decoded content typically contains the credential form."
     },
     {
       "id": "base64-html-password-obfuscation",
@@ -11447,17 +11865,6 @@
       "patternString": "history\\.replaceState\\([\\s\\S]{0,200}(?:microsoft|google|apple|paypal|amazon|netflix|facebook|instagram|wellsfargo|chase|bankofamerica)\\.com",
       "patternFlags": "i",
       "note": "Using history.replaceState to make the URL bar show a legitimate brand domain is a phishkit URL masking technique. The actual URL is the phishing domain, but the user sees a familiar brand URL. [Observation-level: replaceState — every SPA router (React Router, Next.js, etc.)]"
-    },
-    {
-      "id": "image-beacon-exfil",
-      "group": "phishkitSignatures",
-      "description": "Credentials exfiltrated via image beacon (new Image().src with credential data in URL)",
-      "severity": "high",
-      "weight": 0.4,
-      "source": "js",
-      "patternString": "new\\s+Image\\(\\)[\\s\\S]{0,50}\\.src\\s*=\\s*[\\s\\S]{0,200}(?:password|passwd|pwd|credential|getElementById)",
-      "patternFlags": "i",
-      "note": "Creating an Image object and setting its src to a URL containing credential data is a classic phishkit exfiltration technique that bypasses CORS restrictions. No legitimate site sends passwords via image requests."
     },
     {
       "id": "clickfix-clipboard-inject",
@@ -13309,6 +13716,149 @@
       "patternString": "<!--\\s*(?:coded|made|created|built|designed)\\s+by\\s+\\w+\\s*(?:@|\\||#)|<!--.*(?:telegram|t\\.me|@\\w{4,})\\s*(?:kit|scam|phish|grab|log)|<!--\\s*v\\d+\\.\\d+.*(?:scam|phish|kit|panel|stealer)",
       "patternFlags": "i",
       "note": "Author credits in HTML comments — phishkit operators sign their work"
+    },
+    {
+      "id": "geoapify-victim-fingerprint",
+      "group": "phishkitSignatures",
+      "description": "Geoapify IP geolocation API used for victim fingerprinting in phishkits",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "api\\.geoapify\\.com\\/v1\\/ipinfo",
+      "patternFlags": "i",
+      "note": "Geoapify IP info API called to gather victim geolocation metadata. Seen in EmailJS-based React phishkits alongside credential exfiltration."
+    },
+    {
+      "id": "firebase-storage-background-phish",
+      "group": "phishkitSignatures",
+      "description": "Firebase Storage used to host phishing page background images or assets",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "firebasestorage\\.googleapis\\.com\\/v0\\/b\\/[a-z0-9-]+\\.appspot\\.com\\/o\\/[\\s\\S]{0,200}(?:background|backphoto|loginbg|bg-image)",
+      "patternFlags": "i",
+      "note": "Phishkits host background images on Firebase Storage to avoid hosting costs and detection. The pattern matches Firebase Storage URLs with background-related filenames."
+    },
+    {
+      "id": "prefilled-victim-email-input",
+      "group": "phishkitSignatures",
+      "description": "Email input field pre-filled with hardcoded victim email address",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<input[^>]*type=[\"']email[\"'][^>]*value=[\"'][a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}[\"'][^>]*(?:readonly|disabled)",
+      "patternFlags": "i",
+      "note": "Phishing pages pre-fill the victim's email as readonly/disabled to add legitimacy. The victim sees their email already filled in and only needs to enter their password."
+    },
+    {
+      "id": "page-replace-server-content",
+      "group": "phishkitSignatures",
+      "description": "Fetches server content and replaces entire page — server-orchestrated phishing technique",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "document\\.(?:open|write)[\\s\\S]{0,100}(?:response|resp)\\.(?:text|message|data|body)[\\s\\S]{0,100}document\\.close",
+      "patternFlags": "i",
+      "note": "Server-orchestrated phishing: fetch payload from server, then document.open/write/close to replace entire page content. Used by advanced kits for dynamic content delivery."
+    },
+    {
+      "id": "uuid-campaign-tracker",
+      "group": "phishkitSignatures",
+      "description": "Hardcoded UUID campaign identifier combined with dynamic victim UUID tracking",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "[\"'][0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}[\"'][\\s\\S]{0,500}(?:uuidv4|crypto\\.randomUUID|generateUUID)",
+      "patternFlags": "i",
+      "note": "Phishkits use a hardcoded UUID as campaign identifier and generate per-victim UUIDs for tracking. This dual-UUID pattern is characteristic of advanced kits."
+    },
+    {
+      "id": "meta-refresh-redirect-phish",
+      "group": "phishkitSignatures",
+      "description": "Meta refresh auto-redirect with short delay to external URL — used for redirect chains",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<meta\\s+http-equiv=[\"']refresh[\"']\\s+content=[\"']\\d;\\s*url=https?://[^\"']+[\"']",
+      "patternFlags": "i",
+      "note": "Meta refresh redirects with short delays are used in phishing redirect chains. Low-moderate weight because some legitimate sites use meta refresh."
+    },
+    {
+      "id": "fetch-random-org-domain-exfil",
+      "group": "phishkitSignatures",
+      "description": "Selects random domain from hardcoded array for credential exfiltration POST",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "\\[\\s*[\"']https?://[^\"']+\\.org[\"']\\s*,\\s*[\"']https?://[^\"']+\\.org[\"']\\s*,\\s*[\"']https?://[^\"']+\\.org[\"'][\\s\\S]{0,200}Math\\.(?:random|floor)",
+      "patternFlags": "i",
+      "note": "Advanced phishkit technique: hardcoded array of .org domains with random selection for each exfiltration request to evade domain-based blocking."
+    },
+    {
+      "id": "base64-mfa-methods-list",
+      "group": "phishkitSignatures",
+      "description": "Base64-encoded list of MFA methods — characteristic of 2FA bypass kits",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "atob\\([\"'][A-Za-z0-9+/=]+[\"']\\)[\\s\\S]{0,500}(?:push.notification|sms|voice.call|authenticator.app|PhoneAppNotification|PhoneAppOTP|OneWaySMS)",
+      "patternFlags": "i",
+      "note": "AiTM phishkits decode a base64 list of MFA methods (push notifications, SMS, voice calls, authenticator apps) to handle various authentication scenarios."
+    },
+    {
+      "id": "reverse-proxy-session-cookie",
+      "group": "phishkitSignatures",
+      "description": "Captures and relays session cookies through reverse proxy for AiTM attack",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "js",
+      "patternString": "(?:ESTSAUTHPERSISTENT|ESTSAUTH|SSOCOOKIEPULLED|JSESSIONID)[\\s\\S]{0,300}(?:document\\.cookie|setCookie|exfil|send|post)",
+      "patternFlags": "i",
+      "note": "AiTM kits capture Microsoft session cookies (ESTSAUTHPERSISTENT, ESTSAUTH) and relay them for session hijacking. These specific cookie names are definitive Microsoft AiTM indicators."
+    },
+    {
+      "id": "visible-password-toggle-phish",
+      "group": "phishkitSignatures",
+      "description": "Custom password visibility toggle with eye icon — common in branded phishkit UI",
+      "severity": "low",
+      "weight": 0.15,
+      "source": "js",
+      "patternString": "(?:togglePassword|showPassword|eyeToggle)[\\s\\S]{0,200}(?:type\\s*=\\s*[\"']text[\"']|setAttribute\\([\"']type[\"'],\\s*[\"']text[\"'])",
+      "patternFlags": "i",
+      "note": "Custom password visibility toggle functions are common in phishkits that clone branded login pages. Very low weight — legitimate sites have these too."
+    },
+    {
+      "id": "random-org-exfil-domain-array",
+      "group": "phishkitSignatures",
+      "description": "Array of random .org domains for exfiltration endpoint rotation",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "js",
+      "patternString": "(?:domains|servers|endpoints|urls)\\s*=\\s*\\[[\\s\\S]{0,200}[\"']https?://[a-z]{5,20}\\.org[\"'][\\s\\S]{0,200}[\"']https?://[a-z]{5,20}\\.org[\"']",
+      "patternFlags": "i",
+      "note": "Phishkits store arrays of randomly-generated .org domains and select one per exfiltration request. The domain array variable name and .org TLD pattern are distinctive."
+    },
+    {
+      "id": "thematic-comment-fingerprint",
+      "group": "phishkitSignatures",
+      "description": "Unusual thematic HTML comments used by Cephas phishkit for fingerprinting evasion",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<!--[\\s]*(?:wine tasting|Spectral Quasar|Riverside Avenue|quantum fluctuation|celestial navigation)[\\s]*-->",
+      "patternFlags": "i",
+      "note": "The Cephas phishkit inserts unusual thematic comments (wine tasting on Riverside Avenue, Spectral Quasar) as a fingerprinting evasion technique. These specific phrases are kit signatures."
+    },
+    {
+      "id": "ghostframe-iframe-phishing",
+      "group": "phishkitSignatures",
+      "description": "GhostFrame phishkit pattern — harmless outer HTML with hidden malicious iframe",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "<iframe[^>]*src=[\"']https?://[^\"']+[\"'][^>]*(?:width=[\"']100%[\"']|style=[\"'][^\"']*(?:border:\\s*(?:none|0)|width:\\s*100%))[^>]*>[\\s\\S]{0,100}</iframe>\\s*</body>",
+      "patternFlags": "i",
+      "note": "GhostFrame uses a minimal HTML shell with a full-width, borderless iframe pointing to the actual phishing page. The outer page appears harmless while the iframe hides the malicious content."
     },
     {
       "id": "facebook-arabic-security-alert",
@@ -15315,6 +15865,28 @@
       "patternString": "(?:delivery\\s+exception|address\\s+could\\s+not\\s+be\\s+verified)[\\s\\S]{0,1000}(?:update\\s+my\\s+address|verify\\s+address|confirm\\s+address)",
       "patternFlags": "i",
       "note": "Targets logistics delivery scams across DPD, UPS, FedEx campaigns using address verification social engineering"
+    },
+    {
+      "id": "invisible-text-seo-stuffing",
+      "group": "socialEngineering",
+      "description": "Large blocks of invisible text for SEO stuffing on phishing pages",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:color:\\s*(?:transparent|rgba\\(0,\\s*0,\\s*0,\\s*0\\))|font-size:\\s*0(?:px)?|overflow:\\s*hidden[^}]*height:\\s*0)[\\s\\S]{0,200}(?:login|password|sign.in|verify|secure|account)",
+      "patternFlags": "i",
+      "note": "Phishing pages stuff invisible SEO text to manipulate search rankings or evade content-based filters. The text contains credential-related keywords but is hidden from view."
+    },
+    {
+      "id": "background-blur-login-overlay",
+      "group": "socialEngineering",
+      "description": "Blurred background with login overlay — simulates document preview requiring authentication",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "(?:filter:\\s*blur\\(\\d+px\\)|backdrop-filter:\\s*blur)[\\s\\S]{0,1000}<(?:form|input)[^>]*(?:password|login|sign.in)",
+      "patternFlags": "i",
+      "note": "Phishing pages show a blurred document or preview behind a login overlay, tricking victims into thinking they need to authenticate to view content."
     },
     {
       "id": "numeric-domain-pattern",
@@ -17409,7 +17981,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-02T16:04:02.651Z",
+      "compiledAt": "2026-04-02T16:21:06.239Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
