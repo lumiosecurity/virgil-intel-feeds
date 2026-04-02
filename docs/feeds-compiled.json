@@ -1,11 +1,11 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T16:04:04.437Z",
+    "compiledAt": "2026-04-02T16:21:07.476Z",
     "brandCount": 187,
     "signalCount": 1,
     "patternCount": 977,
     "domHashCount": 0,
-    "metaRuleCount": 23
+    "metaRuleCount": 28
   },
   "brandEntries": [
     {
@@ -16828,6 +16828,75 @@
       }
     },
     {
+      "id": "idn-homograph-plus-password-form",
+      "description": "IDN homograph domain impersonating a brand AND page has a password form — near-certain credential phishing via Unicode domain spoofing",
+      "conditions": {
+        "any": [
+          {
+            "signal": "idn-homograph-brand"
+          },
+          {
+            "signal": "idn-whole-script-confusable"
+          }
+        ],
+        "all": [
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "idn-homograph-plus-new-domain",
+      "description": "IDN homograph brand impersonation on a domain less than 30 days old — freshly registered Unicode lookalike is almost exclusively phishing",
+      "conditions": {
+        "any": [
+          {
+            "signal": "idn-homograph-brand"
+          },
+          {
+            "signal": "idn-whole-script-confusable"
+          }
+        ],
+        "all": [
+          {
+            "domain_age_days": {
+              "lt": 30
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "idn-mixed-script-plus-credential-harvesting",
+      "description": "Mixed-script IDN domain (no brand match) combined with credential harvesting source patterns — the script mixing plus harvesting code confirms malicious intent",
+      "conditions": {
+        "all": [
+          {
+            "signal": "idn-mixed-script"
+          },
+          {
+            "signal_group": "credentialHarvesting"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "high"
+      }
+    },
+    {
       "id": "domain-age-dedup",
       "description": "Both WHOIS and CT fired for the same new domain — replace with a single calibrated age signal instead of double-counting",
       "conditions": {
@@ -16916,6 +16985,57 @@
         "scope": "downscore",
         "weight": 0.05,
         "severity": "low"
+      }
+    },
+    {
+      "id": "idn-plus-homoglyph-dedup",
+      "description": "Both IDN homograph and ASCII homoglyph signals fired for the same hostname — they detect the same brand impersonation via different normalization paths. Replace with a single calibrated weight to prevent double-counting.",
+      "conditions": {
+        "all": [
+          {
+            "signal": "homoglyph-substitution"
+          }
+        ],
+        "any": [
+          {
+            "signal": "idn-homograph-brand"
+          },
+          {
+            "signal": "idn-whole-script-confusable"
+          },
+          {
+            "signal": "idn-mixed-script"
+          }
+        ]
+      },
+      "action": {
+        "scope": "replace",
+        "weight": 0.6,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "idn-homograph-brand-plus-risky-tld-cap",
+      "description": "IDN homograph brand impersonation on a high-risk TLD — both signals detect suspicious domain registration but the IDN signal already carries high weight (0.60). Cap to prevent over-scoring when stacked with TLD risk.",
+      "conditions": {
+        "all": [
+          {
+            "signal": "high-risk-tld"
+          }
+        ],
+        "any": [
+          {
+            "signal": "idn-homograph-brand"
+          },
+          {
+            "signal": "idn-whole-script-confusable"
+          }
+        ]
+      },
+      "action": {
+        "scope": "replace",
+        "weight": 0.65,
+        "severity": "high"
       }
     },
     {
@@ -17289,7 +17409,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-02T15:37:25.519Z",
+      "compiledAt": "2026-04-02T16:04:02.651Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
