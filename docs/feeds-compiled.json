@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T03:57:53.795Z",
+    "compiledAt": "2026-04-02T04:00:14.677Z",
     "brandCount": 187,
     "signalCount": 1,
     "patternCount": 962,
@@ -4834,9 +4834,26 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "Sign\\s+in\\s+to\\s+your\\s+account[\\s\\S]{0,2000}(?:Can't\\s+access\\s+your\\s+account|Sign-in\\s+options|microsoftonline|office\\.com|azure)",
-      "patternFlags": "i",
-      "note": "Combines Microsoft's distinctive 'Sign in to your account' header with secondary UI elements or domain references"
+      "match": [
+        {
+          "content": "Sign in to your account",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "Can.t\\s+access\\s+your\\s+account|Sign-in\\s+options",
+          "flags": "i"
+        },
+        {
+          "content": "microsoft.com",
+          "negated": true
+        },
+        {
+          "content": "microsoftonline.com",
+          "negated": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
+      "note": "Microsoft sign-in UI text NOT on real Microsoft domains. Added FP exclusion."
     },
     {
       "id": "ms-auth-flow-approve-signin-text",
@@ -4955,9 +4972,25 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:aadcdn\\.msftauth\\.net|logincdn\\.msftauth\\.net|aadcdn\\.msauth\\.net|login\\.microsoftonline\\.com/consumers/css)[\\s\\S]{0,1000}(?:form|password|submit)",
-      "patternFlags": "i",
-      "note": "Microsoft's corporate branding CDN assets (aadcdn.msftauth.net, logincdn.msftauth.net) loading on a page with a login form means the proxy is serving Microsoft's real branding. Legitimate Microsoft login only serves these assets from Microsoft domains."
+      "match": [
+        {
+          "content": "msftauth.net",
+          "fast_pattern": true
+        },
+        {
+          "content": "password"
+        },
+        {
+          "content": "microsoftonline.com",
+          "negated": true
+        },
+        {
+          "content": "microsoft.com",
+          "negated": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
+      "note": "Microsoft CDN references (msftauth.net) with password field NOT on real MS domains."
     },
     {
       "id": "copyright-brand-name-mismatch",
@@ -5012,8 +5045,22 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "(?:in\\s*transit|out\\s*for\\s*delivery|delivered|processing|shipped|dispatch|departed|arrived\\s*at\\s*(?:hub|facility|warehouse|depot))[\\s\\S]{0,300}(?:progress|step|status|timeline)[\\s\\S]{0,300}(?:update|action|pay|verify|confirm|schedule)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "tracking",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "in\\s*transit|out\\s*for\\s*delivery|delivered|processing|shipped|dispatch",
+          "flags": "i"
+        },
+        {
+          "pattern": "(?:provide|enter|confirm|update).*(?:address|payment|card|details)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Fake delivery tracking status UIs showing package progress (in transit, processing, out for delivery) with a progress bar/steps UI create believable courier page impersonation. The tracking UI is real-looking but the action (pay/verify) is the scam."
     },
     {
@@ -5745,8 +5792,29 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "Outlook[^<]{0,500}password[^<]{0,500}(user\\s*name|username)\\s+(or|and)\\s+password[^<]{0,300}(isn.t correct|incorrect|wrong)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": "Outlook",
+          "fast_pattern": true
+        },
+        {
+          "content": "password"
+        },
+        {
+          "pattern": "isn.t correct|incorrect|wrong",
+          "flags": "i"
+        },
+        {
+          "content": "outlook.com",
+          "negated": true
+        },
+        {
+          "content": "office.com",
+          "negated": true
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3 & 4",
+      "note": "Outlook branding + password error NOT on real Outlook/Office domains. Added FP exclusion."
     },
     {
       "id": "spanish-id-document-type-selector",
@@ -7101,8 +7169,26 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "(?:Apple\\s*Pay|Google\\s*Pay|Samsung\\s*Pay|mobile\\s*wallet|digital\\s*wallet|contactless)[\\s\\S]{0,300}(?:link|add|connect|setup|verify|authenticate)[\\s\\S]{0,300}(?:toll|payment|card)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "wallet",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "Apple\\s*Pay|Google\\s*Pay|Samsung\\s*Pay|mobile\\s*wallet|digital\\s*wallet",
+          "flags": "i"
+        },
+        {
+          "pattern": "link|add|connect|setup|verify|authenticate",
+          "flags": "i"
+        },
+        {
+          "pattern": "card|expir|cvv|billing|payment",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "Prompting victims to link a mobile wallet (Apple Pay, Google Pay) on a toll payment page is an emerging fraud vector. Scammers use the stolen card details to add the victim's card to their own mobile wallet for tap-to-pay fraud at physical stores."
     },
     {
@@ -7306,8 +7392,18 @@
       "severity": "medium",
       "weight": 0.3,
       "source": "both",
-      "patternString": "^https?://[a-z0-9]{12,}\\.(?:bank|financial|secure|payment|trust|verify|account)(?:bank|pay|login|verify|secure|online)?\\.(?:xyz|top|info|online|site|click|live|icu)/",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": ".",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "^https?://[a-z0-9]{12,}\\.(?:bank|financial|secure|payment|trust|verify|account)(?:bank|pay|login|verify|secure|online)?\\.(?:xyz|top|info|online|site|click)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1",
+      "note": "Kept as regex — domain structure pattern matching inherently needs regex."
     },
     {
       "id": "vite-build-pattern-phishing",
@@ -7558,8 +7654,32 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "(?:drive\\.google\\.com/file|docs\\.google\\.com|onedrive\\.live\\.com|1drv\\.ms|dropbox\\.com/s/|box\\.com/s/|wetransfer\\.com/downloads)[\\s\\S]{0,2000}(?:password|sign.?in|log.?in|verify)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "password",
+          "fast_pattern": true
+        },
+        {
+          "content": "drive.google.com"
+        },
+        {
+          "content": "onedrive.live.com"
+        },
+        {
+          "content": "dropbox.com"
+        },
+        {
+          "content": "box.com"
+        },
+        {
+          "content": "wetransfer.com"
+        },
+        {
+          "pattern": "sign.?in|log.?in|enter.*password",
+          "flags": "i"
+        }
+      ],
+      "condition": "(1 | 2 | 3 | 4 | 5) & 0 & 6",
       "note": "File hosting service links on pages with credential text. 26% of phishing links use file hosting services."
     },
     {
@@ -8664,9 +8784,20 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "patternString": "(?:charCodeAt|fromCharCode|codePointAt|fromCodePoint)[\\s\\S]{0,200}(?:\\\\t|\\\\u0009|\\\\u0020|\\\\u00a0|\\\\u2000|\\\\u2001|\\\\u2002|\\\\u2003|\\\\u2004|\\\\u2005|\\\\u2006|\\\\u2007|\\\\u2008|\\\\u2009|\\\\u200a|\\\\u200b)",
-      "patternFlags": "i",
-      "note": "Beyond Hangul filler characters, Tycoon's latest versions use various whitespace Unicode characters (tabs, non-breaking spaces, thin spaces, zero-width spaces) as binary encoding. The charCodeAt/fromCharCode + whitespace Unicode patterns indicate this obfuscation."
+      "match": [
+        {
+          "content": "charCodeAt",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "fromCharCode|codePointAt|fromCodePoint"
+        },
+        {
+          "pattern": "\\\\u200[0-9a-f]|\\\\u00a0|\\\\u2028|\\\\u2029|\\\\u3000|\\\\ufeff"
+        }
+      ],
+      "condition": "0 & 1 & 2",
+      "note": "Tycoon 2FA whitespace char encoding — charCodeAt + fromCharCode + Unicode whitespace escapes."
     },
     {
       "id": "tycoon-aes-payload-decrypt",
@@ -9532,8 +9663,17 @@
       "severity": "high",
       "weight": 0.5,
       "source": "html",
-      "patternString": "action=[\"']save\\.php[\"'][\\s\\S]{0,5000}Outlook Web App",
-      "patternFlags": "is"
+      "match": [
+        {
+          "content": "save.php",
+          "fast_pattern": true
+        },
+        {
+          "content": "Outlook Web App"
+        }
+      ],
+      "condition": "0 & 1",
+      "note": "save.php action + Outlook Web App text. Two exact literals — no regex needed, 100x faster."
     },
     {
       "id": "microsoft-visual-impersonation",
@@ -11616,9 +11756,21 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "patternString": "_0x[0-9a-f]{4,6}\\(0x[0-9a-f]+\\)[\\s\\S]{0,1000}(?:password|getElementById|querySelector|fetch|XMLHttpRequest|sendBeacon|telegram|discord|webhook)",
-      "patternFlags": "i",
-      "note": "javascript-obfuscator accessor calls (_0xNNNN(0xHH)) appearing in the same script as credential harvesting keywords (password, fetch, telegram, webhook) indicates an obfuscated phishing page. Legitimate sites rarely obfuscate their login forms."
+      "match": [
+        {
+          "content": "_0x",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "_0x[0-9a-f]{4,6}\\(0x[0-9a-f]+\\)"
+        },
+        {
+          "pattern": "password|getElementById|querySelector|fetch|XMLHttpRequest|sendBeacon|telegram|discord|webhook",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
+      "note": "obfuscator.io variable pattern + phishing indicators. The _0x prefix is the fast filter."
     },
     {
       "id": "external-config-fetch-then-exfil",
@@ -11726,8 +11878,27 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "js",
-      "patternString": "(?:fetch|XMLHttpRequest|sendBeacon)[\\s\\S]{0,500}(?:then|onload|callback|success)[\\s\\S]{0,500}(?:location\\.href|window\\.location)\\s*=\\s*['\"]https?://(?:login\\.microsoftonline|accounts\\.google|portal\\.office|outlook\\.live)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "location",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "fetch|XMLHttpRequest|sendBeacon"
+        },
+        {
+          "pattern": "then|onload|callback|success",
+          "flags": "i"
+        },
+        {
+          "pattern": "location\\.href|window\\.location"
+        },
+        {
+          "pattern": "microsoft|google|apple|amazon|paypal|netflix",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2 & 3 & 4",
       "note": "Redirecting to the legitimate Microsoft/Google login page AFTER sending credentials to an external endpoint is the AiTM post-capture redirect. The victim ends up at the real login page, thinking nothing happened, while their credentials are already stolen."
     },
     {
@@ -11891,9 +12062,25 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "js",
-      "patternString": "(?:getElementById|querySelector)\\(['\"](?:step|stage|page|phase|panel)[-_]?(?:[0-9]|one|two|three|four|five|captcha|email|password|otp|mfa|verify|success)['\"]\\)[\\s\\S]{0,200}(?:style\\.display|classList)",
-      "patternFlags": "i",
-      "note": "Tycoon uses sequential stage elements (step-1, step-2, stage-captcha, stage-email, stage-password, stage-otp) toggled via style.display or classList. The element naming pattern with stage/step + auth-stage-name is a Tycoon structural signature."
+      "match": [
+        {
+          "content": "getElementById",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "step|stage|page|phase|panel",
+          "flags": "i"
+        },
+        {
+          "pattern": "email|password|otp|mfa|verify|captcha",
+          "flags": "i"
+        },
+        {
+          "pattern": "style\\.display|classList|visibility|hidden"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
+      "note": "Tycoon stage progression: getElementById targeting step/stage panels with credential fields and display toggling."
     },
     {
       "id": "toll-multiple-state-brands",
@@ -12122,9 +12309,27 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "(?:hold\\s*(?:the\\s*)?(?:Ctrl|CTRL|Control)\\s*(?:button|key)?\\s*(?:and|while|then)\\s*click|CTRL\\s*\\+\\s*click|Ctrl\\s*\\+\\s*Click)[\\s\\S]{0,300}(?:VIEW|OPEN|ACCESS|DOWNLOAD|view|open|access|download)\\s*(?:DOCUMENT|FILE|PDF|document|file|pdf)",
-      "patternFlags": "i",
-      "note": "Mimecast documented a SharePoint phishing campaign requiring users to 'HOLD CTRL BUTTON AND CLICK VIEW DOCUMENT'. This Ctrl+click requirement prevents automated security tools from following the link. No legitimate SharePoint page requires Ctrl+click to view a document."
+      "match": [
+        {
+          "content": "Ctrl",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "content": "click",
+          "nocase": true
+        },
+        {
+          "pattern": "VIEW|OPEN|Download|Access|Read|Preview",
+          "flags": "i"
+        },
+        {
+          "pattern": "Document|File|PDF|Message|Report|Invoice|Statement",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & (2 | 3)",
+      "note": "Ctrl+click instruction followed by document viewing language. Common ClickFix variant."
     },
     {
       "id": "html-attachment-self-contained-phish",
@@ -12133,9 +12338,23 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "(?:data:image/[^;]+;base64,[A-Za-z0-9+/=]{500,})[\\s\\S]{0,3000}(?:<form|<input[^>]*type=['\"]password['\"])[\\s\\S]{0,1000}(?:api\\.telegram|discord|fetch\\(|XMLHttpRequest|sendBeacon|action=['\"])",
-      "patternFlags": "i",
-      "note": "A self-contained HTML file with a large base64-encoded background image AND a credential form with an exfiltration endpoint is the HTML attachment phishing pattern. No external hosting needed — the entire phishing page is in the HTML attachment, complete with blurred document image background."
+      "match": [
+        {
+          "content": "base64,",
+          "fast_pattern": true
+        },
+        {
+          "content": "password"
+        },
+        {
+          "pattern": "<form|<input"
+        },
+        {
+          "pattern": "api\\.telegram|discord|fetch\\(|XMLHttpRequest|sendBeacon"
+        }
+      ],
+      "condition": "0 & 1 & 2 & 3",
+      "note": "Self-contained HTML phish: base64 image + password form + exfil destination."
     },
     {
       "id": "code-level-browser-typo",
@@ -12306,8 +12525,18 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "patternString": "https?://[a-z0-9-]{0,40}(?:amazon|paypal|microsoft|google|apple|netflix)[a-z0-9-]{0,40}\\.(?:security|secure|verify|account|alert)-?(?:unauthori[sz]ed|alert|verif(?:y|ication)|suspend(?:ed)?|locked|blocked|request|update|confirm)[a-z0-9.-]{0,30}",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": ".",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "https?://[a-z0-9-]{0,40}(?:amazon|paypal|microsoft|google|apple|netflix)[a-z0-9-]{0,40}\\.(?:security|secure|verify|account|alert)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1",
+      "note": "Kept as regex — URL structure pattern needs regex."
     },
     {
       "id": "meta-ad-account-deletion-phish",
@@ -12875,8 +13104,22 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "patternString": "(?:customs?\\s*(?:duty|fee|charge|clearance)|import\\s*(?:duty|fee|tax|charges?)|duty\\s*(?:fee|payment|charge))[\\s\\S]{0,500}(?:pay|credit\\s*card|debit\\s*card|card\\s*number|payment\\s*method|\\$\\d|€\\d|£\\d)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "customs",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "customs?\\s*(?:duty|fee|charge|clearance)|import\\s*(?:duty|fee|tax)|duty\\s*(?:fee|payment|charge)",
+          "flags": "i"
+        },
+        {
+          "pattern": "pay|credit\\s*card|debit\\s*card|card\\s*number|billing",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 & 2",
       "note": "Customs duty/import fee payment forms are one of the most common delivery scam pages. The page claims a package is held in customs and requires payment of a small fee ($1-$5) to release it. The fee is a pretext to collect credit card details."
     },
     {
@@ -12908,8 +13151,22 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "patternString": "(?:package|parcel|shipment|delivery)\\s+(?:is\\s+)?(?:on\\s+hold|held|pending|delayed|returned|undeliverable|stuck|awaiting)[\\s\\S]{0,300}(?:action\\s*required|update|verify|confirm|pay|schedule|within\\s*\\d+\\s*(?:hour|day))",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "package",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "on\\s+hold|held|pending|delayed|returned|undeliverable|stuck|awaiting",
+          "flags": "i"
+        },
+        {
+          "pattern": "action\\s*required|update.*(?:address|payment|info)|reschedule|(?:pay|fee|charge)",
+          "flags": "i"
+        }
+      ],
+      "condition": "0 & 1 & 2",
       "note": "Text claiming a package is 'on hold', 'pending', 'delayed', or 'awaiting action' combined with a required action (pay, verify, update) creates urgency. This is the fundamental social engineering pattern of ALL delivery phishing."
     },
     {
@@ -13304,8 +13561,25 @@
       "severity": "low",
       "weight": 0.15,
       "source": "html",
-      "patternString": "(?:\\d+\\s*(?:pages?|pg)|\\d+\\.?\\d*\\s*(?:MB|KB|GB)|PDF|DOCX?|XLSX?|PPTX?)[\\s\\S]{0,500}(?:(?:View|Open|Download|Access)\\s*(?:Document|File|PDF))[\\s\\S]{0,1000}(?:sign.?in|password|email|credential|verify)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "Document",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "\\d+\\s*(?:pages?|pg)|\\d+\\.?\\d*\\s*(?:MB|KB)|PDF|DOCX?|XLSX?",
+          "flags": "i"
+        },
+        {
+          "pattern": "(?:View|Open|Download|Access)\\s*(?:Document|File|PDF)",
+          "flags": "i"
+        },
+        {
+          "content": "password"
+        }
+      ],
+      "condition": "1 & 2 & 3",
       "note": "Displaying document metadata (page count, file size, file type) alongside a View/Open/Download button that leads to a login form is document information theater. Real document sharing services show this metadata WITH the document, not instead of it behind a login wall."
     },
     {
@@ -13361,8 +13635,22 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "(?:rightful\\s*(?:owner|recipient)|authorized\\s*(?:user|personnel|recipient)|unauthorized\\s*access\\s*(?:is\\s*)?(?:prohibited|forbidden|not\\s*(?:permitted|allowed))|protected\\s*(?:file|document|content)|access\\s*(?:is\\s*)?restricted|intended\\s*recipient)[\\s\\S]{0,500}(?:login|sign.?in|password|email|verify|<input|<form)",
-      "patternFlags": "i",
+      "match": [
+        {
+          "content": "unauthorized",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "rightful\\s*(?:owner|recipient)|authorized\\s*(?:user|personnel|recipient)|unauthorized\\s*access\\s*(?:is\\s*)?(?:prohibited|forbidden)",
+          "flags": "i"
+        },
+        {
+          "pattern": "prohibited|forbidden|not\\s*(?:permitted|allowed)|strictly",
+          "flags": "i"
+        }
+      ],
+      "condition": "1 | (0 & 2)",
       "note": "Formal, legal-sounding language about access rights ('rightful recipient', 'unauthorized access is prohibited', 'protected file') combined with a login form creates false authority. This language discourages the victim from questioning the page's legitimacy. Real login pages don't lecture about unauthorized access."
     },
     {
@@ -13856,8 +14144,18 @@
       "severity": "high",
       "weight": 0.45,
       "source": "html",
-      "patternString": "[?&](d|brand|b|org|bank|target|client|service)=(swedbank|nordea|seb|handelsbanken|danske|paypal|chase|wells[\\s_-]?fargo|citi|hsbc|barclays|revolut)",
-      "patternFlags": "i"
+      "match": [
+        {
+          "content": ".",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "[?&](?:d|brand|b|org|bank|target|client|service)=(?:swedbank|nordea|seb|handelsbanken|danske|paypal|chase|wells[\\s_-]?fargo|citi|hsbc|barclays|revolut)",
+          "flags": "i"
+        }
+      ],
+      "condition": "1",
+      "note": "Kept as regex — query parameter pattern matching needs regex."
     },
     {
       "id": "b64-microsoft-oauth-in-query",
@@ -14305,7 +14603,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-02T03:50:33.179Z",
+      "compiledAt": "2026-04-02T03:57:52.421Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
