@@ -306,6 +306,7 @@ Your job is to identify WHAT SPECIFIC RULE would catch this page locally without
 - What brand is being impersonated and is it missing from brand entries?
 - Is there a URL pattern, subdomain structure, or typosquat that should be a detection rule?
 - Is there a page source pattern (JS, form action, exfil endpoint) that's characteristic of this phishkit?
+- Does the page exfiltrate credentials to a distinctive endpoint (Telegram, Discord, suspicious PHP) that a network pattern could catch?
 Do NOT recommend NO_ACTION. Do NOT say "detection was correct" as a final answer — the detection worked but the RULE GAP still needs to be closed.
 
 ${RULE_WRITING_GUIDE ? `## RULE WRITING INSTRUCTIONS — FOLLOW THESE EXACTLY
@@ -449,6 +450,29 @@ ALWAYS do:
 - Bound all quantifiers: .{0,500} not .*, [\\s\\S]{0,2000} not [\\s\\S]*
 - Prefer "i" flag over "is" — only add "s" if you genuinely need dot to match newlines, and if so use [\\s\\S]{0,N} instead
 
+Network pattern (for matching outbound HTTP requests — destination URLs, POST bodies, field names):
+\`\`\`json
+{
+  "id": "network-pattern-id",
+  "group": "credentialHarvesting",
+  "description": "...",
+  "severity": "high",
+  "weight": 0.40,
+  "target": "url",
+  "transport": "any",
+  "patternString": "regex here",
+  "patternFlags": "i"
+}
+\`\`\`
+IMPORTANT — use network patterns when you want to match what the page SENDS, not what it contains:
+- target: "url" (match destination URL) | "body" (match POST body) | "fieldNames" (match extracted field name keys) | "any" (all combined)
+- transport: "any" (default, almost always correct) | "fetch" | "xhr" | "beacon" | "websocket"
+- Use "url" target for exfil endpoint detection (Telegram bot API, Discord webhook, PHP collector filenames)
+- Use "fieldNames" target for phishkit field naming conventions (victim, rezult, passw, usr_pass)
+- Use "body" target for distinctive payload shapes (base64-encoded credential blobs)
+- Do NOT write network patterns that would match: SSO logins (Okta, Google, Microsoft), analytics beacons, Stripe/PayPal, WordPress wp-login.php
+- Same group, weight, severity, and id rules as source patterns
+
 DOM structure hash (propose when template reuse is confirmed across 2+ domains):
 \`\`\`json
 {
@@ -469,7 +493,7 @@ DOM hash weight guidance:
 kitName convention: <brand>-<kit-family>-v<N> (e.g. "paypal-16shop-v3", "microsoft-evilginx-v2")
 If the hash appears in the DOM Structure Hash section above with 2+ unique dangerous domains, ALWAYS include a domHashes entry as one of your proposed rules.
 
-4. **Recommended action** (primary rule type — NO_ACTION IS NOT VALID for rule-gap issues): ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADJUST_WEIGHT / NEEDS_MANUAL_REVIEW` : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
+4. **Recommended action** (primary rule type — NO_ACTION IS NOT VALID for rule-gap issues): ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADD_NETWORK_PATTERN / ADJUST_WEIGHT / NEEDS_MANUAL_REVIEW` : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
 
 1. **What is this page?** Describe what you see visually. What brand does it impersonate? What is it asking the user to do?
 2. **Is this phishing?** Based on the page content. Be direct.
@@ -481,6 +505,7 @@ If the hash appears in the DOM Structure Hash section above with 2+ unique dange
    - ADJUST_WEIGHT — detected but wrong confidence, tune signal weights
    - ADD_BRAND_ENTRY — impersonated brand is missing from detection rules
    - ADD_SOURCE_PATTERN — specific page pattern should be added as a source rule
+   - ADD_NETWORK_PATTERN — distinctive outbound request pattern (exfil endpoint URL, POST body, field names) should be added as a network rule
    - NO_ACTION — detection was correct, close as intended
    - NEEDS_MANUAL_REVIEW — genuinely ambiguous
 6. **Proposed rule change** (if applicable): Exact JSON in Virgil schema format`}
@@ -496,7 +521,7 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
   // Sonnet generates (cheap, fast), Opus validates (expensive, thorough).
   const analysis = await claude(systemPrompt, userContent, isRuleGap ? 4000 : 2000, screenshotUrl, null);
 
-  const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|ADD_SOURCE_PATTERN|ADD_DOM_HASH_ENTRY|NO_ACTION|NEEDS_MANUAL_REVIEW/);
+  const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|ADD_SOURCE_PATTERN|ADD_NETWORK_PATTERN|ADD_DOM_HASH_ENTRY|NO_ACTION|NEEDS_MANUAL_REVIEW/);
   let action = actionMatch2?.[0] || 'NEEDS_MANUAL_REVIEW';
 
   // NO_ACTION is never valid for rule-gap issues — the detection worked but the gap still needs closing
@@ -511,6 +536,7 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
     ADJUST_WEIGHT:       'rule-updated',
     ADD_BRAND_ENTRY:     'rule-updated',
     ADD_SOURCE_PATTERN:  'rule-updated',
+    ADD_NETWORK_PATTERN: 'rule-updated',
     NO_ACTION:           'wont-fix',
     NEEDS_MANUAL_REVIEW: 'needs-triage',
   }[action] || 'needs-triage';

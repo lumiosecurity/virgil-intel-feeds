@@ -202,6 +202,89 @@ If no `fast_pattern` is explicitly set, the engine auto-selects the longest non-
 }
 ```
 
+### Network Pattern
+
+Network patterns match against **outbound HTTP request metadata** — destination URLs, POST body content, and field names — in real-time as requests fire from the page. Unlike source patterns (which scan static page content), network patterns observe what the page actually *does* with data.
+
+They run in the content script's exfiltration interceptor against `fetch()`, `XHR`, `navigator.sendBeacon()`, and `WebSocket.send()` calls. When a match fires, it adds `weight` to the cumulative risk score just like source patterns.
+
+**When to use network patterns instead of source patterns:**
+- The exfil endpoint URL is constructed dynamically in JavaScript (not visible in static HTML)
+- The distinctive signal is in the POST body content or field naming conventions, not the page source
+- You want to detect the actual exfiltration happening, not just the code that *could* exfiltrate
+- The phishing page's source is from a legitimate platform (Webflow, Google Sites) but the outbound requests reveal the phishing behavior
+
+```json
+{
+  "id": "network-telegram-bot-post",
+  "group": "phishkitSignatures",
+  "description": "POST to Telegram Bot API sendMessage endpoint — credential exfiltration in progress",
+  "severity": "high",
+  "weight": 0.50,
+  "target": "url",
+  "transport": "any",
+  "patternString": "api\\.telegram\\.org/bot[\\w:]{20,}/sendMessage",
+  "patternFlags": "i",
+  "note": "Actual exfil POST happening, not just URL in source code. No legitimate login page POSTs to Telegram."
+}
+```
+
+```json
+{
+  "id": "network-phishkit-field-names",
+  "group": "credentialHarvesting",
+  "description": "POST body contains phishkit-convention field names (victim, rezult, passw, usr_pass)",
+  "severity": "high",
+  "weight": 0.45,
+  "target": "fieldNames",
+  "transport": "any",
+  "patternString": "\\b(?:victim|rezult|usr_pass|passw[^o]|stolen|phish|cred_data|login_data|card_info|grab_data)\\b",
+  "patternFlags": "i",
+  "note": "Matches extracted field name keys. These are phishkit conventions never used by legitimate apps."
+}
+```
+
+#### Network Pattern `target` Selection Guide
+
+| What you're detecting | `target` | Example |
+|---|---|---|
+| Exfil endpoint URL patterns | `"url"` | Telegram bot API, Discord webhook, PHP collector filenames |
+| Credential data shape in POST body | `"body"` | Base64-encoded credential blobs, specific payload formats |
+| Phishkit field naming conventions | `"fieldNames"` | `victim`, `rezult`, `passw`, `log`, `cc_number` |
+| Could appear in URL or body | `"any"` | Brand names appearing in exfil context |
+
+#### Network Pattern `transport` Values
+
+Almost always use `"any"`. Transport-specific filtering is for rare cases where the transport choice itself is a signal:
+
+| Value | When to use |
+|---|---|
+| `"any"` | Default — match all transports |
+| `"beacon"` | Specifically detecting `sendBeacon()` exfil on page unload (stronger signal than regular fetch) |
+| `"websocket"` | Specifically detecting WebSocket-based exfil channels |
+| `"fetch"` / `"xhr"` | Rarely needed — most phishkits use either interchangeably |
+
+#### False Positive Considerations for Network Patterns
+
+Network patterns have DIFFERENT FP risks than source patterns:
+
+- **Legitimate SSO flows** POST credentials cross-origin (Okta, Azure AD, Google, Apple). Patterns matching `password` in POST body content will FP on every SSO login. Target the *destination URL* or *field names*, not generic credential field presence.
+- **Analytics beacons** fire on every page (`google-analytics.com`, `bat.bing.com`). Patterns matching beacon transport or common tracking URLs are noise.
+- **WordPress** sites legitimately POST to `wp-login.php` and `admin-ajax.php`. PHP endpoint patterns need to be more specific than "ends in `.php`".
+- **Payment processors** make cross-origin POSTs (`api.stripe.com`, `paypal.com`). Don't flag cross-origin credential POSTs to known payment APIs.
+- **Legitimate form backends** like HubSpot, Zapier, and Typeform receive POST data cross-origin. The endpoint URL alone isn't sufficient — combine with other signals.
+
+#### Network Pattern Weight Calibration
+
+Network patterns observe *actual behavior*, not just *page content*. A page containing a Telegram bot token in JavaScript might never execute that code. A page that actually POSTs data to `api.telegram.org/bot.../sendMessage` is definitively exfiltrating. This means network pattern matches carry more inherent signal, but the weights should still reflect specificity:
+
+| Weight | Network pattern examples |
+|---|---|
+| **0.45–0.50** | POST to Telegram Bot API sendMessage. POST body field named `victim` or `rezult`. Discord webhook with full token. |
+| **0.35–0.40** | POST to PHP endpoint with phishkit filename (`send.php`, `grab.php`). Body contains base64 blob alongside credential fields. |
+| **0.20–0.30** | POST body field names include common phishkit conventions (`log`, `passw`). Destination is a free hosting domain different from page domain. |
+| **0.10–0.15** | Cross-origin POST with body (too broad alone, stacks with other signals). |
+
 ---
 
 ## Field Constraints — Exact Valid Values
@@ -246,6 +329,33 @@ ONLY three values: `"html"`, `"js"`, `"both"`
 - ~~`"text"`~~ — page text is in the HTML. Use `"html"`.
 - ~~`"hostname"`~~ — hostname analysis is in `domain-analyzer.js`, not source patterns. If your pattern scans something in the page source that includes a hostname, use `"html"` or `"both"`.
 - ~~`"css"`~~ — inline styles are in the HTML. Use `"html"`.
+
+### `target` (for network patterns)
+ONLY four values: `"url"`, `"body"`, `"fieldNames"`, `"any"`
+
+- `"url"` — match against the destination URL of the outbound request
+- `"body"` — match against the serialized POST body content
+- `"fieldNames"` — match against space-separated lowercase field name keys extracted from the body
+- `"any"` — match against URL + body + fieldNames concatenated
+
+**Do not use:**
+
+- ~~`"request"`~~ → use `"any"`
+- ~~`"destination"`~~ → use `"url"`
+- ~~`"payload"`~~ → use `"body"`
+- ~~`"fields"`~~ → use `"fieldNames"`
+- ~~`"post"`~~ → `target` is what to match against, not the HTTP method. Use `"body"` or `"url"`.
+
+### `transport` (for network patterns)
+ONLY five values: `"any"`, `"fetch"`, `"xhr"`, `"beacon"`, `"websocket"`
+
+Default is `"any"` — almost all network patterns should use this. Only specify a transport when the transport choice itself is the signal (e.g., `"beacon"` for sendBeacon exfil on page unload).
+
+**Do not use:**
+
+- ~~`"http"`~~ → use `"any"`
+- ~~`"post"`~~ → use `"fetch"` (or more likely `"any"`)
+- ~~`"request"`~~ → use `"any"`
 
 ### `severity`
 `"high"`, `"medium"`, or `"low"`. Nothing else.
@@ -866,6 +976,21 @@ Before including a rule in your response, verify ALL of these:
 - [ ] Typos share at least 4 characters with the brand name (for brands ≥ 6 chars long)
 - [ ] No typos overlap with Tranco top-1000 domain names
 
+**For network patterns:**
+- [ ] `id` matches `^[a-z0-9-]+$` and is not a placeholder
+- [ ] `group` is one of the 13 valid values listed in this document
+- [ ] `target` is `"url"`, `"body"`, `"fieldNames"`, or `"any"` — nothing else
+- [ ] `transport` is `"any"`, `"fetch"`, `"xhr"`, `"beacon"`, or `"websocket"` (default `"any"`)
+- [ ] `weight` is between 0.05 and 0.50, calibrated to pattern specificity
+- [ ] `patternString` has all backslashes double-escaped for JSON
+- [ ] `patternString` would compile in `new RegExp(patternString, patternFlags)` without throwing
+- [ ] The pattern would NOT match legitimate SSO logins (Okta, Google, Microsoft, Apple)
+- [ ] The pattern would NOT match analytics beacons (Google Analytics, Bing, TikTok)
+- [ ] The pattern would NOT match legitimate payment processor APIs (Stripe, PayPal)
+- [ ] The pattern would NOT match WordPress endpoints (wp-login.php, admin-ajax.php)
+- [ ] `description` is a real sentence, not placeholder text
+- [ ] `severity` is `"high"`, `"medium"`, or `"low"`
+
 ---
 
 ## The Normalize Safety Net — Do Not Rely On It
@@ -877,6 +1002,10 @@ If your output has invalid field values, the normalize workflow remaps them:
 **Group:** `"typosquatDetection"` → `"typosquatPatterns"`, `"typosquats"` → `"typosquatPatterns"`, `"domainHeuristics"` → `"urlHeuristics"`, `"hosting"` → `"hostingPatterns"`
 
 **Vertical:** `"email"` → `"general"`, `"social-media-business"` → `"social"`, `"telecommunications"` → `"telecom"`
+
+**Target (network patterns):** `"request"` → `"any"`, `"destination"` → `"url"`, `"payload"` → `"body"`, `"fields"` → `"fieldNames"`
+
+**Transport (network patterns):** `"request"` → `"any"`, `"http"` → `"any"`, `"post"` → `"fetch"`, `"get"` → `"fetch"`
 
 These remappings exist because agents have historically produced these exact invalid values. Use valid values from the start.
 
@@ -929,6 +1058,18 @@ You're asked for the top 3 rules. Often the best set is a MIX of rule types, not
 - The code contains an exfil endpoint, anti-forensics technique, or kit-specific function structure
 - The pattern you'd write would NOT match the legitimate site's actual login page
 
+**Choose ADD_NETWORK_PATTERN when:**
+- The exfiltration destination URL is distinctive (Telegram bot API, Discord webhook, PHP collector like `send.php`)
+- The POST body contains phishkit-convention field names (`victim`, `rezult`, `passw`) that no legitimate site uses
+- The page source is from a legitimate platform (Webflow, Google Sites) but the outbound requests reveal the phishing — source patterns can't help, but the POST destination or body content is distinctive
+- You want to catch the actual exfiltration happening, not just the code that exists in the page
+- The exfil endpoint URL is constructed dynamically in JavaScript and doesn't appear in the static HTML source
+
+**Do NOT choose ADD_NETWORK_PATTERN when:**
+- The pattern would match legitimate SSO flows, analytics beacons, payment processors, or WordPress endpoints
+- The only distinctive thing is that a cross-origin POST exists (too broad — many legitimate sites do this)
+- A source pattern already covers the same exfil endpoint URL in the page HTML/JS — the source pattern is sufficient
+
 **Choose ADJUST_WEIGHT when:**
 - The signals that fired were correct but their combined weight was too low
 - A specific signal is underweighted relative to its distinctiveness
@@ -940,6 +1081,7 @@ When you rank your 3 proposed rules, rank by this: **How many FUTURE phishing pa
 Rank higher:
 - Brand entries for commonly phished brands not yet in the ruleset (catches ALL future campaigns against that brand)
 - Source patterns matching widely-reused phishkit code (Telegram exfil, common PHP mailer scripts)
+- Network patterns matching definitive exfil endpoints (Telegram bot POST, Discord webhook POST) — these catch the actual exfiltration even when the source code is obfuscated or dynamically generated
 - Typosquat patterns that cover a whole class of domain generation (e.g., brand + random 4-digit suffix)
 
 Rank lower:
@@ -1150,7 +1292,7 @@ Source: html | Weight: 0.40 | Group: phishkitSignatures
 Not every rule-gap issue has a clean local rule solution. These are valid responses:
 
 - **"The phishing is entirely visual — the page is a screenshot/image with no HTML form."** OCR patterns exist for this but source patterns won't help. Say so.
-- **"The page uses a legitimate hosting platform (Webflow, Google Sites, Netlify) and the only distinguishing factor is the content, not the code."** A brand entry or URL heuristic may help but a source pattern probably won't — the page source is the platform's legitimate code.
+- **"The page uses a legitimate hosting platform (Webflow, Google Sites, Netlify) and the only distinguishing factor is the content, not the code."** A brand entry or URL heuristic may help but a source pattern probably won't — the page source is the platform's legitimate code. However, if the page exfiltrates credentials to a distinctive endpoint (Telegram, Discord, suspicious PHP), a **network pattern** matching the outbound POST destination can work even when source patterns can't.
 - **"The page source was not available and I cannot propose source patterns without seeing the actual code."** This is better than guessing.
 - **"The only distinctive pattern in the source is already covered by existing rules — the gap is a weight calibration issue, not a missing pattern."** Propose ADJUST_WEIGHT instead of inventing a redundant pattern.
 
@@ -1167,4 +1309,4 @@ If yes → don't propose it, or make it more specific.
 Match the weight to how unique the pattern is, not to how severe phishing is as a threat.
 
 **3. Are all field values from the valid enum lists in this document?**
-If you have to invent a `group`, `source`, or `vertical` value, you're doing it wrong.
+If you have to invent a `group`, `source`, `target`, `transport`, or `vertical` value, you're doing it wrong.
