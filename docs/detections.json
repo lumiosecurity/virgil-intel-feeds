@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-02-04:10",
-    "generatedAt": "2026-04-02T04:10:01.765Z",
+    "version": "2026-04-02-04:22",
+    "generatedAt": "2026-04-02T04:22:43.768Z",
     "brandCount": 187,
     "patternCount": 962
   },
@@ -22439,10 +22439,10 @@
       "id": "keylogger-keypress-accumulate",
       "group": "phishkitSignatures",
       "description": "Keystroke accumulation via keypress/keydown handler — credential keylogger pattern",
-      "severity": "high",
-      "weight": 0.45,
+      "severity": "low",
+      "weight": 0.05,
       "source": "js",
-      "note": "Keystroke accumulation + exfil destination. Requires fetch/XHR/beacon/Image after accumulation — without exfil context, this is just a keyboard handler.",
+      "note": "Observation-level signal: keystroke accumulation + exfil destination present on same page. Too generic alone (fires on SPAs with search-as-you-type). Weight 0.05 — will become a building block for meta-rules that combine this with other signals (no visible input, external exfil domain, global document listener).",
       "match": [
         {
           "content": "addEventListener",

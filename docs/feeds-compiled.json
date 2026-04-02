@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T04:10:01.742Z",
+    "compiledAt": "2026-04-02T04:22:43.748Z",
     "brandCount": 187,
     "signalCount": 1,
     "patternCount": 962,
@@ -11320,8 +11320,8 @@
       "id": "keylogger-keypress-accumulate",
       "group": "phishkitSignatures",
       "description": "Keystroke accumulation via keypress/keydown handler — credential keylogger pattern",
-      "severity": "high",
-      "weight": 0.45,
+      "severity": "low",
+      "weight": 0.05,
       "source": "js",
       "match": [
         {
@@ -11339,7 +11339,7 @@
         }
       ],
       "condition": "0 & 1 & 2 & 3",
-      "note": "Keystroke accumulation + exfil destination. Requires fetch/XHR/beacon/Image after accumulation — without exfil context, this is just a keyboard handler."
+      "note": "Observation-level signal: keystroke accumulation + exfil destination present on same page. Too generic alone (fires on SPAs with search-as-you-type). Weight 0.05 — will become a building block for meta-rules that combine this with other signals (no visible input, external exfil domain, global document listener)."
     },
     {
       "id": "window-opener-blank-redirect",
@@ -16227,7 +16227,7 @@
   "domHashes": [],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-02T04:08:52.234Z",
+      "compiledAt": "2026-04-02T04:09:59.436Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
