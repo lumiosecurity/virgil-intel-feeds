@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-03T00:59:01.439Z",
+    "compiledAt": "2026-04-03T01:00:02.037Z",
     "brandCount": 187,
     "signalCount": 1,
-    "patternCount": 1081,
-    "networkPatternCount": 18,
+    "patternCount": 1083,
+    "networkPatternCount": 19,
     "domHashCount": 0,
     "metaRuleCount": 28
   },
@@ -8587,6 +8587,17 @@
       "note": "Phishkits use localStorage to persist attempt counters across page reloads. After N attempts, they redirect to the real site. This pattern is near-exclusive to phishkits."
     },
     {
+      "id": "smtpjs-meta-impersonation",
+      "group": "credentialHarvesting",
+      "description": "SMTP.js library loaded on page impersonating Meta/Facebook business services",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "smtpjs\\.com[/\\w]*smtp\\.js[\\s\\S]{0,5000}(?:facebook|meta|ad\\s+account|advertising\\s+account)",
+      "patternFlags": "i",
+      "note": "SMTP.js is used by phishkits for email-based credential exfiltration. Legitimate Meta services use internal APIs, never third-party email libraries."
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -16385,6 +16396,17 @@
       "note": "Detects fake appeal codes with specific format patterns used in Meta impersonation scams - real Meta doesn't use this code structure"
     },
     {
+      "id": "urgent-suspension-appeal-code-scam",
+      "group": "socialEngineering",
+      "description": "Urgent account suspension warning with appeal code mechanism",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:suspended?|disabled?|terminated?)[\\s\\S]{0,300}(?:48|24)\\s+hours?[\\s\\S]{0,500}appeal\\s+code[\\s\\S]{0,500}(?:click\\s+to\\s+copy|exactly\\s+as\\s+shown)",
+      "patternFlags": "i",
+      "note": "Combines urgency tactics (suspension + time limit) with appeal code harvesting mechanism. Pattern specific enough to avoid legitimate account recovery pages."
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -17688,6 +17710,18 @@
       "note": "SMTP.js is a client-side email library commonly used by phishkits to exfiltrate stolen credentials - no legitimate login page uses this"
     },
     {
+      "id": "network-smtpjs-exfiltration",
+      "group": "credentialHarvesting",
+      "description": "POST request to SMTP.js API for email-based credential exfiltration",
+      "severity": "high",
+      "weight": 0.45,
+      "target": "url",
+      "transport": "any",
+      "patternString": "smtpjs\\.com[/\\w]*(?:send|api|mail)",
+      "patternFlags": "i",
+      "note": "Catches actual credential exfiltration via SMTP.js email service. No legitimate business application would use SMTP.js for sensitive data transmission."
+    },
+    {
       "id": "network-telegram-bot-post",
       "group": "phishkitSignatures",
       "description": "POST to Telegram Bot API sendMessage endpoint — credential exfiltration in progress",
@@ -18773,7 +18807,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-03T00:58:26.430Z",
+      "compiledAt": "2026-04-03T00:58:58.798Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
