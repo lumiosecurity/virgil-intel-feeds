@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-03T06:16:25.501Z",
+    "compiledAt": "2026-04-03T16:32:56.581Z",
     "brandCount": 188,
     "signalCount": 1,
-    "patternCount": 1091,
+    "patternCount": 1092,
     "networkPatternCount": 19,
     "domHashCount": 0,
     "metaRuleCount": 28
@@ -5704,6 +5704,17 @@
       "patternString": "(?:facebook|fb)[^<]{0,500}checkpoint[^<]{0,2000}approvals_code[^<]{0,2000}submit\\[Submit\\s+Code\\]",
       "patternFlags": "i",
       "note": "Matches Facebook-branded pages with 2FA checkpoint form structure - distinctive combination rarely seen on legitimate sites"
+    },
+    {
+      "id": "microsoft-email-phone-skype-pattern",
+      "group": "brandImpersonation",
+      "description": "Microsoft-specific login placeholder text on suspicious domain",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:Email[,\\s]*phone[\\s]*(?:or|&)[\\s]*Skype|phone[\\s]*(?:or|&)[\\s]*Skype)",
+      "patternFlags": "i",
+      "note": "Highly specific Microsoft login field placeholder text that legitimate non-Microsoft sites would never use"
     },
     {
       "id": "fake-captcha-gating",
@@ -18914,7 +18925,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-03T02:50:27.091Z",
+      "compiledAt": "2026-04-03T06:16:22.382Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

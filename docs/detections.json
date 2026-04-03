@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-03-06:16",
-    "generatedAt": "2026-04-03T06:16:25.526Z",
+    "version": "2026-04-03-16:32",
+    "generatedAt": "2026-04-03T16:32:56.605Z",
     "brandCount": 188,
-    "patternCount": 1091,
+    "patternCount": 1092,
     "networkPatternCount": 19
   },
   "brandEntries": [
@@ -16671,6 +16671,17 @@
       "source": "html",
       "note": "Matches Facebook-branded pages with 2FA checkpoint form structure - distinctive combination rarely seen on legitimate sites",
       "patternString": "(?:facebook|fb)[^<]{0,500}checkpoint[^<]{0,2000}approvals_code[^<]{0,2000}submit\\[Submit\\s+Code\\]",
+      "patternFlags": "i"
+    },
+    {
+      "id": "microsoft-email-phone-skype-pattern",
+      "group": "brandImpersonation",
+      "description": "Microsoft-specific login placeholder text on suspicious domain",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "note": "Highly specific Microsoft login field placeholder text that legitimate non-Microsoft sites would never use",
+      "patternString": "(?:Email[,\\s]*phone[\\s]*(?:or|&)[\\s]*Skype|phone[\\s]*(?:or|&)[\\s]*Skype)",
       "patternFlags": "i"
     },
     {
