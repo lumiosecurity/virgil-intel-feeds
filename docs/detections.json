@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-04-03-00:58",
-    "generatedAt": "2026-04-03T00:58:29.141Z",
+    "version": "2026-04-03-00:59",
+    "generatedAt": "2026-04-03T00:59:01.461Z",
     "brandCount": 187,
-    "patternCount": 1079,
-    "networkPatternCount": 17
+    "patternCount": 1081,
+    "networkPatternCount": 18
   },
   "brandEntries": [
     {
@@ -2983,7 +2983,10 @@
     ".club": 0.2,
     ".cm": 0.2,
     ".co.cl": 0.2,
+    ".co.id": 0.2,
     ".co.za": 0.2,
+    ".com.ge": 0.2,
+    ".com.py": 0.2,
     ".company": 0.2,
     ".consulting": 0.2,
     ".country": 0.2,
@@ -27487,6 +27490,28 @@
       "patternFlags": "i"
     },
     {
+      "id": "meta-fake-copyright-enforcement",
+      "group": "socialEngineering",
+      "description": "Fake Facebook copyright enforcement notice threatening account suspension",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "note": "Matches fake AI copyright enforcement warnings with time pressure - legitimate Meta notices don't use this exact phrasing pattern",
+      "patternString": "AI-detected\\s+copyright\\s+enforcement[\\s\\S]{0,2000}(?:suspended|disabled)\\s+(?:within|in)[\\s\\S]{0,100}(?:48\\s+hours?|24\\s+hours?)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "fake-meta-appeal-code",
+      "group": "socialEngineering",
+      "description": "Fake Meta/Facebook account appeal code with suspicious format",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Detects fake appeal codes with specific format patterns used in Meta impersonation scams - real Meta doesn't use this code structure",
+      "patternString": "(?:appeal\\s+code|account\\s+code)[\\s\\S]{0,300}(?:ST9|[A-Z]{2,3})-\\d{12,20}[\\s\\S]{0,200}(?:click\\s+to\\s+copy|never\\s+share)",
+      "patternFlags": "i"
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -28813,6 +28838,18 @@
       "patternString": "getform\\.io/f/[a-zA-Z0-9-]+",
       "patternFlags": "i",
       "note": "getform.io is a form endpoint service frequently abused by phishkits for credential collection."
+    },
+    {
+      "id": "network-smtpjs-exfil",
+      "group": "credentialHarvesting",
+      "description": "SMTP.js library loaded for email-based credential exfiltration",
+      "severity": "high",
+      "weight": 0.4,
+      "target": "url",
+      "transport": "any",
+      "patternString": "smtpjs\\.com/v\\d+/smtp\\.js",
+      "patternFlags": "i",
+      "note": "SMTP.js is a client-side email library commonly used by phishkits to exfiltrate stolen credentials - no legitimate login page uses this"
     },
     {
       "id": "network-telegram-bot-post",
