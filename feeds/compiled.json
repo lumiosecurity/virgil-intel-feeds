@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-03T19:09:15.165Z",
+    "compiledAt": "2026-04-03T22:43:46.804Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -492,6 +492,7 @@
     "elementor.cloud",
     "figma.com",
     "flipsnack.com",
+    "flutterflow.app",
     "forms.weavely.ai",
     "formstack.com",
     "frame.io",
@@ -512,6 +513,7 @@
     "lovable.app",
     "mixpanel.com",
     "mockflow.com",
+    "orbitor.dev",
     "padlet.com",
     "powerappsportals.com",
     "powr.io",

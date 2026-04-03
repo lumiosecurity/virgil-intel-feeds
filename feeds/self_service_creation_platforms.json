@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/self_service_creation_platform_domains.txt",
-    "syncedAt": "2026-04-03T19:09:11.002Z",
+    "syncedAt": "2026-04-03T22:43:42.640Z",
     "role": "free_subdomain_hosts",
     "description": "Self-service website creation platforms where anyone can host content",
-    "count": 89
+    "count": 91
   },
   "entries": [
     "acrobat.adobe.com",
@@ -40,6 +40,7 @@
     "elementor.cloud",
     "figma.com",
     "flipsnack.com",
+    "flutterflow.app",
     "forms.weavely.ai",
     "formstack.com",
     "frame.io",
@@ -63,6 +64,7 @@
     "mockflow.com",
     "netlify.app",
     "onrender.com",
+    "orbitor.dev",
     "padlet.com",
     "powerappsportals.com",
     "powr.io",

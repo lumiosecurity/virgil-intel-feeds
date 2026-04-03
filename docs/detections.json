@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-03-19:09",
-    "generatedAt": "2026-04-03T19:09:17.903Z",
+    "version": "2026-04-03-22:43",
+    "generatedAt": "2026-04-03T22:43:49.256Z",
     "brandCount": 190,
-    "patternCount": 1092,
+    "patternCount": 1094,
     "networkPatternCount": 19
   },
   "brandEntries": [
@@ -16729,6 +16729,28 @@
       "note": "Highly specific Microsoft login field placeholder text that legitimate non-Microsoft sites would never use",
       "patternString": "(?:Email[,\\s]*phone[\\s]*(?:or|&)[\\s]*Skype|phone[\\s]*(?:or|&)[\\s]*Skype)",
       "patternFlags": "i"
+    },
+    {
+      "id": "fake-google-oauth-consent-ui",
+      "group": "brandImpersonation",
+      "description": "Fake Google OAuth consent screen UI elements on non-Google domain",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "note": "Detects Google consent screen text patterns (Choose an account, Sign in with Google, One account All of Google) on non-Google domains — characteristic of fake OAuth phishing pages",
+      "patternString": "(?:accounts\\.google\\.com.*Choose an account|Sign in with Google.*One account.*All of Google)(?!.*accounts\\.google\\.com)",
+      "patternFlags": "is"
+    },
+    {
+      "id": "fake-microsoft-oauth-consent-ui",
+      "group": "brandImpersonation",
+      "description": "Fake Microsoft OAuth consent screen UI on non-Microsoft domain",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "note": "Detects Microsoft consent screen text patterns (Pick an account, Stay signed in) on non-Microsoft domains — characteristic of fake OAuth phishing pages",
+      "patternString": "(?:Pick an account|Sign in to your account).*(?:Stay signed in|microsoft\\.com)(?!.*login\\.microsoftonline\\.com)",
+      "patternFlags": "is"
     },
     {
       "id": "fake-captcha-gating",

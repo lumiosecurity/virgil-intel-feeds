@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-03T19:09:17.879Z",
+    "compiledAt": "2026-04-03T22:43:49.233Z",
     "brandCount": 190,
     "signalCount": 1,
-    "patternCount": 1092,
+    "patternCount": 1094,
     "networkPatternCount": 19,
     "domHashCount": 0,
     "metaRuleCount": 28
@@ -5760,6 +5760,28 @@
       "patternString": "(?:Email[,\\s]*phone[\\s]*(?:or|&)[\\s]*Skype|phone[\\s]*(?:or|&)[\\s]*Skype)",
       "patternFlags": "i",
       "note": "Highly specific Microsoft login field placeholder text that legitimate non-Microsoft sites would never use"
+    },
+    {
+      "id": "fake-google-oauth-consent-ui",
+      "group": "brandImpersonation",
+      "description": "Fake Google OAuth consent screen UI elements on non-Google domain",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "(?:accounts\\.google\\.com.*Choose an account|Sign in with Google.*One account.*All of Google)(?!.*accounts\\.google\\.com)",
+      "patternFlags": "is",
+      "note": "Detects Google consent screen text patterns (Choose an account, Sign in with Google, One account All of Google) on non-Google domains — characteristic of fake OAuth phishing pages"
+    },
+    {
+      "id": "fake-microsoft-oauth-consent-ui",
+      "group": "brandImpersonation",
+      "description": "Fake Microsoft OAuth consent screen UI on non-Microsoft domain",
+      "severity": "high",
+      "weight": 0.45,
+      "source": "html",
+      "patternString": "(?:Pick an account|Sign in to your account).*(?:Stay signed in|microsoft\\.com)(?!.*login\\.microsoftonline\\.com)",
+      "patternFlags": "is",
+      "note": "Detects Microsoft consent screen text patterns (Pick an account, Stay signed in) on non-Microsoft domains — characteristic of fake OAuth phishing pages"
     },
     {
       "id": "fake-captcha-gating",
@@ -18970,7 +18992,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-03T19:02:04.115Z",
+      "compiledAt": "2026-04-03T19:09:15.165Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
