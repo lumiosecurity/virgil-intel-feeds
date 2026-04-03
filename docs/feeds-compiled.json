@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-03T19:02:05.812Z",
-    "brandCount": 189,
+    "compiledAt": "2026-04-03T19:09:17.879Z",
+    "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1092,
     "networkPatternCount": 19,
@@ -1649,6 +1649,27 @@
         "allstete"
       ],
       "note": "Allstate insurance targeted for policy and payment credential phishing."
+    },
+    {
+      "name": "societegenerale",
+      "domains": [
+        "societegenerale.fr",
+        "particuliers.sg.fr",
+        "sg.fr"
+      ],
+      "typos": [
+        "societegeneraie",
+        "soci3tegenerale",
+        "societegennrale",
+        "societegenera1e",
+        "societegeneralee",
+        "socletegenerale",
+        "societgenerale",
+        "socie-tegenerale",
+        "eurogenerale",
+        "societegnerale"
+      ],
+      "vertical": "financial"
     },
     {
       "name": "bet365",
@@ -18949,7 +18970,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-03T16:32:54.782Z",
+      "compiledAt": "2026-04-03T19:02:04.115Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -20002,6 +20023,7 @@
       "xzb.cc",
       "yep.it",
       "yfrog.com",
+      "ytube.io",
       "yweb.com",
       "zat.ink",
       "zfrmz.com",
