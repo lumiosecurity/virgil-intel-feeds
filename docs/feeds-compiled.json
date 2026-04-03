@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-03T16:32:56.581Z",
-    "brandCount": 188,
+    "compiledAt": "2026-04-03T19:02:05.812Z",
+    "brandCount": 189,
     "signalCount": 1,
     "patternCount": 1092,
     "networkPatternCount": 19,
@@ -2865,6 +2865,30 @@
         "googel",
         "goog1e"
       ]
+    },
+    {
+      "name": "outlook",
+      "domains": [
+        "outlook.com",
+        "outlook.live.com",
+        "outlook.office.com",
+        "outlook.office365.com"
+      ],
+      "typos": [
+        "outlooko",
+        "outl00k",
+        "0utlook",
+        "outlookk",
+        "outlooc",
+        "outlok",
+        "outiook",
+        "outlo0k",
+        "outlooq",
+        "outllook",
+        "outlool",
+        "outloook"
+      ],
+      "vertical": "sso"
     },
     {
       "name": "microsoftonedrive",
@@ -18925,7 +18949,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-03T06:16:22.382Z",
+      "compiledAt": "2026-04-03T16:32:54.782Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

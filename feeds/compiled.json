@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-03T16:32:54.782Z",
+    "compiledAt": "2026-04-03T19:02:04.115Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -1053,6 +1053,7 @@
     "xzb.cc",
     "yep.it",
     "yfrog.com",
+    "ytube.io",
     "yweb.com",
     "zat.ink",
     "zfrmz.com",

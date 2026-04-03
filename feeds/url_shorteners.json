@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/url_shorteners.txt",
-    "syncedAt": "2026-04-03T16:32:51.946Z",
+    "syncedAt": "2026-04-03T19:02:01.850Z",
     "role": "url_shorteners",
     "description": "URL shorteners that can mask phishing destinations",
-    "count": 336
+    "count": 337
   },
   "entries": [
     "1in.me",
@@ -335,6 +335,7 @@
     "xzb.cc",
     "yep.it",
     "yfrog.com",
+    "ytube.io",
     "yweb.com",
     "zat.ink",
     "zfrmz.com",
