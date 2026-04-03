@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-03-01:02",
-    "generatedAt": "2026-04-03T01:02:39.804Z",
-    "brandCount": 187,
-    "patternCount": 1086,
+    "version": "2026-04-03-01:11",
+    "generatedAt": "2026-04-03T01:11:56.177Z",
+    "brandCount": 188,
+    "patternCount": 1088,
     "networkPatternCount": 19
   },
   "brandEntries": [
@@ -2929,6 +2929,25 @@
       ]
     },
     {
+      "name": "telstra",
+      "vertical": "telecom",
+      "domains": [
+        "telstra.com",
+        "telstra.com.au",
+        "myid.telstra.com"
+      ],
+      "typos": [
+        "te1stra",
+        "telstarr",
+        "telsra",
+        "tellstra",
+        "telstra-au",
+        "myid-telstra",
+        "telstra-myid",
+        "telstarid"
+      ]
+    },
+    {
       "name": "bellsouth",
       "vertical": "telecommunications",
       "domains": [
@@ -2983,7 +3002,10 @@
     ".club": 0.2,
     ".cm": 0.2,
     ".co.cl": 0.2,
+    ".co.id": 0.2,
     ".co.za": 0.2,
+    ".com.ge": 0.2,
+    ".com.py": 0.2,
     ".company": 0.2,
     ".consulting": 0.2,
     ".country": 0.2,
@@ -16619,6 +16641,17 @@
       "patternFlags": "i"
     },
     {
+      "id": "flutterflow-telecom-signin-impersonation",
+      "group": "brandImpersonation",
+      "description": "FlutterFlow app impersonating telecom brand sign-in with myid pattern",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Telecom brand sign-in impersonation on FlutterFlow platform - legitimate myid flows don't use third-party hosting",
+      "patternString": "<title[^>]*>Sign\\s+in\\s+with\\s+your\\s+(?:Telstra|Vodafone|Optus|T-Mobile|Verizon|AT&T)\\s+ID[^<]*</title>[\\s\\S]{0,5000}flutterflow",
+      "patternFlags": "i"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -28755,6 +28788,17 @@
       "source": "html",
       "note": "Detects logistics brands hosted on suspicious TLDs commonly used for delivery scams",
       "patternString": "(?:dpd|ups|fedex|dhl|usps|royal-?mail|hermes|yodel)\\.[\\w-]+\\.(?:bond|top|click|download|stream|science|work|fun|party|review|loan)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "myid-brand-flutterflow-hosting",
+      "group": "urlHeuristics",
+      "description": "MyID-branded content hosted on FlutterFlow platform",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "note": "Official myid services use brand-owned domains, not third-party app platforms",
+      "patternString": "<meta[^>]+content=[\"']myid\\.(?:telstra|optus|vodafone)[^\"']*[\"'][\\s\\S]{0,3000}flutterflow",
       "patternFlags": "i"
     }
   ],

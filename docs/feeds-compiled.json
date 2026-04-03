@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-03T01:02:39.782Z",
-    "brandCount": 187,
+    "compiledAt": "2026-04-03T01:11:56.154Z",
+    "brandCount": 188,
     "signalCount": 1,
-    "patternCount": 1086,
+    "patternCount": 1088,
     "networkPatternCount": 19,
     "domHashCount": 0,
     "metaRuleCount": 28
@@ -3041,6 +3041,25 @@
       "note": "Verizon is a top targeted telecom brand for account takeover and SIM swap phishing."
     },
     {
+      "name": "telstra",
+      "domains": [
+        "telstra.com",
+        "telstra.com.au",
+        "myid.telstra.com"
+      ],
+      "typos": [
+        "te1stra",
+        "telstarr",
+        "telsra",
+        "tellstra",
+        "telstra-au",
+        "myid-telstra",
+        "telstra-myid",
+        "telstarid"
+      ],
+      "vertical": "telecom"
+    },
+    {
       "name": "bellsouth",
       "domains": [
         "bellsouth.net",
@@ -5652,6 +5671,17 @@
       "patternString": "Windows\\s+(?:11|10|Defender)[\\s\\S]{0,800}(?:Support|Technical|Helpline)[\\s\\S]{0,300}\\+?1-[0-9]{3}-[0-9]{3}-[0-9]{4}",
       "patternFlags": "i",
       "note": "Microsoft never displays phone numbers for Windows support in browser security alerts - definitive impersonation signal"
+    },
+    {
+      "id": "flutterflow-telecom-signin-impersonation",
+      "group": "brandImpersonation",
+      "description": "FlutterFlow app impersonating telecom brand sign-in with myid pattern",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<title[^>]*>Sign\\s+in\\s+with\\s+your\\s+(?:Telstra|Vodafone|Optus|T-Mobile|Verizon|AT&T)\\s+ID[^<]*</title>[\\s\\S]{0,5000}flutterflow",
+      "patternFlags": "i",
+      "note": "Telecom brand sign-in impersonation on FlutterFlow platform - legitimate myid flows don't use third-party hosting"
     },
     {
       "id": "fake-captcha-gating",
@@ -17595,6 +17625,17 @@
       "patternString": "(?:dpd|ups|fedex|dhl|usps|royal-?mail|hermes|yodel)\\.[\\w-]+\\.(?:bond|top|click|download|stream|science|work|fun|party|review|loan)",
       "patternFlags": "i",
       "note": "Detects logistics brands hosted on suspicious TLDs commonly used for delivery scams"
+    },
+    {
+      "id": "myid-brand-flutterflow-hosting",
+      "group": "urlHeuristics",
+      "description": "MyID-branded content hosted on FlutterFlow platform",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<meta[^>]+content=[\"']myid\\.(?:telstra|optus|vodafone)[^\"']*[\"'][\\s\\S]{0,3000}flutterflow",
+      "patternFlags": "i",
+      "note": "Official myid services use brand-owned domains, not third-party app platforms"
     }
   ],
   "networkPatterns": [
@@ -18840,7 +18881,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-02T20:28:45.341Z",
+      "compiledAt": "2026-04-03T01:02:38.446Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -18880,7 +18921,10 @@
       ".club": 0.2,
       ".cm": 0.2,
       ".co.cl": 0.2,
+      ".co.id": 0.2,
       ".co.za": 0.2,
+      ".com.ge": 0.2,
+      ".com.py": 0.2,
       ".company": 0.2,
       ".consulting": 0.2,
       ".country": 0.2,
