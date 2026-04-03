@@ -146,6 +146,37 @@ async function main() {
 
   console.log(`Uncoded DOM template patterns (3+ unique domains): ${uncodedTemplates.length}`);
 
+  // ── Nano concordance analysis ───────────────────────────────────────────────
+  // Find cases where Nano said SAFE but Claude said DANGEROUS — these are
+  // Nano blind spots that may indicate categories needing tighter thresholds
+  // or where Nano should be skipped entirely.
+  let nanoMisses = [];
+  let nanoStats = { total: 0, concordant: 0, misses: 0 };
+  try {
+    nanoMisses = d1raw(`
+      SELECT url_domain, nano_class, nano_confidence, claude_risk, claude_conf
+      FROM nano_concordance
+      WHERE concordant = 0 AND claude_risk = 'dangerous' AND nano_class = 'SAFE'
+        AND created_at >= datetime('now', '-${LOOKBACK_DAYS} days')
+      ORDER BY claude_conf DESC
+      LIMIT 20
+    `);
+
+    const statsRow = d1raw(`
+      SELECT
+        COUNT(*) as total,
+        SUM(CASE WHEN concordant = 1 THEN 1 ELSE 0 END) as concordant,
+        SUM(CASE WHEN concordant = 0 AND claude_risk = 'dangerous' AND nano_class = 'SAFE' THEN 1 ELSE 0 END) as misses
+      FROM nano_concordance
+      WHERE created_at >= datetime('now', '-${LOOKBACK_DAYS} days')
+    `);
+    if (statsRow?.[0]) nanoStats = statsRow[0];
+  } catch (e) {
+    console.warn('Nano concordance query failed (table may not exist yet):', e.message);
+  }
+
+  console.log(`Nano concordance: ${nanoStats.total} total, ${nanoStats.concordant} concordant, ${nanoStats.misses} dangerous misses`);
+
   // ── Ask Claude for gap analysis ─────────────────────────────────────────────
   console.log('Calling Claude for gap analysis...');
 
@@ -189,6 +220,15 @@ ${uncodedTemplates.slice(0,10).map(r =>
   `- \`${r.dom_structure_hash?.slice(0,16)}…\`: ${r.unique_domains} unique domains, ${r.total_hits} total hits, brands: ${r.brands || 'unknown'} (first seen: ${r.first_seen?.slice(0,10)})`
 ).join('\n') || '(none)'}
 
+### Nano vs Claude concordance
+Gemini Nano pre-screens pages before Claude. When Nano says SAFE but Claude says DANGEROUS, that's a dangerous miss — the page would have been skipped without Claude.
+- Total comparisons: ${nanoStats.total}
+- Agreement rate: ${nanoStats.total > 0 ? ((nanoStats.concordant / nanoStats.total) * 100).toFixed(1) : 'N/A'}%
+- Dangerous misses (Nano SAFE → Claude DANGEROUS): ${nanoStats.misses}
+${nanoMisses.length > 0 ? `\nTop missed domains:\n${nanoMisses.slice(0,10).map(r =>
+  `- \`${r.url_domain}\`: Nano=${r.nano_class} (${(r.nano_confidence*100).toFixed(0)}%) → Claude=${r.claude_risk} (${(r.claude_conf*100).toFixed(0)}%)`
+).join('\n')}` : '(no dangerous misses in this period)'}
+
 ## Your task
 
 Write a gap analysis report with:
@@ -215,6 +255,13 @@ For any uncoded DOM template patterns with 5+ unique domains, propose a domHashe
 - Estimate the kitName based on the associated brands and hit pattern
 - Weight: 0.30 for 3-4 domains, 0.40 for 5-9 domains, 0.45 for 10+
 - These can ship via remote config immediately — highest ROI of any rule type
+
+### Nano Blind Spots
+If there are Nano dangerous misses (Nano SAFE → Claude DANGEROUS), identify patterns:
+- Are specific verticals (crypto, financial, SSO) over-represented in misses?
+- Should the Nano confidence threshold be raised for certain signal combinations?
+- Are there categories where Nano should be bypassed entirely?
+If no misses, state that Nano accuracy is acceptable for this period.
 
 ### Quick Wins
 2-3 changes that could be shipped via remote config today (no code change) with the highest expected impact.`;
@@ -259,6 +306,19 @@ ${signalCorrelation.slice(0,20).map(r =>
 ).join('\n')}
 
 </details>
+
+${nanoMisses.length > 0 ? `<details>
+<summary>Nano dangerous misses (${nanoMisses.length})</summary>
+
+| Domain | Nano | Nano conf | Claude | Claude conf |
+|--------|------|----------|--------|------------|
+${nanoMisses.slice(0,20).map(r =>
+  `| \`${r.url_domain}\` | ${r.nano_class} | ${(r.nano_confidence*100).toFixed(0)}% | ${r.claude_risk} | ${(r.claude_conf*100).toFixed(0)}% |`
+).join('\n')}
+
+Nano agreement rate: ${nanoStats.total > 0 ? ((nanoStats.concordant / nanoStats.total) * 100).toFixed(1) : 'N/A'}% (${nanoStats.concordant}/${nanoStats.total})
+
+</details>` : ''}
 
 ---
 
