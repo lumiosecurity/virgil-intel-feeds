@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-03T01:00:02.037Z",
+    "compiledAt": "2026-04-03T01:02:39.782Z",
     "brandCount": 187,
     "signalCount": 1,
-    "patternCount": 1083,
+    "patternCount": 1086,
     "networkPatternCount": 19,
     "domHashCount": 0,
     "metaRuleCount": 28
@@ -4178,6 +4178,17 @@
       "note": "Checking window.opener ensures the page was opened from another page (like a phishing email). Direct navigation gets blocked. Very low weight."
     },
     {
+      "id": "page-trap-cursor-manipulation",
+      "group": "botEvasion",
+      "description": "Page trapping via onbeforeunload with cursor hiding to prevent user escape",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "onbeforeunload\\s*=\\s*['\"]return\\s+[^'\"]*['\"][\\s\\S]{0,500}cursor\\s*:\\s*none",
+      "patternFlags": "i",
+      "note": "Combination of exit-blocking and cursor manipulation is specific to scareware/tech support scams to trap users"
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -5630,6 +5641,17 @@
       "patternString": "Ledger®?\\s+Live[\\s\\S]{0,1000}login[\\s\\S]{0,1000}(?:secure|wallet|hardware|private\\s+keys)[\\s\\S]{0,1000}(?:24-word|recovery\\s+phrase|PIN\\s+code)",
       "patternFlags": "i",
       "note": "Matches pages with extensive Ledger Live login discussion plus security terminology - legitimate Ledger pages are on ledger.com"
+    },
+    {
+      "id": "fake-windows-support-phone",
+      "group": "brandImpersonation",
+      "description": "Fake Windows/Microsoft branding with fraudulent support phone numbers",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "Windows\\s+(?:11|10|Defender)[\\s\\S]{0,800}(?:Support|Technical|Helpline)[\\s\\S]{0,300}\\+?1-[0-9]{3}-[0-9]{3}-[0-9]{4}",
+      "patternFlags": "i",
+      "note": "Microsoft never displays phone numbers for Windows support in browser security alerts - definitive impersonation signal"
     },
     {
       "id": "fake-captcha-gating",
@@ -16407,6 +16429,17 @@
       "note": "Combines urgency tactics (suspension + time limit) with appeal code harvesting mechanism. Pattern specific enough to avoid legitimate account recovery pages."
     },
     {
+      "id": "fake-virus-alert-tech-scam",
+      "group": "socialEngineering",
+      "description": "Tech support scam with fake virus alert, error codes, and urgent phone contact demands",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "patternString": "(?:Virus\\s+Alert|Windows[^<]{0,200}locked|system[^<]{0,200}blocked)[\\s\\S]{0,1000}(?:Error:\\s*[A-Za-z0-9x]{6,}|Trojan[^<]{0,200}spyware|call[^<]{0,200}immediately)[\\s\\S]{0,1000}\\+?1-[0-9]{3}-[0-9]{3}-[0-9]{4}",
+      "patternFlags": "i",
+      "note": "Combines fake virus alerts, system lockdown claims, fabricated error codes, and phone pressure tactics - never appears on legitimate Microsoft pages"
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -18807,7 +18840,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-03T00:58:58.798Z",
+      "compiledAt": "2026-04-02T20:28:45.341Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -18847,10 +18880,7 @@
       ".club": 0.2,
       ".cm": 0.2,
       ".co.cl": 0.2,
-      ".co.id": 0.2,
       ".co.za": 0.2,
-      ".com.ge": 0.2,
-      ".com.py": 0.2,
       ".company": 0.2,
       ".consulting": 0.2,
       ".country": 0.2,

@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-03-01:00",
-    "generatedAt": "2026-04-03T01:00:02.060Z",
+    "version": "2026-04-03-01:02",
+    "generatedAt": "2026-04-03T01:02:39.804Z",
     "brandCount": 187,
-    "patternCount": 1083,
+    "patternCount": 1086,
     "networkPatternCount": 19
   },
   "brandEntries": [
@@ -2983,10 +2983,7 @@
     ".club": 0.2,
     ".cm": 0.2,
     ".co.cl": 0.2,
-    ".co.id": 0.2,
     ".co.za": 0.2,
-    ".com.ge": 0.2,
-    ".com.py": 0.2,
     ".company": 0.2,
     ".consulting": 0.2,
     ".country": 0.2,
@@ -15107,6 +15104,17 @@
       "patternFlags": "i"
     },
     {
+      "id": "page-trap-cursor-manipulation",
+      "group": "botEvasion",
+      "description": "Page trapping via onbeforeunload with cursor hiding to prevent user escape",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "note": "Combination of exit-blocking and cursor manipulation is specific to scareware/tech support scams to trap users",
+      "patternString": "onbeforeunload\\s*=\\s*['\"]return\\s+[^'\"]*['\"][\\s\\S]{0,500}cursor\\s*:\\s*none",
+      "patternFlags": "i"
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -16597,6 +16605,17 @@
       "source": "html",
       "note": "Matches pages with extensive Ledger Live login discussion plus security terminology - legitimate Ledger pages are on ledger.com",
       "patternString": "Ledger®?\\s+Live[\\s\\S]{0,1000}login[\\s\\S]{0,1000}(?:secure|wallet|hardware|private\\s+keys)[\\s\\S]{0,1000}(?:24-word|recovery\\s+phrase|PIN\\s+code)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "fake-windows-support-phone",
+      "group": "brandImpersonation",
+      "description": "Fake Windows/Microsoft branding with fraudulent support phone numbers",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "note": "Microsoft never displays phone numbers for Windows support in browser security alerts - definitive impersonation signal",
+      "patternString": "Windows\\s+(?:11|10|Defender)[\\s\\S]{0,800}(?:Support|Technical|Helpline)[\\s\\S]{0,300}\\+?1-[0-9]{3}-[0-9]{3}-[0-9]{4}",
       "patternFlags": "i"
     },
     {
@@ -27531,6 +27550,17 @@
       "source": "html",
       "note": "Combines urgency tactics (suspension + time limit) with appeal code harvesting mechanism. Pattern specific enough to avoid legitimate account recovery pages.",
       "patternString": "(?:suspended?|disabled?|terminated?)[\\s\\S]{0,300}(?:48|24)\\s+hours?[\\s\\S]{0,500}appeal\\s+code[\\s\\S]{0,500}(?:click\\s+to\\s+copy|exactly\\s+as\\s+shown)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "fake-virus-alert-tech-scam",
+      "group": "socialEngineering",
+      "description": "Tech support scam with fake virus alert, error codes, and urgent phone contact demands",
+      "severity": "high",
+      "weight": 0.4,
+      "source": "html",
+      "note": "Combines fake virus alerts, system lockdown claims, fabricated error codes, and phone pressure tactics - never appears on legitimate Microsoft pages",
+      "patternString": "(?:Virus\\s+Alert|Windows[^<]{0,200}locked|system[^<]{0,200}blocked)[\\s\\S]{0,1000}(?:Error:\\s*[A-Za-z0-9x]{6,}|Trojan[^<]{0,200}spyware|call[^<]{0,200}immediately)[\\s\\S]{0,1000}\\+?1-[0-9]{3}-[0-9]{3}-[0-9]{4}",
       "patternFlags": "i"
     },
     {
