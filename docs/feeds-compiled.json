@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-03T01:11:56.154Z",
+    "compiledAt": "2026-04-03T02:50:28.662Z",
     "brandCount": 188,
     "signalCount": 1,
-    "patternCount": 1088,
+    "patternCount": 1091,
     "networkPatternCount": 19,
     "domHashCount": 0,
     "metaRuleCount": 28
@@ -5684,6 +5684,28 @@
       "note": "Telecom brand sign-in impersonation on FlutterFlow platform - legitimate myid flows don't use third-party hosting"
     },
     {
+      "id": "facebook-multilingual-checkpoint",
+      "group": "brandImpersonation",
+      "description": "Facebook checkpoint page with multilingual footer (Deutsch, English, Español) indicating professional phishing kit",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "checkpoint[\\s\\S]{0,3000}(?:Deutsch|English\\s*\\(US\\)|Español)[\\s\\S]{0,500}(?:Português|Magyar|Italiano)",
+      "patternFlags": "i",
+      "note": "Combination of checkpoint flow with specific multilingual pattern suggests organized Facebook phishing campaign"
+    },
+    {
+      "id": "facebook-2fa-checkpoint-impersonation",
+      "group": "brandImpersonation",
+      "description": "Facebook 2FA checkpoint page impersonation with approvals_code input field and checkpoint submission",
+      "severity": "high",
+      "weight": 0.35,
+      "source": "html",
+      "patternString": "(?:facebook|fb)[^<]{0,500}checkpoint[^<]{0,2000}approvals_code[^<]{0,2000}submit\\[Submit\\s+Code\\]",
+      "patternFlags": "i",
+      "note": "Matches Facebook-branded pages with 2FA checkpoint form structure - distinctive combination rarely seen on legitimate sites"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -8648,6 +8670,17 @@
       "patternString": "smtpjs\\.com[/\\w]*smtp\\.js[\\s\\S]{0,5000}(?:facebook|meta|ad\\s+account|advertising\\s+account)",
       "patternFlags": "i",
       "note": "SMTP.js is used by phishkits for email-based credential exfiltration. Legitimate Meta services use internal APIs, never third-party email libraries."
+    },
+    {
+      "id": "facebook-code-php-form-action",
+      "group": "credentialHarvesting",
+      "description": "Facebook-branded page with form posting to code.php endpoint for 2FA code collection",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:facebook|fb)[\\s\\S]{0,2000}action\\s*=\\s*['\"]code\\.php['\"]",
+      "patternFlags": "i",
+      "note": "Legitimate Facebook never uses code.php endpoints - this is phishkit-specific for 2FA bypass collection"
     },
     {
       "id": "suspicious-subdomain-financial",
@@ -18881,7 +18914,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-03T01:02:38.446Z",
+      "compiledAt": "2026-04-03T01:11:54.583Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
