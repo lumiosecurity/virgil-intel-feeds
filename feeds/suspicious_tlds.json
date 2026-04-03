@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
-    "syncedAt": "2026-04-02T20:28:42.487Z",
+    "syncedAt": "2026-04-03T00:58:23.310Z",
     "role": "tld_risk",
     "description": "TLDs frequently abused, free to register, or rarely used legitimately",
-    "count": 130,
+    "count": 133,
     "defaultWeight": 0.2
   },
   "entries": [
@@ -31,7 +31,10 @@
     "club",
     "cm",
     "co.cl",
+    "co.id",
     "co.za",
+    "com.ge",
+    "com.py",
     "company",
     "consulting",
     "country",

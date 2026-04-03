@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-02T20:28:45.341Z",
+    "compiledAt": "2026-04-03T00:58:26.430Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -40,7 +40,10 @@
     ".club": 0.2,
     ".cm": 0.2,
     ".co.cl": 0.2,
+    ".co.id": 0.2,
     ".co.za": 0.2,
+    ".com.ge": 0.2,
+    ".com.py": 0.2,
     ".company": 0.2,
     ".consulting": 0.2,
     ".country": 0.2,
