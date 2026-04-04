@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-04-19:53",
-    "generatedAt": "2026-04-04T19:53:34.032Z",
+    "version": "2026-04-04-19:57",
+    "generatedAt": "2026-04-04T19:57:06.765Z",
     "brandCount": 190,
     "patternCount": 1094,
     "networkPatternCount": 19
@@ -27287,14 +27287,18 @@
           "flags": "i"
         },
         {
+          "pattern": "document|file|PDF|preview|invoice|report|shared|fax",
+          "flags": "i"
+        },
+        {
           "content": "password"
         },
         {
-          "pattern": "sign.?in|log.?in|view|access|unlock",
+          "pattern": "sign.?in|log.?in|verify|unlock",
           "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "view-document-button-password",

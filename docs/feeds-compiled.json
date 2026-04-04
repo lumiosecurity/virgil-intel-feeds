@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-04T19:53:34.008Z",
+    "compiledAt": "2026-04-04T19:57:06.743Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1094,
@@ -16156,14 +16156,18 @@
           "flags": "i"
         },
         {
+          "pattern": "document|file|PDF|preview|invoice|report|shared|fax",
+          "flags": "i"
+        },
+        {
           "content": "password"
         },
         {
-          "pattern": "sign.?in|log.?in|view|access|unlock",
+          "pattern": "sign.?in|log.?in|verify|unlock",
           "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "A blurred or semi-transparent document image behind a login form is the #1 document lure layout. The 'document' is just an image with CSS blur/opacity applied, and a credential modal sits on top. No legitimate document-sharing service blurs a real document behind a login wall."
     },
     {
@@ -19398,7 +19402,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-04T19:45:32.457Z",
+      "compiledAt": "2026-04-04T19:53:30.768Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
