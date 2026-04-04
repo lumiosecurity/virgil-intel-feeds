@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-04T21:11:26.474Z",
+    "compiledAt": "2026-04-04T21:19:47.840Z",
     "brandCount": 190,
     "signalCount": 1,
-    "patternCount": 1096,
+    "patternCount": 1097,
     "networkPatternCount": 20,
     "domHashCount": 0,
     "metaRuleCount": 42
@@ -12287,12 +12287,13 @@
     {
       "id": "cybeready-phishkit-resource",
       "group": "phishkitSignatures",
-      "description": "CybeReady phishing simulation kit loading resources from lp.cybeready.net",
+      "description": "Page loads resources from CyberReady phishing simulation platform CDN lp.cybeready.net",
       "severity": "high",
-      "weight": 0.45,
+      "weight": 0.25,
       "source": "html",
-      "patternString": "lp\\.cybeready\\.net/Forms/[^\"]{1,100}",
-      "patternFlags": "i"
+      "patternString": "lp\\.cybeready\\.net\\/(?:Forms|common)\\/",
+      "patternFlags": "i",
+      "note": "CyberReady is a phishing simulation platform. Pages loading form templates and scripts from lp.cybeready.net are phishing simulations or repurposed phishkits. The 22+ literal characters make this highly specific — no legitimate site loads resources from this path."
     },
     {
       "id": "cybeready-crrid-tracker",
@@ -14484,6 +14485,17 @@
       "patternString": "createElement\\([\"']a[\"']\\)[\\s\\S]{0,300}\\.href\\s*=\\s*[\"'](?:data:|blob:)[\\s\\S]{0,200}\\.download\\s*=[\\s\\S]{0,100}\\.click\\(\\)",
       "patternFlags": "i",
       "note": "HTML smuggling: creates an anchor element, sets href to a data/blob URL, sets download attribute, then programmatically clicks it to deliver a malicious file. Near-definitive attack technique."
+    },
+    {
+      "id": "getcrrid-campaign-tracker",
+      "group": "phishkitSignatures",
+      "description": "Phishkit campaign tracking function getcrrid() returning hex ID string",
+      "severity": "high",
+      "weight": 0.25,
+      "source": "js",
+      "patternString": "function\\s+getcrrid\\s*\\(\\s*\\)\\s*\\{\\s*return\\s+['\"][0-9a-f]{20,}['\"]",
+      "patternFlags": "i",
+      "note": "The getcrrid() function is a distinctive CyberReady phishkit signature used to track victim sessions with hex campaign IDs. No legitimate site defines a function named getcrrid. 15+ literal chars in 'function getcrrid'."
     },
     {
       "id": "facebook-arabic-security-alert",
@@ -19436,7 +19448,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-04T21:08:39.703Z",
+      "compiledAt": "2026-04-04T21:11:24.375Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
