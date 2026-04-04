@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-04-20:32",
-    "generatedAt": "2026-04-04T20:32:18.573Z",
+    "version": "2026-04-04-20:37",
+    "generatedAt": "2026-04-04T20:37:14.533Z",
     "brandCount": 190,
     "patternCount": 1094,
     "networkPatternCount": 19
@@ -26003,11 +26003,11 @@
           "fast_pattern": true
         },
         {
-          "pattern": "toll|highway|turnpike|expressway|bridge",
+          "pattern": "toll\\s*(?:road|plaza|violation|charge|due|unpaid)|turnpike|expressway|ezpass|sunpass|fastrak",
           "flags": "i"
         },
         {
-          "pattern": "card|payment|credit|debit|billing|amount|balance|fee|\\$",
+          "pattern": "card|payment|debit|billing|fee|amount|\\$\\s*\\d",
           "flags": "i"
         }
       ],
