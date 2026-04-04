@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-04T19:45:35.351Z",
+    "compiledAt": "2026-04-04T19:53:34.008Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1094,
@@ -8122,20 +8122,20 @@
       "source": "html",
       "match": [
         {
-          "content": "track",
+          "content": "tracking",
           "nocase": true,
           "fast_pattern": true
         },
         {
-          "pattern": "package|parcel|shipment|order",
+          "pattern": "parcel|shipment|delivery|courier|consignment",
           "flags": "i"
         },
         {
-          "pattern": "<input[^>]*(?:track|number|code|id)",
+          "pattern": "<input[^>]*(?:tracking|track[_-]?(?:num|number|code|id)|placeholder=[\"'][^\"']*track)",
           "flags": "i"
         },
         {
-          "pattern": "card|payment|credit|address|billing",
+          "pattern": "card|payment|billing|delivery.{0,20}fee",
           "flags": "i"
         }
       ],
@@ -19398,7 +19398,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-04T15:53:52.905Z",
+      "compiledAt": "2026-04-04T19:45:32.457Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

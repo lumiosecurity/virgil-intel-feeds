@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-04-19:45",
-    "generatedAt": "2026-04-04T19:45:35.374Z",
+    "version": "2026-04-04-19:53",
+    "generatedAt": "2026-04-04T19:53:34.032Z",
     "brandCount": 190,
     "patternCount": 1094,
     "networkPatternCount": 19
@@ -19115,20 +19115,20 @@
       "note": "A fake tracking number input that leads to personal info or credential fields is the track-to-harvest pipeline. The victim enters a tracking number (any number works), then is asked for personal details or payment to 'release' the package.",
       "match": [
         {
-          "content": "track",
+          "content": "tracking",
           "nocase": true,
           "fast_pattern": true
         },
         {
-          "pattern": "package|parcel|shipment|order",
+          "pattern": "parcel|shipment|delivery|courier|consignment",
           "flags": "i"
         },
         {
-          "pattern": "<input[^>]*(?:track|number|code|id)",
+          "pattern": "<input[^>]*(?:tracking|track[_-]?(?:num|number|code|id)|placeholder=[\"'][^\"']*track)",
           "flags": "i"
         },
         {
-          "pattern": "card|payment|credit|address|billing",
+          "pattern": "card|payment|billing|delivery.{0,20}fee",
           "flags": "i"
         }
       ],
