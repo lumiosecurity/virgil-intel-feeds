@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-04T20:17:52.683Z",
+    "compiledAt": "2026-04-04T20:32:18.544Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1094,
@@ -8297,7 +8297,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "job\\s*(?:offer|application|opportunity)|apply\\s*(?:now|here)|employment|position|hiring|recruitment",
+          "pattern": "job\\s*(?:offer|application|opportunity|position)|apply\\s*(?:now|here)|employment|hiring|recruitment",
           "flags": "i"
         },
         {
@@ -19402,7 +19402,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-04T20:11:53.818Z",
+      "compiledAt": "2026-04-04T20:17:50.464Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

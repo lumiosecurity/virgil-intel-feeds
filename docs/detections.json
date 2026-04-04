@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-04-20:17",
-    "generatedAt": "2026-04-04T20:17:52.706Z",
+    "version": "2026-04-04-20:32",
+    "generatedAt": "2026-04-04T20:32:18.573Z",
     "brandCount": 190,
     "patternCount": 1094,
     "networkPatternCount": 19
@@ -19290,7 +19290,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "job\\s*(?:offer|application|opportunity)|apply\\s*(?:now|here)|employment|position|hiring|recruitment",
+          "pattern": "job\\s*(?:offer|application|opportunity|position)|apply\\s*(?:now|here)|employment|hiring|recruitment",
           "flags": "i"
         },
         {
