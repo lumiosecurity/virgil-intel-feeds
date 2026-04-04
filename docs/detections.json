@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-04-20:04",
-    "generatedAt": "2026-04-04T20:04:33.321Z",
+    "version": "2026-04-04-20:07",
+    "generatedAt": "2026-04-04T20:07:43.586Z",
     "brandCount": 190,
     "patternCount": 1094,
     "networkPatternCount": 19
@@ -28640,7 +28640,7 @@
           "flags": "i"
         },
         {
-          "pattern": "card|payment|fee|amount|billing|\\\\$\\\\s*\\\\d",
+          "pattern": "card|payment|fee|amount|billing|\\$\\s*\\d",
           "flags": "i"
         }
       ],
