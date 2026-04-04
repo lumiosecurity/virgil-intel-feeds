@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-04-20:37",
-    "generatedAt": "2026-04-04T20:37:14.533Z",
+    "version": "2026-04-04-20:44",
+    "generatedAt": "2026-04-04T20:44:44.964Z",
     "brandCount": 190,
     "patternCount": 1094,
     "networkPatternCount": 19
@@ -28820,11 +28820,11 @@
           "fast_pattern": true
         },
         {
-          "pattern": "location\\.(?:href|replace)|window\\.location|meta.*refresh",
+          "pattern": "location\\.(?:href|replace)|window\\.location",
           "flags": "i"
         },
         {
-          "pattern": "token|id|ref|uid|hash|code",
+          "pattern": "firebasestorage\\.googleapis|blob\\.core\\.windows\\.net|sites\\.google\\.com|docs\\.google\\.com|sharepoint\\.com|tiktok\\.com|wix\\.com|worker(?:s)?\\.dev",
           "flags": "i"
         }
       ],

@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-04T20:37:14.511Z",
+    "compiledAt": "2026-04-04T20:44:44.942Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1094,
@@ -17652,11 +17652,11 @@
           "fast_pattern": true
         },
         {
-          "pattern": "location\\.(?:href|replace)|window\\.location|meta.*refresh",
+          "pattern": "location\\.(?:href|replace)|window\\.location",
           "flags": "i"
         },
         {
-          "pattern": "token|id|ref|uid|hash|code",
+          "pattern": "firebasestorage\\.googleapis|blob\\.core\\.windows\\.net|sites\\.google\\.com|docs\\.google\\.com|sharepoint\\.com|tiktok\\.com|wix\\.com|worker(?:s)?\\.dev",
           "flags": "i"
         }
       ],
@@ -19402,7 +19402,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-04T20:17:50.464Z",
+      "compiledAt": "2026-04-04T20:37:13.123Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
