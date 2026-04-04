@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-04-20:57",
-    "generatedAt": "2026-04-04T20:57:57.753Z",
+    "version": "2026-04-04-21:08",
+    "generatedAt": "2026-04-04T21:08:41.057Z",
     "brandCount": 190,
     "patternCount": 1094,
     "networkPatternCount": 19
@@ -18894,15 +18894,15 @@
           "fast_pattern": true
         },
         {
+          "pattern": "fetch\\(|XMLHttpRequest|sendBeacon|\\$\\.ajax|\\$\\.post",
+          "flags": "i"
+        },
+        {
+          "pattern": "otp|mfa|2fa|two.?factor|authenticator|one.?time.?(?:code|pass)",
+          "flags": "i"
+        },
+        {
           "pattern": "style\\.display|classList|visibility"
-        },
-        {
-          "pattern": "verification|authenticator|code|otp|mfa|2fa|two.?factor",
-          "flags": "i"
-        },
-        {
-          "pattern": "input|form|field",
-          "flags": "i"
         }
       ],
       "condition": "0 & 1 & 2 & 3"
