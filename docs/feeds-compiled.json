@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-04T20:00:07.691Z",
+    "compiledAt": "2026-04-04T20:04:33.298Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1094,
@@ -17472,7 +17472,7 @@
           "flags": "i"
         },
         {
-          "pattern": "card|payment|fee|amount|billing|\\$\\s*\\d",
+          "pattern": "card|payment|fee|amount|billing|\\\\$\\\\s*\\\\d",
           "flags": "i"
         }
       ],
@@ -19402,7 +19402,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-04T19:57:03.913Z",
+      "compiledAt": "2026-04-04T20:00:05.946Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
