@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-04T20:11:55.179Z",
+    "compiledAt": "2026-04-04T20:13:15.420Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1094,
@@ -16156,7 +16156,7 @@
           "flags": "i"
         },
         {
-          "pattern": "document|file|PDF|preview|invoice|report|shared|fax",
+          "pattern": "file|PDF|preview|invoice|report|shared|fax",
           "flags": "i"
         },
         {
@@ -19402,7 +19402,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-04T20:07:41.845Z",
+      "compiledAt": "2026-04-04T20:11:53.818Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
