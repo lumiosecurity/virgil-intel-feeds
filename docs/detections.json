@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-04-20:13",
-    "generatedAt": "2026-04-04T20:13:15.442Z",
+    "version": "2026-04-04-20:17",
+    "generatedAt": "2026-04-04T20:17:52.706Z",
     "brandCount": 190,
     "patternCount": 1094,
     "networkPatternCount": 19
@@ -27092,11 +27092,11 @@
           "fast_pattern": true
         },
         {
-          "pattern": "Windows.*R|Win.*R|Run\\s*dialog|Run\\s*command",
+          "pattern": "Win(?:dows)?\\s*\\+\\s*R|Run\\s+dialog|Run\\s+command|open\\s+Run",
           "flags": "i"
         },
         {
-          "pattern": "paste|Ctrl.*V|clipboard|copy|PowerShell|cmd",
+          "pattern": "paste|Ctrl\\s*\\+\\s*V|clipboard|PowerShell|cmd\\.exe|command\\s+prompt",
           "flags": "i"
         }
       ],
