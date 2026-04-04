@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-04T20:07:43.564Z",
+    "compiledAt": "2026-04-04T20:11:55.179Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1094,
@@ -15817,15 +15817,15 @@
           "fast_pattern": true
         },
         {
-          "pattern": "filter:\\s*blur|blur\\(\\d+px\\)|backdrop-filter.*blur",
+          "pattern": "filter:\\s*blur|blur\\(\\d+px\\)|backdrop-filter:\\s*blur",
           "flags": "i"
         },
         {
-          "pattern": "document|file|PDF|preview|invoice|report",
+          "pattern": "file|PDF|preview|invoice|report|shared",
           "flags": "i"
         },
         {
-          "pattern": "sign.?in|log.?in|password|verify|unlock|view",
+          "pattern": "sign.?in|log.?in|password|verify|unlock",
           "flags": "i"
         }
       ],
@@ -19402,7 +19402,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-04T20:00:05.946Z",
+      "compiledAt": "2026-04-04T20:07:41.845Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
