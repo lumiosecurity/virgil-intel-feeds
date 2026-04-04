@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-04T21:08:41.033Z",
+    "compiledAt": "2026-04-04T21:11:26.474Z",
     "brandCount": 190,
     "signalCount": 1,
-    "patternCount": 1094,
-    "networkPatternCount": 19,
+    "patternCount": 1096,
+    "networkPatternCount": 20,
     "domHashCount": 0,
     "metaRuleCount": 42
   },
@@ -4252,6 +4252,17 @@
       "note": "Combination of exit-blocking and cursor manipulation is specific to scareware/tech support scams to trap users"
     },
     {
+      "id": "enter-key-form-blocking",
+      "group": "botEvasion",
+      "description": "JavaScript blocks Enter key (keyCode 13) on form inputs to prevent automated submission",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "addEventListener\\(['\"]keydown['\"][\\s\\S]{0,200}keyCode\\s*[!=]==?\\s*13[\\s\\S]{0,100}(?:return\\s+false|preventDefault)",
+      "patternFlags": "i",
+      "note": "Blocks Enter key to prevent bots from auto-submitting forms - common phishkit anti-automation technique"
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -5781,6 +5792,17 @@
       "patternString": "(?:Pick an account|Sign in to your account).*(?:Stay signed in|microsoft\\.com)(?!.*login\\.microsoftonline\\.com)",
       "patternFlags": "is",
       "note": "Detects Microsoft consent screen text patterns (Pick an account, Stay signed in) on non-Microsoft domains — characteristic of fake OAuth phishing pages"
+    },
+    {
+      "id": "brand-typo-in-copyright",
+      "group": "brandImpersonation",
+      "description": "Brand name typo in copyright notice (iCIoud instead of iCloud, Micr0soft, etc.)",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "Copyright[^<]{0,200}(?:iCIoud|Micr0soft|G00gle|Amaz0n|PayPaI|Faceb00k|Appl3)",
+      "patternFlags": "i",
+      "note": "Intentional brand name typos in copyright to evade detection while maintaining visual similarity"
     },
     {
       "id": "fake-captcha-gating",
@@ -17910,6 +17932,18 @@
       "note": "Catches actual credential exfiltration via SMTP.js email service. No legitimate business application would use SMTP.js for sensitive data transmission."
     },
     {
+      "id": "network-php-collector-post",
+      "group": "credentialHarvesting",
+      "description": "Form POST to PHP endpoint with phishkit naming pattern (s1.php, send.php, etc.)",
+      "severity": "high",
+      "weight": 0.35,
+      "target": "url",
+      "transport": "any",
+      "patternString": "/(?:s1|send|mail|post|grab|log|save|collect|cred)(?:er)?\\.php(?:\\?|$)",
+      "patternFlags": "i",
+      "note": "PHP endpoints with single-letter + digit or common phishkit verbs - pattern rarely used by legitimate login systems"
+    },
+    {
       "id": "network-telegram-bot-post",
       "group": "phishkitSignatures",
       "description": "POST to Telegram Bot API sendMessage endpoint — credential exfiltration in progress",
@@ -19402,7 +19436,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-04T20:57:56.541Z",
+      "compiledAt": "2026-04-04T21:08:39.703Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

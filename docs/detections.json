@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-04-04-21:08",
-    "generatedAt": "2026-04-04T21:08:41.057Z",
+    "version": "2026-04-04-21:11",
+    "generatedAt": "2026-04-04T21:11:26.497Z",
     "brandCount": 190,
-    "patternCount": 1094,
-    "networkPatternCount": 19
+    "patternCount": 1096,
+    "networkPatternCount": 20
   },
   "brandEntries": [
     {
@@ -15184,6 +15184,17 @@
       "patternFlags": "i"
     },
     {
+      "id": "enter-key-form-blocking",
+      "group": "botEvasion",
+      "description": "JavaScript blocks Enter key (keyCode 13) on form inputs to prevent automated submission",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "note": "Blocks Enter key to prevent bots from auto-submitting forms - common phishkit anti-automation technique",
+      "patternString": "addEventListener\\(['\"]keydown['\"][\\s\\S]{0,200}keyCode\\s*[!=]==?\\s*13[\\s\\S]{0,100}(?:return\\s+false|preventDefault)",
+      "patternFlags": "i"
+    },
+    {
       "id": "spotify-impersonation-title",
       "group": "brandImpersonation",
       "description": "Detects pages claiming to be Spotify Web Player on non-Spotify domains",
@@ -16752,6 +16763,17 @@
       "note": "Detects Microsoft consent screen text patterns (Pick an account, Stay signed in) on non-Microsoft domains — characteristic of fake OAuth phishing pages",
       "patternString": "(?:Pick an account|Sign in to your account).*(?:Stay signed in|microsoft\\.com)(?!.*login\\.microsoftonline\\.com)",
       "patternFlags": "is"
+    },
+    {
+      "id": "brand-typo-in-copyright",
+      "group": "brandImpersonation",
+      "description": "Brand name typo in copyright notice (iCIoud instead of iCloud, Micr0soft, etc.)",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Intentional brand name typos in copyright to evade detection while maintaining visual similarity",
+      "patternString": "Copyright[^<]{0,200}(?:iCIoud|Micr0soft|G00gle|Amaz0n|PayPaI|Faceb00k|Appl3)",
+      "patternFlags": "i"
     },
     {
       "id": "fake-captcha-gating",
@@ -29075,6 +29097,18 @@
       "patternString": "smtpjs\\.com[/\\w]*(?:send|api|mail)",
       "patternFlags": "i",
       "note": "Catches actual credential exfiltration via SMTP.js email service. No legitimate business application would use SMTP.js for sensitive data transmission."
+    },
+    {
+      "id": "network-php-collector-post",
+      "group": "credentialHarvesting",
+      "description": "Form POST to PHP endpoint with phishkit naming pattern (s1.php, send.php, etc.)",
+      "severity": "high",
+      "weight": 0.35,
+      "target": "url",
+      "transport": "any",
+      "patternString": "/(?:s1|send|mail|post|grab|log|save|collect|cred)(?:er)?\\.php(?:\\?|$)",
+      "patternFlags": "i",
+      "note": "PHP endpoints with single-letter + digit or common phishkit verbs - pattern rarely used by legitimate login systems"
     },
     {
       "id": "network-telegram-bot-post",
