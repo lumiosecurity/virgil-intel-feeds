@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-04-21:19",
-    "generatedAt": "2026-04-04T21:19:47.863Z",
+    "version": "2026-04-04-22:49",
+    "generatedAt": "2026-04-04T22:49:29.618Z",
     "brandCount": 190,
     "patternCount": 1097,
     "networkPatternCount": 20
@@ -28441,12 +28441,12 @@
     {
       "id": "base64-email-in-path",
       "group": "urlHeuristics",
-      "description": "URL path contains a base64-encoded string that likely encodes an email address (contains @ when decoded), indicating per-victim phishing targeting",
+      "description": "URL fragment contains a base64-encoded string that likely encodes an email address, indicating per-victim phishing targeting",
       "severity": "high",
       "weight": 0.45,
       "source": "html",
       "note": "",
-      "patternString": "#[A-Za-z0-9+/]{20,}={0,2}",
+      "patternString": "(?:href|action|location\\.href|window\\.location)\\s*=\\s*['\"][^'\"]*#[A-Za-z0-9+/]{20,}={0,2}['\"]",
       "patternFlags": "i"
     },
     {
