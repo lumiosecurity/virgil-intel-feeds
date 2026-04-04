@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-04T15:53:56.124Z",
+    "compiledAt": "2026-04-04T19:45:35.351Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1094,
@@ -304,7 +304,6 @@
         "gemini.com"
       ],
       "typos": [
-        "gemini",
         "geminii",
         "gemin1",
         "gem1ni",
@@ -19399,7 +19398,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-04T05:43:45.666Z",
+      "compiledAt": "2026-04-04T15:53:52.905Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
