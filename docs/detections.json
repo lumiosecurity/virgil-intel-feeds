@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-04-19:57",
-    "generatedAt": "2026-04-04T19:57:06.765Z",
+    "version": "2026-04-04-20:00",
+    "generatedAt": "2026-04-04T20:00:07.713Z",
     "brandCount": 190,
     "patternCount": 1094,
     "networkPatternCount": 19
@@ -28632,15 +28632,15 @@
           "fast_pattern": true
         },
         {
-          "pattern": "\\.top|\\.(xin|cyou|cfd|sbs|bond|hair)",
+          "pattern": "\\.(?:top|xin|cyou|cfd|sbs|bond|hair)",
           "flags": "i"
         },
         {
-          "pattern": "toll|package|delivery|parcel|post|customs|usps|fedex",
+          "pattern": "toll|package|delivery|parcel|postal|customs|usps|fedex",
           "flags": "i"
         },
         {
-          "pattern": "card|payment|fee|pay|amount|\\$",
+          "pattern": "card|payment|fee|amount|billing|\\$\\s*\\d",
           "flags": "i"
         }
       ],
