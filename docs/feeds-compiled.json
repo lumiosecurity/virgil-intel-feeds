@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-04T23:32:08.977Z",
+    "compiledAt": "2026-04-04T23:37:38.139Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1097,
@@ -11505,12 +11505,31 @@
     {
       "id": "zoho-impersonation-favicon",
       "group": "phishkitSignatures",
-      "description": "ZOHO favicon with ZOHO branding on non-ZOHO domain",
+      "description": "ZOHO favicon with ZOHO branding on non-ZOHO domain — dedicated Zoho impersonation",
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "patternString": "google\\.com/s2/favicons\\?domain=zoho\\.com.*?ZOHO",
-      "patternFlags": "is"
+      "match": [
+        {
+          "content": "zoho",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "google\\.com/s2/favicons\\?domain=zoho",
+          "flags": "i"
+        },
+        {
+          "pattern": "ZOHO|Zoho\\s+Mail|zoho\\.com",
+          "flags": "i"
+        },
+        {
+          "pattern": "domain-favicon|domain-logo|provider-icon|email-icon",
+          "flags": "i",
+          "negated": true
+        }
+      ],
+      "condition": "1 & 2 & !3"
     },
     {
       "id": "session-expired-urgency",
@@ -19448,7 +19467,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-04T22:49:28.288Z",
+      "compiledAt": "2026-04-04T23:32:06.422Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

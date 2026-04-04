@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-04-23:32",
-    "generatedAt": "2026-04-04T23:32:08.999Z",
+    "version": "2026-04-04-23:37",
+    "generatedAt": "2026-04-04T23:37:38.164Z",
     "brandCount": 190,
     "patternCount": 1097,
     "networkPatternCount": 20
@@ -22556,13 +22556,32 @@
     {
       "id": "zoho-impersonation-favicon",
       "group": "phishkitSignatures",
-      "description": "ZOHO favicon with ZOHO branding on non-ZOHO domain",
+      "description": "ZOHO favicon with ZOHO branding on non-ZOHO domain — dedicated Zoho impersonation",
       "severity": "high",
       "weight": 0.35,
       "source": "html",
       "note": "",
-      "patternString": "google\\.com/s2/favicons\\?domain=zoho\\.com.*?ZOHO",
-      "patternFlags": "is"
+      "match": [
+        {
+          "content": "zoho",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "google\\.com/s2/favicons\\?domain=zoho",
+          "flags": "i"
+        },
+        {
+          "pattern": "ZOHO|Zoho\\s+Mail|zoho\\.com",
+          "flags": "i"
+        },
+        {
+          "pattern": "domain-favicon|domain-logo|provider-icon|email-icon",
+          "flags": "i",
+          "negated": true
+        }
+      ],
+      "condition": "1 & 2 & !3"
     },
     {
       "id": "session-expired-urgency",
