@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-04-22:49",
-    "generatedAt": "2026-04-04T22:49:29.618Z",
+    "version": "2026-04-04-23:32",
+    "generatedAt": "2026-04-04T23:32:08.999Z",
     "brandCount": 190,
     "patternCount": 1097,
     "networkPatternCount": 20
@@ -18908,8 +18908,8 @@
       "description": "Fake MFA prompt shown after password capture — credential then MFA two-stage AiTM harvest",
       "severity": "high",
       "weight": 0.3,
-      "source": "js",
-      "note": "After capturing the password, showing a hidden MFA/verification code prompt is the two-stage AiTM credential+MFA harvest. The password is relayed to the real site, which triggers a real MFA challenge, then the phish captures the MFA code.",
+      "source": "html",
+      "note": "After capturing the password, showing a hidden MFA/verification code input is the two-stage AiTM credential+MFA harvest. Condition 2 now requires MFA terms in input field attributes (name, id, placeholder), not just page text.",
       "match": [
         {
           "content": "password",
@@ -18920,11 +18920,11 @@
           "flags": "i"
         },
         {
-          "pattern": "otp|mfa|2fa|two.?factor|authenticator|one.?time.?(?:code|pass)",
+          "pattern": "<input[^>]*(?:otp|mfa|2fa|one.?time|verif(?:y|ication).?code|authenticator|sms.?code|security.?code)|(?:name|id|placeholder)=['\"][^'\"]*(?:otp|mfa|totp|verification.?code|auth.?code|sms.?code)['\"]",
           "flags": "i"
         },
         {
-          "pattern": "style\\.display|classList|visibility"
+          "pattern": "style\\.display|classList\\.(?:add|remove|toggle)|visibility"
         }
       ],
       "condition": "0 & 1 & 2 & 3"

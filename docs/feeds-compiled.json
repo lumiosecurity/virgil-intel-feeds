@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-04T22:49:29.596Z",
+    "compiledAt": "2026-04-04T23:32:08.977Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1097,
@@ -7916,7 +7916,7 @@
       "description": "Fake MFA prompt shown after password capture — credential then MFA two-stage AiTM harvest",
       "severity": "high",
       "weight": 0.3,
-      "source": "js",
+      "source": "html",
       "match": [
         {
           "content": "password",
@@ -7927,15 +7927,15 @@
           "flags": "i"
         },
         {
-          "pattern": "otp|mfa|2fa|two.?factor|authenticator|one.?time.?(?:code|pass)",
+          "pattern": "<input[^>]*(?:otp|mfa|2fa|one.?time|verif(?:y|ication).?code|authenticator|sms.?code|security.?code)|(?:name|id|placeholder)=['\"][^'\"]*(?:otp|mfa|totp|verification.?code|auth.?code|sms.?code)['\"]",
           "flags": "i"
         },
         {
-          "pattern": "style\\.display|classList|visibility"
+          "pattern": "style\\.display|classList\\.(?:add|remove|toggle)|visibility"
         }
       ],
       "condition": "0 & 1 & 2 & 3",
-      "note": "After capturing the password, showing a hidden MFA/verification code prompt is the two-stage AiTM credential+MFA harvest. The password is relayed to the real site, which triggers a real MFA challenge, then the phish captures the MFA code."
+      "note": "After capturing the password, showing a hidden MFA/verification code input is the two-stage AiTM credential+MFA harvest. Condition 2 now requires MFA terms in input field attributes (name, id, placeholder), not just page text."
     },
     {
       "id": "aitm-websocket-credential-token-stream",
@@ -19448,7 +19448,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-04T21:19:46.553Z",
+      "compiledAt": "2026-04-04T22:49:28.288Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
