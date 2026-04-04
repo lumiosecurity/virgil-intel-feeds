@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-04-05:43",
-    "generatedAt": "2026-04-04T05:43:48.179Z",
+    "version": "2026-04-04-15:53",
+    "generatedAt": "2026-04-04T15:53:56.147Z",
     "brandCount": 190,
     "patternCount": 1094,
     "networkPatternCount": 19
@@ -30143,6 +30143,413 @@
         "scope": "replace",
         "weight": 0.55,
         "severity": "high"
+      }
+    },
+    {
+      "id": "free-ca-brand-password-form",
+      "description": "Free/automated CA + brand impersonation + password form — enterprise brands (banks, SSO) use enterprise CAs; a Let's Encrypt cert on a page impersonating Chase with a login form is near-definitive phishing",
+      "conditions": {
+        "all": [
+          {
+            "signal": "free-ca-cert"
+          },
+          {
+            "has_password_form": true
+          }
+        ],
+        "any": [
+          {
+            "signal": "known-typosquat"
+          },
+          {
+            "signal": "brand-in-subdomain"
+          },
+          {
+            "signal": "homoglyph-substitution"
+          },
+          {
+            "signal": "idn-homograph-brand"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.25,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "free-ca-new-domain-brand",
+      "description": "Free CA + domain < 7 days old + brand impersonation — disposable phishing domain with a throwaway cert, textbook attack pattern",
+      "conditions": {
+        "all": [
+          {
+            "signal": "free-ca-cert"
+          },
+          {
+            "domain_age_days": {
+              "lt": 7
+            }
+          }
+        ],
+        "any": [
+          {
+            "signal": "known-typosquat"
+          },
+          {
+            "signal": "brand-in-subdomain"
+          },
+          {
+            "signal": "homoglyph-substitution"
+          },
+          {
+            "signal": "idn-homograph-brand"
+          },
+          {
+            "signal": "microsoft-lookalike"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "wildcard-deep-subdomain-brand",
+      "description": "Wildcard cert + deep subdomains + brand impersonation — wildcard certs enable unlimited subdomain phishing (login.paypal.evil.xyz, secure.chase.evil.xyz) from a single cert",
+      "conditions": {
+        "all": [
+          {
+            "signal": "wildcard-cert"
+          },
+          {
+            "signal": "deep-subdomain"
+          }
+        ],
+        "any": [
+          {
+            "signal": "brand-in-subdomain"
+          },
+          {
+            "signal": "known-typosquat"
+          },
+          {
+            "signal": "homoglyph-substitution"
+          },
+          {
+            "signal": "idn-homograph-brand"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "wildcard-credential-harvesting",
+      "description": "Wildcard cert + credential harvesting source patterns + no established brand — wildcard certs on credential harvesters suggest reusable phishing infrastructure",
+      "conditions": {
+        "all": [
+          {
+            "signal": "wildcard-cert"
+          },
+          {
+            "signal_group": "credentialHarvesting"
+          },
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "short-validity-brand-external-form",
+      "description": "Certificate valid <= 30 days + brand impersonation + form posting externally — short-lived cert on a disposable credential harvester, campaign will be over before cert expires",
+      "conditions": {
+        "all": [
+          {
+            "signal": "short-cert-validity"
+          },
+          {
+            "has_external_form": true
+          }
+        ],
+        "any": [
+          {
+            "signal": "known-typosquat"
+          },
+          {
+            "signal": "brand-in-subdomain"
+          },
+          {
+            "signal": "homoglyph-substitution"
+          },
+          {
+            "signal": "idn-homograph-brand"
+          },
+          {
+            "signal_group": "titleImpersonation"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "short-validity-new-domain-password",
+      "description": "Short cert validity + new domain + password form — ephemeral infrastructure purpose-built for a credential harvesting campaign",
+      "conditions": {
+        "all": [
+          {
+            "signal": "short-cert-validity"
+          },
+          {
+            "domain_age_days": {
+              "lt": 14
+            }
+          },
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "multi-san-brand-impersonation",
+      "description": "Certificate covers 10+ unrelated domains + brand impersonation — shared/bulletproof hosting serving phishing pages for multiple campaigns from one cert",
+      "conditions": {
+        "all": [
+          {
+            "signal": "multi-san-cert"
+          }
+        ],
+        "any": [
+          {
+            "signal": "known-typosquat"
+          },
+          {
+            "signal": "brand-in-subdomain"
+          },
+          {
+            "signal": "homoglyph-substitution"
+          },
+          {
+            "signal": "idn-homograph-brand"
+          },
+          {
+            "signal_group": "brandImpersonation"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "multi-san-phishkit",
+      "description": "Multi-SAN certificate + phishkit signature patterns — shared hosting cert combined with known phishing toolkit code confirms malicious infrastructure",
+      "conditions": {
+        "all": [
+          {
+            "signal": "multi-san-cert"
+          },
+          {
+            "signal_group": "phishkitSignatures"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "rapid-issuance-phishkit",
+      "description": "5+ certs issued in 7 days + phishkit signature — rapidly rotating infrastructure deploying known phishing toolkits, active campaign",
+      "conditions": {
+        "all": [
+          {
+            "signal": "rapid-cert-issuance"
+          },
+          {
+            "signal_group": "phishkitSignatures"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "rapid-issuance-credential-form",
+      "description": "Rapid cert cycling + password form + credential keywords in URL — infrastructure churning through certs while harvesting credentials",
+      "conditions": {
+        "all": [
+          {
+            "signal": "rapid-cert-issuance"
+          },
+          {
+            "has_password_form": true
+          },
+          {
+            "signal": "credential-keywords-in-url"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "cert-age-ct-age-dedup",
+      "description": "cert-recently-issued and new-domain-ct-log both derive from crt.sh data — they measure the same underlying condition (recent certificate issuance) so replace with a single calibrated signal to prevent double-counting",
+      "conditions": {
+        "all": [
+          {
+            "signal": "cert-recently-issued"
+          },
+          {
+            "signal": "new-domain-ct-log"
+          }
+        ]
+      },
+      "action": {
+        "scope": "replace",
+        "weight": 0.35,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "tls-ephemeral-infra-dedup",
+      "description": "Free CA + short validity + recently issued cert all describe the same disposable certificate — deduplicate into a single ephemeral-infrastructure signal",
+      "conditions": {
+        "all": [
+          {
+            "signal": "free-ca-cert"
+          },
+          {
+            "signal": "short-cert-validity"
+          },
+          {
+            "signal": "cert-recently-issued"
+          }
+        ]
+      },
+      "action": {
+        "scope": "replace",
+        "weight": 0.2,
+        "severity": "medium"
+      }
+    },
+    {
+      "id": "free-ca-no-corroboration-downscore",
+      "description": "Free CA cert fired but NO brand impersonation, NO credential harvesting, NO password form, and heuristic score is low — this is a normal Let's Encrypt site, reduce the CA signal to near-zero",
+      "conditions": {
+        "all": [
+          {
+            "signal": "free-ca-cert"
+          },
+          {
+            "heuristic_score": {
+              "lt": 0.2
+            }
+          },
+          {
+            "not": {
+              "has_password_form": true
+            }
+          },
+          {
+            "not": {
+              "signal": "known-typosquat"
+            }
+          },
+          {
+            "not": {
+              "signal": "brand-in-subdomain"
+            }
+          },
+          {
+            "not": {
+              "signal": "homoglyph-substitution"
+            }
+          },
+          {
+            "not": {
+              "signal_group": "credentialHarvesting"
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "downscore",
+        "weight": 0,
+        "severity": "info"
+      }
+    },
+    {
+      "id": "wildcard-no-corroboration-downscore",
+      "description": "Wildcard cert fired but no brand impersonation and no suspicious subdomains — wildcard certs are normal infrastructure, suppress the signal",
+      "conditions": {
+        "all": [
+          {
+            "signal": "wildcard-cert"
+          },
+          {
+            "not": {
+              "signal": "deep-subdomain"
+            }
+          },
+          {
+            "not": {
+              "signal": "known-typosquat"
+            }
+          },
+          {
+            "not": {
+              "signal": "brand-in-subdomain"
+            }
+          },
+          {
+            "not": {
+              "signal": "homoglyph-substitution"
+            }
+          },
+          {
+            "not": {
+              "signal_group": "credentialHarvesting"
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "downscore",
+        "weight": 0,
+        "severity": "info"
       }
     }
   ]
