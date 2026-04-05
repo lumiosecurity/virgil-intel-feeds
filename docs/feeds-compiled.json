@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-05T04:37:48.135Z",
+    "compiledAt": "2026-04-05T04:42:04.878Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1097,
@@ -17505,9 +17505,9 @@
       "note": "Custom URI schemes for messaging apps (whatsapp://, telegram://, signal://) in page links can deep-link into apps with pre-filled malicious content, contact additions, or group invites used in social engineering chains."
     },
     {
-      "id": "smishing-triad-top-domain",
+      "id": "risky-tld-delivery-payment-phish",
       "group": "urlHeuristics",
-      "description": "Chinese .TOP domain in page source links — Smishing Triad infrastructure indicator",
+      "description": "Delivery/logistics page on high-risk TLD with payment collection — disposable phishing infrastructure pattern",
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
@@ -17530,7 +17530,7 @@
         }
       ],
       "condition": "1 & 2 & 3",
-      "note": "The Smishing Triad predominantly uses .TOP domains for their toll road, delivery, and payment phishing campaigns. Links to .top domains combined with logistics/toll/payment keywords are characteristic of this Chinese smishing group."
+      "note": "Delivery phishing campaigns frequently use cheap high-risk TLDs (.top, .xin, .cyou, .cfd, .sbs) for disposable infrastructure. The combination of a high-risk TLD, logistics keywords, and payment collection is a strong phishing signal regardless of the specific threat actor."
     },
     {
       "id": "link-in-bio-redirect",
@@ -19544,7 +19544,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-05T04:35:37.210Z",
+      "compiledAt": "2026-04-05T04:37:46.855Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

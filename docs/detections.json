@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-05-04:37",
-    "generatedAt": "2026-04-05T04:37:48.159Z",
+    "version": "2026-04-05-04:42",
+    "generatedAt": "2026-04-05T04:42:04.902Z",
     "brandCount": 190,
     "patternCount": 1097,
     "networkPatternCount": 20
@@ -28671,13 +28671,13 @@
       "patternFlags": "i"
     },
     {
-      "id": "smishing-triad-top-domain",
+      "id": "risky-tld-delivery-payment-phish",
       "group": "urlHeuristics",
-      "description": "Chinese .TOP domain in page source links — Smishing Triad infrastructure indicator",
+      "description": "Delivery/logistics page on high-risk TLD with payment collection — disposable phishing infrastructure pattern",
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "note": "The Smishing Triad predominantly uses .TOP domains for their toll road, delivery, and payment phishing campaigns. Links to .top domains combined with logistics/toll/payment keywords are characteristic of this Chinese smishing group.",
+      "note": "Delivery phishing campaigns frequently use cheap high-risk TLDs (.top, .xin, .cyou, .cfd, .sbs) for disposable infrastructure. The combination of a high-risk TLD, logistics keywords, and payment collection is a strong phishing signal regardless of the specific threat actor.",
       "match": [
         {
           "content": ".top",
