@@ -1,12 +1,12 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-05T04:25:27.724Z",
+    "compiledAt": "2026-04-05T04:35:40.836Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1097,
     "networkPatternCount": 20,
     "domHashCount": 0,
-    "metaRuleCount": 42
+    "metaRuleCount": 45
   },
   "brandEntries": [
     {
@@ -19463,11 +19463,88 @@
         "weight": 0,
         "severity": "info"
       }
+    },
+    {
+      "id": "risky-tld-free-ca-password-form",
+      "description": "High-risk TLD + free/automated CA + password form — disposable phishing domain with throwaway cert and credential harvesting, the classic smishing-to-phish infrastructure pattern",
+      "conditions": {
+        "all": [
+          {
+            "signal": "high-risk-tld"
+          },
+          {
+            "signal": "free-ca-cert"
+          },
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "risky-tld-recent-cert-brand",
+      "description": "High-risk TLD + certificate issued within days + brand impersonation — freshly provisioned phishing infrastructure on an abused TLD targeting a known brand",
+      "conditions": {
+        "all": [
+          {
+            "signal": "high-risk-tld"
+          },
+          {
+            "signal": "cert-recently-issued"
+          }
+        ],
+        "any": [
+          {
+            "signal": "known-typosquat"
+          },
+          {
+            "signal": "brand-in-subdomain"
+          },
+          {
+            "signal": "homoglyph-substitution"
+          },
+          {
+            "signal": "idn-homograph-brand"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "risky-tld-free-ca-recent-cert",
+      "description": "High-risk TLD + free CA + recently issued cert — all three disposable-infrastructure signals converging, even without brand detection yet",
+      "conditions": {
+        "all": [
+          {
+            "signal": "high-risk-tld"
+          },
+          {
+            "signal": "free-ca-cert"
+          },
+          {
+            "signal": "cert-recently-issued"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "medium"
+      }
     }
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-04T23:37:36.906Z",
+      "compiledAt": "2026-04-05T04:25:25.796Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
