@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-05-04:43",
-    "generatedAt": "2026-04-05T04:43:49.497Z",
-    "brandCount": 190,
-    "patternCount": 1097,
+    "version": "2026-04-05-05:12",
+    "generatedAt": "2026-04-05T05:12:04.170Z",
+    "brandCount": 191,
+    "patternCount": 1101,
     "networkPatternCount": 20
   },
   "brandEntries": [
@@ -1625,6 +1625,24 @@
         "socie-tegenerale",
         "eurogenerale",
         "societegnerale"
+      ]
+    },
+    {
+      "name": "qnb",
+      "vertical": "financial",
+      "domains": [
+        "qnb.com",
+        "qnbfinansbank.com",
+        "qnb.com.tr"
+      ],
+      "typos": [
+        "qnbb",
+        "qnbbank",
+        "qnb-bank",
+        "qnbfinans",
+        "qnb-finansbank",
+        "qnbtr",
+        "q-n-b"
       ]
     },
     {
@@ -16776,6 +16794,28 @@
       "patternFlags": "i"
     },
     {
+      "id": "facebook-title-impersonation-spa",
+      "group": "brandImpersonation",
+      "description": "Facebook brand mentioned in title with single-page application structure typical of modern phishing kits",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "note": "Facebook brand in title + React SPA pattern - legitimate Facebook pages don't use this exact structure",
+      "patternString": "<title>[^<]*(?:facebook|business help center)[^<]*</title>[\\s\\S]{0,2000}<div id=\"root\"></div>",
+      "patternFlags": "i"
+    },
+    {
+      "id": "facebook-favicon-impersonation",
+      "group": "brandImpersonation",
+      "description": "Facebook logo favicon used on non-Facebook domain",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Facebook-branded favicon on non-Facebook domain indicates brand impersonation",
+      "patternString": "<link[^>]*rel=\"icon\"[^>]*facebook_logo[^>]*\\.ico[^>]*>",
+      "patternFlags": "i"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -19771,6 +19811,17 @@
       "source": "html",
       "note": "Legitimate Facebook never uses code.php endpoints - this is phishkit-specific for 2FA bypass collection",
       "patternString": "(?:facebook|fb)[\\s\\S]{0,2000}action\\s*=\\s*['\"]code\\.php['\"]",
+      "patternFlags": "i"
+    },
+    {
+      "id": "turkish-banking-card-harvest",
+      "group": "credentialHarvesting",
+      "description": "Turkish banking phishing page collecting name, phone, and credit card details with specific field patterns",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "note": "Matches Turkish phishing pages that collect personal info followed by credit card details - specific language pattern rarely seen on legitimate sites",
+      "patternString": "(?:Adınız\\s+Soyadınız|Telefon\\s+Numaranız)[\\s\\S]{0,2000}(?:Kredi\\s+Kart|cvv|güvenlik\\s+kodu)",
       "patternFlags": "i"
     },
     {
@@ -27763,6 +27814,17 @@
       "source": "html",
       "note": "Combines fake virus alerts, system lockdown claims, fabricated error codes, and phone pressure tactics - never appears on legitimate Microsoft pages",
       "patternString": "(?:Virus\\s+Alert|Windows[^<]{0,200}locked|system[^<]{0,200}blocked)[\\s\\S]{0,1000}(?:Error:\\s*[A-Za-z0-9x]{6,}|Trojan[^<]{0,200}spyware|call[^<]{0,200}immediately)[\\s\\S]{0,1000}\\+?1-[0-9]{3}-[0-9]{3}-[0-9]{4}",
+      "patternFlags": "i"
+    },
+    {
+      "id": "turkish-credit-application-flow",
+      "group": "socialEngineering",
+      "description": "Turkish credit card application social engineering flow asking about card usage before harvesting details",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Detects Turkish social engineering asking about credit card usage before harvesting - legitimate banks don't use this application flow pattern",
+      "patternString": "Kredi\\s+Kartı\\s+Kullanıyor\\s+musunuz[\\s\\S]{0,1000}(?:Evet|Hayır)[\\s\\S]{0,1000}(?:Başvuru|tamamla)",
       "patternFlags": "i"
     },
     {

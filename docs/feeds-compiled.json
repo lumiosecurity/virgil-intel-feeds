@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-05T04:43:49.473Z",
-    "brandCount": 190,
+    "compiledAt": "2026-04-05T05:12:04.147Z",
+    "brandCount": 191,
     "signalCount": 1,
-    "patternCount": 1097,
+    "patternCount": 1101,
     "networkPatternCount": 20,
     "domHashCount": 0,
     "metaRuleCount": 45
@@ -1667,6 +1667,24 @@
         "socie-tegenerale",
         "eurogenerale",
         "societegnerale"
+      ],
+      "vertical": "financial"
+    },
+    {
+      "name": "qnb",
+      "domains": [
+        "qnb.com",
+        "qnbfinansbank.com",
+        "qnb.com.tr"
+      ],
+      "typos": [
+        "qnbb",
+        "qnbbank",
+        "qnb-bank",
+        "qnbfinans",
+        "qnb-finansbank",
+        "qnbtr",
+        "q-n-b"
       ],
       "vertical": "financial"
     },
@@ -5805,6 +5823,28 @@
       "note": "Intentional brand name typos in copyright to evade detection while maintaining visual similarity"
     },
     {
+      "id": "facebook-title-impersonation-spa",
+      "group": "brandImpersonation",
+      "description": "Facebook brand mentioned in title with single-page application structure typical of modern phishing kits",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "<title>[^<]*(?:facebook|business help center)[^<]*</title>[\\s\\S]{0,2000}<div id=\"root\"></div>",
+      "patternFlags": "i",
+      "note": "Facebook brand in title + React SPA pattern - legitimate Facebook pages don't use this exact structure"
+    },
+    {
+      "id": "facebook-favicon-impersonation",
+      "group": "brandImpersonation",
+      "description": "Facebook logo favicon used on non-Facebook domain",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "<link[^>]*rel=\"icon\"[^>]*facebook_logo[^>]*\\.ico[^>]*>",
+      "patternFlags": "i",
+      "note": "Facebook-branded favicon on non-Facebook domain indicates brand impersonation"
+    },
+    {
       "id": "fake-captcha-gating",
       "group": "captchaGating",
       "description": "Fake reCAPTCHA-style verification hiding login form",
@@ -8780,6 +8820,17 @@
       "patternString": "(?:facebook|fb)[\\s\\S]{0,2000}action\\s*=\\s*['\"]code\\.php['\"]",
       "patternFlags": "i",
       "note": "Legitimate Facebook never uses code.php endpoints - this is phishkit-specific for 2FA bypass collection"
+    },
+    {
+      "id": "turkish-banking-card-harvest",
+      "group": "credentialHarvesting",
+      "description": "Turkish banking phishing page collecting name, phone, and credit card details with specific field patterns",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:Adınız\\s+Soyadınız|Telefon\\s+Numaranız)[\\s\\S]{0,2000}(?:Kredi\\s+Kart|cvv|güvenlik\\s+kodu)",
+      "patternFlags": "i",
+      "note": "Matches Turkish phishing pages that collect personal info followed by credit card details - specific language pattern rarely seen on legitimate sites"
     },
     {
       "id": "suspicious-subdomain-financial",
@@ -16637,6 +16688,17 @@
       "note": "Combines fake virus alerts, system lockdown claims, fabricated error codes, and phone pressure tactics - never appears on legitimate Microsoft pages"
     },
     {
+      "id": "turkish-credit-application-flow",
+      "group": "socialEngineering",
+      "description": "Turkish credit card application social engineering flow asking about card usage before harvesting details",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "patternString": "Kredi\\s+Kartı\\s+Kullanıyor\\s+musunuz[\\s\\S]{0,1000}(?:Evet|Hayır)[\\s\\S]{0,1000}(?:Başvuru|tamamla)",
+      "patternFlags": "i",
+      "note": "Detects Turkish social engineering asking about credit card usage before harvesting - legitimate banks don't use this application flow pattern"
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -19544,7 +19606,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-05T04:43:06.511Z",
+      "compiledAt": "2026-04-05T04:43:46.008Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
