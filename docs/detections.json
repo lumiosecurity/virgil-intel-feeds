@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "2026-04-05-04:43",
-    "generatedAt": "2026-04-05T04:43:08.760Z",
+    "generatedAt": "2026-04-05T04:43:49.497Z",
     "brandCount": 190,
     "patternCount": 1097,
     "networkPatternCount": 20
@@ -25917,15 +25917,15 @@
           "fast_pattern": true
         },
         {
-          "pattern": "error|problem|issue|trouble",
+          "pattern": "(?:error|problem|issue|trouble).{0,30}(?:account|sign|log|verify|session)|(?:account|sign|log|verify|session).{0,30}(?:error|problem|issue|trouble)",
           "flags": "i"
         },
         {
-          "pattern": "sign\\s*in|log\\s*in|verify|authenticate",
+          "pattern": "<form[^>]*>[\\s\\S]{0,2000}(?:password|type=['\"]password)",
           "flags": "i"
         },
         {
-          "pattern": "microsoft|google|apple|outlook|office\\s*365|onedrive|sharepoint",
+          "pattern": "<title[^>]*>[^<]*(?:microsoft|google|outlook|office\\s*365|onedrive|sharepoint)[^<]*</title>|<h[1-3][^>]*>[^<]*(?:microsoft|google|outlook|office\\s*365|onedrive|sharepoint)",
           "flags": "i"
         }
       ],
