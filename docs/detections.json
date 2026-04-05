@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "version": "2026-04-05-05:12",
-    "generatedAt": "2026-04-05T05:12:04.170Z",
-    "brandCount": 191,
-    "patternCount": 1101,
-    "networkPatternCount": 20
+    "version": "2026-04-05-05:22",
+    "generatedAt": "2026-04-05T05:22:00.206Z",
+    "brandCount": 192,
+    "patternCount": 1102,
+    "networkPatternCount": 21
   },
   "brandEntries": [
     {
@@ -1643,6 +1643,24 @@
         "qnb-finansbank",
         "qnbtr",
         "q-n-b"
+      ]
+    },
+    {
+      "name": "dkb",
+      "vertical": "financial",
+      "domains": [
+        "dkb.de",
+        "dkb-bank.de"
+      ],
+      "typos": [
+        "dkb-bank",
+        "dkb-banking",
+        "dkb-login",
+        "dkb-online",
+        "dkb24",
+        "dkbbank",
+        "d-k-b",
+        "dkbonline"
       ]
     },
     {
@@ -19825,6 +19843,17 @@
       "patternFlags": "i"
     },
     {
+      "id": "german-banking-credential-harvest",
+      "group": "credentialHarvesting",
+      "description": "German banking login form with Anmeldename/Passwort fields submitting to PHP endpoint",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "note": "German-language banking credential harvesting pattern - Anmeldename (username) + Passwort (password) with PHP form action",
+      "patternString": "(?:Anmeldename|Benutzername)[\\s\\S]{0,500}(?:type=['\"]password['\"]|Passwort)[\\s\\S]{0,500}action=['\"][^'\"]*\\.php",
+      "patternFlags": "i"
+    },
+    {
       "id": "suspicious-subdomain-financial",
       "group": "hostingPatterns",
       "description": "Detects random subdomains on financial-sounding domains used for phishing",
@@ -29201,6 +29230,18 @@
       "patternString": "/(?:s1|send|mail|post|grab|log|save|collect|cred)(?:er)?\\.php(?:\\?|$)",
       "patternFlags": "i",
       "note": "PHP endpoints with single-letter + digit or common phishkit verbs - pattern rarely used by legitimate login systems"
+    },
+    {
+      "id": "network-german-banking-php-exfil",
+      "group": "credentialHarvesting",
+      "description": "POST to PHP endpoint with German banking field names (user/pass or anmeldename/passwort)",
+      "severity": "high",
+      "weight": 0.35,
+      "target": "fieldNames",
+      "transport": "any",
+      "patternString": "\\b(?:anmeldename|benutzername)\\b[\\s\\S]{0,100}\\b(?:pass|passwort)\\b",
+      "patternFlags": "i",
+      "note": "Matches extracted field names from German banking phishing forms - legitimate German banks use different field naming conventions"
     },
     {
       "id": "network-telegram-bot-post",

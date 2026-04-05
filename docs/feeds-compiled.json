@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-05T05:12:04.147Z",
-    "brandCount": 191,
+    "compiledAt": "2026-04-05T05:22:00.162Z",
+    "brandCount": 192,
     "signalCount": 1,
-    "patternCount": 1101,
-    "networkPatternCount": 20,
+    "patternCount": 1102,
+    "networkPatternCount": 21,
     "domHashCount": 0,
     "metaRuleCount": 45
   },
@@ -1685,6 +1685,24 @@
         "qnb-finansbank",
         "qnbtr",
         "q-n-b"
+      ],
+      "vertical": "financial"
+    },
+    {
+      "name": "dkb",
+      "domains": [
+        "dkb.de",
+        "dkb-bank.de"
+      ],
+      "typos": [
+        "dkb-bank",
+        "dkb-banking",
+        "dkb-login",
+        "dkb-online",
+        "dkb24",
+        "dkbbank",
+        "d-k-b",
+        "dkbonline"
       ],
       "vertical": "financial"
     },
@@ -8831,6 +8849,17 @@
       "patternString": "(?:Adınız\\s+Soyadınız|Telefon\\s+Numaranız)[\\s\\S]{0,2000}(?:Kredi\\s+Kart|cvv|güvenlik\\s+kodu)",
       "patternFlags": "i",
       "note": "Matches Turkish phishing pages that collect personal info followed by credit card details - specific language pattern rarely seen on legitimate sites"
+    },
+    {
+      "id": "german-banking-credential-harvest",
+      "group": "credentialHarvesting",
+      "description": "German banking login form with Anmeldename/Passwort fields submitting to PHP endpoint",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "html",
+      "patternString": "(?:Anmeldename|Benutzername)[\\s\\S]{0,500}(?:type=['\"]password['\"]|Passwort)[\\s\\S]{0,500}action=['\"][^'\"]*\\.php",
+      "patternFlags": "i",
+      "note": "German-language banking credential harvesting pattern - Anmeldename (username) + Passwort (password) with PHP form action"
     },
     {
       "id": "suspicious-subdomain-financial",
@@ -18037,6 +18066,18 @@
       "note": "PHP endpoints with single-letter + digit or common phishkit verbs - pattern rarely used by legitimate login systems"
     },
     {
+      "id": "network-german-banking-php-exfil",
+      "group": "credentialHarvesting",
+      "description": "POST to PHP endpoint with German banking field names (user/pass or anmeldename/passwort)",
+      "severity": "high",
+      "weight": 0.35,
+      "target": "fieldNames",
+      "transport": "any",
+      "patternString": "\\b(?:anmeldename|benutzername)\\b[\\s\\S]{0,100}\\b(?:pass|passwort)\\b",
+      "patternFlags": "i",
+      "note": "Matches extracted field names from German banking phishing forms - legitimate German banks use different field naming conventions"
+    },
+    {
       "id": "network-telegram-bot-post",
       "group": "phishkitSignatures",
       "description": "POST to Telegram Bot API sendMessage endpoint — credential exfiltration in progress",
@@ -19606,7 +19647,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-05T04:43:46.008Z",
+      "compiledAt": "2026-04-05T05:12:02.483Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
