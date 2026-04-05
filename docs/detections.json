@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-05-04:35",
-    "generatedAt": "2026-04-05T04:35:40.861Z",
+    "version": "2026-04-05-04:37",
+    "generatedAt": "2026-04-05T04:37:48.159Z",
     "brandCount": 190,
     "patternCount": 1097,
     "networkPatternCount": 20
@@ -16473,8 +16473,8 @@
           "nocase": true
         },
         {
-          "content": "ups",
-          "nocase": true
+          "pattern": "\\bups\\b",
+          "flags": "i"
         },
         {
           "content": "usps",
@@ -16485,12 +16485,12 @@
           "nocase": true
         },
         {
-          "content": "evri",
-          "nocase": true
+          "pattern": "\\bevri\\b",
+          "flags": "i"
         },
         {
-          "content": "dpd",
-          "nocase": true
+          "pattern": "\\bdpd\\b",
+          "flags": "i"
         },
         {
           "content": "la poste",

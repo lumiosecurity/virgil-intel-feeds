@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-05T04:35:40.836Z",
+    "compiledAt": "2026-04-05T04:37:48.135Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1097,
@@ -5501,8 +5501,8 @@
           "nocase": true
         },
         {
-          "content": "ups",
-          "nocase": true
+          "pattern": "\\bups\\b",
+          "flags": "i"
         },
         {
           "content": "usps",
@@ -5513,12 +5513,12 @@
           "nocase": true
         },
         {
-          "content": "evri",
-          "nocase": true
+          "pattern": "\\bevri\\b",
+          "flags": "i"
         },
         {
-          "content": "dpd",
-          "nocase": true
+          "pattern": "\\bdpd\\b",
+          "flags": "i"
         },
         {
           "content": "la poste",
@@ -19544,7 +19544,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-05T04:25:25.796Z",
+      "compiledAt": "2026-04-05T04:35:37.210Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
