@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-05-04:42",
-    "generatedAt": "2026-04-05T04:42:04.902Z",
+    "version": "2026-04-05-04:43",
+    "generatedAt": "2026-04-05T04:43:08.760Z",
     "brandCount": 190,
     "patternCount": 1097,
     "networkPatternCount": 20
@@ -19224,7 +19224,7 @@
     {
       "id": "toll-wallet-link-attempt",
       "group": "credentialHarvesting",
-      "description": "Apple Pay or Google Pay wallet linking prompt on toll payment page — mobile wallet fraud",
+      "description": "Apple Pay or Google Pay wallet linking prompt on toll/delivery payment page — mobile wallet fraud",
       "severity": "high",
       "weight": 0.35,
       "source": "html",
@@ -19236,15 +19236,15 @@
           "fast_pattern": true
         },
         {
-          "pattern": "Apple\\s*Pay|Google\\s*Pay|Samsung\\s*Pay|mobile\\s*wallet|digital\\s*wallet",
+          "pattern": "Apple\\s*Pay|Google\\s*Pay|Samsung\\s*Pay",
           "flags": "i"
         },
         {
-          "pattern": "link|add|connect|setup|verify|authenticate",
+          "pattern": "toll|delivery|parcel|postal|customs|shipping|package",
           "flags": "i"
         },
         {
-          "pattern": "card|expir|cvv|billing|payment",
+          "pattern": "link.{0,15}(?:card|wallet)|add.{0,15}(?:card|wallet)|connect.{0,15}(?:card|wallet)|verify.{0,15}(?:card|wallet)",
           "flags": "i"
         }
       ],

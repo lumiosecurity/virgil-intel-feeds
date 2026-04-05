@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-05T04:42:04.878Z",
+    "compiledAt": "2026-04-05T04:43:08.559Z",
     "brandCount": 190,
     "signalCount": 1,
     "patternCount": 1097,
@@ -8232,7 +8232,7 @@
     {
       "id": "toll-wallet-link-attempt",
       "group": "credentialHarvesting",
-      "description": "Apple Pay or Google Pay wallet linking prompt on toll payment page — mobile wallet fraud",
+      "description": "Apple Pay or Google Pay wallet linking prompt on toll/delivery payment page — mobile wallet fraud",
       "severity": "high",
       "weight": 0.35,
       "source": "html",
@@ -8243,15 +8243,15 @@
           "fast_pattern": true
         },
         {
-          "pattern": "Apple\\s*Pay|Google\\s*Pay|Samsung\\s*Pay|mobile\\s*wallet|digital\\s*wallet",
+          "pattern": "Apple\\s*Pay|Google\\s*Pay|Samsung\\s*Pay",
           "flags": "i"
         },
         {
-          "pattern": "link|add|connect|setup|verify|authenticate",
+          "pattern": "toll|delivery|parcel|postal|customs|shipping|package",
           "flags": "i"
         },
         {
-          "pattern": "card|expir|cvv|billing|payment",
+          "pattern": "link.{0,15}(?:card|wallet)|add.{0,15}(?:card|wallet)|connect.{0,15}(?:card|wallet)|verify.{0,15}(?:card|wallet)",
           "flags": "i"
         }
       ],
@@ -19544,7 +19544,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-05T04:37:46.855Z",
+      "compiledAt": "2026-04-05T04:42:01.695Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
