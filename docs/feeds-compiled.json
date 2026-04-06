@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-06T18:48:39.057Z",
+    "compiledAt": "2026-04-06T18:50:44.451Z",
     "brandCount": 192,
     "signalCount": 1,
     "patternCount": 1102,
@@ -14025,19 +14025,25 @@
           "fast_pattern": true
         },
         {
-          "pattern": "step|stage|page|phase|panel",
+          "pattern": "(?:step|stage|phase|panel)[\\s_-]?(?:\\d|num|count|current|active|next|index)",
           "flags": "i"
         },
         {
-          "pattern": "email|password|otp|mfa|verify|captcha",
+          "pattern": "\\b(?:email|password|passwd|otp|mfa|verify|captcha)\\b",
           "flags": "i"
         },
         {
-          "pattern": "style\\.display|classList|visibility|hidden"
+          "pattern": "(?:style\\.display|classList\\.(?:add|remove|toggle)|visibility)[\\s\\S]{0,1000}\\b(?:email|password|passwd|otp|mfa)\\b|\\b(?:email|password|passwd|otp|mfa)\\b[\\s\\S]{0,1000}(?:style\\.display|classList\\.(?:add|remove|toggle)|visibility)",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
-      "note": "Tycoon stage progression: getElementById targeting step/stage panels with credential fields and display toggling."
+      "condition": "1 & 2 & 3 & 4",
+      "note": "Tycoon stage progression: step/stage counter + credential field + display toggling within 1000 chars. [FP fix: added word boundaries on credential terms (otp matched inside gotPos), required step/stage to have a numeric/state suffix (not just the word page), proximity between display toggling and credential fields, <nav> negation.]"
     },
     {
       "id": "toll-multiple-state-brands",
