@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-06T18:40:57.585Z",
+    "compiledAt": "2026-04-06T18:42:37.214Z",
     "brandCount": 192,
     "signalCount": 1,
     "patternCount": 1102,
@@ -14210,18 +14210,23 @@
           "fast_pattern": true
         },
         {
-          "pattern": "atob|Uint8Array|ArrayBuffer|Blob"
+          "pattern": "atob\\(|Uint8Array\\(|from(?:Binary|Char)"
         },
         {
-          "pattern": "createObjectURL|download|saveAs|msSaveBlob"
+          "pattern": "createObjectURL|msSaveBlob"
         },
         {
-          "pattern": "\\.zip|\\.iso|\\.img|\\.js|\\.exe|\\.msi|\\.hta|\\.vbs|\\.bat|\\.cmd|\\.ps1|\\.lnk|\\.scr",
+          "pattern": "(?:createObjectURL|Blob|download|saveAs)[\\s\\S]{0,500}(?:\\.zip|\\.iso|\\.img|\\.exe|\\.msi|\\.hta|\\.vbs|\\.bat|\\.cmd|\\.ps1|\\.lnk|\\.scr|\\.7z|\\.rar)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
-      "note": "Constructing a file from base64/ArrayBuffer/Blob and triggering a download with a dangerous extension (.zip, .iso, .js, .exe, .msi, .hta) is HTML smuggling — malware delivery constructed entirely in the browser from an HTML attachment."
+      "condition": "1 & 2 & 3 & 4",
+      "note": "HTML smuggling: base64/binary decode (atob/Uint8Array) + Blob + createObjectURL + dangerous file extension within 500 chars. [FP fix: removed .js from extensions (matches every site), tightened atob requirement, added proximity for extension, added <nav> negation. Legitimate sites use Blob+createObjectURL for images/PDFs but never construct .exe/.iso/.zip downloads from base64.]"
     },
     {
       "id": "html-smuggling-click-download",
@@ -19819,7 +19824,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-06T17:24:20.042Z",
+      "compiledAt": "2026-04-06T18:40:54.185Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
