@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-06T18:46:26.192Z",
+    "compiledAt": "2026-04-06T18:48:39.057Z",
     "brandCount": 192,
     "signalCount": 1,
     "patternCount": 1102,
@@ -16303,24 +16303,25 @@
           "fast_pattern": true
         },
         {
-          "pattern": "subscription|renewal|invoice|order|charge|transaction",
+          "pattern": "\\b(?:subscription|renewal|invoice|(?:your\\s+)?order|charge|transaction)\\b",
           "flags": "i"
         },
         {
-          "pattern": "confirmation|receipt|notice",
+          "pattern": "(?:call|phone|dial|contact)\\s{0,5}(?:us\\s+)?(?:at\\s+)?(?:\\+?1[\\s.-]?)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}|(?:\\+?1[\\s.-]?)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}",
           "flags": "i"
         },
         {
-          "pattern": "cancel|dispute|refund|unauthorized",
+          "pattern": "(?:cancel|refund|dispute|unauthorized)[\\s\\S]{0,2000}\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}|\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}[\\s\\S]{0,2000}(?:cancel|refund|dispute|unauthorized)",
           "flags": "i"
         },
         {
-          "pattern": "call|phone|dial|\\+?1[\\s-]?\\(?\\d{3}\\)?",
-          "flags": "i"
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
       "condition": "1 & 2 & 3 & 4",
-      "note": "Callback phishing shows fake subscription/invoice and tells victim to CALL a phone number to cancel. Phone connects to scammers who install remote access software. CrowdStrike reported 442% vishing growth."
+      "note": "Callback phishing: fake invoice/subscription with phone number to call for cancellation. [FP fix: added word boundaries (\"border\" was matching \"order\"), requires actual phone number format (not just the word \"call\"), cancel/refund must be within 2000 chars of the phone number, added <nav> negation.]"
     },
     {
       "id": "callback-phishing-amount-phone",
@@ -19829,7 +19830,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-06T18:42:33.349Z",
+      "compiledAt": "2026-04-06T18:46:20.642Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
