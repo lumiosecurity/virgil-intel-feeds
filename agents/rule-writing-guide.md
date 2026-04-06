@@ -1029,7 +1029,7 @@ Your triage prompt includes some or all of:
 6. **Phishkit indicators** — lightweight regex matches the extension already ran. These are NOT weighted signals — they're raw string matches like "password field" or "Telegram exfil" or "form action: /send.php".
 7. **External scripts** — domains serving JavaScript to the page. Legitimate CDNs are noise; unfamiliar domains are signal.
 8. **Signals that fired** — the heuristic signals that the extension detected. For rule-gap issues, these fired but scored too low — your job is to figure out what additional rules would have pushed the score over the threshold.
-9. **Domain intelligence** — CT log age, Safe Browsing status, corpus history. Supporting context.
+9. **Domain intelligence** — CT log age, corpus history. Supporting context.
 
 ### What You May NOT Receive
 

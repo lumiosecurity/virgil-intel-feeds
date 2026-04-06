@@ -12,7 +12,6 @@ import { join } from 'path';
 export const cfg = {
   anthropicKey:    process.env.ANTHROPIC_API_KEY,
   githubToken:     process.env.GITHUB_TOKEN,
-  safeBrowsingKey: process.env.SAFE_BROWSING_API_KEY,
   d1Database:      process.env.D1_DATABASE    || 'virgil-telemetry',
   orgName:         process.env.ORG_NAME        || 'lumiosecurity',
   coreRulesRepo:   process.env.CORE_RULES_REPO || 'virgil-core-rules',
@@ -217,35 +216,6 @@ export async function getCTAge(domain) {
   } catch { return null; }
 }
 
-// ── Google Safe Browsing ───────────────────────────────────────────────────────
-
-export async function checkSafeBrowsing(url) {
-  if (!cfg.safeBrowsingKey) return null;
-  try {
-    const resp = await fetch(
-      `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${cfg.safeBrowsingKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          client: { clientId: 'virgil-agents', clientVersion: '1.0' },
-          threatInfo: {
-            threatTypes:      ['MALWARE', 'SOCIAL_ENGINEERING'],
-            platformTypes:    ['ANY_PLATFORM'],
-            threatEntryTypes: ['URL'],
-            threatEntries:    [{ url }],
-          },
-        }),
-        signal: AbortSignal.timeout(4000),
-      }
-    );
-    if (!resp.ok) return null;
-    const data = await resp.json();
-    return (data.matches || []).length > 0
-      ? { matched: true, threatTypes: data.matches.map(m => m.threatType) }
-      : { matched: false };
-  } catch { return null; }
-}
 
 // ── Domain utilities ──────────────────────────────────────────────────────────
 // Canonical registered domain extraction — matches the extension's
@@ -298,9 +268,8 @@ export function extractRegisteredDomain(hostname) {
 export async function getDomainIntel(hostname) {
   const registeredDomain = extractRegisteredDomain(hostname);
 
-  const [ct, gsb] = await Promise.allSettled([
+  const [ct] = await Promise.allSettled([
     getCTAge(hostname),                          // CT on full hostname
-    checkSafeBrowsing(`https://${hostname}`),    // GSB on full hostname
   ]);
 
   // Corpus queries use registered_domain column — parameterized
@@ -322,7 +291,6 @@ export async function getDomainIntel(hostname) {
     hostname,
     registeredDomain,
     ct:     ct.status === 'fulfilled' ? ct.value : null,
-    gsb:    gsb.status === 'fulfilled' ? gsb.value : null,
     corpus: corpusRows[0] || { reports: 0, avg_conf: null, max_risk: null },
     feeds:  feedRows[0]   || { hits: 0, avg_score: null, feeds: null },
   };
@@ -392,9 +360,6 @@ export function fmtIntel(intel) {
   } else {
     lines.push('**CT log age:** not found for this specific hostname (may be new, using wildcard cert, or private CA)');
   }
-  if (intel.gsb?.matched)   lines.push(`**Safe Browsing:** ⚠ MATCHED — ${intel.gsb.threatTypes.join(', ')}`);
-  else if (intel.gsb)       lines.push('**Safe Browsing:** clean');
-  else                       lines.push('**Safe Browsing:** not checked (no key)');
   lines.push(`**Corpus reports (${intel.registeredDomain}):** ${intel.corpus.reports} distinct installs, avg confidence ${intel.corpus.avg_conf?.toFixed(2) || 'N/A'}, max verdict ${intel.corpus.max_risk || 'none'}`);
   lines.push(`**Feed hits (${intel.registeredDomain}):** ${intel.feeds.hits} ingested URLs, avg score ${intel.feeds.avg_score?.toFixed(2) || 'N/A'}, sources: ${intel.feeds.feeds || 'none'}`);
   return lines.join('\n');

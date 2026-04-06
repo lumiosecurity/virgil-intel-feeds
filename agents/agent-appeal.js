@@ -9,7 +9,7 @@
 // Input:   ISSUE_NUMBER env var
 // Output:  GitHub issue comment + blocklist removal if auto-approved
 
-import { cfg, d1, claude, github, getCTAge, checkSafeBrowsing } from './agent-tools.js';
+import { cfg, d1, claude, github, getCTAge } from './agent-tools.js';
 
 const ISSUE_NUMBER = parseInt(process.env.ISSUE_NUMBER || process.argv[2]);
 const REPO         = cfg.coreRulesRepo;
@@ -18,7 +18,6 @@ const DRY_RUN      = process.argv.includes('--dry-run');
 // Auto-approve removal if ALL of these pass:
 const AUTO_APPROVE_CRITERIA = {
   minDomainAgeDays:  30,   // domain must be at least 30 days old
-  safeBrowsingClean: true, // must not appear in Safe Browsing
   maxCorpusReports:  2,    // at most 2 distinct reports in corpus
 };
 
@@ -60,9 +59,8 @@ async function main() {
   // ── Gather verification data ────────────────────────────────────────────────
   console.log('Gathering verification data...');
 
-  const [ct, gsb] = await Promise.all([
+  const [ct] = await Promise.all([
     getCTAge(domain),
-    checkSafeBrowsing(`https://${domain}`),
   ]);
 
   // Corpus reports for this domain
@@ -95,7 +93,6 @@ async function main() {
   // ── Evaluate auto-approve criteria ─────────────────────────────────────────
   const checks = {
     domainAge:    ct?.ageDays >= AUTO_APPROVE_CRITERIA.minDomainAgeDays,
-    safeBrowsing: gsb ? !gsb.matched : true, // if can't check, assume clean
     corpusReports:report.distinct_installs <= AUTO_APPROVE_CRITERIA.maxCorpusReports,
     notConfirmedPhish: !inBlocklistCriteria || (report.distinct_installs || 0) <= 2,
   };
@@ -105,7 +102,6 @@ async function main() {
 
   console.log(`Auto-approve checks: ${checksPassed}/${Object.keys(checks).length} passed`);
   console.log(`CT age: ${ct?.ageDays || 'unknown'} days`);
-  console.log(`Safe Browsing: ${gsb?.matched ? 'MATCHED' : 'clean'}`);
   console.log(`Corpus reports: ${report.distinct_installs || 0}`);
 
   // ── Ask Claude for recommendation ───────────────────────────────────────────
@@ -122,9 +118,6 @@ async function main() {
 **Certificate Transparency:**
 ${ct ? `- First cert issued: ${new Date(ct.firstSeenTs).toISOString().slice(0,10)} (${ct.ageDays} days ago)` : '- Not found in CT logs — domain may be very new'}
 
-**Google Safe Browsing:**
-${gsb?.matched ? `- ⚠ MATCHED: ${gsb.threatTypes.join(', ')}` : gsb ? '- Clean — not in Safe Browsing database' : '- Not checked (no API key)'}
-
 **Corpus reports:**
 - Distinct installs that reported this domain: ${report.distinct_installs || 0}
 - Total verdicts: ${report.total_verdicts || 0}
@@ -136,7 +129,6 @@ ${gsb?.matched ? `- ⚠ MATCHED: ${gsb.threatTypes.join(', ')}` : gsb ? '- Clean
 
 **Auto-approve criteria:**
 - Domain age ≥ 30 days: ${checks.domainAge ? '✅' : '❌'} (${ct?.ageDays || 'unknown'} days)
-- Safe Browsing clean: ${checks.safeBrowsing ? '✅' : '❌'}
 - ≤ 2 corpus reports: ${checks.corpusReports ? '✅' : '❌'} (${report.distinct_installs || 0} reports)
 - Not confirmed phish: ${checks.notConfirmedPhish ? '✅' : '❌'}
 
@@ -222,7 +214,6 @@ ${actionTaken ? `\n---\n\n${actionTaken}` : ''}
 | Check | Result |
 |-------|--------|
 | Domain age | ${checks.domainAge ? `✅ ${ct?.ageDays} days` : `❌ ${ct?.ageDays || 'unknown'} days (need ≥30)`} |
-| Safe Browsing | ${checks.safeBrowsing ? '✅ clean' : '❌ MATCHED'} |
 | Corpus reports | ${checks.corpusReports ? `✅ ${report.distinct_installs || 0} reports` : `❌ ${report.distinct_installs} reports (need ≤2)`} |
 | Not confirmed phish | ${checks.notConfirmedPhish ? '✅' : '❌ Recently blocked with high confidence'} |
 

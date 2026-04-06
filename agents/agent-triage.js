@@ -336,7 +336,6 @@ ${fmtHeuristics(heuristics)}
 ## Domain intelligence (supporting context only)
 Hostname: \`${fullHostname}\` (registered: \`${registeredDomain}\`)
 ${fmtIntel(intel)}
-Safe Browsing: ${intel.gsb?.matched ? `⚠ MATCHED — ${intel.gsb.threatTypes?.join(', ')}` : intel.gsb ? 'Clean' : 'Not checked'}
 
 ## Corpus history
 ${signalRows.length > 0 ? signalRows.map(r => `- \`${r.type}\`: ${r.hits} hit(s), avg weight ${r.avg_weight?.toFixed(2)}`).join('\n') : '- No prior reports'}
@@ -561,7 +560,6 @@ ${analysis}
 <summary>Raw intelligence (for reference only)</summary>
 
 **CT log:** ${intel.ct ? `${intel.ct.ageDays} days old (first seen ${new Date(intel.ct.firstSeenTs).toISOString().slice(0,10)})` : 'not found'}
-**Safe Browsing:** ${intel.gsb?.matched ? '⚠ MATCHED' : intel.gsb ? 'clean' : 'not checked'}
 **Corpus reports:** ${intel.corpus.reports} distinct installs
 **Feed hits:** ${intel.feeds.hits}
 
