@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-19:55",
-    "generatedAt": "2026-04-06T19:55:50.751Z",
+    "version": "2026-04-06-20:01",
+    "generatedAt": "2026-04-06T20:01:23.420Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -28137,7 +28137,7 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "js",
-      "note": "Multi-step form wizards that progressively collect credentials, then personal info (SSN, DOB), then payment details across separate 'steps' are comprehensive data harvesting phishing pages.",
+      "note": "Multi-step credential wizard: step/stage counter + credential fields near display toggling. [FP fix: removed \"page\" from step counter (csPage analytics match), added word boundaries, \"social\" changed to \"social security\", requires proximity between credential fields and display toggling.]",
       "match": [
         {
           "content": "step",
@@ -28145,14 +28145,11 @@
           "fast_pattern": true
         },
         {
-          "pattern": "(?:step|page|stage|wizard)\\s*(?:=|\\+=)",
+          "pattern": "\\b(?:step|stage|wizard)\\s*(?:=|\\+=|\\+\\+|--)",
           "flags": "i"
         },
         {
-          "pattern": "classList|style\\.display|visibility"
-        },
-        {
-          "pattern": "password|\\bcard\\b|ssn|social|dob|birth",
+          "pattern": "(?:style\\.display|classList\\.(?:add|remove|toggle)|visibility)[\\s\\S]{0,2000}(?:\\bpassword\\b|\\bcard\\b|\\bssn\\b|social\\s+security|\\bdob\\b|date\\s+of\\s+birth)|(?:\\bpassword\\b|\\bcard\\b|\\bssn\\b|social\\s+security|\\bdob\\b|date\\s+of\\s+birth)[\\s\\S]{0,2000}(?:style\\.display|classList\\.(?:add|remove|toggle)|visibility)",
           "flags": "i"
         },
         {
@@ -28161,7 +28158,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "socketio-credential-relay",
