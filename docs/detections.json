@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-18:50",
-    "generatedAt": "2026-04-06T18:50:44.479Z",
+    "version": "2026-04-06-18:54",
+    "generatedAt": "2026-04-06T18:54:13.171Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -24393,9 +24393,14 @@
         {
           "pattern": "valid|invalid|error|reject|block|proceed|next",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "email-domain-corporate-filter",
@@ -24422,9 +24427,14 @@
         {
           "pattern": "error|invalid|reject|block|redirect|not\\s*allowed",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "wordpress-logged-in-check",
@@ -24966,9 +24976,14 @@
         {
           "content": "spotify.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "amazon-logo-hotlink",
@@ -25002,9 +25017,14 @@
         },
         {
           "content": "Orders"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "instagram-login-impersonation",
@@ -25029,9 +25049,14 @@
         {
           "pattern": "<input[^>]*type=[\"']password[\"']",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 3"
+      "condition": "0 & 1 & 3 & 4"
     },
     {
       "id": "spotify-title-offsite",
@@ -25096,9 +25121,14 @@
         {
           "content": "instagram.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "instagram-credential-placeholder",
@@ -25133,9 +25163,14 @@
         {
           "content": "Hello, sign in",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "sign-dollar-substitution",
@@ -25167,9 +25202,14 @@
         {
           "pattern": "display:\\s*none",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "networksolutions-webmail-reference",
@@ -25228,9 +25268,14 @@
         {
           "content": "#D92E7F",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "instagram-portuguese-phishing",
@@ -25257,9 +25302,14 @@
         {
           "pattern": "<form",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & (1 | 2) & 3"
+      "condition": "0 & (1 | 2) & 3 & 4"
     },
     {
       "id": "microsoft-signin-redirect-pattern",
@@ -25314,9 +25364,14 @@
         {
           "content": "private key",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & (2 | 3) & (1 | 4 | 5)"
+      "condition": "0 & (2 | 3) & (1 | 4 | 5) & 6"
     },
     {
       "id": "netflix-phishing-indicators",
@@ -25354,9 +25409,14 @@
         {
           "content": "billing",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & ((1 & 2) | 3) & (4 | 5 | 6)"
+      "condition": "0 & ((1 & 2) | 3) & (4 | 5 | 6) & 7"
     },
     {
       "id": "gemini-chinese-impersonation",
@@ -25405,9 +25465,14 @@
         {
           "content": "reader software",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & (1 | 2 | 3) & (4 | 5 | 6)"
+      "condition": "0 & (1 | 2 | 3) & (4 | 5 | 6) & 7"
     },
     {
       "id": "coinsquare-char-substitution",
@@ -25480,9 +25545,14 @@
         {
           "content": "download",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & ((1 & 2) | (3 & 4 & 1) | (1))"
+      "condition": "0 & ((1 & 2) | (3 & 4 & 1) | (1)) & 5"
     },
     {
       "id": "generic-webmail-phishkit",
@@ -25506,9 +25576,14 @@
         {
           "pattern": "<input[^>]*type=[\"']password[\"']",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "ledger-start-impersonation",
@@ -25544,9 +25619,14 @@
         {
           "content": "hsbc.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "bet365-fake-domains-pattern",
@@ -25577,9 +25657,14 @@
         },
         {
           "content": "棋牌游戏"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "microsoft-ciam-legitimate-infra",
@@ -25611,9 +25696,14 @@
         {
           "pattern": "Bank of Montreal|BMO|Chase|Wells Fargo|TD Bank|RBC|Scotiabank|CIBC",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "crypto-wallet-login-impersonation",
@@ -25636,9 +25726,14 @@
         {
           "pattern": "login|signin|sign[\\-\\s]in|seed\\s*phrase|recovery\\s*phrase|private\\s*key",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "godaddy-builder-crypto-impersonation",
@@ -25860,9 +25955,14 @@
         {
           "content": "sign in",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "spanish-banking-login-form",
@@ -25894,9 +25994,14 @@
         {
           "content": "amazon.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "brand-subdomain-impersonation",
@@ -25914,9 +26019,14 @@
         {
           "pattern": "(?:support|secure|login|signin|account|help|verify)\\\\.[a-zA-Z0-9-]*(?:paypal|venmo|chase|wellsfargo|bankofamerica|amazon|apple|microsoft|google)\\\\.[a-zA-Z0-9-]+\\\\.(?:org|net|info|biz|top|tk|ml|ga|cf)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1"
+      "condition": "1 & 2"
     },
     {
       "id": "adobe-pdf-verification-impersonation",
@@ -25940,9 +26050,14 @@
         {
           "content": "adobe.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "microsoft-signin-ui-impersonation",
@@ -25968,9 +26083,14 @@
         {
           "content": "microsoftonline.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "ms-auth-flow-approve-signin-text",
@@ -26076,9 +26196,14 @@
         {
           "pattern": "Microsoft|Google|Apple|PayPal|Amazon|Netflix|Facebook|LinkedIn|Dropbox|Adobe|Zoom|Slack",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1"
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "theme-color-mobile-branding",
@@ -26114,9 +26239,14 @@
         {
           "content": "microsoft.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "copyright-brand-name-mismatch",
@@ -26138,9 +26268,14 @@
         {
           "pattern": "(?:Microsoft|Google|Apple|PayPal|Amazon|Netflix|Facebook|Meta|Adobe|Dropbox|LinkedIn|Twitter|Zoom)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "outdated-copyright-year",
@@ -26185,9 +26320,14 @@
         {
           "pattern": "(?:provide|enter|confirm|update).*(?:address|payment|card|details)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "courier-logo-header-form-combo",
@@ -26245,9 +26385,14 @@
         {
           "pattern": "<input[^>]*type=[\\x27\\\"](?:text|email|tel|password|number)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "(1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10) & 11"
+      "condition": "(1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10) & 11 & 12"
     },
     {
       "id": "toll-brand-name-payment-form",
@@ -26269,9 +26414,14 @@
         {
           "pattern": "<input[^>]*(?:card|credit|cvv|expir|ccnum)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "social-icons-no-links",
@@ -26293,9 +26443,14 @@
         {
           "pattern": "(?:facebook|instagram|twitter|youtube|linkedin|tiktok)\\s+icon",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "document-shared-brand-mismatch",
@@ -26333,9 +26488,14 @@
         {
           "pattern": "sign.?in|log.?in",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "(1 | 2 | 3 | 4 | 5) & 6 & 0"
+      "condition": "(1 | 2 | 3 | 4 | 5) & 6 & 0 & 7"
     },
     {
       "id": "adobe-themed-document-login",
@@ -26361,9 +26521,14 @@
         {
           "content": "adobe.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "netflix-brand-github-impersonation",
@@ -26388,9 +26553,14 @@
         {
           "content": "netflix.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "external-font-brand-match",
@@ -26602,9 +26772,14 @@
         {
           "pattern": "<form[^>]*action=",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "turnstile-non-cloudflare-domain",
@@ -26817,9 +26992,14 @@
         {
           "pattern": "payload|body|JSON\\.stringify|FormData",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "tycoon-iconcaptcha-integration",
@@ -27150,9 +27330,14 @@
         {
           "content": "sign up",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & (3 | 4 | 5)"
+      "condition": "0 & 1 & 2 & (3 | 4 | 5) & 6"
     },
     {
       "id": "fake-paypal-openid-endpoint",
@@ -27259,9 +27444,14 @@
         {
           "pattern": "keystrokes|clicks\\s*tracked|time\\s*on\\s*page",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1"
+      "condition": "1 & 2"
     },
     {
       "id": "hidden-field-credential-relay",
@@ -27345,9 +27535,14 @@
         {
           "content": "office.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "spanish-id-document-type-selector",
@@ -27493,9 +27688,14 @@
         {
           "pattern": "(?:microsoft|google|apple|amazon|paypal|netflix|wellsfargo|chase)\\\\.com",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "meta-refresh-brand-redirect",
@@ -27516,9 +27716,14 @@
         {
           "pattern": "microsoft|google|apple|amazon|paypal|netflix|wellsfargo|chase|bankofamerica",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "visibility-hidden-password-field",
@@ -27860,9 +28065,14 @@
         {
           "pattern": "access\\s+your\\s+(?:email|contacts|calendar|files|drive)|read\\s+(?:your|all)\\s+(?:emails?|messages?|contacts?)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "css-keylogger-background-image",
@@ -27905,9 +28115,14 @@
         {
           "pattern": "(?:microsoft|google|apple|amazon|paypal)\\.com",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "cross-origin-iframe-login",
@@ -27944,9 +28159,14 @@
         {
           "pattern": "password|card|ssn|social|dob|birth",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "socketio-credential-relay",
@@ -28105,9 +28325,14 @@
         {
           "pattern": "credit|card|address|name|email|phone|password",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "designmode-editable-page",
@@ -28216,9 +28441,14 @@
         {
           "pattern": "fetch|XMLHttpRequest|sendBeacon|telegram|password|email|credential",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "webview-bridge-credential-leak",
@@ -28255,9 +28485,14 @@
         {
           "pattern": "email|user|pass|login|password",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "telegram-xhr-exfil-call",
@@ -28302,9 +28537,14 @@
         {
           "pattern": "email|password|username|login|credential|token",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "discord-webhook-with-file",
@@ -28360,9 +28600,14 @@
         {
           "pattern": "(?:email|user|login|password|pass|card)\\s*(?::|=|->)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "form-cross-origin-action-any-field",
@@ -28691,9 +28936,14 @@
         },
         {
           "pattern": "style\\.display|classList\\.(?:add|remove|toggle)|visibility"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "aitm-websocket-credential-token-stream",
@@ -28737,9 +28987,14 @@
         },
         {
           "pattern": "style\\.display|classList|visibility|innerHTML"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "password-form-no-forgot-link",
@@ -28777,9 +29032,14 @@
           "content": "trouble signing",
           "negated": true,
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "form-action-php-endpoint",
@@ -28849,9 +29109,14 @@
           "content": "join",
           "negated": true,
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7 & 8"
     },
     {
       "id": "address-update-for-delivery",
@@ -28878,9 +29143,14 @@
         {
           "pattern": "card|payment|fee|charge|\\$",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "small-fee-card-harvest",
@@ -28941,9 +29211,14 @@
         {
           "pattern": "card|payment|billing|address",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "weight-dimensions-form-excuse",
@@ -28966,9 +29241,14 @@
         {
           "pattern": "pay|card|\\$|€|£|amount|fee|charge",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "courier-tracking-input-form",
@@ -28995,9 +29275,14 @@
         {
           "pattern": "card|payment|billing|delivery.{0,20}fee",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "delivery-otp-verification-page",
@@ -29024,9 +29309,14 @@
         {
           "pattern": "<input",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "toll-small-amount-card-harvest",
@@ -29060,9 +29350,14 @@
         {
           "pattern": "verification\\s*code|one-?time\\s*(?:code|password)|OTP|security\\s*code",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "toll-wallet-link-attempt",
@@ -29089,9 +29384,14 @@
         {
           "pattern": "link.{0,15}(?:card|wallet)|add.{0,15}(?:card|wallet)|connect.{0,15}(?:card|wallet)|verify.{0,15}(?:card|wallet)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "toll-license-plate-lookup",
@@ -29136,9 +29436,14 @@
         {
           "pattern": "sign\\s*in|log\\s*in|email|password|verify",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "job-offer-personal-info-harvest",
@@ -29161,9 +29466,14 @@
         {
           "pattern": "social\\s*security|\\bssn\\b|date\\s*of\\s*birth|bank\\s*account|routing\\s*number|direct\\s*deposit",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "oauth-consent-broad-permissions",
@@ -29186,9 +29496,14 @@
         {
           "pattern": "read\\s*(?:your\\s*)?(?:email|contacts|calendar|files)|send\\s*(?:email|mail)\\s*(?:on\\s*your|as\\s*you)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "microsoft-graph-consent-phish",
@@ -29209,9 +29524,14 @@
         {
           "pattern": "consent|approve|allow|grant|accept",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "phishing-typo-submit-button",
@@ -29257,9 +29577,14 @@
         {
           "pattern": "(?:post|login|submit|process|save|send|check|verify|auth|validate|data|go|next|result|handler|action|gate|panel|recv|log)\\\\.php",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "remember-me-checkbox-phish",
@@ -29282,9 +29607,14 @@
         {
           "pattern": "\\\\.php|api\\\\.telegram|discord|webhook",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "shadow-form-hidden-input-sync",
@@ -29654,9 +29984,14 @@
         {
           "pattern": "^https?://[a-z0-9]{12,}\\.(?:bank|financial|secure|payment|trust|verify|account)(?:bank|pay|login|verify|secure|online)?\\.(?:xyz|top|info|online|site|click)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1"
+      "condition": "1 & 2"
     },
     {
       "id": "vite-build-pattern-phishing",
@@ -29931,9 +30266,14 @@
         {
           "pattern": "sign.?in|log.?in|enter.*password",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "(1 | 2 | 3 | 4 | 5) & 0 & 6"
+      "condition": "(1 | 2 | 3 | 4 | 5) & 0 & 6 & 7"
     },
     {
       "id": "cache-bust-index-hash-js",
@@ -30050,9 +30390,14 @@
         },
         {
           "content": "sendLocation"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & (2 | 3 | 4 | 5)"
+      "condition": "0 & 1 & (2 | 3 | 4 | 5) & 6"
     },
     {
       "id": "mm-discord-webhook-exfil",
@@ -30078,9 +30423,14 @@
         },
         {
           "content": "sendBeacon"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & (2 | 3 | 4)"
+      "condition": "0 & 1 & (2 | 3 | 4) & 5"
     },
     {
       "id": "mm-clickfix-paste-and-run",
@@ -30114,9 +30464,14 @@
         {
           "content": "human",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & (1 | 2) & (3 | 4 | 5)"
+      "condition": "0 & (1 | 2) & (3 | 4 | 5) & 6"
     },
     {
       "id": "mm-tycoon-multi-stage",
@@ -30152,9 +30507,14 @@
         {
           "pattern": "step|stage|phase",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & (3 | 4 | 5) & 6"
+      "condition": "0 & 1 & 2 & (3 | 4 | 5) & 6 & 7"
     },
     {
       "id": "mm-fake-microsoft-login-not-real",
@@ -30234,9 +30594,14 @@
         {
           "content": "wave.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4 & 5"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "mm-dean-edwards-packer-full",
@@ -30253,9 +30618,14 @@
         },
         {
           "content": ".split('|')"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1"
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "mm-svg-phishing-payload",
@@ -30282,9 +30652,14 @@
         },
         {
           "pattern": "<form|<input"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & ((1 & (4 | 3)) | (2))"
+      "condition": "0 & ((1 & (4 | 3)) | (2)) & 5"
     },
     {
       "id": "unicode-brand-obfuscation",
@@ -31151,9 +31526,14 @@
         },
         {
           "pattern": "\\\\u200[0-9a-f]|\\\\u00a0|\\\\u2028|\\\\u2029|\\\\u3000|\\\\ufeff"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "tycoon-aes-payload-decrypt",
@@ -31838,9 +32218,14 @@
         {
           "content": "binance.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "telegram-bot-exfil-obfuscated",
@@ -31961,9 +32346,14 @@
         },
         {
           "content": "password"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "brazilian-toll-phishkit",
@@ -32064,9 +32454,14 @@
         {
           "content": "adobe.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "netflix-impersonation-email",
@@ -32103,9 +32498,14 @@
         {
           "pattern": "<input[^>]+type=[\"'](?:email|password)[\"']",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & (1 | 2 | 3 | 4) & 5 & 6"
+      "condition": "0 & (1 | 2 | 3 | 4) & 5 & 6 & 7"
     },
     {
       "id": "dana-indonesian-phishkit",
@@ -32221,9 +32621,14 @@
         },
         {
           "content": "Outlook Web App"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1"
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "microsoft-visual-impersonation",
@@ -32298,9 +32703,14 @@
         },
         {
           "content": "/site/submit"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "adobe-pdf-fake-verification",
@@ -32344,9 +32754,14 @@
         {
           "pattern": "<input[^>]*type=[\"']password[\"']",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "css-phishkit-birthdate",
@@ -32451,9 +32866,14 @@
           "pattern": "domain-favicon|domain-logo|provider-icon|email-icon",
           "flags": "i",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & !3"
+      "condition": "1 & 2 & !3 & 4"
     },
     {
       "id": "session-expired-urgency",
@@ -32506,9 +32926,14 @@
         },
         {
           "content": "display:none"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & (4 | 5)"
+      "condition": "0 & 1 & 2 & 3 & (4 | 5) & 6"
     },
     {
       "id": "microsoft-login-phishkit",
@@ -32533,9 +32958,14 @@
         {
           "pattern": "<input[^>]*(?:password|email)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "microsoft-cdn-spoofing",
@@ -32597,9 +33027,14 @@
         {
           "pattern": "(?:auth|login|wallet|live).*(?:ledger|metamask|coinbase|binance)|(?:ledger|metamask|coinbase|binance).*(?:auth|login|wallet|live)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1"
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "nim-cred-sim-classes",
@@ -33046,9 +33481,14 @@
         },
         {
           "content": "裝置"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "(0 & 1 & 2 & 3) | (4 & 5 & 2 & 3)"
+      "condition": "(0 & 1 & 2 & 3) | (4 & 5 & 2 & 3) & 6"
     },
     {
       "id": "phishkit-user-time-tracker",
@@ -33423,9 +33863,14 @@
         },
         {
           "pattern": "fetch|XMLHttpRequest|sendBeacon|new\\s+Image"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "window-opener-blank-redirect",
@@ -33512,9 +33957,14 @@
         {
           "pattern": "\\.(tk|ml|ga|cf|gq|xyz|top|buzz|icu|click)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "tel-phishing-exfil",
@@ -33774,9 +34224,14 @@
         {
           "pattern": "(?:href|download|src)=[\\x27\\\"][^\\x27\\\"]+\\.(?:pdf|doc|xls|jpg|png)\\.(?:exe|scr|bat|cmd|js|vbs|ps1|hta|msi)[\\x27\\\"]",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1"
+      "condition": "1 & 2"
     },
     {
       "id": "autocapture-screenshot-phish",
@@ -34025,9 +34480,14 @@
         {
           "pattern": "<title>(?:Verify|Confirm|Signin|Update|Validate|Secure)\\s+(?:your\\s+)?(?:account|identity|credentials|email|login|information)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1"
+      "condition": "1 & 2"
     },
     {
       "id": "sneaky-2fa-blurred-background",
@@ -34336,9 +34796,14 @@
         {
           "pattern": "telegram|discord|webhook|sendMessage",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "discord-webhook-url-full",
@@ -34471,9 +34936,14 @@
         {
           "pattern": "email|password|credential",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "jsobs-phish-page-combined",
@@ -34494,9 +34964,14 @@
         {
           "pattern": "password|getElementById|querySelector|fetch|XMLHttpRequest|sendBeacon|telegram|discord|webhook",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "external-config-fetch-then-exfil",
@@ -34571,9 +35046,14 @@
         },
         {
           "pattern": "action=[\\x27\\\"]https?://(?!(?:login\\.microsoftonline|login\\.live|login\\.microsoft)\\.)"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "aitm-domain-mixing-google",
@@ -34593,9 +35073,14 @@
         },
         {
           "pattern": "action=[\\x27\\\"]https?://(?!(?:accounts\\.google|googleapis|gstatic)\\.)"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "aitm-injected-script-alongside-real",
@@ -34645,9 +35130,14 @@
         {
           "pattern": "microsoft|google|apple|amazon|paypal|netflix",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "evilproxy-phishlet-marker",
@@ -34769,9 +35259,14 @@
         {
           "pattern": "redirect|location\\.href|location\\.replace|window\\.location",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "tycoon-email-first-then-password",
@@ -34820,9 +35315,14 @@
         {
           "pattern": "microsoft\\.com|office\\.com|outlook\\.com",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "tycoon-ms-error-message-adaptation",
@@ -34921,9 +35421,14 @@
         {
           "pattern": "position:\\s*(?:fixed|absolute)|z-index:\\s*\\d{3,}",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "bitb-fake-address-display",
@@ -34956,9 +35461,14 @@
         {
           "pattern": "draggable|mousedown.*move|drag",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "bitb-oauth-popup-iframe",
@@ -34984,9 +35494,14 @@
         {
           "pattern": "border-radius|box-shadow|backdrop",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "bitb-os-detect-theme",
@@ -35011,9 +35526,14 @@
         {
           "pattern": "title-bar|window-controls|close|minimize|maximize",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "bitb-onclick-false-href",
@@ -35214,9 +35734,14 @@
         {
           "pattern": "Document|File|PDF|Message|Report|Invoice|Statement",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & (2 | 3)"
+      "condition": "0 & 1 & (2 | 3) & 4"
     },
     {
       "id": "html-attachment-self-contained-phish",
@@ -35239,9 +35764,14 @@
         },
         {
           "pattern": "api\\.telegram|discord|fetch\\(|XMLHttpRequest|sendBeacon"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "code-level-browser-typo",
@@ -35550,9 +36080,14 @@
         },
         {
           "content": "محتوى مقيد"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "wallet-interface-image-phish",
@@ -35617,9 +36152,14 @@
         },
         {
           "content": "風險"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "(0 & 1 & 2 & 3) | (4 & 6 & 3) | (4 & 5)"
+      "condition": "(0 & 1 & 2 & 3) | (4 & 6 & 3) | (4 & 5) & 7"
     },
     {
       "id": "apple-support-vishing-alert",
@@ -35671,9 +36211,14 @@
         },
         {
           "pattern": "\\+?1[\\s-]?\\(?\\d{3}\\)?[\\s-]?\\d{3}[\\s-]?\\d{4}"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "fear-urgency-domain-in-html",
@@ -35702,9 +36247,14 @@
         {
           "pattern": "https?://[a-z0-9-]{0,40}(?:amazon|paypal|microsoft|google|apple|netflix)[a-z0-9-]{0,40}\\.(?:security|secure|verify|account|alert)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1"
+      "condition": "1 & 2"
     },
     {
       "id": "meta-ad-account-deletion-phish",
@@ -35842,9 +36392,14 @@
         {
           "pattern": "<title[^>]*>[^<]*(?:microsoft|google|outlook|office\\s*365|onedrive|sharepoint)[^<]*</title>|<h[1-3][^>]*>[^<]*(?:microsoft|google|outlook|office\\s*365|onedrive|sharepoint)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "shared-document-lure",
@@ -35871,9 +36426,14 @@
         {
           "pattern": "microsoft|google|office|outlook|onedrive|sharepoint",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "voicemail-notification-lure",
@@ -35907,9 +36467,14 @@
         {
           "pattern": "mot\\s*de\\s*passe|identifiant|numéro\\s*de\\s*carte|code\\s*(?:secret|PIN|sécurité)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "portuguese-banking-urgency",
@@ -36010,9 +36575,14 @@
         {
           "pattern": "\\$\\s*\\d{1,2}\\.\\d{2}|(?:credit|debit)\\s*card|payment\\s*(?:method|info|detail)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "subscription-renewal-scam",
@@ -36102,9 +36672,14 @@
         {
           "pattern": "password|credential|card|payment|sign.?in|log.?in",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "fake-browser-update-lure",
@@ -36127,9 +36702,14 @@
         {
           "pattern": "download|install|update\\s*now|click\\s*here",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "tech-support-scam-lockscreen",
@@ -36152,9 +36732,14 @@
         {
           "pattern": "call|phone|dial|contact|support|helpline|toll.free",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "fullscreen-lock-scam",
@@ -36199,9 +36784,14 @@
         {
           "pattern": "routing|account\\s*number|IBAN|SWIFT|wire|beneficiary",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "geek-squad-renewal-scam",
@@ -36322,9 +36912,14 @@
         {
           "pattern": "密码|登录|信用卡|银行卡|身份|手机号",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "fake-google-play-store",
@@ -36417,9 +37012,14 @@
         {
           "pattern": "pay|card|\\$|amount|charge|credit|debit",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "add-to-homescreen-prompt",
@@ -36457,9 +37057,14 @@
         {
           "pattern": "position:\\s*fixed",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "haptic-feedback-fake-auth",
@@ -36506,9 +37111,14 @@
         },
         {
           "pattern": "innerHTML|textContent|innerText|display"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "mailto-support-link-phish",
@@ -36528,9 +37138,14 @@
         },
         {
           "content": "password"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "customs-duty-fee-payment-form",
@@ -36553,9 +37168,14 @@
         {
           "pattern": "pay|credit\\s*card|debit\\s*card|card\\s*number|billing",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "tariff-fee-delivery-scam",
@@ -36578,9 +37198,14 @@
         {
           "pattern": "pay|card|\\$|€|£|amount|fee|charge",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "tracking-number-display-payment",
@@ -36603,9 +37228,14 @@
         {
           "pattern": "pay|fee|charge|card|\\$|€|£",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "package-held-urgency-text",
@@ -36628,9 +37258,14 @@
         {
           "pattern": "action\\s*required|update.*(?:address|payment|info)|reschedule|(?:pay|fee|charge)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "delivery-scheduling-fee",
@@ -36657,9 +37292,14 @@
         {
           "pattern": "pay|card|credit|debit|billing",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "sms-delivery-notification-text",
@@ -36682,9 +37322,14 @@
         {
           "pattern": "click|update|confirm|verify|track|reschedule|action",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "postage-due-payment",
@@ -36707,9 +37352,14 @@
         {
           "pattern": "pay|card|\\$|€|£|amount|fee",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "courier-app-download-prompt",
@@ -36732,9 +37382,14 @@
         {
           "pattern": "apk|download.*app|install.*app|play.*store|app.*store",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "toll-unpaid-balance-urgency",
@@ -36761,9 +37416,14 @@
         {
           "pattern": "pay|settle|clear|resolve|card",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "toll-account-suspension-warning",
@@ -36786,9 +37446,14 @@
         {
           "pattern": "(?:account|service)\\s*(?:will\\s*be|has\\s*been|may\\s*be)\\s*(?:suspended|terminated|deactivated|closed)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "toll-violation-number-display",
@@ -36811,9 +37476,14 @@
         {
           "pattern": "pay|fine|fee|penalty|amount|\\$",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "toll-dmv-registration-threat",
@@ -36874,9 +37544,14 @@
         {
           "pattern": "pay|card|fee|amount|charge|\\$",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "zerofont-preheader-fake-security",
@@ -36898,9 +37573,14 @@
         {
           "pattern": "scanned|verified|secured|protected|safe|clean|threat\\s*protection|virus\\s*free|malware\\s*free|trusted",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "shared-document-view-prompt",
@@ -36923,9 +37603,14 @@
         {
           "pattern": "sign\\s*in|log\\s*in|view\\s*(?:document|file)|enter.*password",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "shared-document-preview-blur",
@@ -36952,9 +37637,14 @@
         {
           "pattern": "sign.?in|log.?in|password|verify|unlock",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "voicemail-listen-prompt",
@@ -36981,9 +37671,14 @@
         {
           "pattern": "sign\\s*in|log\\s*in|password|authenticate",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "voicemail-audio-player-fake",
@@ -37010,9 +37705,14 @@
         {
           "pattern": "\\d{1,2}:\\d{2}|seconds|minutes",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "subscription-auto-renew-alert",
@@ -37039,9 +37739,14 @@
         {
           "pattern": "cancel|refund|dispute|call",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "job-offer-urgency-deposit",
@@ -37068,9 +37773,14 @@
         {
           "pattern": "pay|card|transfer|wire|zelle|cashapp|venmo|bitcoin|crypto|gift\\s*card",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "clickfix-run-dialog-instructions",
@@ -37122,9 +37832,14 @@
         {
           "pattern": "Windows|Run|PowerShell|cmd|command|terminal|dialog",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "callback-phishing-phone-cancel",
@@ -37203,9 +37918,14 @@
         {
           "pattern": "social\\s*security|SSN|passport|bank\\s*(?:account|details)|routing|direct\\s*deposit|date\\s*of\\s*birth",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "hr-portal-credential-phish",
@@ -37228,9 +37948,14 @@
         {
           "pattern": "sign.?in|log.?in|password|credential|authenticate",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "calendar-invite-credential-phish",
@@ -37253,9 +37978,14 @@
         {
           "pattern": "sign.?in|log.?in|password|verify|join\\s*now",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "docusign-signature-phish",
@@ -37296,9 +38026,14 @@
         {
           "pattern": "sign.?in|log.?in|verify|unlock",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "view-document-button-password",
@@ -37319,9 +38054,14 @@
         },
         {
           "content": "password"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "document-notification-generic-login",
@@ -37344,9 +38084,14 @@
         {
           "pattern": "sign.?in|log.?in|enter.*password|email.*password",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "invoice-remittance-credential-harvest",
@@ -37388,9 +38133,14 @@
         {
           "pattern": "<input[^>]*type=[\\x27\\\"]password[\\x27\\\"]",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "(1 | 2 | 3 | 4 | 5 | 6) & 7"
+      "condition": "(1 | 2 | 3 | 4 | 5 | 6) & 7 & 8"
     },
     {
       "id": "document-image-login-overlay",
@@ -37415,9 +38165,14 @@
         },
         {
           "content": "password"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "secure-message-view-login",
@@ -37440,9 +38195,14 @@
         {
           "pattern": "sign.?in|log.?in|password|credential",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "fax-voicemail-document-lure",
@@ -37468,9 +38228,14 @@
         {
           "pattern": "sign.?in|log.?in|password|credential",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "document-page-count-preview-lure",
@@ -37496,9 +38261,14 @@
         },
         {
           "content": "password"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "sender-info-document-phish",
@@ -37520,9 +38290,14 @@
         {
           "pattern": "(?:View|Open|Access|Review|Download)\\\\s*(?:Document|File|PDF|Message)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "login-to-view-file-button",
@@ -37541,9 +38316,14 @@
         {
           "pattern": "Login\\s*To\\s*(?:View|Access|Open|Download)|Sign\\s*[Ii]n\\s*[Tt]o\\s*(?:View|Access|Open|Download)|Log\\s*[Ii]n\\s*[Tt]o\\s*(?:View|Access|Open|Download)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1"
+      "condition": "1 & 2"
     },
     {
       "id": "action-theater-radio-buttons",
@@ -37577,9 +38357,14 @@
         {
           "pattern": "prohibited|forbidden|not\\s*(?:permitted|allowed)|strictly",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 | (0 & 2)"
+      "condition": "1 | (0 & 2) & 3"
     },
     {
       "id": "netflix-signin-language-pattern",
@@ -37971,9 +38756,14 @@
         {
           "pattern": "<title>\\s*(?:chase|paypal|netflix|amazon|apple|microsoft|facebook|instagram|outlook|gmail|yahoo|wells\\s*fargo|bank\\s*of\\s*america|citibank|usaa|coinbase|binance)\\s*</title>",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1"
+      "condition": "1 & 2"
     },
     {
       "id": "title-account-verification-generic",
@@ -38178,9 +38968,14 @@
         {
           "pattern": "^https?://(dpd|dhl|ups|fedex|usps|royalmail|postnl)\\.[a-zA-Z0-9-]+\\.(bond|club|top|tk|ml|ga|cf|live|site)(/|$)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1"
+      "condition": "1 & 2"
     },
     {
       "id": "gov-agency-subdomain-on-nongov",
@@ -38198,9 +38993,14 @@
         {
           "pattern": "(?:txdmv|dmv|irs|ssa|uscis|dol|hud|dps|txdot|txdps)\\\\.[a-z0-9-]+\\\\.(?:life|top|xyz|click|shop|online|site|store|fun|icu|buzz|cc|pw|tk|ml|ga|cf|gq)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1"
+      "condition": "1 & 2"
     },
     {
       "id": "bmo-hostname-typosquat",
@@ -38339,9 +39139,14 @@
         {
           "pattern": "[?&](?:d|brand|b|org|bank|target|client|service)=(?:swedbank|nordea|seb|handelsbanken|danske|paypal|chase|wells[\\s_-]?fargo|citi|hsbc|barclays|revolut)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1"
+      "condition": "1 & 2"
     },
     {
       "id": "b64-microsoft-oauth-in-query",
@@ -38379,9 +39184,14 @@
         {
           "pattern": "\\\\.(?:com|org|net|info)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "constantcontact-landing-page-abuse",
@@ -38468,9 +39278,14 @@
         {
           "pattern": "<form[^>]*action=",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "venmo-log-php-endpoint",
@@ -38524,9 +39339,14 @@
         {
           "pattern": "\\.(?:top|xyz|buzz|live|icu|tk|ml|ga|cf|gq|rest|cfd|sbs|click|link)[/\\x27\\\"\\s>]",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "redirect-chain-suspicious-tld",
@@ -38547,9 +39367,14 @@
         {
           "pattern": "\\.(?:tk|ml|ga|cf|gq|xyz|top|buzz|icu|click|link)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "multiple-redirect-chain",
@@ -38581,9 +39406,14 @@
         {
           "pattern": "bit\\.ly|tinyurl|t\\.co|goo\\.gl|ow\\.ly|is\\.gd|v\\.gd|buff\\.ly|rb\\.gy|cutt\\.ly",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "duckdns-dynamic-domain",
@@ -38653,9 +39483,14 @@
         {
           "pattern": "card|payment|fee|amount|billing|\\$\\s*\\d",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "link-in-bio-redirect",
@@ -38724,9 +39559,14 @@
         {
           "pattern": "<title>\\s*(?:Untitled|Document|Page|Home|Index|Loading|Please\\s*wait|Sign\\s*in|Log\\s*in|Verify)?\\s*</title>",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1"
+      "condition": "1 & 2"
     },
     {
       "id": "ip-address-in-resource-url",
@@ -38788,9 +39628,14 @@
         {
           "pattern": "\\\\.(?:xyz|top|tk|ml|ga|cf|gq|buzz|work|click|link|surf|icu|monster|rest|quest|cfd|sbs)[/\\x27\\\"]",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "empty-href-anchor-links",
@@ -38860,9 +39705,14 @@
         {
           "pattern": "firebasestorage\\.googleapis|blob\\.core\\.windows\\.net|sites\\.google\\.com|docs\\.google\\.com|sharepoint\\.com|tiktok\\.com|wix\\.com|worker(?:s)?\\.dev",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "toll-xin-tld-domain",
@@ -38926,9 +39776,14 @@
         },
         {
           "pattern": "\\.php|api\\.telegram|discord\\.com/api/webhooks"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "logistics-brand-suspicious-tld",

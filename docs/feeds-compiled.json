@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-06T18:50:44.451Z",
+    "compiledAt": "2026-04-06T18:54:13.145Z",
     "brandCount": 192,
     "signalCount": 1,
     "patternCount": 1102,
@@ -3758,9 +3758,14 @@
         {
           "pattern": "valid|invalid|error|reject|block|proceed|next",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Validating the victim's email via API before showing phishing content ensures only real corporate email users see the phishing page. Sneaky 2FA and similar enterprise-targeted kits use this to filter out security researchers."
     },
     {
@@ -3787,9 +3792,14 @@
         {
           "pattern": "error|invalid|reject|block|redirect|not\\s*allowed",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Checking the email domain and rejecting free providers (Gmail, Yahoo, Hotmail) is the Sneaky 2FA enterprise targeting filter. The phishing page only works for corporate email addresses."
     },
     {
@@ -4330,9 +4340,14 @@
         {
           "content": "spotify.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "Spotify UI elements with login — but NOT on real spotify.com. Added FP exclusion."
     },
     {
@@ -4365,9 +4380,14 @@
         },
         {
           "content": "Orders"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -4392,9 +4412,14 @@
         {
           "pattern": "<input[^>]*type=[\"']password[\"']",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 3",
+      "condition": "0 & 1 & 3 & 4",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -4455,9 +4480,14 @@
         {
           "content": "instagram.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Instagram logo image + password field, NOT on instagram.com. Added FP exclusion."
     },
     {
@@ -4491,9 +4521,14 @@
         {
           "content": "Hello, sign in",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -4524,9 +4559,14 @@
         {
           "pattern": "display:\\s*none",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": ""
     },
     {
@@ -4582,9 +4622,14 @@
         {
           "content": "#D92E7F",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": ""
     },
     {
@@ -4611,9 +4656,14 @@
         {
           "pattern": "<form",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & (1 | 2) & 3",
+      "condition": "0 & (1 | 2) & 3 & 4",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -4666,9 +4716,14 @@
         {
           "content": "private key",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & (2 | 3) & (1 | 4 | 5)",
+      "condition": "0 & (2 | 3) & (1 | 4 | 5) & 6",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -4706,9 +4761,14 @@
         {
           "content": "billing",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & ((1 & 2) | 3) & (4 | 5 | 6)",
+      "condition": "0 & ((1 & 2) | 3) & (4 | 5 | 6) & 7",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -4756,9 +4816,14 @@
         {
           "content": "reader software",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & (1 | 2 | 3) & (4 | 5 | 6)",
+      "condition": "0 & (1 | 2 | 3) & (4 | 5 | 6) & 7",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -4827,9 +4892,14 @@
         {
           "content": "download",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & ((1 & 2) | (3 & 4 & 1) | (1))",
+      "condition": "0 & ((1 & 2) | (3 & 4 & 1) | (1)) & 5",
       "note": "WhatsApp + Chinese language indicators. Simplified from three alternation branches."
     },
     {
@@ -4853,9 +4923,14 @@
         {
           "pattern": "<input[^>]*type=[\"']password[\"']",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -4890,9 +4965,14 @@
         {
           "content": "hsbc.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "HSBC + Chinese branding NOT on hsbc.com."
     },
     {
@@ -4922,9 +5002,14 @@
         },
         {
           "content": "棋牌游戏"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -4955,9 +5040,14 @@
         {
           "pattern": "Bank of Montreal|BMO|Chase|Wells Fargo|TD Bank|RBC|Scotiabank|CIBC",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": ""
     },
     {
@@ -4980,9 +5070,14 @@
         {
           "pattern": "login|signin|sign[\\-\\s]in|seed\\s*phrase|recovery\\s*phrase|private\\s*key",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": ""
     },
     {
@@ -5186,9 +5281,14 @@
         {
           "content": "sign in",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -5220,9 +5320,14 @@
         {
           "content": "amazon.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Amazon UI structure + negated amazon.com FP exclusion."
     },
     {
@@ -5240,9 +5345,14 @@
         {
           "pattern": "(?:support|secure|login|signin|account|help|verify)\\\\.[a-zA-Z0-9-]*(?:paypal|venmo|chase|wellsfargo|bankofamerica|amazon|apple|microsoft|google)\\\\.[a-zA-Z0-9-]+\\\\.(?:org|net|info|biz|top|tk|ml|ga|cf)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1",
+      "condition": "1 & 2",
       "note": "Kept as regex — subdomain pattern matching needs regex. Auto-extracts literal."
     },
     {
@@ -5266,9 +5376,14 @@
         {
           "content": "adobe.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "Three exact literal matches + FP exclusion. Zero regex needed."
     },
     {
@@ -5294,9 +5409,14 @@
         {
           "content": "microsoftonline.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "Microsoft sign-in UI text NOT on real Microsoft domains. Added FP exclusion."
     },
     {
@@ -5402,9 +5522,14 @@
         {
           "pattern": "Microsoft|Google|Apple|PayPal|Amazon|Netflix|Facebook|LinkedIn|Dropbox|Adobe|Zoom|Slack",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1",
+      "condition": "0 & 1 & 2",
       "note": "Embedding brand logos as inline SVG avoids making external requests that could be tracked or blocked. Phishing kits inline SVG brand logos so the page looks legitimate without loading any external assets."
     },
     {
@@ -5440,9 +5565,14 @@
         {
           "content": "microsoft.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "Microsoft CDN references (msftauth.net) with password field NOT on real MS domains."
     },
     {
@@ -5464,9 +5594,14 @@
         {
           "pattern": "(?:Microsoft|Google|Apple|PayPal|Amazon|Netflix|Facebook|Meta|Adobe|Dropbox|LinkedIn|Twitter|Zoom)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Also matches © and &copy; since they appear in the HTML source alongside copyright text."
     },
     {
@@ -5511,9 +5646,14 @@
         {
           "pattern": "(?:provide|enter|confirm|update).*(?:address|payment|card|details)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Fake delivery tracking status UIs showing package progress (in transit, processing, out for delivery) with a progress bar/steps UI create believable courier page impersonation. The tracking UI is real-looking but the action (pay/verify) is the scam."
     },
     {
@@ -5571,9 +5711,14 @@
         {
           "pattern": "<input[^>]*type=[\\x27\\\"](?:text|email|tel|password|number)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "(1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10) & 11",
+      "condition": "(1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10) & 11 & 12",
       "note": "A courier brand name or logo in the page header followed by a form with input fields is the basic layout of every delivery phishing page. This structural pattern catches the simplest delivery phish that have no obfuscation or JavaScript."
     },
     {
@@ -5595,9 +5740,14 @@
         {
           "pattern": "<input[^>]*(?:card|credit|cvv|expir|ccnum)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Any US toll system brand name (EZPass, SunPass, FasTrak, I-Pass, TxTag, PeachPass, ExpressToll, NTTA, EZDrive, Good To Go, RiverLink, PikePass) on a page with credit card input fields is toll service impersonation."
     },
     {
@@ -5619,9 +5769,14 @@
         {
           "pattern": "(?:facebook|instagram|twitter|youtube|linkedin|tiktok)\\s+icon",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Two or more social media icon references — phishkits include decorative social icons without real links."
     },
     {
@@ -5659,9 +5814,14 @@
         {
           "pattern": "sign.?in|log.?in",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "(1 | 2 | 3 | 4 | 5) & 6 & 0",
+      "condition": "(1 | 2 | 3 | 4 | 5) & 6 & 0 & 7",
       "note": "A page showing a OneDrive/SharePoint/Google Drive sharing notification but presenting a generic Microsoft/Google/email login form is cross-brand document phishing. The sharing notification is fake — it's just lure text above a credential harvest form."
     },
     {
@@ -5687,9 +5847,14 @@
         {
           "content": "adobe.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "Adobe-themed login page NOT on adobe.com. Added FP exclusion for real Adobe."
     },
     {
@@ -5714,9 +5879,14 @@
         {
           "content": "netflix.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "Netflix title + login form NOT on netflix.com. Added FP exclusion."
     },
     {
@@ -5924,9 +6094,14 @@
         {
           "pattern": "<form[^>]*action=",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -6139,9 +6314,14 @@
         {
           "pattern": "payload|body|JSON\\.stringify|FormData",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "After successful CAPTCHA verification, Tycoon fetches the actual phishing page payload from an attacker-controlled server. The CAPTCHA gate→success→fetch-payload chain ensures security scanners that can't solve the CAPTCHA never see the credential form."
     },
     {
@@ -6469,9 +6649,14 @@
         {
           "content": "sign up",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & (3 | 4 | 5)",
+      "condition": "0 & 1 & 2 & (3 | 4 | 5) & 6",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -6570,9 +6755,14 @@
         {
           "pattern": "keystrokes|clicks\\s*tracked|time\\s*on\\s*page",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1",
+      "condition": "1 & 2",
       "note": "Phishkits that display tracking counters to create urgency. Simplified — the literal is already very specific."
     },
     {
@@ -6651,9 +6841,14 @@
         {
           "content": "office.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4",
+      "condition": "0 & 1 & 2 & 3 & 4 & 5",
       "note": "Outlook branding + password error NOT on real Outlook/Office domains. Added FP exclusion."
     },
     {
@@ -6798,9 +6993,14 @@
         {
           "pattern": "(?:microsoft|google|apple|amazon|paypal|netflix|wellsfargo|chase)\\\\.com",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Redirecting to the real brand's legitimate site after a successful data exfiltration (in a .then(), success callback, or onload) is the classic phishkit concealment pattern. The victim thinks they were logged out and tries again on the real site."
     },
     {
@@ -6821,9 +7021,14 @@
         {
           "pattern": "microsoft|google|apple|amazon|paypal|netflix|wellsfargo|chase|bankofamerica",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "A meta refresh redirecting to a major brand's legitimate login page after a short delay is a strong indicator of a phishing landing page that has already captured credentials and is now sending the victim to the real site."
     },
     {
@@ -7165,9 +7370,14 @@
         {
           "pattern": "access\\s+your\\s+(?:email|contacts|calendar|files|drive)|read\\s+(?:your|all)\\s+(?:emails?|messages?|contacts?)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Fake OAuth consent screens requesting broad permissions (email access, contacts, calendar, files) are used to trick users into granting malicious apps access to their data without stealing passwords."
     },
     {
@@ -7210,9 +7420,14 @@
         {
           "pattern": "(?:microsoft|google|apple|amazon|paypal)\\.com",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "A timed auto-redirect to a legitimate brand site after a delay (encoded as milliseconds like 300000 or 5*60*1000) is a self-destruct mechanism. The phishing page exists only temporarily, then becomes an innocent redirect. [Observation-level: setTimeout + redirect to brand — legitimate SSO/OAuth flows do this]"
     },
     {
@@ -7249,9 +7464,14 @@
         {
           "pattern": "password|card|ssn|social|dob|birth",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Multi-step form wizards that progressively collect credentials, then personal info (SSN, DOB), then payment details across separate 'steps' are comprehensive data harvesting phishing pages."
     },
     {
@@ -7410,9 +7630,14 @@
         {
           "pattern": "credit|card|address|name|email|phone|password",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Hidden input fields with autocomplete attributes trick browsers into auto-filling credit card, name, email, phone, and address data. The fields are invisible to the user but the browser fills them automatically, enabling silent PII harvesting."
     },
     {
@@ -7521,9 +7746,14 @@
         {
           "pattern": "fetch|XMLHttpRequest|sendBeacon|telegram|password|email|credential",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Requesting fine GPS location alongside credential capture gives attackers the victim's exact physical location. This data enables physical attacks (home break-in, stalking) or verifies victim identity for targeted fraud."
     },
     {
@@ -7560,9 +7790,14 @@
         {
           "pattern": "email|user|pass|login|password",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "A fetch() POST to any URL containing 'telegram' with credential-related fields in the body is a direct Telegram exfiltration call. This catches both plain and partially obfuscated API URLs."
     },
     {
@@ -7607,9 +7842,14 @@
         {
           "pattern": "email|password|username|login|credential|token",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Discord webhook embeds with fields containing credential labels create formatted exfiltration reports. Each embed field displays a stolen credential (email, password, IP, etc.) in a structured Discord message."
     },
     {
@@ -7665,9 +7905,14 @@
         {
           "pattern": "(?:email|user|login|password|pass|card)\\s*(?::|=|->)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Simple Discord webhook messages with plaintext content containing 'email:', 'password:', etc. are basic credential exfiltration. Not all phishkits use embeds — many just send a plain text message with credential key:value pairs."
     },
     {
@@ -7996,9 +8241,14 @@
         },
         {
           "pattern": "style\\.display|classList\\.(?:add|remove|toggle)|visibility"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "After capturing the password, showing a hidden MFA/verification code input is the two-stage AiTM credential+MFA harvest. Condition 2 now requires MFA terms in input field attributes (name, id, placeholder), not just page text."
     },
     {
@@ -8042,9 +8292,14 @@
         },
         {
           "pattern": "style\\.display|classList|visibility|innerHTML"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "A JavaScript state machine managing email→password→MFA step progression by showing/hiding page sections is the AiTM multi-step authentication flow controller. Each step captures different credentials and the kit advances through the auth flow."
     },
     {
@@ -8083,9 +8338,14 @@
           "content": "trouble signing",
           "negated": true,
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "form-action-php-endpoint",
@@ -8155,9 +8415,14 @@
           "content": "join",
           "negated": true,
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7 & 8"
     },
     {
       "id": "address-update-for-delivery",
@@ -8183,9 +8448,14 @@
         {
           "pattern": "card|payment|fee|charge|\\$",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Address update forms claiming delivery failure due to incorrect/incomplete address harvest full physical addresses. The data enables identity theft, physical attacks, and targeted social engineering with the victim's real address."
     },
     {
@@ -8246,9 +8516,14 @@
         {
           "pattern": "card|payment|billing|address",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Delivery preference/notification settings pages that ask for email, phone, or account credentials harvest contact information and login details under the guise of updating delivery preferences."
     },
     {
@@ -8271,9 +8546,14 @@
         {
           "pattern": "pay|card|\\$|€|£|amount|fee|charge",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Surcharge pages claiming a package exceeds weight or size limits and requires additional payment are a delivery phishing variant. Real surcharges are handled by the sender, not collected via web pages from the recipient."
     },
     {
@@ -8300,9 +8580,14 @@
         {
           "pattern": "card|payment|billing|delivery.{0,20}fee",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "A fake tracking number input that leads to personal info or credential fields is the track-to-harvest pipeline. The victim enters a tracking number (any number works), then is asked for personal details or payment to 'release' the package."
     },
     {
@@ -8329,9 +8614,14 @@
         {
           "pattern": "<input",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Delivery OTP verification pages claim a code was sent to the victim's phone to verify delivery. This is an MFA interception technique — the victim enters the real OTP from their carrier account, which the attacker uses for account takeover."
     },
     {
@@ -8365,9 +8655,14 @@
         {
           "pattern": "verification\\s*code|one-?time\\s*(?:code|password)|OTP|security\\s*code",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Requesting an OTP/verification code AFTER the victim enters card details is the bank fraud escalation. The scammer initiates a real transaction with the stolen card and needs the victim's bank OTP to authorize it."
     },
     {
@@ -8394,9 +8689,14 @@
         {
           "pattern": "link.{0,15}(?:card|wallet)|add.{0,15}(?:card|wallet)|connect.{0,15}(?:card|wallet)|verify.{0,15}(?:card|wallet)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Prompting victims to link a mobile wallet (Apple Pay, Google Pay) on a toll payment page is an emerging fraud vector. Scammers use the stolen card details to add the victim's card to their own mobile wallet for tap-to-pay fraud at physical stores."
     },
     {
@@ -8441,9 +8741,14 @@
         {
           "pattern": "sign\\s*in|log\\s*in|email|password|verify",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Cancel subscription flows that require sign-in or identity verification harvest credentials under the guise of cancellation. The victim wants to cancel an unwanted charge, so they eagerly enter their credentials."
     },
     {
@@ -8466,9 +8771,14 @@
         {
           "pattern": "social\\s*security|\\bssn\\b|date\\s*of\\s*birth|bank\\s*account|routing\\s*number|direct\\s*deposit",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Job applications requesting SSN, date of birth, bank account, or passport information are employment scams harvesting PII for identity theft. Legitimate employers don't collect SSN or banking details in initial applications."
     },
     {
@@ -8491,9 +8801,14 @@
         {
           "pattern": "read\\s*(?:your\\s*)?(?:email|contacts|calendar|files)|send\\s*(?:email|mail)\\s*(?:on\\s*your|as\\s*you)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Fake OAuth consent pages requesting broad permissions trick users into authorizing malicious apps with persistent account access."
     },
     {
@@ -8514,9 +8829,14 @@
         {
           "pattern": "consent|approve|allow|grant|accept",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Microsoft Graph API permission scope names (Mail.Read, Mail.Send, etc.) in a consent page are definitive consent phishing indicators."
     },
     {
@@ -8562,9 +8882,14 @@
         {
           "pattern": "(?:post|login|submit|process|save|send|check|verify|auth|validate|data|go|next|result|handler|action|gate|panel|recv|log)\\\\.php",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "A form posting to a bare PHP filename (post.php, login.php, submit.php, process.php) without any path indicates a locally-hosted phishing kit. The PHP file names are generic credential collectors. Legitimate services use API endpoints, not bare PHP filenames."
     },
     {
@@ -8587,9 +8912,14 @@
         {
           "pattern": "\\\\.php|api\\\\.telegram|discord|webhook",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "A 'Remember me' checkbox on a page that posts to a PHP file or sends to Telegram/Discord is a cloned UX element. The checkbox has no backend function on a phishing page — it's visual theater to make the form look legitimate."
     },
     {
@@ -8959,9 +9289,14 @@
         {
           "pattern": "^https?://[a-z0-9]{12,}\\.(?:bank|financial|secure|payment|trust|verify|account)(?:bank|pay|login|verify|secure|online)?\\.(?:xyz|top|info|online|site|click)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1",
+      "condition": "1 & 2",
       "note": "Kept as regex — domain structure pattern matching inherently needs regex."
     },
     {
@@ -9236,9 +9571,14 @@
         {
           "pattern": "sign.?in|log.?in|enter.*password",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "(1 | 2 | 3 | 4 | 5) & 0 & 6",
+      "condition": "(1 | 2 | 3 | 4 | 5) & 0 & 6 & 7",
       "note": "File hosting service links on pages with credential text. 26% of phishing links use file hosting services."
     },
     {
@@ -9355,9 +9695,14 @@
         },
         {
           "content": "sendLocation"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & (2 | 3 | 4 | 5)",
+      "condition": "0 & 1 & (2 | 3 | 4 | 5) & 6",
       "note": "Comprehensive Telegram exfil detection: requires the API domain AND a valid bot token AND any one of the send methods. Replaces 4 separate legacy rules with one multi-match rule. The fast_pattern on 'api.telegram.org' means this rule is only evaluated on pages that reference Telegram's API."
     },
     {
@@ -9383,9 +9728,14 @@
         },
         {
           "content": "sendBeacon"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & (2 | 3 | 4)",
+      "condition": "0 & 1 & (2 | 3 | 4) & 5",
       "note": "Discord webhook exfil: requires the webhook URL pattern AND a valid webhook ID/token AND a fetch mechanism. The webhook ID (17-20 digits) and token (60+ chars) format is definitive."
     },
     {
@@ -9419,9 +9769,14 @@
         {
           "content": "human",
           "nocase": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & (1 | 2) & (3 | 4 | 5)",
+      "condition": "0 & (1 | 2) & (3 | 4 | 5) & 6",
       "note": "ClickFix attack: clipboard manipulation AND a system command (powershell or mshta) AND verification language (verify, captcha, or human). 47% of attacks per Microsoft use this technique."
     },
     {
@@ -9457,9 +9812,14 @@
         {
           "pattern": "step|stage|phase",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & (3 | 4 | 5) & 6",
+      "condition": "0 & 1 & 2 & (3 | 4 | 5) & 6 & 7",
       "note": "Tycoon 2FA multi-stage flow: requires password + email + display toggling + (otp OR authenticator OR verification code) + stage naming. This catches the full email→password→MFA progression."
     },
     {
@@ -9539,9 +9899,14 @@
         {
           "content": "wave.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4 & 5",
+      "condition": "0 & 1 & 2 & 3 & 4 & 5 & 6",
       "note": "Invoice document lure with password field, but NOT on real accounting platforms (QuickBooks, FreshBooks, Xero, Wave). This is the FP-safe version of invoice phishing detection — a real QuickBooks invoice page mentions 'invoice' and might have a login form, but won't be flagged."
     },
     {
@@ -9558,9 +9923,14 @@
         },
         {
           "content": ".split('|')"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1",
+      "condition": "0 & 1 & 2",
       "note": "Dean Edwards Packer: both the eval(function(p,a,c,k,e, signature AND the .split('|') dictionary unpacker must be present. Using content matches instead of regex — much faster and equally precise since these are exact string literals."
     },
     {
@@ -9587,9 +9957,14 @@
         },
         {
           "pattern": "<form|<input"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & ((1 & (4 | 3)) | (2))",
+      "condition": "0 & ((1 & (4 | 3)) | (2)) & 5",
       "note": "SVG phishing: requires <svg> AND either (foreignObject with form/password) OR (onload with redirect). Two independent detection paths in one rule."
     },
     {
@@ -10448,9 +10823,14 @@
         },
         {
           "pattern": "\\\\u200[0-9a-f]|\\\\u00a0|\\\\u2028|\\\\u2029|\\\\u3000|\\\\ufeff"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Tycoon 2FA whitespace char encoding — charCodeAt + fromCharCode + Unicode whitespace escapes."
     },
     {
@@ -11123,9 +11503,14 @@
         {
           "content": "binance.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "Binance title + crypto keywords NOT on binance.com. Added FP exclusion."
     },
     {
@@ -11237,9 +11622,14 @@
         },
         {
           "content": "password"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": ""
     },
     {
@@ -11333,9 +11723,14 @@
         {
           "content": "adobe.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "Adobe verification page + password NOT on adobe.com. Pure literals."
     },
     {
@@ -11372,9 +11767,14 @@
         {
           "pattern": "<input[^>]+type=[\"'](?:email|password)[\"']",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & (1 | 2 | 3 | 4) & 5 & 6",
+      "condition": "0 & (1 | 2 | 3 | 4) & 5 & 6 & 7",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -11481,9 +11881,14 @@
         },
         {
           "content": "Outlook Web App"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1",
+      "condition": "0 & 1 & 2",
       "note": "save.php action + Outlook Web App text. Two exact literals — no regex needed, 100x faster."
     },
     {
@@ -11553,9 +11958,14 @@
         },
         {
           "content": "/site/submit"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Adobe PDF phishkit — three exact literal matches, no regex needed. 100x faster."
     },
     {
@@ -11597,9 +12007,14 @@
         {
           "pattern": "<input[^>]*type=[\"']password[\"']",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -11697,9 +12112,14 @@
           "pattern": "domain-favicon|domain-logo|provider-icon|email-icon",
           "flags": "i",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & !3"
+      "condition": "1 & 2 & !3 & 4"
     },
     {
       "id": "session-expired-urgency",
@@ -11750,9 +12170,14 @@
         },
         {
           "content": "display:none"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & (4 | 5)",
+      "condition": "0 & 1 & 2 & 3 & (4 | 5) & 6",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -11777,9 +12202,14 @@
         {
           "pattern": "<input[^>]*(?:password|email)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -11837,9 +12267,14 @@
         {
           "pattern": "(?:auth|login|wallet|live).*(?:ledger|metamask|coinbase|binance)|(?:ledger|metamask|coinbase|binance).*(?:auth|login|wallet|live)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1",
+      "condition": "0 & 1 & 2",
       "note": ""
     },
     {
@@ -12248,9 +12683,14 @@
         },
         {
           "content": "裝置"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "(0 & 1 & 2 & 3) | (4 & 5 & 2 & 3)",
+      "condition": "(0 & 1 & 2 & 3) | (4 & 5 & 2 & 3) & 6",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -12599,9 +13039,14 @@
         },
         {
           "pattern": "fetch|XMLHttpRequest|sendBeacon|new\\s+Image"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "Observation-level signal: keystroke accumulation + exfil destination present on same page. Too generic alone (fires on SPAs with search-as-you-type). Weight 0.05 — will become a building block for meta-rules that combine this with other signals (no visible input, external exfil domain, global document listener)."
     },
     {
@@ -12688,9 +13133,14 @@
         {
           "pattern": "\\.(tk|ml|ga|cf|gq|xyz|top|buzz|icu|click)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "DNS prefetch hints to suspicious TLDs or PHP/ASP endpoints indicate the phishing page is preconnecting to its exfiltration infrastructure for faster credential stealing."
     },
     {
@@ -12950,9 +13400,14 @@
         {
           "pattern": "(?:href|download|src)=[\\x27\\\"][^\\x27\\\"]+\\.(?:pdf|doc|xls|jpg|png)\\.(?:exe|scr|bat|cmd|js|vbs|ps1|hta|msi)[\\x27\\\"]",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1",
+      "condition": "1 & 2",
       "note": "Double extension download links. Kept regex for the full pattern but .exe fast filter eliminates 99.9% of pages."
     },
     {
@@ -13201,9 +13656,14 @@
         {
           "pattern": "<title>(?:Verify|Confirm|Signin|Update|Validate|Secure)\\s+(?:your\\s+)?(?:account|identity|credentials|email|login|information)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1",
+      "condition": "1 & 2",
       "note": "Sneaky 2FA randomly selects page titles from a specific list: 'Verify your account/identity/credentials/informations/email/login', 'Confirm your ...', 'Signin to your account'. The exact set of alternatives is a Sneaky 2FA signature."
     },
     {
@@ -13512,9 +13972,14 @@
         {
           "pattern": "telegram|discord|webhook|sendMessage",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Structured messages containing IP/UserAgent/Country/City/Browser metadata sent to Telegram are phishkit victim reports. The attacker receives a formatted intelligence brief on each victim alongside their credentials."
     },
     {
@@ -13647,9 +14112,14 @@
         {
           "pattern": "email|password|credential",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Both Telegram AND Discord referenced with credential terms — multi-platform exfil."
     },
     {
@@ -13670,9 +14140,14 @@
         {
           "pattern": "password|getElementById|querySelector|fetch|XMLHttpRequest|sendBeacon|telegram|discord|webhook",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "obfuscator.io variable pattern + phishing indicators. The _0x prefix is the fast filter."
     },
     {
@@ -13747,9 +14222,14 @@
         },
         {
           "pattern": "action=[\\x27\\\"]https?://(?!(?:login\\.microsoftonline|login\\.live|login\\.microsoft)\\.)"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Microsoft auth CDN references but form posts to non-Microsoft domain. AiTM indicator."
     },
     {
@@ -13769,9 +14249,14 @@
         },
         {
           "pattern": "action=[\\x27\\\"]https?://(?!(?:accounts\\.google|googleapis|gstatic)\\.)"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Google auth references but form posts to non-Google domain. AiTM indicator."
     },
     {
@@ -13821,9 +14306,14 @@
         {
           "pattern": "microsoft|google|apple|amazon|paypal|netflix",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4",
+      "condition": "1 & 2 & 3 & 4 & 5",
       "note": "Redirecting to the legitimate Microsoft/Google login page AFTER sending credentials to an external endpoint is the AiTM post-capture redirect. The victim ends up at the real login page, thinking nothing happened, while their credentials are already stolen."
     },
     {
@@ -13945,9 +14435,14 @@
         {
           "pattern": "redirect|location\\.href|location\\.replace|window\\.location",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "A generic 'Thank you, your account has been verified/updated' message followed by a redirect is the phishing completion page. After stealing credentials, the kit shows a success message then redirects to the real site."
     },
     {
@@ -13996,9 +14491,14 @@
         {
           "pattern": "microsoft\\.com|office\\.com|outlook\\.com",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4",
+      "condition": "1 & 2 & 3 & 4 & 5",
       "note": "After capturing credentials (reading .value, sending via fetch/XHR), redirecting to the REAL Microsoft login page (login.microsoftonline.com) is Tycoon's post-capture behavior. The victim lands at the real login, thinks they just need to sign in again."
     },
     {
@@ -14097,9 +14597,14 @@
         {
           "pattern": "position:\\s*(?:fixed|absolute)|z-index:\\s*\\d{3,}",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "BitB attacks create fake browser windows using HTML/CSS with class names like title-bar, address-bar, browser-frame, popup-window. Combined with fixed/absolute positioning, high z-index, and an iframe or login form, this is a definitive BitB signature."
     },
     {
@@ -14132,9 +14637,14 @@
         {
           "pattern": "draggable|mousedown.*move|drag",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Browser-in-the-Browser titlebar with draggable functionality."
     },
     {
@@ -14160,9 +14670,14 @@
         {
           "pattern": "border-radius|box-shadow|backdrop",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "A styled popup/modal/overlay containing an iframe that loads a login/auth page is the core BitB mechanism. The popup simulates a browser window and the iframe loads the actual phishing form from the attacker's server."
     },
     {
@@ -14187,9 +14702,14 @@
         {
           "pattern": "title-bar|window-controls|close|minimize|maximize",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "Detecting the victim's OS via navigator.platform/userAgent to apply matching window chrome styling (Windows title bar vs macOS traffic lights vs Linux decorations) is a BitB kit feature that makes the fake popup match the victim's real OS."
     },
     {
@@ -14390,9 +14910,14 @@
         {
           "pattern": "Document|File|PDF|Message|Report|Invoice|Statement",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & (2 | 3)",
+      "condition": "0 & 1 & (2 | 3) & 4",
       "note": "Ctrl+click instruction followed by document viewing language. Common ClickFix variant."
     },
     {
@@ -14415,9 +14940,14 @@
         },
         {
           "pattern": "api\\.telegram|discord|fetch\\(|XMLHttpRequest|sendBeacon"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": "Self-contained HTML phish: base64 image + password form + exfil destination."
     },
     {
@@ -14726,9 +15256,14 @@
         },
         {
           "content": "محتوى مقيد"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2 & 3 & 4",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -14790,9 +15325,14 @@
         },
         {
           "content": "風險"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "(0 & 1 & 2 & 3) | (4 & 6 & 3) | (4 & 5)",
+      "condition": "(0 & 1 & 2 & 3) | (4 & 6 & 3) | (4 & 5) & 7",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -14842,9 +15382,14 @@
         },
         {
           "pattern": "\\+?1[\\s-]?\\(?\\d{3}\\)?[\\s-]?\\d{3}[\\s-]?\\d{4}"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4",
+      "condition": "0 & 1 & 2 & 3 & 4 & 5",
       "note": ""
     },
     {
@@ -14872,9 +15417,14 @@
         {
           "pattern": "https?://[a-z0-9-]{0,40}(?:amazon|paypal|microsoft|google|apple|netflix)[a-z0-9-]{0,40}\\.(?:security|secure|verify|account|alert)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1",
+      "condition": "1 & 2",
       "note": "Kept as regex — URL structure pattern needs regex."
     },
     {
@@ -15010,9 +15560,14 @@
         {
           "pattern": "<title[^>]*>[^<]*(?:microsoft|google|outlook|office\\s*365|onedrive|sharepoint)[^<]*</title>|<h[1-3][^>]*>[^<]*(?:microsoft|google|outlook|office\\s*365|onedrive|sharepoint)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Fake error messages paired with login prompts and brand names create urgency ('There was a problem with your Microsoft account. Please sign in to verify.'). This social engineering pattern is used across many phishing campaigns."
     },
     {
@@ -15039,9 +15594,14 @@
         {
           "pattern": "microsoft|google|office|outlook|onedrive|sharepoint",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Shared document lure text ('Someone has shared a document with you. Sign in to view.') is the #1 phishing email-to-page conversion technique for business email compromise. This text on a login page is a strong phishing indicator."
     },
     {
@@ -15075,9 +15635,14 @@
         {
           "pattern": "mot\\s*de\\s*passe|identifiant|numéro\\s*de\\s*carte|code\\s*(?:secret|PIN|sécurité)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "French-language account suspension and verification urgency text ('votre compte a été bloqué', 'veuillez confirmer votre identité') targets French-speaking victims. This social engineering text combined with a login form is a strong phishing indicator."
     },
     {
@@ -15178,9 +15743,14 @@
         {
           "pattern": "\\$\\s*\\d{1,2}\\.\\d{2}|(?:credit|debit)\\s*card|payment\\s*(?:method|info|detail)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Fake redelivery fees or customs charges are the hook for logistics phishing. USPS, DHL, FedEx, and UPS impersonation pages request small payment amounts to harvest credit card details."
     },
     {
@@ -15270,9 +15840,14 @@
         {
           "pattern": "password|credential|card|payment|sign.?in|log.?in",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Fake live chat widgets on phishing pages create the illusion of a legitimate support channel. Scammers may guide victims through entering credentials or personal information via the fake chat."
     },
     {
@@ -15295,9 +15870,14 @@
         {
           "pattern": "download|install|update\\s*now|click\\s*here",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Fake browser update notifications are the primary delivery mechanism for SocGholish, ClearFake, FakeBat, and RogueRaticate malware. The 'browser out of date + download' combination on any website that isn't an official browser vendor is a definitive malware lure."
     },
     {
@@ -15320,9 +15900,14 @@
         {
           "pattern": "call|phone|dial|contact|support|helpline|toll.free",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Tech support scam pages showing fake virus/trojan/computer locked messages with a phone number to call. These pages often use requestFullscreen() to simulate a locked computer."
     },
     {
@@ -15367,9 +15952,14 @@
         {
           "pattern": "routing|account\\s*number|IBAN|SWIFT|wire|beneficiary",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Invoice/payment urgency text combined with payment action prompts is characteristic of Business Email Compromise landing pages. These harvest banking details or redirect victims to payment fraud pages."
     },
     {
@@ -15490,9 +16080,14 @@
         {
           "pattern": "密码|登录|信用卡|银行卡|身份|手机号",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Chinese-language account urgency text ('您的账号已被冻结', '请验证您的身份', '立即更新') targets Chinese-speaking users with account suspension and verification phishing."
     },
     {
@@ -15585,9 +16180,14 @@
         {
           "pattern": "pay|card|\\$|amount|charge|credit|debit",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Mobile carrier billing/account verification pages that request payment updates are used in carrier impersonation phishing targeting T-Mobile, Verizon, AT&T, and other providers."
     },
     {
@@ -15625,9 +16225,14 @@
         {
           "pattern": "position:\\s*fixed",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Rendering a fake mobile status bar (signal bars, battery, time, 4G/5G) in HTML positioned at the top of the page makes the phishing page look like it's running inside a native app rather than a browser."
     },
     {
@@ -15674,9 +16279,14 @@
         },
         {
           "pattern": "innerHTML|textContent|innerText|display"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "JavaScript countdown timers showing 'X minutes remaining' or 'expires in...' create artificial urgency on phishing pages. The timer pressures victims to enter credentials quickly before 'time runs out'. [Observation-level: Countdown timer — sales pages, event countdowns, session timeouts]"
     },
     {
@@ -15696,9 +16306,14 @@
         },
         {
           "content": "password"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "A mailto link to a free email provider (Gmail, Yahoo, Hotmail) on a login page is suspicious. Legitimate enterprise services use their own domain for support contacts, not free email accounts."
     },
     {
@@ -15721,9 +16336,14 @@
         {
           "pattern": "pay|credit\\s*card|debit\\s*card|card\\s*number|billing",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Customs duty/import fee payment forms are one of the most common delivery scam pages. The page claims a package is held in customs and requires payment of a small fee ($1-$5) to release it. The fee is a pretext to collect credit card details."
     },
     {
@@ -15746,9 +16366,14 @@
         {
           "pattern": "pay|card|\\$|€|£|amount|fee|charge",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Post-August 2025 tariff scams exploit consumer confusion about new US de minimis tariff rules on imports under $800. Scammers claim a tariff must be paid before delivery. The FCC specifically warned about this emerging scam vector."
     },
     {
@@ -15771,9 +16396,14 @@
         {
           "pattern": "pay|fee|charge|card|\\$|€|£",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Displaying a fake tracking number (that looks real but isn't) alongside a payment or action request is the core courier phishing pattern. The tracking number adds perceived legitimacy but the fee/verify request is the scam."
     },
     {
@@ -15796,9 +16426,14 @@
         {
           "pattern": "action\\s*required|update.*(?:address|payment|info)|reschedule|(?:pay|fee|charge)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Text claiming a package is 'on hold', 'pending', 'delayed', or 'awaiting action' combined with a required action (pay, verify, update) creates urgency. This is the fundamental social engineering pattern of ALL delivery phishing."
     },
     {
@@ -15825,9 +16460,14 @@
         {
           "pattern": "pay|card|credit|debit|billing",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Delivery scheduling/rescheduling fee forms claim a small charge ($0.99-$3.99) is required to reschedule a missed delivery. Real courier services don't charge rescheduling fees via SMS/email links. The fee is a pretext for card harvesting."
     },
     {
@@ -15850,9 +16490,14 @@
         {
           "pattern": "click|update|confirm|verify|track|reschedule|action",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Short notification-style text about a delivery status (delivered, attempted, held, delayed, missed) is the landing page for an SMS phishing link. The text matches what was in the original smishing SMS that brought the victim to this page."
     },
     {
@@ -15875,9 +16520,14 @@
         {
           "pattern": "pay|card|\\$|€|£|amount|fee",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Postage due/insufficient postage payment pages claim additional shipping fees must be paid to receive a package. These are common in USPS, Royal Mail, and La Poste impersonation phishing."
     },
     {
@@ -15900,9 +16550,14 @@
         {
           "pattern": "apk|download.*app|install.*app|play.*store|app.*store",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Fake courier app download prompts impersonate DHL, FedEx, USPS, etc. and direct users to install malicious APKs or fake apps. The 'tracking app' is actually malware that can intercept SMS (for OTP theft), access contacts, and steal banking credentials."
     },
     {
@@ -15929,9 +16584,14 @@
         {
           "pattern": "pay|settle|clear|resolve|card",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "The exact text pattern of toll phishing: 'unpaid toll balance' + threat of $25-$50 late fee/penalty + 'pay now to avoid'. This is the social engineering text on every Smishing Triad toll landing page. 60,000+ FBI complaints about this exact pattern."
     },
     {
@@ -15954,9 +16614,14 @@
         {
           "pattern": "(?:account|service)\\s*(?:will\\s*be|has\\s*been|may\\s*be)\\s*(?:suspended|terminated|deactivated|closed)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Threatening toll account suspension/hold if payment isn't made is the escalation tactic used in toll phishing. Real toll agencies send physical mail for collections, not SMS threats of account suspension."
     },
     {
@@ -15979,9 +16644,14 @@
         {
           "pattern": "pay|fine|fee|penalty|amount|\\$",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Displaying a fake violation/invoice number (like 'Violation #TX-89234' or 'Invoice: 7829341') alongside a toll balance adds perceived legitimacy. The number is generated per-visit and doesn't correspond to any real toll record."
     },
     {
@@ -16042,9 +16712,14 @@
         {
           "pattern": "pay|card|fee|amount|charge|\\$",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Threatening collections agency referral, legal action, or credit score impact for unpaid tolls is extreme-pressure toll phishing. Real toll debt follows months of physical mail notices before any collections referral."
     },
     {
@@ -16066,9 +16741,14 @@
         {
           "pattern": "scanned|verified|secured|protected|safe|clean|threat\\s*protection|virus\\s*free|malware\\s*free|trusted",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Hidden text claiming 'Scanned and secured by Advanced Threat Protection' or similar fake security assurances appears in email previews, making the message look legitimate. SANS ISC documented this as a 'new spin' on ZeroFont in September 2023, still active."
     },
     {
@@ -16091,9 +16771,14 @@
         {
           "pattern": "sign\\s*in|log\\s*in|view\\s*(?:document|file)|enter.*password",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Pages claiming 'Someone shared a document with you' followed by a sign-in prompt are the most common enterprise phishing lure. The victim thinks they need to authenticate to view a shared file, but the login form harvests their credentials."
     },
     {
@@ -16120,9 +16805,14 @@
         {
           "pattern": "sign.?in|log.?in|password|verify|unlock",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "A blurred or partially transparent document preview behind a login overlay is the visual trick that makes shared document phishing convincing. The victim can see enough of the document to believe it's real, but must 'sign in' to view it clearly."
     },
     {
@@ -16149,9 +16839,14 @@
         {
           "pattern": "sign\\s*in|log\\s*in|password|authenticate",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Voicemail notification pages with play/listen buttons that require sign-in are a top enterprise phishing lure. Microsoft voicemail notifications are frequently impersonated, with the login form harvesting M365 credentials."
     },
     {
@@ -16178,9 +16873,14 @@
         {
           "pattern": "\\d{1,2}:\\d{2}|seconds|minutes",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "A fake audio player UI showing waveform, play button, progress bar, and duration (e.g., '0:45') for a voicemail message is the visual component of voicemail phishing. The player doesn't actually play audio — it's just HTML/CSS that gates a login form."
     },
     {
@@ -16207,9 +16907,14 @@
         {
           "pattern": "cancel|refund|dispute|call",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Subscription auto-renewal alerts claiming 'Your subscription has been renewed for $XXX' with options to cancel or update payment are a top consumer phishing lure. Norton, McAfee, Geek Squad, and streaming services are commonly impersonated."
     },
     {
@@ -16236,9 +16941,14 @@
         {
           "pattern": "pay|card|transfer|wire|zelle|cashapp|venmo|bitcoin|crypto|gift\\s*card",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Job offers requiring upfront payments for training, equipment, background checks, or registration are advance fee employment scams. Legitimate employers never charge employees to start working."
     },
     {
@@ -16290,9 +17000,14 @@
         {
           "pattern": "Windows|Run|PowerShell|cmd|command|terminal|dialog",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "ClickFix uses numbered steps progressing from verification language to command execution language. This step progression is unique to ClickFix."
     },
     {
@@ -16371,9 +17086,14 @@
         {
           "pattern": "social\\s*security|SSN|passport|bank\\s*(?:account|details)|routing|direct\\s*deposit|date\\s*of\\s*birth",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Fake job offers collecting SSN, DOB, bank details. Legitimate apps never ask for SSN in initial forms."
     },
     {
@@ -16396,9 +17116,14 @@
         {
           "pattern": "sign.?in|log.?in|password|credential|authenticate",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "HR portal impersonation pages are among the top AI-generated lure categories in 2025-2026."
     },
     {
@@ -16421,9 +17146,14 @@
         {
           "pattern": "sign.?in|log.?in|password|verify|join\\s*now",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Fake meeting invites requiring login to 'join'. Calendar phishing is an emerging bypass for email security."
     },
     {
@@ -16464,9 +17194,14 @@
         {
           "pattern": "sign.?in|log.?in|verify|unlock",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4",
+      "condition": "1 & 2 & 3 & 4 & 5",
       "note": "A blurred or semi-transparent document image behind a login form is the #1 document lure layout. The 'document' is just an image with CSS blur/opacity applied, and a credential modal sits on top. No legitimate document-sharing service blurs a real document behind a login wall."
     },
     {
@@ -16487,9 +17222,14 @@
         },
         {
           "content": "password"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "A 'View Document' or 'Open File' button/heading on the same page as a password input field is a document lure phishing layout. Legitimate file sharing shows the document directly or uses the hosting service's own login, not a generic password prompt on the same page."
     },
     {
@@ -16512,9 +17252,14 @@
         {
           "pattern": "sign.?in|log.?in|enter.*password|email.*password",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Generic 'X has shared a document with you' notification text followed by a 'sign in to view' prompt is the standard document lure layout. Legitimate sharing notifications link to the hosting service's own authenticated view, not a generic login prompt."
     },
     {
@@ -16556,9 +17301,14 @@
         {
           "pattern": "<input[^>]*type=[\\x27\\\"]password[\\x27\\\"]",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "(1 | 2 | 3 | 4 | 5 | 6) & 7",
+      "condition": "(1 | 2 | 3 | 4 | 5 | 6) & 7 & 8",
       "note": "Invoice/remittance/PO/RFQ document text combined with a login prompt or password field on the same page is BEC document lure phishing. Real invoices are attached as PDFs or viewed in accounting software — they don't require signing in on the same page."
     },
     {
@@ -16583,9 +17333,14 @@
         },
         {
           "content": "password"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "A static document/invoice/PDF image as background with a positioned login modal on top is the visual layout of image-based document lures. The 'document' is a screenshot or placeholder image, not real interactive content. The login modal steals credentials."
     },
     {
@@ -16608,9 +17363,14 @@
         {
           "pattern": "sign.?in|log.?in|password|credential",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Fake 'secure message' or 'encrypted email' notifications that require signing in to view the message are a popular phishing lure. They impersonate services like Zix, Proofpoint Encryption, or Microsoft 365 Message Encryption. The login form harvests credentials."
     },
     {
@@ -16636,9 +17396,14 @@
         {
           "pattern": "sign.?in|log.?in|password|credential",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Fake fax or voicemail notifications requiring login to 'listen' or 'view' the message are legacy communication lures. They impersonate services like eFax, RingCentral, or Microsoft 365 voicemail. The login form is the actual phishing payload."
     },
     {
@@ -16664,9 +17429,14 @@
         },
         {
           "content": "password"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Displaying document metadata (page count, file size, file type) alongside a View/Open/Download button that leads to a login form is document information theater. Real document sharing services show this metadata WITH the document, not instead of it behind a login wall."
     },
     {
@@ -16688,9 +17458,14 @@
         {
           "pattern": "(?:View|Open|Access|Review|Download)\\\\s*(?:Document|File|PDF|Message)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Showing the sender's name and email address in a document sharing notification adds perceived legitimacy (the victim recognizes the sender). Combined with a View Document button and a login form, this is a personalized document lure. The sender info is often extracted from the victim's email."
     },
     {
@@ -16709,9 +17484,14 @@
         {
           "pattern": "Login\\s*To\\s*(?:View|Access|Open|Download)|Sign\\s*[Ii]n\\s*[Tt]o\\s*(?:View|Access|Open|Download)|Log\\s*[Ii]n\\s*[Tt]o\\s*(?:View|Access|Open|Download)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1",
+      "condition": "1 & 2",
       "note": "Button text like Login To View File — definitive phishing language. Kept regex for the phrase matching."
     },
     {
@@ -16745,9 +17525,14 @@
         {
           "pattern": "prohibited|forbidden|not\\s*(?:permitted|allowed)|strictly",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 | (0 & 2)",
+      "condition": "1 | (0 & 2) & 3",
       "note": "Formal, legal-sounding language about access rights ('rightful recipient', 'unauthorized access is prohibited', 'protected file') combined with a login form creates false authority. This language discourages the victim from questioning the page's legitimacy. Real login pages don't lecture about unauthorized access."
     },
     {
@@ -17126,9 +17911,14 @@
         {
           "pattern": "<title>\\s*(?:chase|paypal|netflix|amazon|apple|microsoft|facebook|instagram|outlook|gmail|yahoo|wells\\s*fargo|bank\\s*of\\s*america|citibank|usaa|coinbase|binance)\\s*</title>",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1",
+      "condition": "1 & 2",
       "note": "Title tag containing only a brand name — phishing pages use bare brand names as titles."
     },
     {
@@ -17327,9 +18117,14 @@
         {
           "pattern": "^https?://(dpd|dhl|ups|fedex|usps|royalmail|postnl)\\.[a-zA-Z0-9-]+\\.(bond|club|top|tk|ml|ga|cf|live|site)(/|$)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1",
+      "condition": "1 & 2",
       "note": "Kept as regex — URL pattern matching needs regex."
     },
     {
@@ -17347,9 +18142,14 @@
         {
           "pattern": "(?:txdmv|dmv|irs|ssa|uscis|dol|hud|dps|txdot|txdps)\\\\.[a-z0-9-]+\\\\.(?:life|top|xyz|click|shop|online|site|store|fun|icu|buzz|cc|pw|tk|ml|ga|cf|gq)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1",
+      "condition": "1 & 2",
       "note": "Kept as regex — the domain pattern matching is inherently regex. fast_pattern auto-selects."
     },
     {
@@ -17477,9 +18277,14 @@
         {
           "pattern": "[?&](?:d|brand|b|org|bank|target|client|service)=(?:swedbank|nordea|seb|handelsbanken|danske|paypal|chase|wells[\\s_-]?fargo|citi|hsbc|barclays|revolut)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1",
+      "condition": "1 & 2",
       "note": "Kept as regex — query parameter pattern matching needs regex."
     },
     {
@@ -17516,9 +18321,14 @@
         {
           "pattern": "\\\\.(?:com|org|net|info)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": ""
     },
     {
@@ -17599,9 +18409,14 @@
         {
           "pattern": "<form[^>]*action=",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": " [converted to multi-match for performance]"
     },
     {
@@ -17655,9 +18470,14 @@
         {
           "pattern": "\\.(?:top|xyz|buzz|live|icu|tk|ml|ga|cf|gq|rest|cfd|sbs|click|link)[/\\x27\\\"\\s>]",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Form actions pointing to domains on suspicious TLDs (.top, .xyz, .buzz, .live, .icu, .tk, etc.) indicate credential exfiltration to cheap/free domain infrastructure. These TLDs are disproportionately used for phishing."
     },
     {
@@ -17678,9 +18498,14 @@
         {
           "pattern": "\\.(?:tk|ml|ga|cf|gq|xyz|top|buzz|icu|click|link)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "JavaScript redirects to suspicious TLDs indicate the page is part of a phishing redirect chain that bounces through multiple domains."
     },
     {
@@ -17712,9 +18537,14 @@
         {
           "pattern": "bit\\.ly|tinyurl|t\\.co|goo\\.gl|ow\\.ly|is\\.gd|v\\.gd|buff\\.ly|rb\\.gy|cutt\\.ly",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Redirecting through URL shorteners in JavaScript hides the final phishing destination from both users and URL-based detection. No legitimate login page redirects through shortener services."
     },
     {
@@ -17784,9 +18614,14 @@
         {
           "pattern": "card|payment|fee|amount|billing|\\$\\s*\\d",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Delivery phishing campaigns frequently use cheap high-risk TLDs (.top, .xin, .cyou, .cfd, .sbs) for disposable infrastructure. The combination of a high-risk TLD, logistics keywords, and payment collection is a strong phishing signal regardless of the specific threat actor."
     },
     {
@@ -17855,9 +18690,14 @@
         {
           "pattern": "<title>\\s*(?:Untitled|Document|Page|Home|Index|Loading|Please\\s*wait|Sign\\s*in|Log\\s*in|Verify)?\\s*</title>",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1",
+      "condition": "1 & 2",
       "note": "Phishing pages often have generic, blank, or single-word titles like 'Document', 'Login', 'Verify', 'Untitled'. Legitimate login pages always have branded titles (e.g., 'Sign in to Microsoft'). A generic title on a credential page is suspicious."
     },
     {
@@ -17919,9 +18759,14 @@
         {
           "pattern": "\\\\.(?:xyz|top|tk|ml|ga|cf|gq|buzz|work|click|link|surf|icu|monster|rest|quest|cfd|sbs)[/\\x27\\\"]",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Form actions posting to cheap or commonly-abused TLDs (.xyz, .top, .tk, .ml, .ga, .cf, .gq, .icu, etc.) are strong phishing indicators. These TLDs are disproportionately used for phishing due to low cost or free registration."
     },
     {
@@ -17991,9 +18836,14 @@
         {
           "pattern": "firebasestorage\\.googleapis|blob\\.core\\.windows\\.net|sites\\.google\\.com|docs\\.google\\.com|sharepoint\\.com|tiktok\\.com|wix\\.com|worker(?:s)?\\.dev",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Tycoon chains redirects through trusted services (Firebase, Azure Blob, Wix, TikTok, Google Docs/Sites) before landing on the phishing page. These trusted intermediate domains lend legitimacy to the redirect chain and bypass URL reputation checks."
     },
     {
@@ -18057,9 +18907,14 @@
         },
         {
           "pattern": "\\.php|api\\.telegram|discord\\.com/api/webhooks"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1 & 2 & 3",
       "note": "Loading legitimate CDN resources (Google Fonts, cdnjs) on a page that posts to a PHP credential collector or Telegram/Discord webhook indicates a phishing kit using legitimate CDNs for visual polish while exfiltrating through attacker infrastructure."
     },
     {
@@ -19836,7 +20691,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-06T18:46:20.642Z",
+      "compiledAt": "2026-04-06T18:50:41.900Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
