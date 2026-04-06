@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-20:04",
-    "generatedAt": "2026-04-06T20:04:15.269Z",
+    "version": "2026-04-06-20:21",
+    "generatedAt": "2026-04-06T20:21:19.777Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -26585,9 +26585,44 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "note": "Detects comprehensive Microsoft product mimicry - bounded wildcards prevent performance issues",
-      "patternString": "Microsoft[\\s\\S]{0,2000}(?:Teams|Surface|Xbox|Office)[\\s\\S]{0,2000}(?:Teams|Surface|Xbox|Office|365)",
-      "patternFlags": "i"
+      "note": "Microsoft product portfolio on non-Microsoft domain with credential form. [FP fix: old pattern just matched Microsoft + 2 product names within 4000 chars — every tech/gaming site. Now requires actual password input + excludes Microsoft domains + <nav> negation.]",
+      "match": [
+        {
+          "content": "microsoft",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:Teams|Surface|Xbox|OneDrive|Outlook)",
+          "flags": "i"
+        },
+        {
+          "pattern": "(?:Office|365|Azure|Windows|Bing)",
+          "flags": "i"
+        },
+        {
+          "pattern": "<input[^>]*type=['\\\"]password['\\\"]",
+          "flags": "i"
+        },
+        {
+          "content": "microsoft.com",
+          "negated": true
+        },
+        {
+          "content": "office.com",
+          "negated": true
+        },
+        {
+          "content": "live.com",
+          "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
     },
     {
       "id": "ledger-live-login-impersonation",
