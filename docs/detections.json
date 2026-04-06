@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-19:29",
-    "generatedAt": "2026-04-06T19:29:07.481Z",
+    "version": "2026-04-06-19:43",
+    "generatedAt": "2026-04-06T19:43:15.315Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -35347,22 +35347,22 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "note": "A styled popup/modal/overlay containing an iframe that loads a login/auth page is the core BitB mechanism. The popup simulates a browser window and the iframe loads the actual phishing form from the attacker's server.",
+      "note": "BitB: iframe loading a login/auth URL inside a styled popup overlay. [FP fix: entry 1 now requires the iframe src to contain login/oauth/auth terms — previously just checked if \"iframe\" and \"login\" existed anywhere on the page independently. Also tightened z-index to require high values (900+ or 10000+) and requires both border-radius AND box-shadow in same CSS block.]",
       "match": [
         {
           "content": "iframe",
           "fast_pattern": true
         },
         {
-          "pattern": "position:\\s*(?:fixed|absolute).*z-index|z-index.*position:\\s*(?:fixed|absolute)",
+          "pattern": "<iframe[^>]*src=['\\\"][^'\\\"]*(?:login|sign.?in|oauth|authorize|auth\\.|accounts\\.)[^'\\\"]*['\\\"]",
           "flags": "i"
         },
         {
-          "pattern": "login|sign.?in|oauth|authorize|google|microsoft|apple|facebook",
+          "pattern": "position:\\s*(?:fixed|absolute)[^}]{0,200}z-index:\\s*(?:9\\d{2,}|[1-9]\\d{4,})",
           "flags": "i"
         },
         {
-          "pattern": "border-radius|box-shadow|backdrop",
+          "pattern": "(?:border-radius|box-shadow)[^}]{0,200}(?:border-radius|box-shadow)",
           "flags": "i"
         }
       ],
