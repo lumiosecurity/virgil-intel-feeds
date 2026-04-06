@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-06T20:25:09.461Z",
+    "compiledAt": "2026-04-06T20:27:25.426Z",
     "brandCount": 192,
     "signalCount": 1,
     "patternCount": 1102,
@@ -18433,10 +18433,10 @@
           "fast_pattern": true
         },
         {
-          "pattern": "location\\.(?:href|replace)|window\\.location|meta.*refresh"
+          "pattern": "location\\.(?:href|replace)\\s*=|window\\.location\\s*="
         },
         {
-          "pattern": "\\.(?:tk|ml|ga|cf|gq|xyz|top|buzz|icu|click|link)",
+          "pattern": "['\\\"]https?://[a-z0-9.-]+\\.(?:tk|ml|ga|cf|gq|xyz|top|buzz|icu|click|link)(?:/|['\\\"])",
           "flags": "i"
         },
         {
@@ -18446,7 +18446,7 @@
         }
       ],
       "condition": "1 & 2 & 3",
-      "note": "JavaScript redirects to suspicious TLDs indicate the page is part of a phishing redirect chain that bounces through multiple domains."
+      "note": "JS redirect to suspicious TLD URL. [FP fix: old pattern matched .click/.top/.link as bare dot+word — these are standard JS methods (element.click(), window.top, String.link()). Now requires TLD to appear in a URL string context (https://domain.tld).]"
     },
     {
       "id": "multiple-redirect-chain",
@@ -20626,7 +20626,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-06T20:23:12.577Z",
+      "compiledAt": "2026-04-06T20:21:17.101Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
