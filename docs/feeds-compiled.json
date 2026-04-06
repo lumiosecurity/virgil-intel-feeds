@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-06T18:57:51.853Z",
+    "compiledAt": "2026-04-06T19:01:09.006Z",
     "brandCount": 192,
     "signalCount": 1,
     "patternCount": 1102,
@@ -5565,14 +5565,9 @@
         {
           "content": "microsoft.com",
           "negated": true
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Microsoft CDN references (msftauth.net) with password field NOT on real MS domains."
     },
     {
@@ -6314,14 +6309,9 @@
         {
           "pattern": "payload|body|JSON\\.stringify|FormData",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4",
+      "condition": "1 & 2 & 3",
       "note": "After successful CAPTCHA verification, Tycoon fetches the actual phishing page payload from an attacker-controlled server. The CAPTCHA gate→success→fetch-payload chain ensures security scanners that can't solve the CAPTCHA never see the credential form."
     },
     {
@@ -6755,14 +6745,9 @@
         {
           "pattern": "keystrokes|clicks\\s*tracked|time\\s*on\\s*page",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1",
       "note": "Phishkits that display tracking counters to create urgency. Simplified — the literal is already very specific."
     },
     {
@@ -7630,14 +7615,9 @@
         {
           "pattern": "credit|\\bcard\\b|address|name|email|phone|password",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4",
+      "condition": "1 & 2 & 3",
       "note": "Hidden input fields with autocomplete attributes trick browsers into auto-filling credit card, name, email, phone, and address data. The fields are invisible to the user but the browser fills them automatically, enabling silent PII harvesting."
     },
     {
@@ -7746,14 +7726,9 @@
         {
           "pattern": "fetch|XMLHttpRequest|sendBeacon|telegram|password|email|credential",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2",
       "note": "Requesting fine GPS location alongside credential capture gives attackers the victim's exact physical location. This data enables physical attacks (home break-in, stalking) or verifies victim identity for targeted fraud."
     },
     {
@@ -7790,14 +7765,9 @@
         {
           "pattern": "email|user|pass|login|password",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4",
+      "condition": "0 & 1 & 2 & 3",
       "note": "A fetch() POST to any URL containing 'telegram' with credential-related fields in the body is a direct Telegram exfiltration call. This catches both plain and partially obfuscated API URLs."
     },
     {
@@ -7842,14 +7812,9 @@
         {
           "pattern": "email|password|username|login|credential|token",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2",
       "note": "Discord webhook embeds with fields containing credential labels create formatted exfiltration reports. Each embed field displays a stolen credential (email, password, IP, etc.) in a structured Discord message."
     },
     {
@@ -7905,14 +7870,9 @@
         {
           "pattern": "(?:email|user|login|password|pass|card)\\s*(?::|=|->)",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2",
       "note": "Simple Discord webhook messages with plaintext content containing 'email:', 'password:', etc. are basic credential exfiltration. Not all phishkits use embeds — many just send a plain text message with credential key:value pairs."
     },
     {
@@ -8187,14 +8147,9 @@
         {
           "pattern": "document\\.cookie[\\s\\S]{0,500}(?:fetch\\(['\\\"]https?://|XMLHttpRequest[\\s\\S]{0,200}open[\\s\\S]{0,200}https?://|sendBeacon\\(['\\\"]https?://|postMessage\\([\\s\\S]{0,100}document\\.cookie)",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2",
       "note": "AiTM cookie extraction: document.cookie read with specific auth cookie name AND exfil to external URL (fetch/XHR/beacon with https://). [FP fix: requires cookie name within 200 chars of document.cookie, exfil must target a URL, and no <nav> element. Prevents FP on Auth0/Firebase/Okta sites that legitimately read their own auth cookies.]"
     },
     {
@@ -8241,14 +8196,9 @@
         },
         {
           "pattern": "style\\.display|classList\\.(?:add|remove|toggle)|visibility"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4",
+      "condition": "0 & 1 & 2 & 3",
       "note": "After capturing the password, showing a hidden MFA/verification code input is the two-stage AiTM credential+MFA harvest. Condition 2 now requires MFA terms in input field attributes (name, id, placeholder), not just page text."
     },
     {
@@ -8292,14 +8242,9 @@
         },
         {
           "pattern": "style\\.display|classList|visibility|innerHTML"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2",
       "note": "A JavaScript state machine managing email→password→MFA step progression by showing/hiding page sections is the AiTM multi-step authentication flow controller. Each step captures different credentials and the kit advances through the auth flow."
     },
     {
@@ -9695,14 +9640,9 @@
         },
         {
           "content": "sendLocation"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & (2 | 3 | 4 | 5) & 6",
+      "condition": "0 & 1 & (2 | 3 | 4 | 5)",
       "note": "Comprehensive Telegram exfil detection: requires the API domain AND a valid bot token AND any one of the send methods. Replaces 4 separate legacy rules with one multi-match rule. The fast_pattern on 'api.telegram.org' means this rule is only evaluated on pages that reference Telegram's API."
     },
     {
@@ -9728,14 +9668,9 @@
         },
         {
           "content": "sendBeacon"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & (2 | 3 | 4) & 5",
+      "condition": "0 & 1 & (2 | 3 | 4)",
       "note": "Discord webhook exfil: requires the webhook URL pattern AND a valid webhook ID/token AND a fetch mechanism. The webhook ID (17-20 digits) and token (60+ chars) format is definitive."
     },
     {
@@ -9812,14 +9747,9 @@
         {
           "pattern": "step|stage|phase",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & (3 | 4 | 5) & 6 & 7",
+      "condition": "0 & 1 & 2 & (3 | 4 | 5) & 6",
       "note": "Tycoon 2FA multi-stage flow: requires password + email + display toggling + (otp OR authenticator OR verification code) + stage naming. This catches the full email→password→MFA progression."
     },
     {
@@ -9923,14 +9853,9 @@
         },
         {
           "content": ".split('|')"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2",
+      "condition": "0 & 1",
       "note": "Dean Edwards Packer: both the eval(function(p,a,c,k,e, signature AND the .split('|') dictionary unpacker must be present. Using content matches instead of regex — much faster and equally precise since these are exact string literals."
     },
     {
@@ -10823,14 +10748,9 @@
         },
         {
           "pattern": "\\\\u200[0-9a-f]|\\\\u00a0|\\\\u2028|\\\\u2029|\\\\u3000|\\\\ufeff"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2",
       "note": "Tycoon 2FA whitespace char encoding — charCodeAt + fromCharCode + Unicode whitespace escapes."
     },
     {
@@ -13039,14 +12959,9 @@
         },
         {
           "pattern": "fetch|XMLHttpRequest|sendBeacon|new\\s+Image"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Observation-level signal: keystroke accumulation + exfil destination present on same page. Too generic alone (fires on SPAs with search-as-you-type). Weight 0.05 — will become a building block for meta-rules that combine this with other signals (no visible input, external exfil domain, global document listener)."
     },
     {
@@ -13656,14 +13571,9 @@
         {
           "pattern": "<title>(?:Verify|Confirm|Signin|Update|Validate|Secure)\\s+(?:your\\s+)?(?:account|identity|credentials|email|login|information)",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2",
+      "condition": "1",
       "note": "Sneaky 2FA randomly selects page titles from a specific list: 'Verify your account/identity/credentials/informations/email/login', 'Confirm your ...', 'Signin to your account'. The exact set of alternatives is a Sneaky 2FA signature."
     },
     {
@@ -13972,14 +13882,9 @@
         {
           "pattern": "telegram|discord|webhook|sendMessage",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2",
       "note": "Structured messages containing IP/UserAgent/Country/City/Browser metadata sent to Telegram are phishkit victim reports. The attacker receives a formatted intelligence brief on each victim alongside their credentials."
     },
     {
@@ -14112,14 +14017,9 @@
         {
           "pattern": "email|password|credential",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
+      "condition": "0 & 1 & 2",
       "note": "Both Telegram AND Discord referenced with credential terms — multi-platform exfil."
     },
     {
@@ -14140,14 +14040,9 @@
         {
           "pattern": "password|getElementById|querySelector|fetch|XMLHttpRequest|sendBeacon|telegram|discord|webhook",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2",
       "note": "obfuscator.io variable pattern + phishing indicators. The _0x prefix is the fast filter."
     },
     {
@@ -14222,14 +14117,9 @@
         },
         {
           "pattern": "action=[\\x27\\\"]https?://(?!(?:login\\.microsoftonline|login\\.live|login\\.microsoft)\\.)"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2",
       "note": "Microsoft auth CDN references but form posts to non-Microsoft domain. AiTM indicator."
     },
     {
@@ -14249,14 +14139,9 @@
         },
         {
           "pattern": "action=[\\x27\\\"]https?://(?!(?:accounts\\.google|googleapis|gstatic)\\.)"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2",
       "note": "Google auth references but form posts to non-Google domain. AiTM indicator."
     },
     {
@@ -14306,14 +14191,9 @@
         {
           "pattern": "microsoft|google|apple|amazon|paypal|netflix",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5",
+      "condition": "1 & 2 & 3 & 4",
       "note": "Redirecting to the legitimate Microsoft/Google login page AFTER sending credentials to an external endpoint is the AiTM post-capture redirect. The victim ends up at the real login page, thinking nothing happened, while their credentials are already stolen."
     },
     {
@@ -14491,14 +14371,9 @@
         {
           "pattern": "microsoft\\.com|office\\.com|outlook\\.com",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5",
+      "condition": "1 & 2 & 3 & 4",
       "note": "After capturing credentials (reading .value, sending via fetch/XHR), redirecting to the REAL Microsoft login page (login.microsoftonline.com) is Tycoon's post-capture behavior. The victim lands at the real login, thinks they just need to sign in again."
     },
     {
@@ -14535,14 +14410,9 @@
         {
           "pattern": "(?:style\\.display|classList\\.(?:add|remove|toggle)|visibility)[\\s\\S]{0,1000}\\b(?:email|password|passwd|otp|mfa)\\b|\\b(?:email|password|passwd|otp|mfa)\\b[\\s\\S]{0,1000}(?:style\\.display|classList\\.(?:add|remove|toggle)|visibility)",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4",
+      "condition": "1 & 2 & 3",
       "note": "Tycoon stage progression: step/stage counter + credential field + display toggling within 1000 chars. [FP fix: added word boundaries on credential terms (otp matched inside gotPos), required step/stage to have a numeric/state suffix (not just the word page), proximity between display toggling and credential fields, <nav> negation.]"
     },
     {
@@ -14597,14 +14467,9 @@
         {
           "pattern": "position:\\s*(?:fixed|absolute)|z-index:\\s*\\d{3,}",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2",
       "note": "BitB attacks create fake browser windows using HTML/CSS with class names like title-bar, address-bar, browser-frame, popup-window. Combined with fixed/absolute positioning, high z-index, and an iframe or login form, this is a definitive BitB signature."
     },
     {
@@ -14637,14 +14502,9 @@
         {
           "pattern": "draggable|mousedown.*move|drag",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2",
       "note": "Browser-in-the-Browser titlebar with draggable functionality."
     },
     {
@@ -14670,14 +14530,9 @@
         {
           "pattern": "border-radius|box-shadow|backdrop",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4",
+      "condition": "1 & 2 & 3",
       "note": "A styled popup/modal/overlay containing an iframe that loads a login/auth page is the core BitB mechanism. The popup simulates a browser window and the iframe loads the actual phishing form from the attacker's server."
     },
     {
@@ -14702,14 +14557,9 @@
         {
           "pattern": "title-bar|window-controls|close|minimize|maximize",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4",
+      "condition": "0 & 1 & 2 & 3",
       "note": "Detecting the victim's OS via navigator.platform/userAgent to apply matching window chrome styling (Windows title bar vs macOS traffic lights vs Linux decorations) is a BitB kit feature that makes the fake popup match the victim's real OS."
     },
     {
@@ -18836,14 +18686,9 @@
         {
           "pattern": "firebasestorage\\.googleapis|blob\\.core\\.windows\\.net|sites\\.google\\.com|docs\\.google\\.com|sharepoint\\.com|tiktok\\.com|wix\\.com|worker(?:s)?\\.dev",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
+      "condition": "1 & 2",
       "note": "Tycoon chains redirects through trusted services (Firebase, Azure Blob, Wix, TikTok, Google Docs/Sites) before landing on the phishing page. These trusted intermediate domains lend legitimacy to the redirect chain and bypass URL reputation checks."
     },
     {
@@ -20691,7 +20536,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-06T18:50:41.900Z",
+      "compiledAt": "2026-04-06T18:57:48.540Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

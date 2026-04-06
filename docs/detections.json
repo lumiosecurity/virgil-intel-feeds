@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-18:57",
-    "generatedAt": "2026-04-06T18:57:51.878Z",
+    "version": "2026-04-06-19:01",
+    "generatedAt": "2026-04-06T19:01:09.030Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -26239,14 +26239,9 @@
         {
           "content": "microsoft.com",
           "negated": true
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "copyright-brand-name-mismatch",
@@ -26992,14 +26987,9 @@
         {
           "pattern": "payload|body|JSON\\.stringify|FormData",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "tycoon-iconcaptcha-integration",
@@ -27444,14 +27434,9 @@
         {
           "pattern": "keystrokes|clicks\\s*tracked|time\\s*on\\s*page",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1"
     },
     {
       "id": "hidden-field-credential-relay",
@@ -28325,14 +28310,9 @@
         {
           "pattern": "credit|\\bcard\\b|address|name|email|phone|password",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "designmode-editable-page",
@@ -28441,14 +28421,9 @@
         {
           "pattern": "fetch|XMLHttpRequest|sendBeacon|telegram|password|email|credential",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "webview-bridge-credential-leak",
@@ -28485,14 +28460,9 @@
         {
           "pattern": "email|user|pass|login|password",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "telegram-xhr-exfil-call",
@@ -28537,14 +28507,9 @@
         {
           "pattern": "email|password|username|login|credential|token",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "discord-webhook-with-file",
@@ -28600,14 +28565,9 @@
         {
           "pattern": "(?:email|user|login|password|pass|card)\\s*(?::|=|->)",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "form-cross-origin-action-any-field",
@@ -28882,14 +28842,9 @@
         {
           "pattern": "document\\.cookie[\\s\\S]{0,500}(?:fetch\\(['\\\"]https?://|XMLHttpRequest[\\s\\S]{0,200}open[\\s\\S]{0,200}https?://|sendBeacon\\(['\\\"]https?://|postMessage\\([\\s\\S]{0,100}document\\.cookie)",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2"
     },
     {
       "id": "aitm-set-cookie-relay-js",
@@ -28936,14 +28891,9 @@
         },
         {
           "pattern": "style\\.display|classList\\.(?:add|remove|toggle)|visibility"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "aitm-websocket-credential-token-stream",
@@ -28987,14 +28937,9 @@
         },
         {
           "pattern": "style\\.display|classList|visibility|innerHTML"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2"
     },
     {
       "id": "password-form-no-forgot-link",
@@ -30390,14 +30335,9 @@
         },
         {
           "content": "sendLocation"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & (2 | 3 | 4 | 5) & 6"
+      "condition": "0 & 1 & (2 | 3 | 4 | 5)"
     },
     {
       "id": "mm-discord-webhook-exfil",
@@ -30423,14 +30363,9 @@
         },
         {
           "content": "sendBeacon"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & (2 | 3 | 4) & 5"
+      "condition": "0 & 1 & (2 | 3 | 4)"
     },
     {
       "id": "mm-clickfix-paste-and-run",
@@ -30507,14 +30442,9 @@
         {
           "pattern": "step|stage|phase",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & (3 | 4 | 5) & 6 & 7"
+      "condition": "0 & 1 & 2 & (3 | 4 | 5) & 6"
     },
     {
       "id": "mm-fake-microsoft-login-not-real",
@@ -30618,14 +30548,9 @@
         },
         {
           "content": ".split('|')"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2"
+      "condition": "0 & 1"
     },
     {
       "id": "mm-svg-phishing-payload",
@@ -31526,14 +31451,9 @@
         },
         {
           "pattern": "\\\\u200[0-9a-f]|\\\\u00a0|\\\\u2028|\\\\u2029|\\\\u3000|\\\\ufeff"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "tycoon-aes-payload-decrypt",
@@ -33863,14 +33783,9 @@
         },
         {
           "pattern": "fetch|XMLHttpRequest|sendBeacon|new\\s+Image"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "window-opener-blank-redirect",
@@ -34480,14 +34395,9 @@
         {
           "pattern": "<title>(?:Verify|Confirm|Signin|Update|Validate|Secure)\\s+(?:your\\s+)?(?:account|identity|credentials|email|login|information)",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1"
     },
     {
       "id": "sneaky-2fa-blurred-background",
@@ -34796,14 +34706,9 @@
         {
           "pattern": "telegram|discord|webhook|sendMessage",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2"
     },
     {
       "id": "discord-webhook-url-full",
@@ -34936,14 +34841,9 @@
         {
           "pattern": "email|password|credential",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "jsobs-phish-page-combined",
@@ -34964,14 +34864,9 @@
         {
           "pattern": "password|getElementById|querySelector|fetch|XMLHttpRequest|sendBeacon|telegram|discord|webhook",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2"
     },
     {
       "id": "external-config-fetch-then-exfil",
@@ -35046,14 +34941,9 @@
         },
         {
           "pattern": "action=[\\x27\\\"]https?://(?!(?:login\\.microsoftonline|login\\.live|login\\.microsoft)\\.)"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2"
     },
     {
       "id": "aitm-domain-mixing-google",
@@ -35073,14 +34963,9 @@
         },
         {
           "pattern": "action=[\\x27\\\"]https?://(?!(?:accounts\\.google|googleapis|gstatic)\\.)"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2"
     },
     {
       "id": "aitm-injected-script-alongside-real",
@@ -35130,14 +35015,9 @@
         {
           "pattern": "microsoft|google|apple|amazon|paypal|netflix",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "evilproxy-phishlet-marker",
@@ -35315,14 +35195,9 @@
         {
           "pattern": "microsoft\\.com|office\\.com|outlook\\.com",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "tycoon-ms-error-message-adaptation",
@@ -35359,14 +35234,9 @@
         {
           "pattern": "(?:style\\.display|classList\\.(?:add|remove|toggle)|visibility)[\\s\\S]{0,1000}\\b(?:email|password|passwd|otp|mfa)\\b|\\b(?:email|password|passwd|otp|mfa)\\b[\\s\\S]{0,1000}(?:style\\.display|classList\\.(?:add|remove|toggle)|visibility)",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "toll-multiple-state-brands",
@@ -35421,14 +35291,9 @@
         {
           "pattern": "position:\\s*(?:fixed|absolute)|z-index:\\s*\\d{3,}",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2"
     },
     {
       "id": "bitb-fake-address-display",
@@ -35461,14 +35326,9 @@
         {
           "pattern": "draggable|mousedown.*move|drag",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2"
     },
     {
       "id": "bitb-oauth-popup-iframe",
@@ -35494,14 +35354,9 @@
         {
           "pattern": "border-radius|box-shadow|backdrop",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "bitb-os-detect-theme",
@@ -35526,14 +35381,9 @@
         {
           "pattern": "title-bar|window-controls|close|minimize|maximize",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "bitb-onclick-false-href",
@@ -39705,14 +39555,9 @@
         {
           "pattern": "firebasestorage\\.googleapis|blob\\.core\\.windows\\.net|sites\\.google\\.com|docs\\.google\\.com|sharepoint\\.com|tiktok\\.com|wix\\.com|worker(?:s)?\\.dev",
           "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2"
     },
     {
       "id": "toll-xin-tld-domain",
