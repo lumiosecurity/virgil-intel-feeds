@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-19:52",
-    "generatedAt": "2026-04-06T19:52:18.289Z",
+    "version": "2026-04-06-19:55",
+    "generatedAt": "2026-04-06T19:55:50.751Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -31769,9 +31769,24 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "note": "A display:none element containing 20+ characters of text is a hidden text salting block. The invisible text confuses NLP-based detection by diluting malicious content with irrelevant words that parsers see but users don't.",
-      "patternString": "<(?:span|div|p|font)[^>]*(?:display:\\s*none|display:none)[^>]*>[^<]{20,}</(?:span|div|p|font)>",
-      "patternFlags": "i"
+      "note": "Hidden text block with 200+ chars — ZeroFont/text salting technique. [FP fix: raised threshold from 20 to 200 chars. 20 chars matches every hidden newsletter template, cookie label, and accessibility span. Real ZeroFont attacks use hundreds of chars of junk text per block. Added <nav> negation.]",
+      "match": [
+        {
+          "content": "display:none",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<(?:span|div|p|font)[^>]*(?:display:\\s*none|visibility:\\s*hidden|font-size:\\s*0)[^>]*>[^<]{200,}",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "zerofont-opacity-zero-container",
