@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-06T19:45:47.003Z",
+    "compiledAt": "2026-04-06T19:48:55.504Z",
     "brandCount": 192,
     "signalCount": 1,
     "patternCount": 1102,
@@ -10319,9 +10319,23 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "patternString": "aria-hidden=['\"]true['\"][\\s\\S]{0,200}(?:password|sign\\s*in|log\\s*in|verify|credential)",
-      "patternFlags": "i",
-      "note": "Using aria-hidden=true on elements containing login/password text hides phishing content from screen readers and accessibility-based scanners while keeping it visually visible to sighted users."
+      "note": "Aria-hidden container with password input field inside — hides credential form from accessibility scanners. [FP fix: old pattern matched aria-hidden + \"log in\" text, which is standard for duplicate mobile nav links. Now requires actual password input within the hidden container.]",
+      "match": [
+        {
+          "content": "aria-hidden",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "aria-hidden=['\\\"]true['\\\"][\\s\\S]{0,500}<input[^>]*type=['\\\"]password['\\\"]",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "canvas-stego-pixel-decode",
@@ -20546,7 +20560,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-06T19:29:04.736Z",
+      "compiledAt": "2026-04-06T19:45:43.985Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

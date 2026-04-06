@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-19:45",
-    "generatedAt": "2026-04-06T19:45:47.027Z",
+    "version": "2026-04-06-19:48",
+    "generatedAt": "2026-04-06T19:48:55.532Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -31021,9 +31021,23 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "note": "Using aria-hidden=true on elements containing login/password text hides phishing content from screen readers and accessibility-based scanners while keeping it visually visible to sighted users.",
-      "patternString": "aria-hidden=['\"]true['\"][\\s\\S]{0,200}(?:password|sign\\s*in|log\\s*in|verify|credential)",
-      "patternFlags": "i"
+      "note": "Aria-hidden container with password input field inside — hides credential form from accessibility scanners. [FP fix: old pattern matched aria-hidden + \"log in\" text, which is standard for duplicate mobile nav links. Now requires actual password input within the hidden container.]",
+      "match": [
+        {
+          "content": "aria-hidden",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "aria-hidden=['\\\"]true['\\\"][\\s\\S]{0,500}<input[^>]*type=['\\\"]password['\\\"]",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "canvas-stego-pixel-decode",
