@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-18:54",
-    "generatedAt": "2026-04-06T18:54:13.171Z",
+    "version": "2026-04-06-18:57",
+    "generatedAt": "2026-04-06T18:57:51.878Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -26318,7 +26318,7 @@
           "flags": "i"
         },
         {
-          "pattern": "(?:provide|enter|confirm|update).*(?:address|payment|card|details)",
+          "pattern": "(?:provide|enter|confirm|update).*(?:address|payment|\\bcard\\b|details)",
           "flags": "i"
         },
         {
@@ -28157,7 +28157,7 @@
           "pattern": "classList|style\\.display|visibility"
         },
         {
-          "pattern": "password|card|ssn|social|dob|birth",
+          "pattern": "password|\\bcard\\b|ssn|social|dob|birth",
           "flags": "i"
         },
         {
@@ -28323,7 +28323,7 @@
           "flags": "i"
         },
         {
-          "pattern": "credit|card|address|name|email|phone|password",
+          "pattern": "credit|\\bcard\\b|address|name|email|phone|password",
           "flags": "i"
         },
         {
@@ -28876,7 +28876,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "document\\.cookie[\\s\\S]{0,200}(?:session[_-]?id|auth[_-]?token|access[_-]?token|sid|JSESSIONID|PHPSESSID|connect\\.sid|__Host-|__Secure-)",
+          "pattern": "document\\.cookie[\\s\\S]{0,200}(?:session[_-]?id|auth[_-]?token|access[_-]?token|\\bsid\\b|JSESSIONID|PHPSESSID|connect\\.sid|__Host-|__Secure-)",
           "flags": "i"
         },
         {
@@ -28982,7 +28982,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "(?:step|state|phase|stage)\\s*(?:=|===?)\\s*(?:[\\x27\\\"](?:email|password|mfa|otp|verify|code)[\\x27\\\"]|[012345])",
+          "pattern": "(?:step|state|phase|stage)\\s*(?:=|===?)\\s*(?:[\\x27\\\"](?:email|password|mfa|\\botp\\b|verify|code)[\\x27\\\"]|[012345])",
           "flags": "i"
         },
         {
@@ -29141,7 +29141,7 @@
           "flags": "i"
         },
         {
-          "pattern": "card|payment|fee|charge|\\$",
+          "pattern": "\\bcard\\b|payment|fee|charge|\\$",
           "flags": "i"
         },
         {
@@ -29209,7 +29209,7 @@
           "flags": "i"
         },
         {
-          "pattern": "card|payment|billing|address",
+          "pattern": "\\bcard\\b|payment|billing|address",
           "flags": "i"
         },
         {
@@ -29239,7 +29239,7 @@
           "flags": "i"
         },
         {
-          "pattern": "pay|card|\\$|€|£|amount|fee|charge",
+          "pattern": "\\bpay\\b|\\bcard\\b|\\$|€|£|amount|fee|charge",
           "flags": "i"
         },
         {
@@ -29273,7 +29273,7 @@
           "flags": "i"
         },
         {
-          "pattern": "card|payment|billing|delivery.{0,20}fee",
+          "pattern": "\\bcard\\b|payment|billing|delivery.{0,20}fee",
           "flags": "i"
         },
         {
@@ -29303,7 +29303,7 @@
           "flags": "i"
         },
         {
-          "pattern": "verification\\s*code|one-?time\\s*(?:code|password|pin)|OTP|security\\s*code",
+          "pattern": "verification\\s*code|one-?time\\s*(?:code|password|\\bpin\\b)|\\bOTP\\b|security\\s*code",
           "flags": "i"
         },
         {
@@ -29344,11 +29344,11 @@
           "fast_pattern": true
         },
         {
-          "pattern": "card|payment|credit|debit",
+          "pattern": "\\bcard\\b|payment|credit|debit",
           "flags": "i"
         },
         {
-          "pattern": "verification\\s*code|one-?time\\s*(?:code|password)|OTP|security\\s*code",
+          "pattern": "verification\\s*code|one-?time\\s*(?:code|password)|\\bOTP\\b|security\\s*code",
           "flags": "i"
         },
         {
@@ -29575,7 +29575,7 @@
           "content": "action="
         },
         {
-          "pattern": "(?:post|login|submit|process|save|send|check|verify|auth|validate|data|go|next|result|handler|action|gate|panel|recv|log)\\\\.php",
+          "pattern": "(?:post|login|submit|process|save|send|check|verify|\\bauth\\b|validate|data|go|next|result|handler|action|gate|panel|recv|log)\\\\.php",
           "flags": "i"
         },
         {
@@ -29982,7 +29982,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "^https?://[a-z0-9]{12,}\\.(?:bank|financial|secure|payment|trust|verify|account)(?:bank|pay|login|verify|secure|online)?\\.(?:xyz|top|info|online|site|click)",
+          "pattern": "^https?://[a-z0-9]{12,}\\.(?:bank|financial|secure|payment|trust|verify|account)(?:bank|\\bpay\\b|login|verify|secure|online)?\\.(?:xyz|top|info|online|site|click)",
           "flags": "i"
         },
         {
@@ -32748,7 +32748,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "<form[^>]*action=[\"'][^\"']*(log|auth|verify|next)",
+          "pattern": "<form[^>]*action=[\"'][^\"']*(log|\\bauth\\b|verify|next)",
           "flags": "i"
         },
         {
@@ -33025,7 +33025,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "(?:auth|login|wallet|live).*(?:ledger|metamask|coinbase|binance)|(?:ledger|metamask|coinbase|binance).*(?:auth|login|wallet|live)",
+          "pattern": "(?:\\bauth\\b|login|wallet|live).*(?:ledger|metamask|coinbase|binance)|(?:ledger|metamask|coinbase|binance).*(?:auth|login|wallet|live)",
           "flags": "i"
         },
         {
@@ -34222,7 +34222,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "(?:href|download|src)=[\\x27\\\"][^\\x27\\\"]+\\.(?:pdf|doc|xls|jpg|png)\\.(?:exe|scr|bat|cmd|js|vbs|ps1|hta|msi)[\\x27\\\"]",
+          "pattern": "(?:href|download|src)=[\\x27\\\"][^\\x27\\\"]+\\.(?:pdf|doc|xls|jpg|png)\\.(?:exe|scr|bat|\\bcmd\\b|js|vbs|ps1|hta|msi)[\\x27\\\"]",
           "flags": "i"
         },
         {
@@ -35386,7 +35386,7 @@
           "flags": "i"
         },
         {
-          "pattern": "card|payment|credit|debit|billing|amount|balance|fee",
+          "pattern": "\\bcard\\b|payment|credit|debit|billing|amount|balance|fee",
           "flags": "i"
         },
         {
@@ -35566,7 +35566,7 @@
           "pattern": "createObjectURL|msSaveBlob"
         },
         {
-          "pattern": "(?:createObjectURL|Blob|download|saveAs)[\\s\\S]{0,500}(?:\\.zip|\\.iso|\\.img|\\.exe|\\.msi|\\.hta|\\.vbs|\\.bat|\\.cmd|\\.ps1|\\.lnk|\\.scr|\\.7z|\\.rar)",
+          "pattern": "(?:createObjectURL|Blob|download|saveAs)[\\s\\S]{0,500}(?:\\.zip|\\.iso|\\.img|\\.exe|\\.msi|\\.hta|\\.vbs|\\.bat|\\.\\bcmd\\b|\\.ps1|\\.lnk|\\.scr|\\.7z|\\.rar)",
           "flags": "i"
         },
         {
@@ -36382,7 +36382,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "(?:error|problem|issue|trouble).{0,30}(?:account|sign|log|verify|session)|(?:account|sign|log|verify|session).{0,30}(?:error|problem|issue|trouble)",
+          "pattern": "(?:error|problem|issue|trouble).{0,30}(?:account|sign|\\blog\\b|verify|session)|(?:account|sign|\\blog\\b|verify|session).{0,30}(?:error|problem|issue|trouble)",
           "flags": "i"
         },
         {
@@ -36465,7 +36465,7 @@
           "flags": "i"
         },
         {
-          "pattern": "mot\\s*de\\s*passe|identifiant|numéro\\s*de\\s*carte|code\\s*(?:secret|PIN|sécurité)",
+          "pattern": "mot\\s*de\\s*passe|identifiant|numéro\\s*de\\s*carte|code\\s*(?:secret|\\bPIN\\b|sécurité)",
           "flags": "i"
         },
         {
@@ -36539,7 +36539,7 @@
           "flags": "i"
         },
         {
-          "pattern": "card|payment|debit|billing|fee|amount|\\$\\s*\\d",
+          "pattern": "\\bcard\\b|payment|debit|billing|fee|amount|\\$\\s*\\d",
           "flags": "i"
         },
         {
@@ -36603,7 +36603,7 @@
           "flags": "i"
         },
         {
-          "pattern": "renew|reactivat|restore|update.*(?:now|payment)|pay|card|\\$",
+          "pattern": "renew|reactivat|restore|update.*(?:now|payment)|\\bpay\\b|\\bcard\\b|\\$",
           "flags": "i"
         },
         {
@@ -36670,7 +36670,7 @@
           "flags": "i"
         },
         {
-          "pattern": "password|credential|card|payment|sign.?in|log.?in",
+          "pattern": "password|credential|\\bcard\\b|payment|sign.?in|log.?in",
           "flags": "i"
         },
         {
@@ -37010,7 +37010,7 @@
           "flags": "i"
         },
         {
-          "pattern": "pay|card|\\$|amount|charge|credit|debit",
+          "pattern": "\\bpay\\b|\\bcard\\b|\\$|amount|charge|credit|debit",
           "flags": "i"
         },
         {
@@ -37166,7 +37166,7 @@
           "flags": "i"
         },
         {
-          "pattern": "pay|credit\\s*card|debit\\s*card|card\\s*number|billing",
+          "pattern": "\\bpay\\b|credit\\s*card|debit\\s*card|card\\s*number|billing",
           "flags": "i"
         },
         {
@@ -37196,7 +37196,7 @@
           "flags": "i"
         },
         {
-          "pattern": "pay|card|\\$|€|£|amount|fee|charge",
+          "pattern": "\\bpay\\b|\\bcard\\b|\\$|€|£|amount|fee|charge",
           "flags": "i"
         },
         {
@@ -37226,7 +37226,7 @@
           "flags": "i"
         },
         {
-          "pattern": "pay|fee|charge|card|\\$|€|£",
+          "pattern": "\\bpay\\b|fee|charge|\\bcard\\b|\\$|€|£",
           "flags": "i"
         },
         {
@@ -37256,7 +37256,7 @@
           "flags": "i"
         },
         {
-          "pattern": "action\\s*required|update.*(?:address|payment|info)|reschedule|(?:pay|fee|charge)",
+          "pattern": "action\\s*required|update.*(?:address|payment|info)|reschedule|(?:\\bpay\\b|fee|charge)",
           "flags": "i"
         },
         {
@@ -37290,7 +37290,7 @@
           "flags": "i"
         },
         {
-          "pattern": "pay|card|credit|debit|billing",
+          "pattern": "\\bpay\\b|\\bcard\\b|credit|debit|billing",
           "flags": "i"
         },
         {
@@ -37316,7 +37316,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "your\\s+(?:package|parcel|shipment|order|delivery)\\s+(?:has\\s+been|was|is)\\s+(?:delivered|attempted|held|delayed|returned|unable)|unable\\s+to\\s+deliver",
+          "pattern": "your\\s+(?:package|parcel|shipment|\\border\\b|delivery)\\s+(?:has\\s+been|was|is)\\s+(?:delivered|attempted|held|delayed|returned|unable)|unable\\s+to\\s+deliver",
           "flags": "i"
         },
         {
@@ -37350,7 +37350,7 @@
           "flags": "i"
         },
         {
-          "pattern": "pay|card|\\$|€|£|amount|fee",
+          "pattern": "\\bpay\\b|\\bcard\\b|\\$|€|£|amount|fee",
           "flags": "i"
         },
         {
@@ -37414,7 +37414,7 @@
           "flags": "i"
         },
         {
-          "pattern": "pay|settle|clear|resolve|card",
+          "pattern": "\\bpay\\b|settle|clear|resolve|\\bcard\\b",
           "flags": "i"
         },
         {
@@ -37474,7 +37474,7 @@
           "flags": "i"
         },
         {
-          "pattern": "pay|fine|fee|penalty|amount|\\$",
+          "pattern": "\\bpay\\b|fine|fee|penalty|amount|\\$",
           "flags": "i"
         },
         {
@@ -37542,7 +37542,7 @@
           "flags": "i"
         },
         {
-          "pattern": "pay|card|fee|amount|charge|\\$",
+          "pattern": "\\bpay\\b|\\bcard\\b|fee|amount|charge|\\$",
           "flags": "i"
         },
         {
@@ -37771,7 +37771,7 @@
           "flags": "i"
         },
         {
-          "pattern": "pay|card|transfer|wire|zelle|cashapp|venmo|bitcoin|crypto|gift\\s*card",
+          "pattern": "\\bpay\\b|\\bcard\\b|transfer|wire|zelle|cashapp|venmo|bitcoin|crypto|gift\\s*card",
           "flags": "i"
         },
         {
@@ -37830,7 +37830,7 @@
           "flags": "i"
         },
         {
-          "pattern": "Windows|Run|PowerShell|cmd|command|terminal|dialog",
+          "pattern": "Windows|\\bRun\\b|PowerShell|\\bcmd\\b|command|terminal|dialog",
           "flags": "i"
         },
         {
@@ -39481,7 +39481,7 @@
           "flags": "i"
         },
         {
-          "pattern": "card|payment|fee|amount|billing|\\$\\s*\\d",
+          "pattern": "\\bcard\\b|payment|fee|amount|billing|\\$\\s*\\d",
           "flags": "i"
         },
         {
