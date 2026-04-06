@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-06T20:33:01.312Z",
+    "compiledAt": "2026-04-06T20:34:42.087Z",
     "brandCount": 192,
     "signalCount": 1,
     "patternCount": 1102,
@@ -8056,9 +8056,27 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "js",
-      "patternString": "MutationObserver\\([\\s\\S]{0,300}(?:characterData|attributes|childList)[\\s\\S]{0,300}(?:input|form|value)",
-      "patternFlags": "i",
-      "note": "Using MutationObserver to passively watch for input value changes avoids attaching suspicious event listeners to form fields. The observer silently captures everything typed without any addEventListener or onkeypress."
+      "note": "MutationObserver monitoring input field value changes for passive credential capture. [FP fix: old pattern matched any MutationObserver + childList + the word \"value\" — catches every SPA router and analytics library. Now requires characterData/attributeFilter + querySelector/getElementById + password-related selectors, which is the actual credential monitoring pattern.]",
+      "match": [
+        {
+          "content": "MutationObserver",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:characterData|attributeFilter|attributes:\\s*true)",
+          "flags": "i"
+        },
+        {
+          "pattern": "\\b(?:password|passwd|pwd|credential)\\b|input\\[type=['\\\"](?:password|text|email)",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "proxy-handler-property-trap",
@@ -20645,7 +20663,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-06T20:27:21.932Z",
+      "compiledAt": "2026-04-06T20:32:57.683Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
