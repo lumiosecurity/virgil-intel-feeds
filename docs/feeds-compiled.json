@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-06T19:48:55.504Z",
+    "compiledAt": "2026-04-06T19:50:17.933Z",
     "brandCount": 192,
     "signalCount": 1,
     "patternCount": 1102,
@@ -10542,9 +10542,9 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "js",
-      "patternString": "\\\\u[0-9a-fA-F]{4}\\\\u[0-9a-fA-F]{4}\\\\u[0-9a-fA-F]{4}\\\\u[0-9a-fA-F]{4}\\\\u[0-9a-fA-F]{4}",
+      "patternString": "(?:\\\\u00[0-9a-fA-F]{2}){5,}",
       "patternFlags": "",
-      "note": "Five or more consecutive \\uNNNN unicode escape sequences indicate obfuscator.io's unicodeEscapeSequence option. All string literals are converted to unicode escapes, hiding brand names, URLs, and keywords."
+      "note": "Five+ consecutive \\u00xx unicode escapes in ASCII/Latin range — javascript-obfuscator signature. [FP fix: old pattern matched any \\uNNNN chain including emoji surrogate pairs (\\ud83c etc.) which every emoji library uses. Now restricted to \\u00xx range which is where obfuscated ASCII text lives.]"
     },
     {
       "id": "jsobs-numbers-to-expressions",
@@ -20560,7 +20560,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-06T19:45:43.985Z",
+      "compiledAt": "2026-04-06T19:48:52.358Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
