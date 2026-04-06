@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-18:42",
-    "generatedAt": "2026-04-06T18:42:37.239Z",
+    "version": "2026-04-06-18:46",
+    "generatedAt": "2026-04-06T18:46:26.216Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -37073,22 +37073,27 @@
       "severity": "high",
       "weight": 0.4,
       "source": "html",
-      "note": "ClickFix instructions telling user to press Win+R, paste, and press Enter. No legitimate CAPTCHA ever asks a user to open the Run dialog.",
+      "note": "ClickFix: Win+R keyboard shortcut instruction with paste/PowerShell/cmd within 2000 chars. [FP fix: old pattern used \"Run\" as fast_pattern (matches everything), accepted \"Run dialog\" and \"open Run\" alternatives that match normal page content. Now requires literal Win+R shortcut with proximity to paste/cmd instruction. Added <nav> negation.]",
       "match": [
         {
-          "content": "Run",
+          "content": "Win",
           "fast_pattern": true
         },
         {
-          "pattern": "Win(?:dows)?\\s*\\+\\s*R|Run\\s+dialog|Run\\s+command|open\\s+Run",
+          "pattern": "Win(?:dows)?\\s*(?:\\+|\\u002[bB])\\s*R",
           "flags": "i"
         },
         {
-          "pattern": "paste|Ctrl\\s*\\+\\s*V|clipboard|PowerShell|cmd\\.exe|command\\s+prompt",
+          "pattern": "Win(?:dows)?\\s*(?:\\+|\\u002[bB])\\s*R[\\s\\S]{0,2000}(?:paste|Ctrl\\s*\\+\\s*V|clipboard|PowerShell|cmd\\.exe|mshta|powershell\\.exe)|(?:paste|Ctrl\\s*\\+\\s*V|clipboard|PowerShell|cmd\\.exe)[\\s\\S]{0,2000}Win(?:dows)?\\s*(?:\\+|\\u002[bB])\\s*R",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "clickfix-verification-step-lure",
