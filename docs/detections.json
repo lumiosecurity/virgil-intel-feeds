@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-20:21",
-    "generatedAt": "2026-04-06T20:21:19.777Z",
+    "version": "2026-04-06-20:23",
+    "generatedAt": "2026-04-06T20:23:16.642Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -39476,10 +39476,10 @@
       "id": "base-href-external-domain",
       "group": "urlHeuristics",
       "description": "Base href tag pointing to a different domain — makes relative URLs resolve to attacker's server",
-      "severity": "high",
-      "weight": 0.25,
+      "severity": "low",
+      "weight": 0.05,
       "source": "html",
-      "note": "A <base href> tag pointing to an external domain makes ALL relative URLs on the page resolve to that domain instead of the current one. Phishers use this to load assets from a different server while hosting the phishing page elsewhere.",
+      "note": "Base href tag with absolute URL. Downscored to 0.05 — source patterns cannot compare the base href domain against the current page domain, so this fires on every CMS that sets <base href> to its own canonical URL (WordPress, Drupal, etc.). The cross-domain check belongs in the domain analyzer which has access to both the page URL and the content. At 0.05 this serves as a weak combination signal only.",
       "patternString": "<base[^>]*href=['\"]https?://[^'\"]+['\"]",
       "patternFlags": "i"
     },
