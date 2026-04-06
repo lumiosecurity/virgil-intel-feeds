@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-20:27",
-    "generatedAt": "2026-04-06T20:27:25.453Z",
+    "version": "2026-04-06-20:33",
+    "generatedAt": "2026-04-06T20:33:01.337Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -32835,9 +32835,27 @@
       "severity": "high",
       "weight": 0.45,
       "source": "js",
-      "note": "",
-      "patternString": "atob\\(['\"][aHR0cHM6Ly8][^'\"]{20,}['\"]\\)",
-      "patternFlags": "i"
+      "note": "Base64-encoded URL used as exfil endpoint in credential theft. [FP fix: old pattern matched any atob(https://...) which catches ad tech encoding URLs to evade blockers (Freestar, etc.). Now requires the atob call to be within 2000 chars of credential handling code (password, submit, fetch).]",
+      "match": [
+        {
+          "content": "atob",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "atob\\(['\\\"]aHR0cHM6Ly[^'\\\"]{20,}['\\\"]\\)",
+          "flags": "i"
+        },
+        {
+          "pattern": "atob\\([^)]+\\)[\\s\\S]{0,2000}(?:\\bpassword\\b|\\bpasswd\\b|getElementById|querySelector|fetch\\(|XMLHttpRequest|\\.send\\(|\\bsubmit\\b)|(?:\\bpassword\\b|\\bpasswd\\b|getElementById|querySelector|fetch\\(|XMLHttpRequest|\\.send\\(|\\bsubmit\\b)[\\s\\S]{0,2000}atob\\(",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "document-password-gate",
