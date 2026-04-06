@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-06T19:50:17.933Z",
+    "compiledAt": "2026-04-06T19:52:18.263Z",
     "brandCount": 192,
     "signalCount": 1,
     "patternCount": 1102,
@@ -10751,9 +10751,28 @@
       "severity": "medium",
       "weight": 0.15,
       "source": "html",
-      "patternString": "<script(?:(?!src=)[^>])*>[\\s\\S]{5000,}</script>",
-      "patternFlags": "i",
-      "note": "A page with a very large (5000+ char) inline script and no external script sources is characteristic of self-contained phishing pages where all code is embedded and typically obfuscated. Legitimate pages usually load scripts from external CDNs."
+      "note": "Self-contained phishing page: very large inline script (10K+ chars) with NO external script sources. [FP fix: old pattern just checked for any 5K+ inline script — every site with ad/analytics code matched. Now requires NO external scripts (truly self-contained) + raised threshold to 10K + <nav> negation.]",
+      "match": [
+        {
+          "content": "<script",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<script(?:(?!src=)[^>])*>[\\s\\S]{10000,}</script>",
+          "flags": "i"
+        },
+        {
+          "pattern": "<script[^>]+src=",
+          "negated": true,
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "tycoon-whitespace-obfuscation-variants",
@@ -20560,7 +20579,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-06T19:48:52.358Z",
+      "compiledAt": "2026-04-06T19:50:14.156Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

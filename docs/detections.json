@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-19:50",
-    "generatedAt": "2026-04-06T19:50:17.957Z",
+    "version": "2026-04-06-19:52",
+    "generatedAt": "2026-04-06T19:52:18.289Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -31453,9 +31453,28 @@
       "severity": "medium",
       "weight": 0.15,
       "source": "html",
-      "note": "A page with a very large (5000+ char) inline script and no external script sources is characteristic of self-contained phishing pages where all code is embedded and typically obfuscated. Legitimate pages usually load scripts from external CDNs.",
-      "patternString": "<script(?:(?!src=)[^>])*>[\\s\\S]{5000,}</script>",
-      "patternFlags": "i"
+      "note": "Self-contained phishing page: very large inline script (10K+ chars) with NO external script sources. [FP fix: old pattern just checked for any 5K+ inline script — every site with ad/analytics code matched. Now requires NO external scripts (truly self-contained) + raised threshold to 10K + <nav> negation.]",
+      "match": [
+        {
+          "content": "<script",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<script(?:(?!src=)[^>])*>[\\s\\S]{10000,}</script>",
+          "flags": "i"
+        },
+        {
+          "pattern": "<script[^>]+src=",
+          "negated": true,
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "tycoon-whitespace-obfuscation-variants",
