@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-06T19:43:15.290Z",
+    "compiledAt": "2026-04-06T19:45:47.003Z",
     "brandCount": 192,
     "signalCount": 1,
     "patternCount": 1102,
@@ -18395,7 +18395,7 @@
           "pattern": "location\\.(?:href|replace)|window\\.location"
         },
         {
-          "pattern": "bit\\.ly|tinyurl|t\\.co|goo\\.gl|ow\\.ly|is\\.gd|v\\.gd|buff\\.ly|rb\\.gy|cutt\\.ly",
+          "pattern": "(?:https?:)?//(?:bit\\.ly|tinyurl\\.com|t\\.co|goo\\.gl|ow\\.ly|is\\.gd|v\\.gd|buff\\.ly|rb\\.gy|cutt\\.ly|shorturl\\.at)/",
           "flags": "i"
         },
         {
@@ -18405,7 +18405,7 @@
         }
       ],
       "condition": "1 & 2 & 3",
-      "note": "Redirecting through URL shorteners in JavaScript hides the final phishing destination from both users and URL-based detection. No legitimate login page redirects through shortener services."
+      "note": "JS redirect to URL shortener. [FP fix: shortener domains now require URL context (://domain/) to prevent matching inside other domains like revcontent.com containing t.co as substring.]"
     },
     {
       "id": "duckdns-dynamic-domain",
