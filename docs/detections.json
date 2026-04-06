@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-19:01",
-    "generatedAt": "2026-04-06T19:01:09.030Z",
+    "version": "2026-04-06-19:06",
+    "generatedAt": "2026-04-06T19:06:37.222Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -26331,7 +26331,7 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "note": "A courier brand name or logo in the page header followed by a form with input fields is the basic layout of every delivery phishing page. This structural pattern catches the simplest delivery phish that have no obfuscation or JavaScript.",
+      "note": "Courier brand in page header + non-search form with inputs. [FP fix: courier brand limited to first 3000 chars (header area, not article body), form must not be a search form, <nav> negation. Prevents FP when news articles mention UPS/FedEx.]",
       "match": [
         {
           "content": "form",
@@ -26339,46 +26339,56 @@
         },
         {
           "content": "dhl",
-          "nocase": true
+          "nocase": true,
+          "depth": 3000
         },
         {
           "content": "fedex",
-          "nocase": true
+          "nocase": true,
+          "depth": 3000
         },
         {
           "pattern": "\\bups\\b",
-          "flags": "i"
+          "flags": "i",
+          "depth": 3000
         },
         {
           "content": "usps",
-          "nocase": true
+          "nocase": true,
+          "depth": 3000
         },
         {
           "content": "royal mail",
-          "nocase": true
+          "nocase": true,
+          "depth": 3000
         },
         {
           "pattern": "\\bevri\\b",
-          "flags": "i"
+          "flags": "i",
+          "depth": 3000
         },
         {
           "pattern": "\\bdpd\\b",
-          "flags": "i"
+          "flags": "i",
+          "depth": 3000
         },
         {
           "content": "la poste",
-          "nocase": true
+          "nocase": true,
+          "depth": 3000
         },
         {
           "content": "correos",
-          "nocase": true
+          "nocase": true,
+          "depth": 3000
         },
         {
           "content": "canada post",
-          "nocase": true
+          "nocase": true,
+          "depth": 3000
         },
         {
-          "pattern": "<input[^>]*type=[\\x27\\\"](?:text|email|tel|password|number)",
+          "pattern": "<form(?![^>]*(?:search|query|filter|find))[^>]*>[\\s\\S]{0,3000}<input[^>]*type=['\\\"](?:text|email|tel|password|number)['\\\"]",
           "flags": "i"
         },
         {
