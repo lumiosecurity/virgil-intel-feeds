@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-07:12",
-    "generatedAt": "2026-04-06T07:12:20.715Z",
+    "version": "2026-04-06-17:24",
+    "generatedAt": "2026-04-06T17:24:24.275Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -19040,9 +19040,38 @@
       "severity": "low",
       "weight": 0.1,
       "source": "html",
-      "note": "A legitimate login page always has a 'Forgot password?' link. Phishing pages frequently omit this because they don't have a password reset backend. The absence of forgot/reset/recover near a password field is a simple but telling indicator.",
-      "patternString": "<input[^>]*type=['\"]password['\"][^>]*>[\\s\\S]{0,2000}(?:</form>|</body>)(?!.*(?:forgot|reset|recover|trouble).*(?:password|access))",
-      "patternFlags": "i"
+      "note": "A legitimate login page always has a 'Forgot password?' link. Phishing pages frequently omit this because they don't have a password reset backend. The absence of forgot/reset/recover near a password field is a simple but telling indicator. [FP fix: now searches entire page for forgot/reset/recover links, not just near the form. Slashdot has forgot link outside form tag.]",
+      "match": [
+        {
+          "content": "password",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<input[^>]*type=[\"']password[\"']",
+          "flags": "i"
+        },
+        {
+          "content": "forgot",
+          "negated": true,
+          "nocase": true
+        },
+        {
+          "content": "reset",
+          "negated": true,
+          "nocase": true
+        },
+        {
+          "content": "recover",
+          "negated": true,
+          "nocase": true
+        },
+        {
+          "content": "trouble signing",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "form-action-php-endpoint",
@@ -19073,9 +19102,48 @@
       "severity": "low",
       "weight": 0.1,
       "source": "html",
-      "note": "A login page with no 'Create account', 'Sign up', or 'Register' link is a harvesting-only page. Legitimate login pages always offer a registration path. Phishing pages only need the login form.",
-      "patternString": "<input[^>]*type=['\"]password['\"][\\s\\S]{0,3000}</body>(?!.*(?:create|sign\\s*up|register|new\\s*account|join))",
-      "patternFlags": "i"
+      "note": "A login page with no 'Create account', 'Sign up', or 'Register' link is a harvesting-only page. Legitimate login pages always offer a registration path. Phishing pages only need the login form. [FP fix: searches entire page for signup/register links. Added newuser and join. Slashdot uses /my/newuser path.]",
+      "match": [
+        {
+          "content": "password",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<input[^>]*type=[\"']password[\"']",
+          "flags": "i"
+        },
+        {
+          "content": "sign up",
+          "negated": true,
+          "nocase": true
+        },
+        {
+          "content": "create account",
+          "negated": true,
+          "nocase": true
+        },
+        {
+          "content": "register",
+          "negated": true,
+          "nocase": true
+        },
+        {
+          "content": "new account",
+          "negated": true,
+          "nocase": true
+        },
+        {
+          "content": "newuser",
+          "negated": true,
+          "nocase": true
+        },
+        {
+          "content": "join",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
     },
     {
       "id": "address-update-for-delivery",
@@ -19113,7 +19181,7 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "note": "Requesting full credit card details (card number, CVV, expiry) for a micro-payment of $0.30-$4.99 is the delivery fee scam signature. The small amount seems harmless but the goal is to capture the full card details for larger fraud.",
+      "note": "Requesting full credit card details (card number, CVV, expiry) for a micro-payment of $0.30-$4.99 is the delivery fee scam signature. The small amount seems harmless but the goal is to capture the full card details for larger fraud. [FP fix: requires form/input element on page] [FP fix v3: requires form/input + no <nav> element]",
       "match": [
         {
           "content": "card",
@@ -19127,9 +19195,18 @@
         {
           "pattern": "card\\s*(?:number|#)|cvv|expir|billing|credit|debit",
           "flags": "i"
+        },
+        {
+          "pattern": "<(?:form|input)",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "delivery-preference-update-phish",
@@ -20378,7 +20455,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "note": "Fires on pages mentioning Microsoft + password + form, but NOT on real Microsoft domains. The four negated matches ensure this never fires on login.microsoftonline.com, microsoft.com, office.com, or live.com. Previously impossible with a single regex.",
+      "note": "Microsoft branding + password input + form on non-Microsoft domain. [FP fix v3: excludes pages with <nav> element — content/news sites discussing Microsoft phishing are not themselves phishing]",
       "match": [
         {
           "content": "microsoft",
@@ -20386,10 +20463,12 @@
           "fast_pattern": true
         },
         {
-          "content": "password"
+          "pattern": "<input[^>]*type=['\\\"]password['\\\"]",
+          "flags": "i"
         },
         {
-          "pattern": "<form|<input"
+          "pattern": "<form",
+          "flags": "i"
         },
         {
           "content": "login.microsoftonline.com",
@@ -20406,9 +20485,14 @@
         {
           "content": "live.com",
           "negated": true
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4 & 5 & 6"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
     },
     {
       "id": "mm-invoice-document-lure-not-accounting",
@@ -25077,7 +25161,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "html",
-      "note": "Two or more different US state toll brand names appearing on the same page indicates a smishing kit that serves multiple toll system templates. The kit configuration or template selection logic is leaking brand names from other campaigns.",
+      "note": "Two or more different US state toll brand names appearing on the same page indicates a smishing kit that serves multiple toll system templates. The kit configuration or template selection logic is leaking brand names from other campaigns. [FP fix: requires form/input + no <nav> element — news articles about toll scams mention these brands]",
       "match": [
         {
           "content": "Pass",
@@ -25090,9 +25174,18 @@
         {
           "pattern": "card|payment|credit|debit|billing|amount|balance|fee",
           "flags": "i"
+        },
+        {
+          "pattern": "<(?:form|input)",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "bitb-fake-popup-window",
@@ -25934,9 +26027,32 @@
       "severity": "low",
       "weight": 0.1,
       "source": "html",
-      "note": "Urgency messaging combining account status warnings with login prompts is a core social engineering technique. The chain of suspended/expired + verify/login is highly specific to phishing pages. [Observation-level: Session expired — same, legitimate session management]",
-      "patternString": "(?:session\\s+(?:has\\s+)?expired|account\\s+(?:has\\s+been\\s+)?(?:suspended|locked|disabled|restricted|limited))[\\s\\S]{0,200}(?:verify|confirm|sign\\s*in|log\\s*in|re-?enter)",
-      "patternFlags": "i"
+      "note": "Urgency messaging combining account status warnings with login prompts is a core social engineering technique. The chain of suspended/expired + verify/login is highly specific to phishing pages. [Observation-level: Session expired — same, legitimate session management] [FP fix: requires actual password input element, prevents FP on news articles discussing account security] [FP fix v2: urgency text must appear within 2000 chars of password input]",
+      "match": [
+        {
+          "content": "session",
+          "nocase": true,
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:session\\s+(?:has\\s+)?expired|account\\s+(?:has\\s+been\\s+)?(?:suspended|locked|disabled|restricted|limited))",
+          "flags": "i"
+        },
+        {
+          "pattern": "(?:verify|confirm|sign\\s*in|log\\s*in|re-?enter)",
+          "flags": "i"
+        },
+        {
+          "pattern": "<input[^>]*type=['\\\"]password['\\\"]",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "unusual-action-required-text",
@@ -26127,7 +26243,7 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "note": "Toll road payment pages showing small dollar amounts ($3-$12 typically) combined with toll brand names are the hallmark of the massive 2025-2026 Chinese smishing campaigns. The small amount makes victims less suspicious.",
+      "note": "Toll road payment pages showing small dollar amounts ($3-$12 typically) combined with toll brand names are the hallmark of the massive 2025-2026 Chinese smishing campaigns. The small amount makes victims less suspicious. [FP fix: now requires actual form/input element on page, preventing matches on news articles about toll scams] [FP fix v2: toll keywords must appear within 3000 chars of a <form> element]",
       "match": [
         {
           "content": "toll",
@@ -26141,9 +26257,18 @@
         {
           "pattern": "card|payment|debit|billing|fee|amount|\\$\\s*\\d",
           "flags": "i"
+        },
+        {
+          "pattern": "<(?:form|input)",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "delivery-redelivery-fee",
@@ -26177,7 +26302,7 @@
       "severity": "high",
       "weight": 0.25,
       "source": "html",
-      "note": "Fake subscription renewal scams impersonating McAfee, Norton, and other software are a top phishing vector. They create urgency about 'expired protection' to harvest payment information.",
+      "note": "Fake subscription renewal scams impersonating McAfee, Norton, and other software are a top phishing vector. They create urgency about 'expired protection' to harvest payment information. [FP fix: requires form/input element] [FP fix v2: expiry keywords must appear within 3000 chars of form/input]",
       "match": [
         {
           "content": "subscription",
@@ -26191,9 +26316,18 @@
         {
           "pattern": "renew|reactivat|restore|update.*(?:now|payment)|pay|card|\\$",
           "flags": "i"
+        },
+        {
+          "pattern": "<(?:form|input)",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "fake-airdrop-claim-page",
@@ -26969,7 +27103,7 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "note": "Threatening DMV action, vehicle registration holds, or license plate suspension for unpaid tolls is the highest-pressure escalation in toll phishing. Real toll agencies follow lengthy legal processes, not instant SMS threats.",
+      "note": "Threatening DMV action, vehicle registration holds, or license plate suspension for unpaid tolls is the highest-pressure escalation in toll phishing. Real toll agencies follow lengthy legal processes, not instant SMS threats. [FP fix: requires form/input element] [FP fix v2: requires proximity to form/input element]",
       "match": [
         {
           "content": "registration",
@@ -26983,9 +27117,18 @@
         {
           "pattern": "suspend|revoke|cancel|hold|penalty|fine|fee",
           "flags": "i"
+        },
+        {
+          "pattern": "<(?:form|input)",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "toll-collections-escalation",
@@ -28807,21 +28950,27 @@
       "severity": "medium",
       "weight": 0.15,
       "source": "html",
-      "note": "Two or more footer/navigation links pointing to # or javascript:void(0) indicates a phishing page with decorative non-functional links. Phishers copy the visual layout of legitimate sites but don't bother making footer links work.",
+      "note": "Two or more footer/navigation links pointing to # or javascript:void(0) indicates a phishing page with decorative non-functional links. Phishers copy the visual layout of legitimate sites but don't bother making footer links work. [FP fix: now requires 3+ null links AND no <nav element. Single # anchors are common on legit sites.]",
       "match": [
         {
           "content": "href",
           "fast_pattern": true
         },
         {
-          "pattern": "href=[\\x27\\\"](?:#|javascript:void|javascript:;)[\\x27\\\"]"
+          "pattern": "(?:href=[\\x27\\\"](?:#|javascript:void|javascript:;)[\\x27\\\"].*){3,}",
+          "flags": "is"
         },
         {
           "pattern": "(?:Privacy|Terms|Contact|About|Support|Help|FAQ)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "base-href-external-domain",
@@ -28872,22 +29021,25 @@
       "severity": "medium",
       "weight": 0.15,
       "source": "html",
-      "note": "Simplified from 5KB wildcard scan to content checks. Detects minimal login-only pages.",
+      "note": "Simplified from 5KB wildcard scan to content checks. Detects minimal login-only pages. [FP fix: requires no <nav element AND fewer than 5 external links. Legit login pages have navigation; phishing pages typically do not.]",
       "match": [
         {
           "content": "password",
           "fast_pattern": true
         },
         {
-          "pattern": "<body"
-        },
-        {
           "pattern": "<input[^>]*type=[\\x27\\\"]password[\\x27\\\"]",
           "flags": "i"
         },
         {
-          "pattern": "</body>",
-          "flags": "i"
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        },
+        {
+          "pattern": "(?:<a\\s[^>]*href=[\\x27\\\"]https?://[^>]*>.*){5,}",
+          "flags": "is",
+          "negated": true
         }
       ],
       "condition": "1 & 2 & 3"
@@ -28944,9 +29096,23 @@
       "severity": "low",
       "weight": 0.1,
       "source": "html",
-      "note": "A page where all links are absolute URLs to external domains (no relative internal links) indicates a page without internal site structure. Phishing pages link out to the real brand site for Terms/Privacy but have no internal pages.",
-      "patternString": "<a[^>]*href=['\"]https?://[^'\"]+['\"][^>]*>[\\s\\S]{0,300}<a[^>]*href=['\"]https?://[^'\"]+['\"][^>]*>[\\s\\S]{0,300}<a[^>]*href=['\"]https?://[^'\"]+['\"]",
-      "patternFlags": "i"
+      "note": "A page where all links are absolute URLs to external domains (no relative internal links) indicates a page without internal site structure. Phishing pages link out to the real brand site for Terms/Privacy but have no internal pages. [FP fix: excludes pages with <nav> element — content sites have external links alongside navigation]",
+      "match": [
+        {
+          "content": "href=",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<a[^>]*href=['\\\"]https?://[^'\\\"]+['\\\"][^>]*>[\\s\\S]{0,300}<a[^>]*href=['\\\"]https?://[^'\\\"]+['\\\"][^>]*>[\\s\\S]{0,300}<a[^>]*href=['\\\"]https?://[^'\\\"]+['\\\"]",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "tycoon-redirect-chain-intermediate",
