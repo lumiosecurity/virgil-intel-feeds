@@ -1,0 +1,76 @@
+name: Update Tranco Tiers
+
+on:
+  schedule:
+    # Weekly on Monday at 06:00 UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-tranco:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout intel-feeds
+        uses: actions/checkout@v4
+        with:
+          path: virgil-intel-feeds
+
+      - name: Checkout extension
+        uses: actions/checkout@v4
+        with:
+          repository: lumiosecurity/virgil-extension
+          token: ${{ secrets.LUMIO7_PAT }}
+          path: virgil-extension
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build Tranco tiers
+        working-directory: virgil-extension
+        run: |
+          node tools/build-tranco-tiers.js \
+            --sublime-dir ../virgil-intel-feeds/feeds
+
+      - name: Copy popularity file to intel-feeds docs
+        run: |
+          cp virgil-extension/feeds/tranco-popularity.json \
+             virgil-intel-feeds/docs/tranco-popularity.json
+
+      - name: Commit safelist to extension
+        working-directory: virgil-extension
+        run: |
+          git config user.name "lumio-7"
+          git config user.email "lumio-7@lumiosecurity"
+          git add feeds/tranco-safelist.json feeds/tranco-popularity.json
+          if git diff --cached --quiet; then
+            echo "No Tranco changes"
+          else
+            git commit -m "chore: update Tranco tiers [$(date -u +%Y-%m-%d)]"
+            git push
+          fi
+
+      - name: Commit popularity to intel-feeds
+        working-directory: virgil-intel-feeds
+        run: |
+          git config user.name "lumio-7"
+          git config user.email "lumio-7@lumiosecurity"
+          git add docs/tranco-popularity.json
+          if git diff --cached --quiet; then
+            echo "No popularity changes"
+          else
+            git commit -m "chore: update tranco-popularity.json [$(date -u +%Y-%m-%d)]"
+            git push
+          fi
+
+      - name: Trigger detections publish
+        working-directory: virgil-intel-feeds
+        run: |
+          # Trigger publish-detections to recompile with new safelist
+          gh workflow run publish-detections.yml || echo "Publish trigger skipped"
+        env:
+          GH_TOKEN: ${{ secrets.LUMIO7_PAT }}

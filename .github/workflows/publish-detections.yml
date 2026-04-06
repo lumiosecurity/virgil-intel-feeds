@@ -58,11 +58,13 @@ jobs:
           node scripts/sync-sublime.js 2>&1 | tee /tmp/sync-output.txt
           echo "Sublime sync complete"
 
-      - name: Download Tranco top 10K
+      - name: Build Tranco tiers (safelist + popularity)
         run: |
           cd extension
-          node tools/download-tranco.js 2>&1 | tee /tmp/tranco-output.txt
-          echo "Tranco download complete"
+          node tools/build-tranco-tiers.js \
+            --sublime-dir "${{ github.workspace }}/feeds" \
+            2>&1 | tee /tmp/tranco-output.txt
+          echo "Tranco tier build complete"
 
       - name: Compile detections.json
         env:
@@ -84,13 +86,18 @@ jobs:
           if [ -f src/background/feeds-compiled.json ]; then
             cp src/background/feeds-compiled.json ../docs/feeds-compiled.json
           fi
+          # Copy tranco-popularity.json for CDN serving (10K–1M downscore data)
+          if [ -f feeds/tranco-popularity.json ]; then
+            cp feeds/tranco-popularity.json ../docs/tranco-popularity.json
+            echo "tranco-popularity.json copied to docs/"
+          fi
 
       - name: Commit and push
         if: github.event.inputs.dry_run != 'true'
         run: |
           git config user.name  "virgil-detections[bot]"
           git config user.email "detections-bot@lumiosecurity"
-          git add docs/detections.json docs/feeds-compiled.json feeds/
+          git add docs/detections.json docs/feeds-compiled.json docs/tranco-popularity.json feeds/
           if git diff --cached --quiet; then
             echo "No changes"
           else
