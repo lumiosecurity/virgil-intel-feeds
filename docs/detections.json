@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-06-19:21",
-    "generatedAt": "2026-04-06T19:21:13.843Z",
+    "version": "2026-04-06-19:29",
+    "generatedAt": "2026-04-06T19:29:07.481Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -28839,18 +28839,18 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "note": "AiTM cookie extraction: document.cookie read with specific auth cookie name AND exfil to external URL (fetch/XHR/beacon with https://). [FP fix: requires cookie name within 200 chars of document.cookie, exfil must target a URL, and no <nav> element. Prevents FP on Auth0/Firebase/Okta sites that legitimately read their own auth cookies.]",
+      "note": "AiTM session cookie theft: document.cookie read targeting specific platform session cookies (Azure AD ESTSAUTH, Java JSESSIONID, PHP PHPSESSID, .NET SessionId, Express connect.sid, Cookie prefixes __Host-/__Secure-) with exfil to external URL. [FP fix v2: removed generic auth_token/session_id/access_token (every auth library uses these — Auth0, Firebase, Okta all FP). Now uses platform-specific cookie names that only appear in AiTM extraction. Fixed postMessage alternative to require document.cookie inside the call args.]",
       "match": [
         {
           "content": "document.cookie",
           "fast_pattern": true
         },
         {
-          "pattern": "document\\.cookie[\\s\\S]{0,200}(?:session[_-]?id|auth[_-]?token|access[_-]?token|\\bsid\\b|JSESSIONID|PHPSESSID|connect\\.sid|__Host-|__Secure-)",
+          "pattern": "document\\.cookie[\\s\\S]{0,300}(?:ESTSAUTH|ESTSAUTHPERSISTENT|JSESSIONID|PHPSESSID|ASP\\.NET_SessionId|connect\\.sid|__Host-|__Secure-|stsservicecookie|SignInStateCookie|x-ms-cpim)",
           "flags": "i"
         },
         {
-          "pattern": "document\\.cookie[\\s\\S]{0,500}(?:fetch\\(['\\\"]https?://|XMLHttpRequest[\\s\\S]{0,200}open[\\s\\S]{0,200}https?://|sendBeacon\\(['\\\"]https?://|postMessage\\([\\s\\S]{0,100}document\\.cookie)",
+          "pattern": "document\\.cookie[\\s\\S]{0,500}(?:fetch\\(['\\\"]https?://|XMLHttpRequest[\\s\\S]{0,200}\\.open\\([\\s\\S]{0,50}https?://|navigator\\.sendBeacon\\(['\\\"]https?://)|postMessage\\([^)]{0,50}document\\.cookie",
           "flags": "i"
         }
       ],
