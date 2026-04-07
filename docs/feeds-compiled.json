@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-07T18:00:34.917Z",
+    "compiledAt": "2026-04-07T18:05:46.512Z",
     "brandCount": 192,
     "signalCount": 1,
     "patternCount": 1102,
@@ -18275,9 +18275,29 @@
       "description": "URL path contains UUID followed by Base64-encoded string, characteristic of targeted spearphishing campaigns with per-victim URLs",
       "severity": "high",
       "weight": 0.35,
-      "source": "html",
-      "patternString": "/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/[A-Za-z0-9+/]{24,}={0,2}(?:[?#&]|$)",
-      "patternFlags": "i"
+      "source": "both",
+      "match": [
+        {
+          "content": "-",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/[A-Za-z0-9+/]{24,}={0,2}(?:[?#&]|$)",
+          "flags": "i"
+        },
+        {
+          "pattern": "streamamg\\.com|cloudfront\\.net|cdn\\.|api/v[0-9]|/api/|akamai|fastly",
+          "negated": true,
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2 & 3",
+      "note": "UUID followed by base64 in URL path - targeted spearphishing per-victim URLs. [FP fix: converted to multi-match. Added negation for CDN/API domains (streamamg, cloudfront, akamai, fastly) and /api/v* paths - RESTful APIs routinely use UUIDs (content IDs) and base64 tokens in paths. Added <nav negation. Previously matched any UUID+base64 anywhere in page HTML including embedded video player API URLs]"
     },
     {
       "id": "my-prefix-risky-tld-banking",
@@ -20747,7 +20767,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-07T17:55:22.404Z",
+      "compiledAt": "2026-04-07T18:00:31.966Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
