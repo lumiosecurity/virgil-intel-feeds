@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-06T20:34:38.930Z",
+    "compiledAt": "2026-04-07T06:54:41.475Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -61,10 +61,12 @@
     ".fashion": 0.2,
     ".finance": 0.2,
     ".fit": 0.2,
+    ".foo": 0.2,
     ".free": 0.2,
     ".fun": 0.2,
     ".ga": 0.2,
     ".gdn": 0.2,
+    ".gf": 0.2,
     ".gq": 0.2,
     ".gu": 0.2,
     ".help": 0.2,
@@ -119,6 +121,7 @@
     ".sale": 0.2,
     ".sbs": 0.2,
     ".science": 0.2,
+    ".shop": 0.2,
     ".site": 0.2,
     ".so": 0.2,
     ".social": 0.2,
