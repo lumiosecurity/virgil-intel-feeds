@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-07-17:55",
-    "generatedAt": "2026-04-07T17:55:25.343Z",
+    "version": "2026-04-07-18:00",
+    "generatedAt": "2026-04-07T18:00:34.940Z",
     "brandCount": 192,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -24384,7 +24384,7 @@
       "severity": "high",
       "weight": 0.3,
       "source": "js",
-      "note": "Validating the victim's email via API before showing phishing content ensures only real corporate email users see the phishing page. Sneaky 2FA and similar enterprise-targeted kits use this to filter out security researchers.",
+      "note": "Validating the victim's email via API before showing phishing content ensures only real corporate email users see the phishing page. Sneaky 2FA and similar enterprise-targeted kits use this to filter out security researchers. [FP fix: tightened proximity from .* to {0,100} chars between api/validate and email. Added wp-json negation - WordPress REST API endpoints like device/validate are legitimate CMS infrastructure, not phishing gates]",
       "match": [
         {
           "content": "validate",
@@ -24392,7 +24392,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "(?:api|endpoint|validate|verify).*(?:email|mail)",
+          "pattern": "(?:api|validate|verify)[\\s\\S]{0,100}(?:email|mail)",
           "flags": "i"
         },
         {
@@ -24403,9 +24403,14 @@
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "content": "wp-json",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "email-domain-corporate-filter",
@@ -30490,7 +30495,7 @@
       "severity": "high",
       "weight": 0.35,
       "source": "both",
-      "note": "Tycoon 2FA multi-stage flow: requires password + email + display toggling + (otp OR authenticator OR verification code) + stage naming. This catches the full email→password→MFA progression.",
+      "note": "Tycoon 2FA multi-stage flow: requires password + email + display toggling + (otp OR authenticator OR verification code) + stage naming. This catches the full email→password→MFA progression. [FP fix: added <form requirement and <nav negation. Words like password, email, authenticator appear in CMS configs and article text on news sites - requiring an actual credential form ensures this only fires on pages collecting credentials]",
       "match": [
         {
           "content": "password",
@@ -30517,9 +30522,18 @@
         {
           "pattern": "step|stage|phase",
           "flags": "i"
+        },
+        {
+          "pattern": "<form[^>]*(?:action|method)",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & (3 | 4 | 5) & 6"
+      "condition": "0 & 1 & 2 & (3 | 4 | 5) & 6 & 7 & 8"
     },
     {
       "id": "mm-fake-microsoft-login-not-real",
@@ -31009,9 +31023,28 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "note": "Using an img tag with an intentionally broken src and a long onerror handler is a technique to execute JavaScript without a <script> tag. The 'image' never loads, triggering the onerror which contains the phishing payload.",
-      "patternString": "<img[^>]*src=['\"][^'\"]*['\"][^>]*onerror=['\"][^'\"]{20,}['\"]",
-      "patternFlags": "i"
+      "note": "Using an img tag with an intentionally broken src and a long onerror handler is a technique to execute JavaScript without a <script> tag. The 'image' never loads, triggering the onerror which contains the phishing payload. [FP fix: converted to multi-match. Excluded common fallback patterns (this.src=, this.style, this.parentNode, this.remove) used by CMS lazy-load and broken image recovery. Added <nav negation]",
+      "match": [
+        {
+          "content": "onerror",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<img[^>]*onerror=['\"][^'\"]{20,}['\"]",
+          "flags": "i"
+        },
+        {
+          "pattern": "this\\.src\\s*=|this\\.style|this\\.parentNode|this\\.remove|this\\.classList",
+          "negated": true,
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "css-content-text-inject",
@@ -39652,9 +39685,28 @@
       "severity": "low",
       "weight": 0.1,
       "source": "html",
-      "note": "Three or more anchor tags with empty href attributes on the same page are decorative links that go nowhere. Phishing pages include visual link text (Terms, Privacy, Help) but with empty hrefs because the phisher didn't set up those pages.",
-      "patternString": "<a[^>]*href=['\"]\\s*['\"][^>]*>[\\s\\S]{0,200}<a[^>]*href=['\"]\\s*['\"][^>]*>[\\s\\S]{0,200}<a[^>]*href=['\"]\\s*['\"]",
-      "patternFlags": "i"
+      "note": "Three or more anchor tags with empty href attributes on the same page are decorative links that go nowhere. Phishing pages include visual link text (Terms, Privacy, Help) but with empty hrefs because the phisher didn't set up those pages. [FP fix: converted to multi-match. Excluded anchors with onclick handlers - empty href + onclick is legitimate JS-driven navigation (Nexstar \"Read Next\" pattern). Added <nav negation]",
+      "match": [
+        {
+          "content": "href=\"\"",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "<a[^>]*href=['\"]\\s*['\"][^>]*>[\\s\\S]{0,200}<a[^>]*href=['\"]\\s*['\"][^>]*>[\\s\\S]{0,200}<a[^>]*href=['\"]\\s*['\"]",
+          "flags": "i"
+        },
+        {
+          "pattern": "onclick",
+          "negated": true,
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "meta-refresh-redirect-delayed",
@@ -39699,7 +39751,7 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "js",
-      "note": "Tycoon chains redirects through trusted services (Firebase, Azure Blob, Wix, TikTok, Google Docs/Sites) before landing on the phishing page. These trusted intermediate domains lend legitimacy to the redirect chain and bypass URL reputation checks.",
+      "note": "Tycoon chains redirects through trusted services (Firebase, Azure Blob, Wix, TikTok, Google Docs/Sites) before landing on the phishing page. These trusted intermediate domains lend legitimacy to the redirect chain and bypass URL reputation checks. [FP fix: entry 2 now requires the trusted domain appears inside a location.href/replace assignment, not just anywhere on the page. Removed tiktok.com and wix.com from the list — too common in social sharing configs. Fixed condition to require all 3 entries. Added <nav negation]",
       "match": [
         {
           "content": "redirect",
@@ -39711,11 +39763,16 @@
           "flags": "i"
         },
         {
-          "pattern": "firebasestorage\\.googleapis|blob\\.core\\.windows\\.net|sites\\.google\\.com|docs\\.google\\.com|sharepoint\\.com|tiktok\\.com|wix\\.com|worker(?:s)?\\.dev",
+          "pattern": "location\\.(?:href|replace)\\s*=\\s*['\"][^\"']*(?:firebasestorage\\.googleapis|blob\\.core\\.windows\\.net|sites\\.google\\.com|docs\\.google\\.com|sharepoint\\.com|workers?\\.dev)",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2"
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "toll-xin-tld-domain",
