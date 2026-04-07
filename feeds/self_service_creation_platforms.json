@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/self_service_creation_platform_domains.txt",
-    "syncedAt": "2026-04-07T19:22:23.635Z",
+    "syncedAt": "2026-04-07T20:28:02.235Z",
     "role": "free_subdomain_hosts",
     "description": "Self-service website creation platforms where anyone can host content",
-    "count": 91
+    "count": 93
   },
   "entries": [
     "acrobat.adobe.com",
@@ -75,8 +75,10 @@
     "riddle.com",
     "run.app",
     "scribehow.com",
+    "scw.cloud",
     "seesaw.me",
     "soloist.ai",
+    "square.site",
     "studio.site",
     "surveymonkey.com",
     "systeme.io",

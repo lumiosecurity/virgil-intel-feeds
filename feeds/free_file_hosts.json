@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_file_hosts.txt",
-    "syncedAt": "2026-04-07T19:22:23.821Z",
+    "syncedAt": "2026-04-07T20:28:02.322Z",
     "role": "free_file_hosts",
     "description": "Sites allowing anyone to upload and serve files publicly",
-    "count": 180
+    "count": 182
   },
   "entries": [
     "0x0.st",
@@ -96,6 +96,7 @@
     "graph.org",
     "hidrive.ionos.com",
     "hightail.com",
+    "hmstorage.net",
     "icedrive.net",
     "iceiy.com",
     "idrive.com",
@@ -166,6 +167,7 @@
     "teletype.in",
     "temp.sh",
     "terabox.com",
+    "tiiny.site",
     "tinyupload.com",
     "transfer.sh",
     "transfergb.com",

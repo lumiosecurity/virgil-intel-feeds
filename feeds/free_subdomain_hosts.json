@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
-    "syncedAt": "2026-04-07T19:22:23.429Z",
+    "syncedAt": "2026-04-07T20:28:02.148Z",
     "role": "free_subdomain_hosts",
     "description": "Sites allowing anyone to create subdomains and host arbitrary content",
-    "count": 308
+    "count": 309
   },
   "entries": [
     "000webhost.com",
@@ -263,6 +263,7 @@
     "te4m.de",
     "team.cx",
     "team.tl",
+    "temporary.site",
     "test.lc",
     "th.tn",
     "top.lc",

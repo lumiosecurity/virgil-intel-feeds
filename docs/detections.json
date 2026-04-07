@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-07-19:22",
-    "generatedAt": "2026-04-07T19:22:31.020Z",
+    "version": "2026-04-07-20:28",
+    "generatedAt": "2026-04-07T20:28:07.062Z",
     "brandCount": 193,
     "patternCount": 1104,
     "networkPatternCount": 21
@@ -7006,7 +7006,6 @@
     "thrtle.com",
     "website-files.com",
     "wixdns.net",
-    "square.site",
     "trustindex.io",
     "panasonic.com",
     "ksyna.net",
@@ -8368,7 +8367,6 @@
     "foggymorningmist.com",
     "sway.com",
     "hubspotusercontent-na1.net",
-    "scw.cloud",
     "cms.gov",
     "giantpanda.com",
     "pubnub.com",
@@ -10436,7 +10434,6 @@
     "anota.ai",
     "trpcdn.net",
     "icy-veins.com",
-    "temporary.site",
     "wistia.net",
     "europapress.es",
     "notebooklm.google",
@@ -16861,7 +16858,6 @@
     "thrtle.com",
     "website-files.com",
     "wixdns.net",
-    "square.site",
     "trustindex.io",
     "panasonic.com",
     "ksyna.net",
@@ -18223,7 +18219,6 @@
     "foggymorningmist.com",
     "sway.com",
     "hubspotusercontent-na1.net",
-    "scw.cloud",
     "cms.gov",
     "giantpanda.com",
     "pubnub.com",
@@ -20291,7 +20286,6 @@
     "anota.ai",
     "trpcdn.net",
     "icy-veins.com",
-    "temporary.site",
     "wistia.net",
     "europapress.es",
     "notebooklm.google",
@@ -24401,7 +24395,7 @@
       "description": "Email address validated against external API before showing phishing content — targeted phishing gate",
       "severity": "high",
       "weight": 0.3,
-      "source": "js",
+      "source": "both",
       "note": "Validating the victim's email via API before showing phishing content ensures only real corporate email users see the phishing page. Sneaky 2FA and similar enterprise-targeted kits use this to filter out security researchers. [FP fix: tightened proximity from .* to {0,100} chars between api/validate and email. Added wp-json negation - WordPress REST API endpoints like device/validate are legitimate CMS infrastructure, not phishing gates]",
       "match": [
         {
@@ -24436,7 +24430,7 @@
       "description": "Email domain checked against corporate domain list before proceeding — enterprise targeting filter",
       "severity": "high",
       "weight": 0.3,
-      "source": "js",
+      "source": "both",
       "note": "Checking the email domain and rejecting free providers (Gmail, Yahoo, Hotmail) is the Sneaky 2FA enterprise targeting filter. The phishing page only works for corporate email addresses.",
       "match": [
         {
@@ -27042,7 +27036,7 @@
       "description": "CAPTCHA success triggers fetch for phishing page payload — Tycoon's gate-then-load architecture",
       "severity": "high",
       "weight": 0.3,
-      "source": "js",
+      "source": "both",
       "note": "After successful CAPTCHA verification, Tycoon fetches the actual phishing page payload from an attacker-controlled server. The CAPTCHA gate→success→fetch-payload chain ensures security scanners that can't solve the CAPTCHA never see the credential form. [FP fix: added <nav negation - legitimate sites with reCAPTCHA + fetch (WordPress, CMS) always have navigation elements]",
       "match": [
         {
@@ -27734,7 +27728,7 @@
       "description": "Redirect to legitimate brand site after credential capture — post-exfiltration concealment",
       "severity": "high",
       "weight": 0.35,
-      "source": "js",
+      "source": "both",
       "note": "Redirecting to the real brand's legitimate site after a successful data exfiltration (in a .then(), success callback, or onload) is the classic phishkit concealment pattern. The victim thinks they were logged out and tries again on the real site.",
       "match": [
         {
@@ -28165,7 +28159,7 @@
       "description": "Page auto-redirects to legitimate site after timeout — self-destructing phishing page",
       "severity": "low",
       "weight": 0.1,
-      "source": "js",
+      "source": "both",
       "note": "A timed auto-redirect to a legitimate brand site after a delay (encoded as milliseconds like 300000 or 5*60*1000) is a self-destruct mechanism. The phishing page exists only temporarily, then becomes an innocent redirect. [Observation-level: setTimeout + redirect to brand — legitimate SSO/OAuth flows do this] [FP fix: added interstitial negation - legitimate paywall/subscription interstitials use setTimeout+redirect patterns identical to phishing self-destruct]",
       "match": [
         {
@@ -28209,7 +28203,7 @@
       "description": "Multi-page form wizard collecting credentials across multiple steps — staged data harvesting",
       "severity": "medium",
       "weight": 0.2,
-      "source": "js",
+      "source": "both",
       "note": "Multi-step credential wizard: step/stage counter + credential fields near display toggling. [FP fix: removed \"page\" from step counter (csPage analytics match), added word boundaries, \"social\" changed to \"social security\", requires proximity between credential fields and display toggling.]",
       "match": [
         {
@@ -28787,7 +28781,7 @@
       "description": "MutationObserver watching for input value changes — passive credential monitoring without event handlers",
       "severity": "medium",
       "weight": 0.25,
-      "source": "js",
+      "source": "both",
       "note": "MutationObserver monitoring input field value changes for passive credential capture. [FP fix: old pattern matched any MutationObserver + childList + the word \"value\" — catches every SPA router and analytics library. Now requires characterData/attributeFilter + querySelector/getElementById + password-related selectors, which is the actual credential monitoring pattern.]",
       "match": [
         {
@@ -32785,7 +32779,7 @@
       "description": "Adobe PDF phishkit credential handlers",
       "severity": "high",
       "weight": 0.45,
-      "source": "js",
+      "source": "both",
       "note": "Adobe PDF phishkit — three exact literal matches, no regex needed. 100x faster.",
       "match": [
         {
@@ -32918,7 +32912,7 @@
       "description": "Base64 encoded URL in JavaScript credential exfiltration",
       "severity": "high",
       "weight": 0.45,
-      "source": "js",
+      "source": "both",
       "note": "Base64-encoded URL used as exfil endpoint in credential theft. [FP fix: old pattern matched any atob(https://...) which catches ad tech encoding URLs to evade blockers (Freestar, etc.). Now requires the atob call to be within 2000 chars of credential handling code (password, submit, fetch).]",
       "match": [
         {
@@ -33572,7 +33566,7 @@
       "description": "WhatsApp phishkit using Vue.js templates",
       "severity": "high",
       "weight": 0.35,
-      "source": "js",
+      "source": "both",
       "note": " [converted to multi-match for performance]",
       "match": [
         {
@@ -35194,7 +35188,7 @@
       "description": "Redirect to legitimate service after credential capture — AiTM post-phish legitimacy redirect",
       "severity": "medium",
       "weight": 0.25,
-      "source": "js",
+      "source": "both",
       "note": "Redirecting to the legitimate Microsoft/Google login page AFTER sending credentials to an external endpoint is the AiTM post-capture redirect. The victim ends up at the real login page, thinking nothing happened, while their credentials are already stolen. [FP fix: added <nav negation - legitimate sites with Google Sign-In have fetch+then+location+google in their scripts naturally]",
       "match": [
         {
@@ -35606,7 +35600,7 @@
       "description": "HTML smuggling download constructed from base64 blob in-browser — malware delivery via HTML file",
       "severity": "high",
       "weight": 0.4,
-      "source": "js",
+      "source": "both",
       "note": "HTML smuggling: base64/binary decode (atob/Uint8Array) + Blob + createObjectURL + dangerous file extension within 500 chars. [FP fix: removed .js from extensions (matches every site), tightened atob requirement, added proximity for extension, added <nav> negation. Legitimate sites use Blob+createObjectURL for images/PDFs but never construct .exe/.iso/.zip downloads from base64.]",
       "match": [
         {
@@ -37148,7 +37142,7 @@
       "description": "Countdown timer creating urgency — account action expires in X minutes/hours pattern",
       "severity": "low",
       "weight": 0.05,
-      "source": "js",
+      "source": "both",
       "note": "JavaScript countdown timers showing 'X minutes remaining' or 'expires in...' create artificial urgency on phishing pages. The timer pressures victims to enter credentials quickly before 'time runs out'. [Observation-level: Countdown timer — sales pages, event countdowns, session timeouts] [FP fix: added negation for subscription/paywall language - news sites use countdown timers for free article limits]",
       "match": [
         {
@@ -39443,7 +39437,7 @@
       "description": "JavaScript redirect to suspicious TLD — phishing redirect chain endpoint",
       "severity": "medium",
       "weight": 0.25,
-      "source": "js",
+      "source": "both",
       "note": "JS redirect to suspicious TLD URL. [FP fix: old pattern matched .click/.top/.link as bare dot+word — these are standard JS methods (element.click(), window.top, String.link()). Now requires TLD to appear in a URL string context (https://domain.tld).]",
       "match": [
         {
@@ -39482,7 +39476,7 @@
       "description": "URL shortener used in JavaScript redirect — obscured phishing destination",
       "severity": "medium",
       "weight": 0.25,
-      "source": "js",
+      "source": "both",
       "note": "JS redirect to URL shortener. [FP fix: shortener domains now require URL context (://domain/) to prevent matching inside other domains like revcontent.com containing t.co as substring.]",
       "match": [
         {
@@ -39798,7 +39792,7 @@
       "description": "Redirect through trusted intermediate service before phishing landing — Tycoon's redirect laundering",
       "severity": "medium",
       "weight": 0.2,
-      "source": "js",
+      "source": "both",
       "note": "Tycoon chains redirects through trusted services (Firebase, Azure Blob, Wix, TikTok, Google Docs/Sites) before landing on the phishing page. These trusted intermediate domains lend legitimacy to the redirect chain and bypass URL reputation checks. [FP fix: entry 2 now requires the trusted domain appears inside a location.href/replace assignment, not just anywhere on the page. Removed tiktok.com and wix.com from the list — too common in social sharing configs. Fixed condition to require all 3 entries. Added <nav negation]",
       "match": [
         {
