@@ -82,10 +82,6 @@ jobs:
             echo "detections.json generated:"
             node -e "const d=require('./src/background/detections.json'); console.log('  brands:', d.brandEntries?.length, 'patterns:', d.sourcePatterns?.length, 'TLDs:', Object.keys(d.tldRisk||{}).length)"
           fi
-          # Also copy feeds-compiled.json back to intel-feeds for serving
-          if [ -f src/background/feeds-compiled.json ]; then
-            cp src/background/feeds-compiled.json ../docs/feeds-compiled.json
-          fi
           # Copy tranco-popularity.json for CDN serving (10K–1M downscore data)
           if [ -f feeds/tranco-popularity.json ]; then
             cp feeds/tranco-popularity.json ../docs/tranco-popularity.json
@@ -97,7 +93,7 @@ jobs:
         run: |
           git config user.name  "virgil-detections[bot]"
           git config user.email "detections-bot@lumiosecurity"
-          git add docs/detections.json docs/feeds-compiled.json docs/tranco-popularity.json feeds/
+          git add docs/detections.json docs/tranco-popularity.json feeds/
           if git diff --cached --quiet; then
             echo "No changes"
           else
