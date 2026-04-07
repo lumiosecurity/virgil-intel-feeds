@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-07T06:54:44.095Z",
+    "compiledAt": "2026-04-07T17:55:25.318Z",
     "brandCount": 192,
     "signalCount": 1,
     "patternCount": 1102,
@@ -6354,10 +6354,15 @@
         {
           "pattern": "payload|body|JSON\\.stringify|FormData",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3",
-      "note": "After successful CAPTCHA verification, Tycoon fetches the actual phishing page payload from an attacker-controlled server. The CAPTCHA gate→success→fetch-payload chain ensures security scanners that can't solve the CAPTCHA never see the credential form."
+      "condition": "1 & 2 & 3 & 4",
+      "note": "After successful CAPTCHA verification, Tycoon fetches the actual phishing page payload from an attacker-controlled server. The CAPTCHA gate→success→fetch-payload chain ensures security scanners that can't solve the CAPTCHA never see the credential form. [FP fix: added <nav negation - legitimate sites with reCAPTCHA + fetch (WordPress, CMS) always have navigation elements]"
     },
     {
       "id": "tycoon-iconcaptcha-integration",
@@ -6953,9 +6958,9 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "patternString": "new\\s+FormData\\([\\s\\S]{0,300}fetch\\(['\"][^'\"]*\\.php",
+      "patternString": "new\\s+FormData\\([\\s\\S]{0,300}fetch\\(['\\\"][^'\\\"]*(?!admin-ajax|wp-login|wp-cron|activehosted|mailchimp)[\\w-]+\\.php",
       "patternFlags": "i",
-      "note": "Constructing FormData and sending it to a .php endpoint via fetch is a near-definitive phishkit credential exfiltration pattern. Modern legitimate login pages use JSON APIs, not PHP form handlers from JavaScript."
+      "note": "Constructing FormData and sending it to a .php endpoint via fetch is a near-definitive phishkit credential exfiltration pattern. Modern legitimate login pages use JSON APIs, not PHP form handlers from JavaScript. [FP fix: excluded admin-ajax.php, wp-login.php, wp-cron.php, and known marketing automation endpoints (ActiveCampaign, Mailchimp) which use legitimate PHP form handlers]"
     },
     {
       "id": "xmlhttprequest-php-exfil",
@@ -7455,10 +7460,15 @@
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "content": "interstitial",
+          "nocase": true,
+          "negated": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3",
-      "note": "A timed auto-redirect to a legitimate brand site after a delay (encoded as milliseconds like 300000 or 5*60*1000) is a self-destruct mechanism. The phishing page exists only temporarily, then becomes an innocent redirect. [Observation-level: setTimeout + redirect to brand — legitimate SSO/OAuth flows do this]"
+      "condition": "0 & 1 & 2 & 3 & 4",
+      "note": "A timed auto-redirect to a legitimate brand site after a delay (encoded as milliseconds like 300000 or 5*60*1000) is a self-destruct mechanism. The phishing page exists only temporarily, then becomes an innocent redirect. [Observation-level: setTimeout + redirect to brand — legitimate SSO/OAuth flows do this] [FP fix: added interstitial negation - legitimate paywall/subscription interstitials use setTimeout+redirect patterns identical to phishing self-destruct]"
     },
     {
       "id": "cross-origin-iframe-login",
@@ -7642,12 +7652,12 @@
       "source": "html",
       "match": [
         {
-          "content": "autofill",
+          "content": "autocomplete",
           "nocase": true,
           "fast_pattern": true
         },
         {
-          "pattern": "autocomplete|autofill",
+          "pattern": "autocomplete\\s*=\\s*[\"'](?:on|cc-|address|tel|email|username|current-password|new-password)",
           "flags": "i"
         },
         {
@@ -7660,7 +7670,7 @@
         }
       ],
       "condition": "1 & 2 & 3",
-      "note": "Hidden input fields with autocomplete attributes trick browsers into auto-filling credit card, name, email, phone, and address data. The fields are invisible to the user but the browser fills them automatically, enabling silent PII harvesting."
+      "note": "Hidden input fields with autocomplete attributes trick browsers into auto-filling credit card, name, email, phone, and address data. The fields are invisible to the user but the browser fills them automatically, enabling silent PII harvesting. [FP fix: now requires autocomplete= attribute with sensitive field values, not just the word \"autofill\". Previously matched data-autofill=\"false\" which is a site DISABLING autofill]"
     },
     {
       "id": "designmode-editable-page",
@@ -14262,14 +14272,21 @@
           "fast_pattern": true
         },
         {
-          "pattern": "accounts\\.google\\.com|googleapis\\.com|gstatic\\.com"
+          "pattern": "accounts\\.google\\.com(?!/gsi/)",
+          "flags": "i"
         },
         {
-          "pattern": "action=[\\x27\\\"]https?://(?!(?:accounts\\.google|googleapis|gstatic)\\.)"
+          "pattern": "action=[\\x27\\\\\"][^'\\\"]*https?://(?!(?:accounts\\.google|googleapis|gstatic)\\.)",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2",
-      "note": "Google auth references but form posts to non-Google domain. AiTM indicator."
+      "condition": "1 & 2 & 3",
+      "note": "Google auth references but form posts to non-Google domain. AiTM indicator. [FP fix: excluded accounts.google.com/gsi/ paths (legitimate Google Sign-In embeds), enforced the non-Google form action matcher in condition, added <nav negation]"
     },
     {
       "id": "aitm-injected-script-alongside-real",
@@ -14318,10 +14335,15 @@
         {
           "pattern": "microsoft|google|apple|amazon|paypal|netflix",
           "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4",
-      "note": "Redirecting to the legitimate Microsoft/Google login page AFTER sending credentials to an external endpoint is the AiTM post-capture redirect. The victim ends up at the real login page, thinking nothing happened, while their credentials are already stolen."
+      "condition": "1 & 2 & 3 & 4 & 5",
+      "note": "Redirecting to the legitimate Microsoft/Google login page AFTER sending credentials to an external endpoint is the AiTM post-capture redirect. The victim ends up at the real login page, thinking nothing happened, while their credentials are already stolen. [FP fix: added <nav negation - legitimate sites with Google Sign-In have fetch+then+location+google in their scripts naturally]"
     },
     {
       "id": "evilproxy-phishlet-marker",
@@ -14647,7 +14669,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "<iframe[^>]*src=['\\\"][^'\\\"]*(?:login|sign.?in|oauth|authorize|auth\\.|accounts\\.)[^'\\\"]*['\\\"]",
+          "pattern": "<iframe[^>]*src=['\\\\\"][^'\\\\\"]*(?:login|sign.?in|oauth|authorize|auth\\.)(?!.*accounts\\.google\\.com/gsi/)[^'\\\\\"]*['\\\\\"]",
           "flags": "i"
         },
         {
@@ -14660,7 +14682,7 @@
         }
       ],
       "condition": "1 & 2 & 3",
-      "note": "BitB: iframe loading a login/auth URL inside a styled popup overlay. [FP fix: entry 1 now requires the iframe src to contain login/oauth/auth terms — previously just checked if \"iframe\" and \"login\" existed anywhere on the page independently. Also tightened z-index to require high values (900+ or 10000+) and requires both border-radius AND box-shadow in same CSS block.]"
+      "note": "BitB: iframe loading a login/auth URL inside a styled popup overlay. [FP fix: entry 1 now requires the iframe src to contain login/oauth/auth terms — previously just checked if \"iframe\" and \"login\" existed anywhere on the page independently. Also tightened z-index to require high values (900+ or 10000+) and requires both border-radius AND box-shadow in same CSS block.] [FP fix: excluded accounts.google.com/gsi/ iframe sources - legitimate Google Sign-In button embeds, not BitB attacks]"
     },
     {
       "id": "bitb-os-detect-theme",
@@ -14956,9 +14978,9 @@
       "severity": "high",
       "weight": 0.35,
       "source": "both",
-      "patternString": "(?:send|mail|post|grab|log|save|recv|gate|panel|check|verify|process|handler|submit|login|auth|data|next|go|result)\\.php",
+      "patternString": "(?:send|mail|grab|log|save|recv|gate|panel|check|verify|handler|submit|auth|data|next|go|result)\\.php",
       "patternFlags": "i",
-      "note": "send.php, mailer.php, grab.php — canonical phishkit backend filenames"
+      "note": "send.php, mailer.php, grab.php — canonical phishkit backend filenames [FP fix: removed \"post\", \"process\", and \"login\" from endpoint name list. login.php is standard WordPress, process/post.php are standard CMS form handlers]"
     },
     {
       "id": "blackeye-signature",
@@ -16261,10 +16283,15 @@
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "pattern": "subscribe|subscription|paywall|membership|premium",
+          "flags": "i",
+          "negated": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4",
-      "note": "JavaScript countdown timers showing 'X minutes remaining' or 'expires in...' create artificial urgency on phishing pages. The timer pressures victims to enter credentials quickly before 'time runs out'. [Observation-level: Countdown timer — sales pages, event countdowns, session timeouts]"
+      "condition": "1 & 2 & 3 & 4 & 5",
+      "note": "JavaScript countdown timers showing 'X minutes remaining' or 'expires in...' create artificial urgency on phishing pages. The timer pressures victims to enter credentials quickly before 'time runs out'. [Observation-level: Countdown timer — sales pages, event countdowns, session timeouts] [FP fix: added negation for subscription/paywall language - news sites use countdown timers for free article limits]"
     },
     {
       "id": "mailto-support-link-phish",
@@ -20663,7 +20690,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-06T20:34:38.930Z",
+      "compiledAt": "2026-04-07T06:54:41.475Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -20724,10 +20751,12 @@
       ".fashion": 0.2,
       ".finance": 0.2,
       ".fit": 0.2,
+      ".foo": 0.2,
       ".free": 0.2,
       ".fun": 0.2,
       ".ga": 0.2,
       ".gdn": 0.2,
+      ".gf": 0.2,
       ".gq": 0.2,
       ".gu": 0.2,
       ".help": 0.2,
@@ -20782,6 +20811,7 @@
       ".sale": 0.2,
       ".sbs": 0.2,
       ".science": 0.2,
+      ".shop": 0.2,
       ".site": 0.2,
       ".so": 0.2,
       ".social": 0.2,
