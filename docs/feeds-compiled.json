@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-07T18:05:46.512Z",
-    "brandCount": 192,
+    "compiledAt": "2026-04-07T19:22:30.996Z",
+    "brandCount": 193,
     "signalCount": 1,
-    "patternCount": 1102,
+    "patternCount": 1104,
     "networkPatternCount": 21,
     "domHashCount": 0,
     "metaRuleCount": 45
@@ -547,6 +547,24 @@
         "coinsquar",
         "coinsquarre"
       ]
+    },
+    {
+      "name": "pancakeswap",
+      "domains": [
+        "pancakeswap.finance",
+        "pancakeswap.com"
+      ],
+      "typos": [
+        "puncakeswap",
+        "pancakeswaap",
+        "pancakesvvap",
+        "puncake-swap",
+        "pancake-swap",
+        "pancakesw4p",
+        "pancak3swap",
+        "pancakeswasp"
+      ],
+      "vertical": "crypto"
     },
     {
       "name": "amazon",
@@ -17716,6 +17734,17 @@
       "note": "Detects Turkish social engineering asking about credit card usage before harvesting - legitimate banks don't use this application flow pattern"
     },
     {
+      "id": "link-disabling-trap-pattern",
+      "group": "socialEngineering",
+      "description": "All page links disabled via jQuery attr() calls with return false onclick — user entrapment technique",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "patternString": "\\$\\(['\"]a['\"]\\)\\.attr\\(['\"]href['\"][\\s\\S]{0,200}\\$\\(['\"]a['\"]\\)\\.attr\\(['\"]onclick['\"],\\s*['\"]return\\s+false['\"]\\)",
+      "patternFlags": "i",
+      "note": "Disables all navigation while keeping visual appearance — traps users on malicious site"
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -19014,6 +19043,17 @@
       "patternString": "<meta[^>]+content=[\"']myid\\.(?:telstra|optus|vodafone)[^\"']*[\"'][\\s\\S]{0,3000}flutterflow",
       "patternFlags": "i",
       "note": "Official myid services use brand-owned domains, not third-party app platforms"
+    },
+    {
+      "id": "crypto-themed-suspicious-tld",
+      "group": "urlHeuristics",
+      "description": "Crypto/DeFi page hosted on suspicious web3-themed TLD domains",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "patternString": "<title[^>]*>.*(?:swap|defi|dex|pancake|uniswap|crypto|trade)[\\s\\S]{0,100}</title>[\\s\\S]{0,5000}web-3\\.(?:to|site|info|click)",
+      "patternFlags": "i",
+      "note": "Combines crypto terminology in page title with suspicious web3-themed TLD pattern"
     }
   ],
   "networkPatterns": [
@@ -20767,7 +20807,7 @@
   ],
   "intel": {
     "_meta": {
-      "compiledAt": "2026-04-07T18:00:31.966Z",
+      "compiledAt": "2026-04-07T18:05:43.545Z",
       "sources": [
         "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
         "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-07-18:05",
-    "generatedAt": "2026-04-07T18:05:46.536Z",
-    "brandCount": 192,
-    "patternCount": 1102,
+    "version": "2026-04-07-19:22",
+    "generatedAt": "2026-04-07T19:22:31.020Z",
+    "brandCount": 193,
+    "patternCount": 1104,
     "networkPatternCount": 21
   },
   "brandEntries": [
@@ -538,6 +538,24 @@
         "coinsquarelogi",
         "coinsquar",
         "coinsquarre"
+      ]
+    },
+    {
+      "name": "pancakeswap",
+      "vertical": "crypto",
+      "domains": [
+        "pancakeswap.finance",
+        "pancakeswap.com"
+      ],
+      "typos": [
+        "puncakeswap",
+        "pancakeswaap",
+        "pancakesvvap",
+        "puncake-swap",
+        "pancake-swap",
+        "pancakesw4p",
+        "pancak3swap",
+        "pancakeswasp"
       ]
     },
     {
@@ -38551,6 +38569,17 @@
       "patternFlags": "i"
     },
     {
+      "id": "link-disabling-trap-pattern",
+      "group": "socialEngineering",
+      "description": "All page links disabled via jQuery attr() calls with return false onclick — user entrapment technique",
+      "severity": "high",
+      "weight": 0.3,
+      "source": "js",
+      "note": "Disables all navigation while keeping visual appearance — traps users on malicious site",
+      "patternString": "\\$\\(['\"]a['\"]\\)\\.attr\\(['\"]href['\"][\\s\\S]{0,200}\\$\\(['\"]a['\"]\\)\\.attr\\(['\"]onclick['\"],\\s*['\"]return\\s+false['\"]\\)",
+      "patternFlags": "i"
+    },
+    {
       "id": "numeric-domain-pattern",
       "group": "suspiciousDomains",
       "description": "All-numeric domain pattern often used for phishing",
@@ -39884,6 +39913,17 @@
       "source": "html",
       "note": "Official myid services use brand-owned domains, not third-party app platforms",
       "patternString": "<meta[^>]+content=[\"']myid\\.(?:telstra|optus|vodafone)[^\"']*[\"'][\\s\\S]{0,3000}flutterflow",
+      "patternFlags": "i"
+    },
+    {
+      "id": "crypto-themed-suspicious-tld",
+      "group": "urlHeuristics",
+      "description": "Crypto/DeFi page hosted on suspicious web3-themed TLD domains",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "note": "Combines crypto terminology in page title with suspicious web3-themed TLD pattern",
+      "patternString": "<title[^>]*>.*(?:swap|defi|dex|pancake|uniswap|crypto|trade)[\\s\\S]{0,100}</title>[\\s\\S]{0,5000}web-3\\.(?:to|site|info|click)",
       "patternFlags": "i"
     }
   ],
