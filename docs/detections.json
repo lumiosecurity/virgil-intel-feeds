@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-07-20:28",
-    "generatedAt": "2026-04-07T20:28:07.062Z",
+    "version": "2026-04-07-21:04",
+    "generatedAt": "2026-04-07T21:04:03.633Z",
     "brandCount": 193,
     "patternCount": 1104,
     "networkPatternCount": 21
@@ -3471,6 +3471,7 @@
     "te4m.de",
     "team.cx",
     "team.tl",
+    "temporary.site",
     "test.lc",
     "th.tn",
     "top.lc",
@@ -3586,8 +3587,10 @@
     "riddle.com",
     "run.app",
     "scribehow.com",
+    "scw.cloud",
     "seesaw.me",
     "soloist.ai",
+    "square.site",
     "studio.site",
     "surveymonkey.com",
     "systeme.io",
@@ -27997,10 +28000,24 @@
       "description": "JavaScript redirect triggered after form submission handler — post-harvest navigation",
       "severity": "low",
       "weight": 0.1,
-      "source": "js",
-      "note": "A form submit handler that triggers a delayed redirect via setTimeout is the standard phishkit flow: capture credentials, show a brief loading state, then redirect to the real brand site. [Observation-level: setTimeout + redirect after submit — standard post-form thank-you page]",
-      "patternString": "(?:addEventListener|onsubmit)[\\s\\S]{0,100}(?:submit|click)[\\s\\S]{0,500}setTimeout\\([\\s\\S]{0,200}(?:window\\.location|location\\.href|location\\.replace)",
-      "patternFlags": "i"
+      "source": "both",
+      "note": "A form submit handler that triggers a delayed redirect via setTimeout is the standard phishkit flow: capture credentials, show a brief loading state, then redirect to the real brand site. [Observation-level: setTimeout + redirect after submit — standard post-form thank-you page] [FP fix: added <nav negation with source=both — click tracking handlers with setTimeout+redirect are standard on CMS/news sites for analytics fire-before-navigate patterns]",
+      "match": [
+        {
+          "content": "addEventListener",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "(?:addEventListener|onsubmit)[\\s\\S]{0,100}(?:submit|click)[\\s\\S]{0,500}setTimeout\\([\\s\\S]{0,200}(?:window\\.location|location\\.href|location\\.replace)",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "crypto-wallet-seed-capture",
@@ -30792,10 +30809,24 @@
       "description": "Bulk String.fromCharCode calls used to reconstruct obfuscated page content or URLs",
       "severity": "medium",
       "weight": 0.25,
-      "source": "js",
-      "note": "Bulk String.fromCharCode with 5+ comma-separated character codes reconstructs obfuscated strings at runtime. Very common in phishing kits to hide URLs, brand names, and credential harvesting code from static analysis.",
-      "patternString": "String\\.fromCharCode\\(\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}",
-      "patternFlags": "i"
+      "source": "both",
+      "note": "Bulk String.fromCharCode with 5+ comma-separated character codes reconstructs obfuscated strings at runtime. Very common in phishing kits to hide URLs, brand names, and credential harvesting code from static analysis. [FP fix: raised minimum from 5 to 10 char codes — ad libraries (googletag/admiral) use short fromCharCode calls for non-obfuscation purposes. Phishing kits decode full URLs/pages with 20+ codes. Added <nav negation]",
+      "match": [
+        {
+          "content": "fromCharCode",
+          "fast_pattern": true
+        },
+        {
+          "pattern": "String\\.fromCharCode\\((?:\\d{2,3}\\s*,\\s*){9,}\\d{2,3}",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2"
     },
     {
       "id": "hex-escape-heavy-obfuscation",
@@ -31846,8 +31877,8 @@
       "severity": "low",
       "weight": 0.1,
       "source": "js",
-      "note": "Constructing a RegExp from concatenated or decoded strings builds the regex pattern at runtime. This hides URL patterns, brand names, or detection-related strings from static source analysis. [Observation-level: new RegExp from string — any dynamic search, highlighting]",
-      "patternString": "new\\s+RegExp\\([\\s\\S]{0,100}(?:\\+|concat|atob|fromCharCode|decodeURI)",
+      "note": "Constructing a RegExp from concatenated or decoded strings builds the regex pattern at runtime. This hides URL patterns, brand names, or detection-related strings from static source analysis. [Observation-level: new RegExp from string — any dynamic search, highlighting] [FP fix: removed + operator from alternatives — new RegExp(\"...\" + var) is standard JS for cookie readers, search highlighting, and dynamic filtering. Only atob/fromCharCode/decodeURI indicate actual obfuscation]",
+      "patternString": "new\\s+RegExp\\([\\s\\S]{0,100}(?:concat|atob|fromCharCode|decodeURI)",
       "patternFlags": "i"
     },
     {
@@ -31926,10 +31957,30 @@
       "description": "Text color matching background color — white-on-white or matching color text concealment",
       "severity": "medium",
       "weight": 0.2,
-      "source": "html",
-      "note": "Setting text color to white (#fff, #ffffff, white), transparent, or rgba with 0 alpha on a white background makes text invisible to users but readable by HTML parsers. One of the oldest text hiding techniques, still actively used in phishing.",
-      "patternString": "<(?:span|font|div)[^>]*(?:color:\\s*(?:#fff(?:fff)?|white|#fefefe|transparent|rgba\\(\\s*\\d+\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*,\\s*0)|color=['\"](?:#fff(?:fff)?|white|#fefefe))[^>]*>[^<]{5,}",
-      "patternFlags": "i"
+      "source": "both",
+      "note": "Setting text color to white (#fff, #ffffff, white), transparent, or rgba with 0 alpha on a white background makes text invisible to users but readable by HTML parsers. One of the oldest text hiding techniques, still actively used in phishing. [FP fix: excluded ad disclosure labels (sponsored, advertisement, promoted) — news sites hide these with color:transparent for accessibility while showing visual ad indicators. Added <nav negation]",
+      "match": [
+        {
+          "content": "transparent",
+          "fast_pattern": true,
+          "nocase": true
+        },
+        {
+          "pattern": "<(?:span|font|div)[^>]*(?:color:\\s*(?:#fff(?:fff)?|white|#fefefe|transparent|rgba\\(\\s*\\d+\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*,\\s*0)|color=['\"](?:#fff(?:fff)?|white|#fefefe))[^>]*>[^<]{5,}",
+          "flags": "i"
+        },
+        {
+          "pattern": "sponsor|advertis|promot|paid.?content|disclosure",
+          "negated": true,
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
+        }
+      ],
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "zwsp-zwnj-brand-name-split",
@@ -35562,26 +35613,32 @@
       "description": "OS detection for BitB window theming — adapts fake popup to match victim's operating system",
       "severity": "high",
       "weight": 0.35,
-      "source": "js",
-      "note": "Detecting the victim's OS via navigator.platform/userAgent to apply matching window chrome styling (Windows title bar vs macOS traffic lights vs Linux decorations) is a BitB kit feature that makes the fake popup match the victim's real OS.",
+      "source": "both",
+      "note": "Detecting the victim OS via navigator.platform/userAgent to apply matching window chrome styling is a BitB kit feature. [FP fix: removed dark/light/theme/close from matchers — \"Dark\" matched \"LaunchDarkly\" (feature flags), \"Close\" matched \"OptanonAlertBoxClosed\" (cookie consent). Now requires actual window-control terms (title-bar, window-controls, minimize, maximize) with word boundaries. Added <nav negation]",
       "match": [
         {
           "content": "navigator.platform",
           "fast_pattern": true
         },
         {
-          "pattern": "navigator\\.(?:platform|userAgent)"
-        },
-        {
-          "pattern": "Windows|MacOS|Mac OS|Linux|dark|light|theme",
+          "pattern": "navigator\\.(?:platform|userAgent)",
           "flags": "i"
         },
         {
-          "pattern": "title-bar|window-controls|close|minimize|maximize",
+          "pattern": "(?:^|[\\s\"'])(?:Windows|MacOS|Mac OS|Linux)(?:[\\s\"']|$)",
           "flags": "i"
+        },
+        {
+          "pattern": "title-bar|window-controls|(?:^|[\\s\"'.])(?:minimize|maximize)(?:[\\s\"'.}]|$)",
+          "flags": "i"
+        },
+        {
+          "content": "<nav",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "bitb-onclick-false-href",
