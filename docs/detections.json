@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-08-07:00",
-    "generatedAt": "2026-04-08T07:00:41.572Z",
+    "version": "2026-04-08-15:29",
+    "generatedAt": "2026-04-08T15:29:29.822Z",
     "brandCount": 193,
     "patternCount": 1104,
     "networkPatternCount": 21
@@ -44490,6 +44490,271 @@
       },
       "created": "2026-04-07",
       "updated": "2026-04-07",
+      "rev": 1
+    },
+    {
+      "id": "behavioral-canonical-phishing-shape",
+      "description": "THE canonical phishing shape: first-ever visit to domain + first-ever credential entry + page arrived via email/chat delivery. This pattern covers 80%+ of phishing campaigns regardless of brand or kit.",
+      "conditions": {
+        "all": [
+          {
+            "signal": "behavioral-relationship-first-visit"
+          },
+          {
+            "signal": "behavioral-relationship-first-credential"
+          },
+          {
+            "signal": "behavioral-arrival-external-delivery"
+          },
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.35,
+        "severity": "high"
+      },
+      "created": "2026-04-08",
+      "updated": "2026-04-08",
+      "rev": 1
+    },
+    {
+      "id": "behavioral-canonical-with-pressure",
+      "description": "Canonical phishing shape + urgency/pressure manipulation — near-zero false positive rate. The page was email-delivered, domain is unfamiliar, credentials are requested, and the page is manufacturing urgency.",
+      "conditions": {
+        "all": [
+          {
+            "signal": "behavioral-relationship-first-visit"
+          },
+          {
+            "signal": "behavioral-relationship-first-credential"
+          },
+          {
+            "has_password_form": true
+          },
+          {
+            "behavioral_dimension": "pressure"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.45,
+        "severity": "high"
+      },
+      "created": "2026-04-08",
+      "updated": "2026-04-08",
+      "rev": 1
+    },
+    {
+      "id": "behavioral-first-visit-credential-new-domain",
+      "description": "First-ever visit to a domain < 7 days old that requests credentials — combines relationship novelty with infrastructure freshness. Legitimate new accounts on established services don't look like this.",
+      "conditions": {
+        "all": [
+          {
+            "signal": "behavioral-relationship-first-visit"
+          },
+          {
+            "has_password_form": true
+          },
+          {
+            "domain_age_days": {
+              "lt": 7
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.4,
+        "severity": "high"
+      },
+      "created": "2026-04-08",
+      "updated": "2026-04-08",
+      "rev": 1
+    },
+    {
+      "id": "behavioral-rapid-delivery-credential",
+      "description": "User arrived very fast (< 4s from previous page) at an unfamiliar domain requesting credentials. Classic SMS/QR phishing pattern — user was rushed from a lure to a credential page without time to evaluate.",
+      "conditions": {
+        "all": [
+          {
+            "signal": "behavioral-arrival-very-fast"
+          },
+          {
+            "signal": "behavioral-relationship-first-visit"
+          },
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.3,
+        "severity": "high"
+      },
+      "created": "2026-04-08",
+      "updated": "2026-04-08",
+      "rev": 1
+    },
+    {
+      "id": "behavioral-isolation-credential",
+      "description": "Page with credential request is actively blocking navigation (beforeunload, history manipulation) or hiding browser chrome. Legitimate login pages never prevent users from leaving.",
+      "conditions": {
+        "all": [
+          {
+            "has_password_form": true
+          },
+          {
+            "behavioral_dimension": "isolation"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.3,
+        "severity": "high"
+      },
+      "created": "2026-04-08",
+      "updated": "2026-04-08",
+      "rev": 1
+    },
+    {
+      "id": "behavioral-fake-chrome-definitive",
+      "description": "Page simulates browser chrome (fake address bar) or is in fullscreen hiding the URL bar. This is definitive phishing technique — no legitimate site does this.",
+      "conditions": {
+        "any": [
+          {
+            "signal": "behavioral-isolation-fake-browser-chrome"
+          },
+          {
+            "signal": "behavioral-isolation-fullscreen"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.5,
+        "severity": "high"
+      },
+      "created": "2026-04-08",
+      "updated": "2026-04-08",
+      "rev": 1
+    },
+    {
+      "id": "behavioral-coherence-brand-mismatch-credential",
+      "description": "User arrived from email/chat, landed on a domain that doesn't match the detected brand, and the page requests credentials. The referrer context contradicts the page identity.",
+      "conditions": {
+        "all": [
+          {
+            "signal": "behavioral-coherence-referrer-brand-mismatch"
+          },
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.3,
+        "severity": "high"
+      },
+      "created": "2026-04-08",
+      "updated": "2026-04-08",
+      "rev": 1
+    },
+    {
+      "id": "behavioral-no-cookies-no-history-credential",
+      "description": "Page requests credentials on a domain with zero cookies AND zero browsing history — the browser has absolutely no prior relationship with this site. Combined with credential request, this is highly anomalous.",
+      "conditions": {
+        "all": [
+          {
+            "signal": "behavioral-relationship-first-visit"
+          },
+          {
+            "signal": "behavioral-relationship-no-cookies"
+          },
+          {
+            "signal": "behavioral-relationship-first-credential"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.25,
+        "severity": "high"
+      },
+      "created": "2026-04-08",
+      "updated": "2026-04-08",
+      "rev": 1
+    },
+    {
+      "id": "behavioral-over-asking-first-visit",
+      "description": "First visit to domain and the page asks for 3+ types of sensitive data (e.g. password + SSN + credit card). Legitimate services never collect all of these on a single page, especially on first contact.",
+      "conditions": {
+        "all": [
+          {
+            "signal": "behavioral-relationship-first-visit"
+          },
+          {
+            "signal": "behavioral-intent-over-asking"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.35,
+        "severity": "high"
+      },
+      "created": "2026-04-08",
+      "updated": "2026-04-08",
+      "rev": 1
+    },
+    {
+      "id": "behavioral-familiar-domain-downscore",
+      "description": "DOWNSCORE: User has a strong relationship with this domain (many past visits, previous credential entries) and the page has no pressure or isolation signals. Heuristic false positives on familiar sites should be dampened.",
+      "conditions": {
+        "all": [
+          {
+            "not": {
+              "is_first_visit": true
+            }
+          },
+          {
+            "not": {
+              "signal": "behavioral-relationship-first-credential"
+            }
+          },
+          {
+            "not": {
+              "behavioral_dimension": "pressure"
+            }
+          },
+          {
+            "not": {
+              "behavioral_dimension": "isolation"
+            }
+          },
+          {
+            "behavioral_credential_gated": true
+          },
+          {
+            "heuristic_score": {
+              "lt": 0.6
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "downscore",
+        "weight": 0.15,
+        "severity": "info"
+      },
+      "created": "2026-04-08",
+      "updated": "2026-04-08",
       "rev": 1
     },
     {
