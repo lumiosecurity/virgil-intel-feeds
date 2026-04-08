@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-08T15:29:26.683Z",
+    "compiledAt": "2026-04-08T20:27:06.930Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -95,10 +95,12 @@
     ".mom": 0.2,
     ".monster": 0.2,
     ".mov": 0.2,
+    ".mq": 0.2,
     ".my.id": 0.2,
     ".ne.jp": 0.2,
     ".net.ms": 0.2,
     ".nom.za": 0.2,
+    ".one": 0.2,
     ".online": 0.2,
     ".ooo": 0.2,
     ".party": 0.2,
