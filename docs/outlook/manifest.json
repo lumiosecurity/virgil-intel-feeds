@@ -1,0 +1,124 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/vDevPreview/MicrosoftTeams.schema.json",
+  "manifestVersion": "devPreview",
+  "version": "1.0.0",
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "name": {
+    "short": "Virgil",
+    "full": "Virgil — AI Phishing Detection for Outlook"
+  },
+  "description": {
+    "short": "Scans email links for phishing before you click",
+    "full": "Virgil scans every link in your inbox using AI-powered behavioral analysis. Dangerous links are flagged with a notification before you click them. Works across Outlook desktop, web, and mobile."
+  },
+  "developer": {
+    "name": "Lumio Security",
+    "websiteUrl": "https://lumiosecurity.com",
+    "privacyUrl": "https://lumiosecurity.github.io/virgil-intel-feeds/outlook/privacy.html",
+    "termsOfUseUrl": "https://lumiosecurity.github.io/virgil-intel-feeds/outlook/terms.html"
+  },
+  "icons": {
+    "color": "https://lumiosecurity.github.io/virgil-intel-feeds/outlook/icon-color.png",
+    "outline": "https://lumiosecurity.github.io/virgil-intel-feeds/outlook/icon-outline.png"
+  },
+  "accentColor": "#06B6D4",
+  "localizationInfo": {
+    "defaultLanguageTag": "en-us"
+  },
+  "authorization": {
+    "permissions": {
+      "resourceSpecific": [
+        {
+          "name": "MailboxItem.Read.User",
+          "type": "Delegated"
+        }
+      ]
+    }
+  },
+  "extensions": [
+    {
+      "requirements": {
+        "capabilities": [
+          {
+            "name": "Mailbox",
+            "minVersion": "1.13"
+          }
+        ]
+      },
+      "runtimes": [
+        {
+          "id": "autorun-runtime",
+          "type": "general",
+          "code": {
+            "page": "https://lumiosecurity.github.io/virgil-intel-feeds/outlook/autorun.html"
+          },
+          "lifetime": "short",
+          "actions": [
+            { "id": "onMessageRead", "type": "executeFunction" },
+            { "id": "onNewCompose", "type": "executeFunction" }
+          ]
+        },
+        {
+          "id": "taskpane-runtime",
+          "type": "general",
+          "code": {
+            "page": "https://lumiosecurity.github.io/virgil-intel-feeds/outlook/taskpane.html"
+          }
+        }
+      ],
+      "ribbons": [
+        {
+          "contexts": ["mailRead"],
+          "tabs": [
+            {
+              "builtInTabId": "TabDefault",
+              "groups": [
+                {
+                  "id": "virgilGroup",
+                  "label": "Virgil",
+                  "icons": [
+                    { "size": 16, "url": "https://lumiosecurity.github.io/virgil-intel-feeds/outlook/icon16.png" },
+                    { "size": 32, "url": "https://lumiosecurity.github.io/virgil-intel-feeds/outlook/icon32.png" },
+                    { "size": 80, "url": "https://lumiosecurity.github.io/virgil-intel-feeds/outlook/icon80.png" }
+                  ],
+                  "controls": [
+                    {
+                      "id": "scanLinksBtn",
+                      "type": "button",
+                      "label": "Scan Links",
+                      "icons": [
+                        { "size": 16, "url": "https://lumiosecurity.github.io/virgil-intel-feeds/outlook/icon16.png" },
+                        { "size": 32, "url": "https://lumiosecurity.github.io/virgil-intel-feeds/outlook/icon32.png" },
+                        { "size": 80, "url": "https://lumiosecurity.github.io/virgil-intel-feeds/outlook/icon80.png" }
+                      ],
+                      "supertip": {
+                        "title": "Scan Email Links",
+                        "description": "Analyze all links in this email for phishing indicators using Virgil's AI engine"
+                      },
+                      "actionId": "showTaskpane"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "autoRunEvents": [
+        {
+          "requirements": {
+            "capabilities": [
+              { "name": "Mailbox", "minVersion": "1.13" }
+            ]
+          },
+          "events": [
+            {
+              "type": "newMessageComposeCreated",
+              "actionId": "onNewCompose"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

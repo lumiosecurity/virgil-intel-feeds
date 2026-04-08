@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Virgil — Link Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+<script src="shared.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #05060a; color: #c8cdd8; min-height: 100vh;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  font-size: 13px; line-height: 1.5;
+}
+.header {
+  padding: 16px 16px 12px; border-bottom: 1px solid #1e293b;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.brand { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 11px; color: #06b6d4; letter-spacing: .3em; }
+.count { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #475569; }
+.summary {
+  padding: 12px 16px; background: #0c0d14;
+  border-bottom: 1px solid #1e293b;
+}
+.summary-stat {
+  display: flex; gap: 12px; margin-bottom: 6px;
+}
+.stat-badge {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 4px;
+}
+.badge-danger { color: #ef4444; background: #ef444415; }
+.badge-warning { color: #f97316; background: #f9731615; }
+.badge-safe { color: #22c55e; background: #22c55e15; }
+
+.content { padding: 12px 16px; }
+
+.link-card {
+  background: #0f1117; border-radius: 8px; padding: 12px;
+  margin-bottom: 8px; border-left: 3px solid;
+}
+.link-card.dangerous { border-color: #ef4444; }
+.link-card.suspicious { border-color: #f97316; }
+.link-card.safe { border-color: #22c55e; }
+
+.link-verdict {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  font-weight: 700; letter-spacing: .1em; margin-bottom: 4px;
+}
+.link-url {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: #94a3b8; word-break: break-all; margin-bottom: 2px;
+}
+.link-text {
+  font-size: 11px; color: #475569; margin-bottom: 8px;
+  font-style: italic;
+}
+.link-resolved {
+  font-size: 11px; color: #06b6d4; margin-bottom: 6px;
+}
+
+.signal {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 3px 0; font-size: 11px;
+}
+.signal-type { color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+.signal-weight { color: #475569; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+.signal-desc { color: #64748b; font-size: 10px; margin-top: 1px; }
+
+.brand-info {
+  margin-top: 8px; padding: 8px 10px; border-radius: 6px;
+}
+.brand-info.dangerous { background: #ef444410; }
+.brand-info.suspicious { background: #f9731610; }
+.brand-label { font-size: 11px; font-weight: 600; margin-bottom: 2px; }
+.brand-action { font-size: 11px; }
+.brand-action a { color: #22c55e; text-decoration: none; font-weight: 600; }
+.brand-action a:hover { text-decoration: underline; }
+
+.email-context {
+  margin-top: 16px; padding: 12px; background: #0f1117;
+  border-radius: 8px; border-top: 2px solid #475569;
+}
+.email-context h3 {
+  font-size: 11px; font-weight: 700; color: #94a3b8;
+  margin-bottom: 6px; text-transform: uppercase;
+  letter-spacing: .1em; font-family: 'JetBrains Mono', monospace;
+}
+.email-row {
+  font-size: 11px; color: #64748b; margin-bottom: 3px;
+}
+.email-row strong { color: #94a3b8; }
+
+.scanning {
+  text-align: center; padding: 40px 16px;
+}
+.spinner {
+  width: 24px; height: 24px; border: 2px solid #1e293b;
+  border-top-color: #06b6d4; border-radius: 50%;
+  margin: 0 auto 12px; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty {
+  text-align: center; padding: 40px 16px; color: #475569;
+}
+.empty-icon { font-size: 28px; margin-bottom: 8px; }
+
+.footer {
+  padding: 12px 16px; border-top: 1px solid #1e293b;
+  text-align: center; font-size: 10px; color: #1e293b;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: .1em;
+}
+
+.rescan-btn {
+  display: block; width: 100%; padding: 8px; margin-top: 12px;
+  background: transparent; border: 1px solid #1e293b;
+  color: #06b6d4; border-radius: 6px; cursor: pointer;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  font-weight: 600; letter-spacing: .05em;
+  transition: border-color .2s;
+}
+.rescan-btn:hover { border-color: #06b6d4; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="brand">VIRGIL</span>
+    <span class="count" id="linkCount"></span>
+  </div>
+
+  <div id="scanningState" class="scanning" style="display:none">
+    <div class="spinner"></div>
+    <div style="color:#06b6d4;font-size:12px;font-weight:600">Scanning links...</div>
+    <div style="color:#475569;font-size:11px;margin-top:4px">Analyzing against Virgil's phishing engine</div>
+  </div>
+
+  <div id="emptyState" class="empty" style="display:none">
+    <div class="empty-icon">&#x1F6E1;</div>
+    <div style="font-size:13px;color:#94a3b8;margin-bottom:4px">No external links found</div>
+    <div>This email doesn't contain links to analyze.</div>
+  </div>
+
+  <div id="resultsState" style="display:none">
+    <div class="summary" id="summary"></div>
+    <div class="content" id="linkCards"></div>
+    <div class="content" id="emailContext"></div>
+  </div>
+
+  <div class="footer">
+    VIRGIL &middot; LUMIO SECURITY
+    <button class="rescan-btn" id="rescanBtn" style="display:none">&#x21bb; RESCAN</button>
+  </div>
+
+<script>
+Office.onReady(function (info) {
+  if (info.host === Office.HostType.Outlook) {
+    loadResults();
+    document.getElementById('rescanBtn').addEventListener('click', rescan);
+  }
+});
+
+function loadResults() {
+  // Try cached results first
+  try {
+    var cached = Office.context.roamingSettings.get('virgilLastScan');
+    if (cached) {
+      var data = typeof cached === 'string' ? JSON.parse(cached) : cached;
+      if (data && data.results) {
+        renderResults(data);
+        document.getElementById('rescanBtn').style.display = 'block';
+        return;
+      }
+    }
+  } catch (e) {}
+
+  // No cached results — scan now
+  rescan();
+}
+
+function rescan() {
+  showState('scanning');
+
+  var item = Office.context.mailbox.item;
+  item.body.getAsync(Office.CoercionType.Html, function (bodyResult) {
+    if (bodyResult.status !== Office.AsyncResultStatus.Succeeded) {
+      showState('empty');
+      return;
+    }
+
+    var html = bodyResult.value;
+    var links = Virgil.extractLinksFromHtml(html);
+
+    if (links.length === 0) {
+      showState('empty');
+      return;
+    }
+
+    var sender = '';
+    var subject = '';
+    try {
+      sender = item.from ? item.from.emailAddress : '';
+      subject = item.subject || '';
+    } catch (e) {}
+
+    Virgil.scanLinks(links, sender, subject)
+      .then(function (results) {
+        var dangerousCount = 0, suspiciousCount = 0;
+        for (var i = 0; i < results.length; i++) {
+          results[i]._verdict = Virgil.classifyResult(results[i]);
+          if (results[i]._verdict === 'dangerous') dangerousCount++;
+          else if (results[i]._verdict === 'suspicious') suspiciousCount++;
+        }
+
+        var data = {
+          results: results,
+          links: links,
+          sender: sender,
+          subject: subject,
+          scannedAt: new Date().toISOString(),
+          dangerousCount: dangerousCount,
+          suspiciousCount: suspiciousCount,
+        };
+
+        // Cache
+        try {
+          Office.context.roamingSettings.set('virgilLastScan', JSON.stringify(data));
+          Office.context.roamingSettings.saveAsync();
+        } catch (e) {}
+
+        // Behavioral bridge
+        if (dangerousCount > 0) {
+          var flagged = results.filter(function (r) { return r._verdict === 'dangerous'; })
+            .map(function (r) { return r.url; });
+          Virgil.postEmailContext(flagged, sender, subject);
+        }
+
+        renderResults(data);
+        document.getElementById('rescanBtn').style.display = 'block';
+      })
+      .catch(function (err) {
+        console.error('[Virgil]', err);
+        showState('empty');
+      });
+  });
+}
+
+function renderResults(data) {
+  showState('results');
+
+  var results = data.results || [];
+  var dangerous = data.dangerousCount || 0;
+  var suspicious = data.suspiciousCount || 0;
+  var safe = results.length - dangerous - suspicious;
+
+  // Count
+  document.getElementById('linkCount').textContent = results.length + ' link' + (results.length !== 1 ? 's' : '');
+
+  // Summary
+  var summaryHtml = '<div class="summary-stat">';
+  if (dangerous > 0) summaryHtml += '<span class="stat-badge badge-danger">' + dangerous + ' DANGEROUS</span>';
+  if (suspicious > 0) summaryHtml += '<span class="stat-badge badge-warning">' + suspicious + ' SUSPICIOUS</span>';
+  summaryHtml += '<span class="stat-badge badge-safe">' + safe + ' SAFE</span>';
+  summaryHtml += '</div>';
+  summaryHtml += '<div style="font-size:10px;color:#475569">Scanned ' + new Date(data.scannedAt).toLocaleTimeString() + '</div>';
+  document.getElementById('summary').innerHTML = summaryHtml;
+
+  // Sort: dangerous first, then suspicious, then safe
+  var sorted = results.slice().sort(function (a, b) {
+    var order = { dangerous: 0, suspicious: 1, safe: 2 };
+    return (order[a._verdict] || 2) - (order[b._verdict] || 2);
+  });
+
+  // Link cards
+  var cardsHtml = '';
+  for (var i = 0; i < sorted.length; i++) {
+    var r = sorted[i];
+    var v = r._verdict || 'safe';
+    var color = Virgil.getSeverityColor(v);
+
+    cardsHtml += '<div class="link-card ' + v + '">';
+    cardsHtml += '<div class="link-verdict" style="color:' + color + '">' + Virgil.getSeverityLabel(v) + '</div>';
+    cardsHtml += '<div class="link-url">' + escapeHtml(r.url) + '</div>';
+
+    // Link text from email
+    var link = data.links ? data.links.find(function (l) { return l.url === r.url; }) : null;
+    if (link && link.text) {
+      cardsHtml += '<div class="link-text">Link text: "' + escapeHtml(link.text) + '"</div>';
+    }
+
+    // Resolved shortener
+    if (r.isShortener && r.resolvedUrl) {
+      cardsHtml += '<div class="link-resolved">&rarr; Resolves to: ' + escapeHtml(r.resolvedUrl) + '</div>';
+    }
+
+    // Signals
+    var signals = r.signals || [];
+    if (signals.length > 0) {
+      for (var j = 0; j < signals.length; j++) {
+        var s = signals[j];
+        cardsHtml += '<div class="signal">';
+        cardsHtml += '<span class="signal-type">' + escapeHtml(s.type || '') + '</span>';
+        cardsHtml += '<span class="signal-weight">+' + (s.weight || 0).toFixed(2) + '</span>';
+        cardsHtml += '</div>';
+        if (s.description) {
+          cardsHtml += '<div class="signal-desc">' + escapeHtml(s.description) + '</div>';
+        }
+      }
+    } else if (v === 'safe') {
+      cardsHtml += '<div style="font-size:11px;color:#22c55e">No signals detected</div>';
+    }
+
+    // Brand info
+    if (r.detectedBrand && v !== 'safe') {
+      cardsHtml += '<div class="brand-info ' + v + '">';
+      cardsHtml += '<div class="brand-label" style="color:' + color + '">Impersonating: ' + escapeHtml(r.detectedBrand) + '</div>';
+      cardsHtml += '<div class="brand-action">Visit the real site: <a href="https://www.' + escapeHtml(r.detectedBrand.toLowerCase()) + '.com" target="_blank">' + escapeHtml(r.detectedBrand.toLowerCase()) + '.com</a></div>';
+      cardsHtml += '</div>';
+    }
+
+    cardsHtml += '</div>';
+  }
+  document.getElementById('linkCards').innerHTML = cardsHtml;
+
+  // Email context
+  if (data.sender || data.subject) {
+    var ctxHtml = '<div class="email-context"><h3>Email Context</h3>';
+    if (data.sender) ctxHtml += '<div class="email-row"><strong>From:</strong> ' + escapeHtml(data.sender) + '</div>';
+    if (data.subject) ctxHtml += '<div class="email-row"><strong>Subject:</strong> ' + escapeHtml(data.subject) + '</div>';
+    ctxHtml += '</div>';
+    document.getElementById('emailContext').innerHTML = ctxHtml;
+  }
+}
+
+function showState(state) {
+  document.getElementById('scanningState').style.display = state === 'scanning' ? 'block' : 'none';
+  document.getElementById('emptyState').style.display = state === 'empty' ? 'block' : 'none';
+  document.getElementById('resultsState').style.display = state === 'results' ? 'block' : 'none';
+}
+
+function escapeHtml(text) {
+  var d = document.createElement('div');
+  d.textContent = text;
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>
