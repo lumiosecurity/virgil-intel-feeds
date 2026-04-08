@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Virgil — Live Phishing Detection Demo</title>
+<meta name="description" content="Watch Virgil's AI-powered phishing detection engine catch a phishing attack in real-time — from email to verdict.">
+<meta property="og:title" content="Virgil — Live Phishing Detection Demo">
+<meta property="og:description" content="Watch a phishing attack unfold and get caught in real-time. From email to verdict in 4 seconds.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #05060a; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+  @keyframes blink { 50% { opacity: 0; } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes loading { 0% { width: 0%; } 100% { width: 100%; } }
+  @keyframes verdictAppear { from { opacity: 0; transform: scale(0.95) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  @keyframes pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+  div::-webkit-scrollbar { width: 2px; }
+  div::-webkit-scrollbar-track { background: transparent; }
+  div::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 2px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const PHASES = [
+  { id: "idle", duration: 0 },
+  { id: "email", duration: 0 },
+  { id: "clicking", duration: 1200 },
+  { id: "loading", duration: 1400 },
+  { id: "intercept", duration: 800, label: "NAVIGATION INTERCEPTED" },
+  { id: "heuristics", duration: 1400, label: "DOMAIN HEURISTICS" },
+  { id: "behavioral", duration: 1800, label: "BEHAVIORAL SHAPE ANALYSIS" },
+  { id: "visual", duration: 1000, label: "VISUAL HASH" },
+  { id: "meta", duration: 600, label: "META-RULES" },
+  { id: "claude", duration: 2800, label: "CLAUDE AI ANALYSIS" },
+  { id: "verdict", duration: 5000, label: "VERDICT" },
+];
+
+const SIGNALS = [
+  { phase: "heuristics", delay: 200, type: "brand-in-subdomain", desc: "Brand 'Chase' in subdomain of non-Chase domain", severity: "high", weight: 0.35, dim: null },
+  { phase: "heuristics", delay: 450, type: "suspicious-tld", desc: "High-risk TLD: .top", severity: "medium", weight: 0.15, dim: null },
+  { phase: "heuristics", delay: 700, type: "feed-typosquat-match", desc: "Known typosquat pattern for chase.com", severity: "high", weight: 0.40, dim: null },
+  { phase: "heuristics", delay: 1050, type: "new-domain-whois", desc: "Domain registered 6 hours ago (RDAP)", severity: "high", weight: 0.45, dim: null },
+  { phase: "behavioral", delay: 100, type: "arrival-external-delivery", desc: "Arrived via email link from mail.google.com", severity: "medium", weight: 0.15, dim: "arrival" },
+  { phase: "behavioral", delay: 350, type: "arrival-velocity-fast", desc: "3.2s from email click to credential page", severity: "high", weight: 0.20, dim: "arrival" },
+  { phase: "behavioral", delay: 550, type: "relationship-first-visit", desc: "First-ever visit to this domain in 90 days", severity: "high", weight: 0.25, dim: "relationship" },
+  { phase: "behavioral", delay: 750, type: "relationship-first-cred", desc: "User has never entered credentials here", severity: "high", weight: 0.30, dim: "relationship" },
+  { phase: "behavioral", delay: 900, type: "relationship-no-cookies", desc: "Zero cookies \u2014 no prior browser session", severity: "medium", weight: 0.10, dim: "relationship" },
+  { phase: "behavioral", delay: 1050, type: "pressure-urgency", desc: '"Account will be permanently suspended"', severity: "high", weight: 0.20, dim: "pressure" },
+  { phase: "behavioral", delay: 1200, type: "pressure-countdown", desc: 'Active countdown timer: "4:59 remaining"', severity: "high", weight: 0.25, dim: "pressure" },
+  { phase: "behavioral", delay: 1400, type: "pressure-loss-framing", desc: '"Verify now to prevent losing access"', severity: "high", weight: 0.20, dim: "pressure" },
+  { phase: "behavioral", delay: 1600, type: "coherence-mismatch", desc: "Gmail referrer \u2192 .top domain \u2192 Chase branding", severity: "high", weight: 0.25, dim: "coherence" },
+  { phase: "visual", delay: 300, type: "visual-hash-match", desc: "Screenshot matches Chase login (d=12, 95%)", severity: "high", weight: 0.65, dim: null },
+  { phase: "meta", delay: 100, type: "meta-canonical-shape", desc: "CANONICAL: email \u2192 first visit \u2192 cred \u2192 pressure", severity: "critical", weight: 0.45, dim: null },
+  { phase: "meta", delay: 350, type: "meta-new-domain-cred", desc: "First visit + domain < 24hrs + credentials", severity: "high", weight: 0.40, dim: null },
+];
+
+const DIMS = ["arrival", "relationship", "intent", "pressure", "coherence", "isolation"];
+const DIM_C = { arrival: "#f97316", relationship: "#a855f7", intent: "#06b6d4", pressure: "#ef4444", coherence: "#22c55e", isolation: "#ec4899" };
+const URL_T = "chase-secure-login.account-verify.top/signin";
+
+function EmailView({ onClick, visible, highlight }) {
+  if (!visible) return null;
+  return (
+    <div style={{ animation: "fadeIn 0.5s ease" }}>
+      <div style={{ textAlign: "center", marginBottom: 12, fontSize: 9, color: "#5f6368", fontFamily: "sans-serif", letterSpacing: "0.1em" }}>
+        <strong>INBOX</strong> — a suspicious email arrives
+      </div>
+      <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #dadce0", maxWidth: 420, margin: "0 auto", boxShadow: "0 2px 12px rgba(0,0,0,0.08)", overflow: "hidden" }}>
+        <div style={{ background: "#f6f8fc", padding: "10px 14px", borderBottom: "1px solid #e8eaed", display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#1a73e8", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "white", fontFamily: "sans-serif" }}>C</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "#202124", fontFamily: "'DM Sans', sans-serif" }}>Chase Security Alert</div>
+            <div style={{ fontSize: 10, color: "#5f6368", fontFamily: "'DM Sans', sans-serif" }}>no-reply@chase-alerts-secure.top</div>
+          </div>
+          <div style={{ fontSize: 10, color: "#5f6368", fontFamily: "sans-serif" }}>2:34 PM</div>
+        </div>
+        <div style={{ padding: "18px 20px", fontFamily: "'DM Sans', 'Segoe UI', sans-serif" }}>
+          <div style={{ fontSize: 16, fontWeight: 600, color: "#202124", marginBottom: 14 }}>Urgent: Unusual sign-in activity detected</div>
+          <div style={{ fontSize: 13, color: "#3c4043", lineHeight: 1.7 }}>
+            <p style={{ margin: "0 0 12px" }}>Dear Customer,</p>
+            <p style={{ margin: "0 0 12px" }}>We detected an unauthorized sign-in attempt on your Chase account from an unrecognized device in <strong>Lagos, Nigeria</strong> at 2:14 PM EST today.</p>
+            <p style={{ margin: "0 0 12px" }}>Your account has been temporarily limited. If you do not verify your identity within <strong style={{ color: "#d93025" }}>24 hours</strong>, your account will be <strong style={{ color: "#d93025" }}>permanently suspended</strong>.</p>
+          </div>
+          <div style={{ textAlign: "center", margin: "20px 0" }}>
+            <div onClick={onClick} style={{ display: "inline-block", background: highlight ? "#1557b0" : "#1a73e8", color: "white", padding: "11px 32px", borderRadius: 6, fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", transform: highlight ? "scale(0.97)" : "scale(1)", transition: "all 0.15s", boxShadow: highlight ? "0 0 0 3px rgba(26,115,232,0.3)" : "0 1px 3px rgba(0,0,0,0.12)" }}>
+              Verify Your Identity Now
+            </div>
+          </div>
+          <div style={{ fontSize: 11, color: "#5f6368", lineHeight: 1.5, borderTop: "1px solid #e8eaed", paddingTop: 12, marginTop: 8 }}>
+            If you did not initiate this request, please verify immediately to secure your account.<br /><br />
+            <span style={{ color: "#80868b" }}>Chase Bank Security Team<br />&copy; 2026 JPMorgan Chase & Co.</span>
+          </div>
+        </div>
+      </div>
+      {!highlight && <div style={{ textAlign: "center", marginTop: 16, fontSize: 10, color: "#1a73e8", fontFamily: "'DM Sans', sans-serif", animation: "blink 1.2s ease-in-out infinite" }}>&uarr; Click the blue button</div>}
+    </div>
+  );
+}
+
+function PhishPage({ visible }) {
+  if (!visible) return null;
+  return (
+    <div style={{ animation: "fadeIn 0.4s ease" }}>
+      <div style={{ textAlign: "center", marginBottom: 10, fontSize: 9, color: "#5f6368", fontFamily: "sans-serif" }}>Page loading...</div>
+      <div style={{ background: "#fff", borderRadius: 10, border: "1px solid #dadce0", maxWidth: 340, margin: "0 auto", boxShadow: "0 2px 12px rgba(0,0,0,0.08)", overflow: "hidden" }}>
+        <div style={{ background: "#f1f3f4", padding: "7px 12px", borderBottom: "1px solid #dadce0" }}>
+          <div style={{ fontSize: 8, color: "#5f6368", fontFamily: "'JetBrains Mono', monospace", background: "white", padding: "4px 10px", borderRadius: 12, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>&#x1f512; https://{URL_T}</div>
+        </div>
+        <div style={{ padding: "24px 20px", textAlign: "center", fontFamily: "'DM Sans', sans-serif" }}>
+          <div style={{ width: 44, height: 44, background: "#117ACA", borderRadius: 8, margin: "0 auto 14px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "serif", fontSize: 20, fontWeight: 900, color: "white" }}>C</div>
+          <div style={{ fontSize: 17, fontWeight: 600, color: "#333", marginBottom: 16 }}>Sign in to Chase</div>
+          <input readOnly placeholder="Username" style={{ width: "100%", padding: "9px 11px", marginBottom: 8, border: "1px solid #ccc", borderRadius: 4, fontSize: 13, boxSizing: "border-box" }} />
+          <input readOnly placeholder="Password" type="password" style={{ width: "100%", padding: "9px 11px", marginBottom: 12, border: "1px solid #ccc", borderRadius: 4, fontSize: 13, boxSizing: "border-box" }} />
+          <div style={{ background: "#117ACA", color: "white", padding: "9px", borderRadius: 4, fontSize: 14, fontWeight: 600 }}>Sign In</div>
+          <div style={{ marginTop: 14, padding: "7px 10px", background: "#fff3cd", borderRadius: 4, border: "1px solid #ffc107", fontSize: 10, color: "#856404" }}>&#x26a0; Session expires in <strong>4:59</strong>. Verify now to prevent account suspension.</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [pi, setPi] = useState(0);
+  const [sigs, setSigs] = useState([]);
+  const [score, setScore] = useState(0);
+  const [on, setOn] = useState(false);
+  const [shape, setShape] = useState("");
+  const [verd, setVerd] = useState(false);
+  const [hl, setHl] = useState(false);
+  const [sl, setSl] = useState(0);
+
+  const p = PHASES[pi];
+  const pid = p?.id;
+
+  useEffect(() => { if (on && pi === 0) setPi(1); }, [on]);
+
+  useEffect(() => {
+    if (!on || pi === 0 || pid === "email") return;
+    if (pi >= PHASES.length - 1) return;
+    const t = setTimeout(() => setPi(i => i + 1), p.duration);
+    return () => clearTimeout(t);
+  }, [pi, on, pid]);
+
+  function clickEmail() {
+    if (pid !== "email") return;
+    setHl(true);
+    setTimeout(() => setPi(PHASES.findIndex(x => x.id === "clicking")), 400);
+  }
+
+  useEffect(() => {
+    if (!on) return;
+    const tt = [];
+    for (const sig of SIGNALS) {
+      if (sig.phase === pid) {
+        tt.push(setTimeout(() => {
+          setSigs(prev => [...prev, sig]);
+          setScore(prev => Math.min(prev + sig.weight * 0.14, 1.0));
+        }, sig.delay));
+      }
+    }
+    if (pid === "behavioral") tt.push(setTimeout(() => setShape("CANONICAL"), 1500));
+    if (pid === "verdict") tt.push(setTimeout(() => setVerd(true), 500));
+    return () => tt.forEach(clearTimeout);
+  }, [pid, on]);
+
+  useEffect(() => {
+    if (!["intercept","heuristics","behavioral","visual","meta","claude"].includes(pid)) return;
+    let f;
+    const go = () => { setSl(p => (p + 0.5) % 100); f = requestAnimationFrame(go); };
+    f = requestAnimationFrame(go);
+    return () => cancelAnimationFrame(f);
+  }, [pid]);
+
+  const ds = {};
+  for (const d of DIMS) ds[d] = sigs.filter(s => s.dim === d).length;
+
+  const showEmail = pid === "email";
+  const showPhish = pid === "loading";
+  const showClick = pid === "clicking";
+  const showPipe = ["intercept","heuristics","behavioral","visual","meta","claude","verdict"].includes(pid);
+  const dark = showPipe || showClick || pid === "idle";
+
+  return (
+    <div style={{ minHeight: "100vh", background: dark ? "#05060a" : "#f6f8fc", transition: "background 0.8s ease", fontFamily: "'JetBrains Mono', monospace", overflow: "hidden", position: "relative" }}>
+      {showPipe && !verd && <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 100, background: `linear-gradient(transparent ${sl}%, rgba(6,182,212,0.04) ${sl+0.3}%, transparent ${sl+0.6}%)` }} />}
+      {verd && <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 99, background: "radial-gradient(ellipse at center, rgba(239,68,68,0.06) 0%, transparent 70%)", animation: "pulse 2.5s ease-in-out infinite" }} />}
+      <div style={{ padding: "20px 16px", position: "relative", zIndex: 1, maxWidth: 520, margin: "0 auto" }}>
+
+        {!on && <div style={{ textAlign: "center", paddingTop: 80 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, letterSpacing: "0.4em", color: "#06b6d4", marginBottom: 4 }}>VIRGIL</div>
+          <div style={{ fontSize: 9, color: "#334155", letterSpacing: "0.2em", marginBottom: 40 }}>AI-POWERED PHISHING DETECTION</div>
+          <button onClick={() => setOn(true)} style={{ background: "transparent", border: "1px solid #06b6d4", color: "#06b6d4", padding: "14px 32px", borderRadius: 8, fontSize: 12, fontWeight: 700, letterSpacing: "0.2em", cursor: "pointer", fontFamily: "inherit" }}>START SIMULATION</button>
+          <div style={{ fontSize: 10, color: "#1e293b", marginTop: 14 }}>Watch a phishing attack unfold — from email to verdict</div>
+        </div>}
+
+        <EmailView visible={showEmail} onClick={clickEmail} highlight={hl} />
+
+        {showClick && <div style={{ textAlign: "center", paddingTop: 100, animation: "fadeIn 0.3s" }}>
+          <div style={{ width: 24, height: 24, border: "2px solid #06b6d4", borderTopColor: "transparent", borderRadius: "50%", margin: "0 auto 12px", animation: "spin 0.8s linear infinite" }} />
+          <div style={{ fontSize: 10, color: "#475569" }}>Browser navigating...</div>
+        </div>}
+
+        <PhishPage visible={showPhish} />
+
+        {showPipe && <div style={{ animation: "fadeIn 0.5s" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: "0.35em", color: verd ? "#ef4444" : "#06b6d4", transition: "color 0.5s" }}>VIRGIL</div>
+              <div style={{ fontSize: 8, color: "#334155", letterSpacing: "0.15em", marginTop: 1 }}>INTERCEPTION ACTIVE</div>
+            </div>
+            <div style={{ fontSize: 10 }}>
+              {!verd ? <span style={{ color: "#06b6d4", animation: "blink 1s step-end infinite" }}>&#x25cf; SCANNING</span> : <span style={{ color: "#ef4444", fontWeight: 700 }}>&#x25cf; THREAT DETECTED</span>}
+            </div>
+          </div>
+
+          <div style={{ background: "#0c0d14", border: "1px solid " + (verd ? "#ef444430" : "#1e293b20"), borderRadius: 8, padding: "8px 12px", marginBottom: 12 }}>
+            <div style={{ fontSize: 8, color: "#475569", marginBottom: 3 }}>TARGET</div>
+            <div style={{ fontSize: 11, color: verd ? "#ef4444" : "#94a3b8", wordBreak: "break-all" }}>https://{URL_T}</div>
+          </div>
+
+          {p.label && <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", marginBottom: 10, color: pid === "verdict" ? "#ef4444" : pid === "behavioral" ? "#a855f7" : pid === "claude" ? "#ec4899" : "#06b6d4" }}>
+            {p.label}{pid !== "verdict" && <span style={{ opacity: 0.4, animation: "blink 0.8s step-end infinite" }}> _</span>}
+          </div>}
+
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+            <div style={{ fontSize: 8, color: "#475569", width: 30 }}>RISK</div>
+            <div style={{ flex: 1, height: 6, background: "#111827", borderRadius: 3, overflow: "hidden" }}>
+              <div style={{ height: "100%", borderRadius: 3, width: Math.min(score*100,100)+"%", background: score > 0.7 ? "linear-gradient(90deg,#f97316,#ef4444)" : score > 0.3 ? "linear-gradient(90deg,#06b6d4,#f97316)" : "#06b6d4", transition: "width 0.4s", boxShadow: score > 0.7 ? "0 0 10px rgba(239,68,68,0.3)" : "none" }} />
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 700, width: 40, textAlign: "right", fontVariantNumeric: "tabular-nums", color: score > 0.7 ? "#ef4444" : score > 0.3 ? "#f97316" : "#06b6d4" }}>{(score*100).toFixed(0)}%</div>
+          </div>
+
+          {["behavioral","visual","meta","claude","verdict"].includes(pid) && <div style={{ background: "#0c0d14", border: "1px solid " + (shape ? "#a855f730" : "#111827"), borderRadius: 8, padding: "8px 12px", marginBottom: 10 }}>
+            <div style={{ fontSize: 8, color: "#a855f7", letterSpacing: "0.15em", marginBottom: 6, fontWeight: 700 }}>BEHAVIORAL SHAPE</div>
+            <div style={{ display: "flex", gap: 3, marginBottom: 6, flexWrap: "wrap" }}>
+              {DIMS.map(d => <div key={d} style={{ padding: "2px 6px", borderRadius: 3, background: ds[d] > 0 ? DIM_C[d]+"15" : "#0a0b10", border: "1px solid " + (ds[d] > 0 ? DIM_C[d]+"35" : "transparent"), fontSize: 8, color: ds[d] > 0 ? DIM_C[d] : "#1e293b", fontWeight: ds[d] > 0 ? 700 : 400, transition: "all 0.4s", textTransform: "uppercase" }}>{ds[d] > 0 && "\u25cf "}{d}</div>)}
+            </div>
+            {shape && <div style={{ fontSize: 10, color: "#a855f7", fontWeight: 700, padding: "5px 8px", background: "#a855f708", borderRadius: 4, borderLeft: "2px solid #a855f7" }}>{shape}: email &rarr; first visit &rarr; first credential &rarr; urgency</div>}
+          </div>}
+
+          <div style={{ background: "#0c0d14", border: "1px solid #111827", borderRadius: 8, padding: "8px 12px", marginBottom: 10, maxHeight: 190, overflowY: "auto" }}>
+            <div style={{ fontSize: 8, color: "#475569", letterSpacing: "0.15em", marginBottom: 6, fontWeight: 700 }}>SIGNALS ({sigs.length})</div>
+            {[...sigs].reverse().map((s, i) => <div key={i} style={{ display: "flex", gap: 6, padding: "3px 0", borderBottom: i < sigs.length-1 ? "1px solid #0a0b10" : "none", animation: "fadeSlideIn 0.3s ease" }}>
+              <span style={{ fontSize: 7, fontWeight: 700, flexShrink: 0, padding: "1px 4px", borderRadius: 2, marginTop: 1, color: s.severity === "critical" ? "#ef4444" : s.severity === "high" ? "#f97316" : "#eab308", background: s.severity === "critical" ? "#ef444412" : s.severity === "high" ? "#f9731612" : "#eab30812" }}>{s.severity === "critical" ? "CRIT" : s.severity === "high" ? "HIGH" : "MED"}</span>
+              <div style={{ flex: 1 }}><div style={{ fontSize: 8, color: "#94a3b8", fontWeight: 600 }}>{s.type}</div><div style={{ fontSize: 8, color: "#475569" }}>{s.desc}</div></div>
+              <span style={{ fontSize: 8, color: "#475569", flexShrink: 0 }}>+{s.weight.toFixed(2)}</span>
+            </div>)}
+          </div>
+
+          {pid === "claude" && !verd && <div style={{ background: "#0c0d14", border: "1px solid #ec489920", borderRadius: 8, padding: "12px", marginBottom: 10, textAlign: "center" }}>
+            <div style={{ fontSize: 9, color: "#ec4899", fontWeight: 700, letterSpacing: "0.15em" }}>CLAUDE SONNET 4 ANALYZING</div>
+            <div style={{ fontSize: 8, color: "#475569", marginTop: 3 }}>16 signals + behavioral shape + visual hash &rarr; verdict</div>
+            <div style={{ marginTop: 8, height: 2, background: "#111827", borderRadius: 1, overflow: "hidden" }}><div style={{ height: "100%", background: "#ec4899", animation: "loading 2.5s ease-in-out", borderRadius: 1 }} /></div>
+          </div>}
+
+          {verd && <div style={{ background: "linear-gradient(135deg,#1a0505,#0c0d14)", border: "1px solid #ef444440", borderRadius: 10, padding: "16px 14px", animation: "verdictAppear 0.6s cubic-bezier(0.16,1,0.3,1)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+              <div style={{ width: 34, height: 34, borderRadius: "50%", background: "#ef4444", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 900, color: "white", boxShadow: "0 0 20px rgba(239,68,68,0.4)" }}>!</div>
+              <div><div style={{ fontSize: 14, fontWeight: 800, color: "#ef4444", letterSpacing: "0.15em" }}>DANGEROUS</div><div style={{ fontSize: 9, color: "#fca5a5" }}>Confidence: 0.97</div></div>
+            </div>
+            <div style={{ fontSize: 11, color: "#fecaca", lineHeight: 1.6, marginBottom: 10, fontFamily: "'DM Sans', sans-serif" }}>This page impersonates Chase Bank. The domain was registered 6 hours ago, you arrived via a phishing email, you've never visited this site, and it uses urgency manipulation with a countdown timer to pressure you into entering credentials.</div>
+            <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 10 }}>
+              {[["#ef4444","Chase impersonation"],["#f97316","Domain: 6hrs old"],["#a855f7","Shape: CANONICAL"],["#06b6d4","Visual: 95% match"]].map(([c,l]) => <span key={l} style={{ fontSize: 8, fontWeight: 600, padding: "2px 7px", borderRadius: 3, color: c, background: c+"12", border: "1px solid " + c + "25" }}>{l}</span>)}
+            </div>
+            <div style={{ padding: "8px 10px", background: "#ef444410", borderRadius: 6, borderLeft: "3px solid #ef4444" }}>
+              <div style={{ fontSize: 9, color: "#fca5a5", fontWeight: 700, marginBottom: 3 }}>BLOCKED</div>
+              <div style={{ fontSize: 10, color: "#fecaca" }}>Credential entry blocked. Visit the real Chase at <span style={{ color: "#22c55e", fontWeight: 700 }}>chase.com</span></div>
+            </div>
+            <div style={{ marginTop: 10, fontSize: 8, color: "#475569", textAlign: "center", lineHeight: 1.5 }}>16 signals &bull; 4 behavioral dimensions &bull; 2 meta-rules &bull; 1 visual match<br />Pipeline: 4.2s &mdash; Credential entry was never possible</div>
+          </div>}
+
+          {verd && <div style={{ marginTop: 24, textAlign: "center", fontSize: 9, color: "#334155", lineHeight: 1.6, maxWidth: 360, margin: "24px auto 0" }}>
+            <div style={{ color: "#475569", fontWeight: 700, marginBottom: 4, letterSpacing: "0.1em", fontSize: 10 }}>THE SHAPE IS THE SIGNAL</div>
+            No brand-specific rules were needed. The behavioral shape &mdash; email delivery, unfamiliar domain, credential request, urgency &mdash; is the universal fingerprint of phishing.
+            <div style={{ marginTop: 16, fontSize: 8, color: "#1e293b" }}>VIRGIL &mdash; lumiosecurity.com</div>
+          </div>}
+        </div>}
+
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
