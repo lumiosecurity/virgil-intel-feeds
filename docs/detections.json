@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-08-22:40",
-    "generatedAt": "2026-04-08T22:40:59.867Z",
+    "version": "2026-04-08-23:15",
+    "generatedAt": "2026-04-08T23:15:40.413Z",
     "brandCount": 193,
-    "patternCount": 1105,
+    "patternCount": 1108,
     "networkPatternCount": 21
   },
   "adScriptSignatures": [
@@ -42283,6 +42283,39 @@
       "updated": "2026-04-07",
       "rev": 1,
       "patternString": "\\$\\(['\"]a['\"]\\)\\.attr\\(['\"]href['\"][\\s\\S]{0,200}\\$\\(['\"]a['\"]\\)\\.attr\\(['\"]onclick['\"],\\s*['\"]return\\s+false['\"]\\)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "document-human-verification-gate",
+      "group": "socialEngineering",
+      "description": "Document access page requiring human verification - common phishing social engineering pattern",
+      "severity": "medium",
+      "weight": 0.25,
+      "source": "html",
+      "note": "Combines human verification prompt with document access language - legitimate sites don't typically require CAPTCHA verification to view documents",
+      "patternString": "(?:verify you are human|human verification)[\\s\\S]{0,500}(?:document ready|view file|access document|continue to document)",
+      "patternFlags": "i"
+    },
+    {
+      "id": "fake-document-portal-future-copyright",
+      "group": "socialEngineering",
+      "description": "Page claiming to be secure document portal with suspicious future copyright date",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "note": "Future copyright dates on document portals suggest fake legitimacy - real document services don't use future copyright years",
+      "patternString": "secure document portal[\\s\\S]{0,300}©\\s*(?:202[6-9]|20[3-9][0-9])",
+      "patternFlags": "i"
+    },
+    {
+      "id": "document-ready-review-verification",
+      "group": "socialEngineering",
+      "description": "Document ready for review page with human verification prompt",
+      "severity": "medium",
+      "weight": 0.2,
+      "source": "html",
+      "note": "Specific template language used in document-based phishing campaigns to create urgency and false legitimacy",
+      "patternString": "document ready for review[\\s\\S]{0,200}(?:verify|verification)[\\s\\S]{0,200}human",
       "patternFlags": "i"
     },
     {
