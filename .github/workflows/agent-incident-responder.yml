@@ -1,0 +1,70 @@
+name: Agent — Incident Responder
+
+on:
+  repository_dispatch:
+    types: [sla-breach-critical, verdict-spike]
+  issues:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      trigger:
+        description: 'Incident trigger type'
+        required: true
+        type: choice
+        options: [manual, sla_breach, verdict_spike]
+      spike_brand:
+        description: 'Brand name (for verdict_spike trigger)'
+        required: false
+      issue_number:
+        description: 'Related issue number'
+        required: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  incident-responder:
+    name: Incident Responder
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: |
+      github.event_name == 'repository_dispatch' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issues' && github.event.label.name == 'incident')
+    steps:
+      - name: Checkout virgil-core-rules
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/virgil-core-rules
+          token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+          path: virgil-core-rules
+
+      - name: Checkout virgil-agents
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/virgil-agents
+          token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      - name: Install dependencies
+        run: npm install -g wrangler && npm install @anthropic-ai/sdk 2>/dev/null || true
+
+      - name: Run incident responder
+        env:
+          ANTHROPIC_API_KEY:     ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN:          ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+          CLOUDFLARE_API_TOKEN:  ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SLACK_WEBHOOK_URL:     ${{ secrets.SLACK_WEBHOOK_URL }}
+          WORKER_URL:            ${{ secrets.WORKER_URL }}
+          ORG_NAME:              ${{ github.repository_owner }}
+          CORE_RULES_REPO:       virgil-core-rules
+          INCIDENT_TRIGGER:      ${{ github.event.client_payload.trigger || github.event.inputs.trigger || 'manual' }}
+          BREACH_COMPONENT:      ${{ github.event.client_payload.component || '' }}
+          BREACH_DETAIL:         ${{ github.event.client_payload.detail || '' }}
+          SPIKE_BRAND:           ${{ github.event.client_payload.brand || github.event.inputs.spike_brand || '' }}
+          ISSUE_NUMBER:          ${{ github.event.issue.number || github.event.inputs.issue_number || '' }}
+        run: node agents/agent-incident-responder.js

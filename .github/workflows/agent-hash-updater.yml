@@ -1,0 +1,42 @@
+name: Agent — Perceptual Hash Updater
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  hash-updater:
+    name: Hash Updater
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout virgil-agents
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/virgil-agents
+          token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      - name: Install Puppeteer + dependencies
+        run: |
+          npm install -g wrangler
+          npm install puppeteer @anthropic-ai/sdk 2>/dev/null || true
+          npx puppeteer browsers install chrome 2>/dev/null || true
+
+      - name: Run hash updater agent
+        env:
+          ANTHROPIC_API_KEY:     ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN:          ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+          CLOUDFLARE_API_TOKEN:  ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          ORG_NAME:              ${{ github.repository_owner }}
+          JSQR_KNOWN_HASH:       ${{ secrets.JSQR_KNOWN_HASH }}
+        run: node agents/agent-hash-updater.js

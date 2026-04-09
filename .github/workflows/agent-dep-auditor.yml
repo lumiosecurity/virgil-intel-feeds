@@ -1,0 +1,48 @@
+name: Agent — Dependency Auditor
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  dep-auditor:
+    name: Dependency Auditor
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout virgil-agents
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/virgil-agents
+          token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      - name: Install dependencies
+        run: npm install -g wrangler && npm install @anthropic-ai/sdk 2>/dev/null || true
+
+      - name: Run dependency auditor
+        env:
+          ANTHROPIC_API_KEY:     ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN:          ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+          CLOUDFLARE_API_TOKEN:  ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SLACK_WEBHOOK_URL:     ${{ secrets.SLACK_WEBHOOK_URL }}
+          JSQR_KNOWN_HASH:       ${{ secrets.JSQR_KNOWN_HASH }}
+          ORG_NAME:              ${{ github.repository_owner }}
+          CORE_RULES_REPO:       virgil-core-rules
+        run: node agents/agent-dep-auditor.js
+        continue-on-error: true   # Don't block other workflows on audit failure
+
+      - name: Fail on critical CVEs
+        run: |
+          # Exit code 1 from dep-auditor = critical CVE found
+          # Re-run to capture exit code properly
+          node agents/agent-dep-auditor.js --exit-on-critical || exit 1
+        continue-on-error: false

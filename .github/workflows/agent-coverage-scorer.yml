@@ -1,0 +1,51 @@
+name: Agent — Coverage Scorer
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  coverage-scorer:
+    name: Coverage Scorer
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout intel-feeds
+        uses: actions/checkout@v4
+
+      - name: Checkout virgil-agents
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/virgil-agents
+          token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+          path: virgil-agents
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      - name: Install dependencies
+        run: npm install -g wrangler && npm install @anthropic-ai/sdk 2>/dev/null || true
+        working-directory: virgil-agents
+
+      - name: Run coverage scorer
+        env:
+          ANTHROPIC_API_KEY:     ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN:          ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+          CLOUDFLARE_API_TOKEN:  ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          ORG_NAME:              ${{ github.repository_owner }}
+          CORE_RULES_REPO:       virgil-core-rules
+        run: node virgil-agents/agents/agent-coverage-scorer.js
+
+      - name: Commit coverage.json
+        run: |
+          git config user.name  "lumio-7"
+          git config user.email "lumio-7@lumiosecurity.com"
+          git add docs/coverage.json
+          git diff --staged --quiet || git commit -m "chore: update coverage scores $(date +%Y-%m-%d) [A15]"
+          git push
