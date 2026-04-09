@@ -191,7 +191,10 @@ async function fetchPhishTank() {
 
 async function fetchURLhaus() {
   const key = process.env.URLHAUS_AUTH_KEY;
-  if (!key) throw new Error('URLHAUS_AUTH_KEY not set');
+  if (!key) {
+    console.log('  [skip] URLHAUS_AUTH_KEY not set');
+    return [];
+  }
 
   const resp = await fetch('https://urlhaus-api.abuse.ch/v1/urls/recent/', {
     method: 'POST',
@@ -214,7 +217,10 @@ async function fetchURLhaus() {
 
 async function fetchURLScan() {
   const key = process.env.URLSCAN_API_KEY;
-  if (!key) throw new Error('URLSCAN_API_KEY not set');
+  if (!key) {
+    console.log('  [skip] URLSCAN_API_KEY not set');
+    return [];
+  }
 
   // Query: malicious verdicts from last 24 hours
   const params = new URLSearchParams({
