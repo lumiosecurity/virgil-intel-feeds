@@ -88,6 +88,23 @@ jobs:
             echo "tranco-popularity.json copied to docs/"
           fi
 
+
+      - name: Checkout virgil-agents (for deploy validator)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/virgil-agents
+          token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+          path: virgil-agents
+
+      - name: Run deploy validator (A24)
+        env:
+          ANTHROPIC_API_KEY:     ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN:          ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+          CLOUDFLARE_API_TOKEN:  ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WORKER_URL:            ${{ secrets.WORKER_URL }}
+        run: node virgil-agents/agents/agent-deploy-validator.js
+
       - name: Commit and push
         if: github.event.inputs.dry_run != 'true'
         run: |
