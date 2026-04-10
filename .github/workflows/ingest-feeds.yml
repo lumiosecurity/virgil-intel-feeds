@@ -29,8 +29,15 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - name: Checkout
+      - name: Checkout intel-feeds
         uses: actions/checkout@v4
+
+      - name: Checkout virgil-core-rules (for source patterns)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/virgil-core-rules
+          token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+          path: virgil-core-rules
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -44,6 +51,8 @@ jobs:
           URLSCAN_API_KEY:     ${{ secrets.URLSCAN_API_KEY }}
           PHISHTANK_APP_KEY:   ${{ secrets.PHISHTANK_APP_KEY }}
           URLHAUS_AUTH_KEY:    ${{ secrets.URLHAUS_AUTH_KEY }}
+          CORE_RULES_PATH:     virgil-core-rules/rules/source
+          VIRGIL_GITHUB_TOKEN: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
         run: |
           ARGS="${{ github.event.inputs.feeds }}"
           LIMIT="--limit=${{ github.event.inputs.limit || '500' }}"
