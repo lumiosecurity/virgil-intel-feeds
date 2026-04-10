@@ -227,16 +227,22 @@ async function main() {
     if (!DRY_RUN && results.length > 0) {
       process.stdout.write(`  Posting ${results.length} results... `);
       let posted = 0;
+      let skipped = 0;
       for (const result of results) {
         try {
-          await postResult(result);
-          posted++;
+          const res = await postResult(result);
+          if (res?.skipped) {
+            skipped++;
+          } else {
+            posted++;
+          }
         } catch (e) {
           totals.errors++;
         }
       }
-      console.log(`✓ ${posted} posted`);
-      totals.posted += posted;
+      console.log(`✓ ${posted} new, ${skipped} skipped (already seen)`);
+      totals.posted  += posted;
+      totals.skipped += skipped;
     } else if (DRY_RUN && results.length > 0) {
       console.log(`  [dry-run] Would post ${results.length} results`);
       // Print a sample
@@ -530,6 +536,8 @@ async function postResult(result) {
     const text = await resp.text().catch(() => '');
     throw new Error(`Worker ${resp.status}: ${text.slice(0, 100)}`);
   }
+
+  return resp.json().catch(() => ({}));
 }
 
 
