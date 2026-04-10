@@ -21,9 +21,8 @@
 // OpenPhish requires no key.
 
 import { createHash, createHmac }      from 'crypto';
-import { createBunzip2 }   from 'node:zlib';
-import { pipeline }        from 'node:stream/promises';
-import { Writable }        from 'node:stream';
+import { execSync }        from 'node:child_process';
+import { writeFileSync, readFileSync, unlinkSync } from 'node:fs';
 
 // ── Config ────────────────────────────────────────────────────────────────────
 
@@ -166,22 +165,26 @@ async function fetchPhishTank() {
     : 'https://data.phishtank.com/data/online-valid.json.bz2';
 
   const resp = await fetch(url, {
-    headers: {
-      'User-Agent': 'phishtank/virgil (github.com/lumiosecurity)',
-    },
+    headers: { 'User-Agent': 'phishtank/virgil (github.com/lumiosecurity)' },
   });
 
   if (!resp.ok) throw new Error(`PhishTank HTTP ${resp.status}`);
 
-  // Decompress bz2 stream
-  const chunks = [];
-  const bz2 = createBunzip2();
-  const collect = new Writable({
-    write(chunk, _enc, cb) { chunks.push(chunk); cb(); }
-  });
+  // Write bz2 to temp file, decompress with system bunzip2
+  const tmpBz2  = '/tmp/phishtank.json.bz2';
+  const tmpJson = '/tmp/phishtank.json';
+  const buf = Buffer.from(await resp.arrayBuffer());
+  writeFileSync(tmpBz2, buf);
 
-  await pipeline(resp.body, bz2, collect);
-  const json = JSON.parse(Buffer.concat(chunks).toString('utf8'));
+  try {
+    execSync(`bunzip2 -f -k ${tmpBz2}`, { stdio: 'pipe' });
+  } catch (e) {
+    throw new Error(`bunzip2 failed: ${e.message}`);
+  }
+
+  const json = JSON.parse(readFileSync(tmpJson, 'utf8'));
+
+  try { unlinkSync(tmpBz2); unlinkSync(tmpJson); } catch {}
 
   return json
     .filter(e => e.online === 'yes' && e.verified === 'yes')
