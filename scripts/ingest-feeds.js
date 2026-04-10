@@ -24,6 +24,93 @@ import { createHash, createHmac }      from 'crypto';
 import { execSync }        from 'node:child_process';
 import { writeFileSync, readFileSync, unlinkSync } from 'node:fs';
 
+
+// ── Source pattern matching (mirrors phishkit-detector.js logic) ──────────────
+
+let SOURCE_PATTERNS = null;
+
+async function loadSourcePatterns() {
+  if (SOURCE_PATTERNS) return SOURCE_PATTERNS;
+
+  // Load all pattern files from virgil-core-rules (cloned in CI alongside this script)
+  // Falls back to empty set if not available
+  const PATTERN_FILES = [
+    'phishkitSignatures','credentialHarvesting','brandImpersonation',
+    'socialEngineering','obfuscation','botEvasion','captchaGating',
+    'cdnGating','cookieTheft','hostingPatterns','titleImpersonation',
+    'typosquatPatterns','urlHeuristics',
+  ];
+
+  const patterns = [];
+  const baseDir = process.env.CORE_RULES_PATH || '../virgil-core-rules/rules/source';
+
+  for (const name of PATTERN_FILES) {
+    try {
+      const { readFileSync } = await import('node:fs');
+      const raw  = readFileSync(`${baseDir}/${name}.json`, 'utf8');
+      const data = JSON.parse(raw);
+      const pats = data.patterns || data.sourcePatterns || [];
+      patterns.push(...pats);
+    } catch { /* file not available in this environment */ }
+  }
+
+  SOURCE_PATTERNS = patterns;
+  if (patterns.length > 0) {
+    console.log(`  Loaded ${patterns.length} source patterns`);
+  }
+  return patterns;
+}
+
+function runSourcePatterns(html, js, patterns) {
+  const hits = [];
+
+  for (const p of patterns) {
+    try {
+      let matched = false;
+
+      if (p.patternString) {
+        // Single-regex format
+        const target = p.source === 'js' ? js : p.source === 'html' ? html : html + '\n' + js;
+        const re = new RegExp(p.patternString, p.patternFlags || 'i');
+        matched = re.test(target);
+      } else if (p.match && p.condition) {
+        // Multi-match format — evaluate boolean condition
+        const target = p.source === 'js' ? js : p.source === 'html' ? html : html + '\n' + js;
+        const results = p.match.map(m => {
+          if (m.content)  return target.includes(m.content);
+          if (m.pattern)  return new RegExp(m.pattern, m.flags || 'i').test(target);
+          return false;
+        });
+        // Evaluate condition string: "0 & 1 & (2 | 3)" etc.
+        const expr = p.condition.replace(/(\d+)/g, (_, i) => results[parseInt(i)] ? '1' : '0');
+        matched = eval(expr.replace(/&/g, '&&').replace(/\|/g, '||')) === 1;
+      }
+
+      if (matched) {
+        hits.push({
+          type:        p.id,
+          description: p.description,
+          severity:    p.severity || 'medium',
+          weight:      p.weight   || 0.10,
+          group:       p.group    || 'unknown',
+        });
+      }
+    } catch { /* bad regex — skip */ }
+  }
+
+  return hits;
+}
+
+function extractInlineJs(html) {
+  const scripts = [];
+  const scriptRe = /<script(?![^>]*\bsrc\b)[^>]*>([\s\S]*?)<\/script>/gi;
+  const eventRe  = /\bon\w+\s*=\s*["']([^"']+)["']/gi;
+  let m;
+  while ((m = scriptRe.exec(html)) !== null) scripts.push(m[1]);
+  while ((m = eventRe.exec(html))   !== null) scripts.push(m[1]);
+  return scripts.join('\n');
+}
+
 // ── Config ────────────────────────────────────────────────────────────────────
 
 const TELEMETRY_ENDPOINT = process.env.TELEMETRY_ENDPOINT;
@@ -100,18 +187,40 @@ async function main() {
       continue;
     }
 
+    // Load source patterns once per run
+    const patterns = await loadSourcePatterns();
+
     // Analyse in concurrent batches
     let done = 0;
     const results = [];
 
     for (let i = 0; i < urls.length; i += CONCURRENCY) {
       const batch = urls.slice(i, i + CONCURRENCY);
-      const analysed = await Promise.all(batch.map(url => analyseUrl(url, feed.name)));
+      const analysed = await Promise.all(batch.map(async url => {
+        // Step 1: URL heuristics (fast, no network)
+        const urlResult = analyseUrl(url, feed.name);
+        if (!urlResult) return null;
+
+        // Step 2: Fetch page source via worker proxy and run source patterns
+        let sourceHits = [];
+        if (patterns.length > 0 && TELEMETRY_ENDPOINT) {
+          const pageData = await fetchPageSource(url);
+          if (pageData?.source) {
+            const html = pageData.source;
+            const js   = extractInlineJs(html);
+            sourceHits = runSourcePatterns(html, js, patterns);
+            // Re-analyse with page content merged in
+            return analyseUrl(url, feed.name, pageData, sourceHits);
+          }
+        }
+        return urlResult;
+      }));
       results.push(...analysed.filter(Boolean));
       done += batch.length;
       process.stdout.write(`\r  Analysing... ${done}/${urls.length}`);
     }
-    console.log(`\r  Analysed: ${results.length} produced signals`);
+    const sourceCount = results.filter(r => r.hadPageContent).length;
+    console.log(`\r  Analysed: ${results.length} with signals (${sourceCount} with page content)`);
     totals.analysed += results.length;
 
     // Post results
@@ -254,7 +363,7 @@ async function fetchURLScan() {
 // Mirrors the extension's signal detection — same weights, same logic.
 // This is the source of truth for the corpus signal data.
 
-function analyseUrl(url, feedSource) {
+function analyseUrl(url, feedSource, pageData = null, sourcePatternHits = []) {
   try {
     const parsed = new URL(url);
     const hostname = parsed.hostname.toLowerCase();
@@ -340,16 +449,33 @@ function analyseUrl(url, feedSource) {
     // Only return if meaningful signal
     if (score < 0.10 && signals.length === 0) return null;
 
+    // Merge source pattern hits into signals
+    const allSourceSignals = sourcePatternHits.map(h => ({
+      type:        h.type,
+      severity:    h.severity,
+      weight:      h.weight,
+      description: h.description,
+    }));
+
+    // Add source pattern weights to score
+    const sourceScore = allSourceSignals.reduce((s, h) => s + h.weight, 0);
+    const finalScore  = Math.min(score + sourceScore, 1.0);
+
     return {
       url,
-      urlHash: sha256Sync(url),
+      urlHash:          sha256Sync(url),
       registeredDomain: regDomain,
       tld,
-      riskScore: score,
-      signals: signals.map(s => ({ type: s.type, severity: s.severity, weight: s.weight })),
-      detectedBrand: brandSub || brandGlyph || null,
+      riskScore:        finalScore,
+      signals:          [
+        ...signals.map(s => ({ type: s.type, severity: s.severity, weight: s.weight })),
+        ...allSourceSignals,
+      ],
+      detectedBrand:    brandSub || brandGlyph || null,
       feedSource,
-      ingestedAt: new Date().toISOString(),
+      pageTitle:        pageData?.title || null,
+      hadPageContent:   !!pageData,
+      ingestedAt:       new Date().toISOString(),
     };
 
   } catch {
@@ -357,6 +483,28 @@ function analyseUrl(url, feedSource) {
   }
 }
 
+
+
+// ── Fetch page source via worker proxy ───────────────────────────────────────
+
+async function fetchPageSource(url) {
+  if (!TELEMETRY_ENDPOINT) return null;
+  try {
+    const resp = await fetch(`${TELEMETRY_ENDPOINT}/fetch-source`, {
+      method:  'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent':   'Virgil-Intel-Sync/1.0',
+        // fetch-source accepts requests from localhost/file origins — no HMAC needed
+      },
+      body:    JSON.stringify({ url, timeout: 8000 }),
+      signal:  AbortSignal.timeout(12000),
+    });
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    return data.ok ? data : null;
+  } catch { return null; }
+}
 
 // ── POST to telemetry worker ───────────────────────────────────────────────────
 
