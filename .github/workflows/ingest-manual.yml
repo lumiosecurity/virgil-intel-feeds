@@ -1,0 +1,56 @@
+name: Ingest — Manual URL List
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: 'URLs to ingest (one per line, or comma-separated)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run — analyse only, do not post to D1'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  ingest-manual:
+    name: Manual Ingest
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout intel-feeds
+        uses: actions/checkout@v4
+
+      - name: Checkout virgil-core-rules (for source patterns)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/virgil-core-rules
+          token: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+          path: virgil-core-rules
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run manual ingestion
+        env:
+          TELEMETRY_ENDPOINT:  ${{ secrets.TELEMETRY_ENDPOINT }}
+          PIPELINE_SECRET:     ${{ secrets.PIPELINE_SECRET }}
+          CORE_RULES_PATH:     virgil-core-rules/rules/source
+          VIRGIL_GITHUB_TOKEN: ${{ secrets.VIRGIL_GITHUB_TOKEN }}
+          URLS:                ${{ github.event.inputs.urls }}
+        run: |
+          ARGS=""
+          [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="--dry-run"
+          node scripts/ingest-manual.js $ARGS
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Manual Ingest Results" >> $GITHUB_STEP_SUMMARY
+          echo "**URLs submitted:** $(echo '${{ github.event.inputs.urls }}' | tr ',' '\n' | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "**Mode:** ${{ github.event.inputs.dry_run == 'true' && 'Dry run' || 'Live' }}" >> $GITHUB_STEP_SUMMARY
