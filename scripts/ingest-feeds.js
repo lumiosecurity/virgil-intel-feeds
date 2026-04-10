@@ -193,29 +193,28 @@ async function fetchPhishTank() {
 }
 
 async function fetchURLhaus() {
-  const key = process.env.URLHAUS_AUTH_KEY;
-  if (!key) {
-    console.log('  [skip] URLHAUS_AUTH_KEY not set');
-    return [];
-  }
-
-  const resp = await fetch('https://urlhaus-api.abuse.ch/v1/urls/recent/', {
-    method: 'POST',
-    headers: {
-      'Auth-Key': key,
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'User-Agent': 'Virgil-Intel-Sync/1.0',
-    },
-    body: 'limit=1000',
+  // Public CSV feed — no auth required, updated every 5 minutes
+  // https://urlhaus.abuse.ch/downloads/csv_recent/
+  const resp = await fetch('https://urlhaus.abuse.ch/downloads/csv_recent/', {
+    headers: { 'User-Agent': 'Virgil-Intel-Sync/1.0 (github.com/lumiosecurity)' },
+    signal: AbortSignal.timeout(15000),
   });
 
   if (!resp.ok) throw new Error(`URLhaus HTTP ${resp.status}`);
-  const data = await resp.json();
+  const text = await resp.text();
 
-  return (data.urls || [])
-    .filter(e => e.url_status === 'online')
-    .map(e => e.url)
-    .filter(isValidUrl);
+  // CSV: id,dateadded,url,url_status,last_online,threat,tags,urlhaus_link,reporter
+  // Lines starting with # are comments
+  return text
+    .split('\n')
+    .filter(line => line && !line.startsWith('#'))
+    .map(line => {
+      // URL is the 3rd column — strip surrounding quotes
+      const cols = line.match(/(".*?"|[^,]+)/g) || [];
+      return cols[2]?.replace(/^"|"$/g, '').trim();
+    })
+    .filter(isValidUrl)
+    .slice(0, 500);
 }
 
 async function fetchURLScan() {
@@ -238,6 +237,10 @@ async function fetchURLScan() {
     },
   });
 
+  if (resp.status === 403) {
+    console.log('  [skip] URLScan API key invalid or not set — get a free key at urlscan.io');
+    return [];
+  }
   if (!resp.ok) throw new Error(`URLScan HTTP ${resp.status}`);
   const data = await resp.json();
 
