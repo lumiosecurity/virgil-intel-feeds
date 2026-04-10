@@ -1,0 +1,15 @@
+{
+  "generated_at": "2026-04-10T11:14:15.148Z",
+  "window_days": 7,
+  "overall": {
+    "local_coverage": null,
+    "trend": 0,
+    "total_dangerous": 0,
+    "local_caught": 0,
+    "ai_calls_made": 0,
+    "wau": 0
+  },
+  "by_vertical": {},
+  "by_brand": [],
+  "below_threshold": []
+}
