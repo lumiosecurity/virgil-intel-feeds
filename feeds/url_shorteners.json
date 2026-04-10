@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/url_shorteners.txt",
-    "syncedAt": "2026-04-09T07:03:54.686Z",
+    "syncedAt": "2026-04-10T19:46:41.250Z",
     "role": "url_shorteners",
     "description": "URL shorteners that can mask phishing destinations",
-    "count": 337
+    "count": 342
   },
   "entries": [
     "1in.me",
@@ -84,6 +84,7 @@
     "fire.to",
     "firsturl.de",
     "flic.kr",
+    "flowcode.com",
     "flowto.it",
     "fly2.ws",
     "fon.gs",
@@ -189,8 +190,10 @@
     "profile.to",
     "qicute.com",
     "qlnk.net",
+    "qr.coffee",
     "qr.fm",
     "qrco.de",
+    "qrkit.co",
     "qrsu.io",
     "qti.ai",
     "quip-art.com",
@@ -206,6 +209,7 @@
     "rsmonkey.com",
     "ru.ly",
     "rubyurl.com",
+    "s.craft.me",
     "s.id",
     "s7y.us",
     "safe.mn",
@@ -217,6 +221,7 @@
     "short.ie",
     "short.io",
     "short.to",
+    "shorten.world",
     "shorter.gg",
     "shorter.me",
     "shortlinks.co.uk",

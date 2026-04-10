@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/self_service_creation_platform_domains.txt",
-    "syncedAt": "2026-04-09T07:03:54.547Z",
+    "syncedAt": "2026-04-10T19:46:40.956Z",
     "role": "free_subdomain_hosts",
     "description": "Self-service website creation platforms where anyone can host content",
-    "count": 93
+    "count": 97
   },
   "entries": [
     "acrobat.adobe.com",
@@ -45,12 +45,14 @@
     "formstack.com",
     "frame.io",
     "framer.app",
+    "framer.media",
     "framer.website",
     "freshdesk.com",
     "gamma.app",
     "heightsplatform.com",
     "heyflow.site",
     "intakeq.com",
+    "ipfs.dweb.link",
     "ipfs.io",
     "issuu.com",
     "isu.pub",
@@ -60,6 +62,7 @@
     "larksuite.com",
     "lighthouse.storage",
     "lovable.app",
+    "miricanvas.com",
     "mixpanel.com",
     "mockflow.com",
     "netlify.app",
@@ -79,6 +82,7 @@
     "seesaw.me",
     "soloist.ai",
     "square.site",
+    "static.hf.space",
     "studio.site",
     "surveymonkey.com",
     "systeme.io",
