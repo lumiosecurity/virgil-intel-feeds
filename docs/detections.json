@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-11-22:41",
-    "generatedAt": "2026-04-11T22:41:46.139Z",
+    "version": "2026-04-11-22:47",
+    "generatedAt": "2026-04-11T22:47:28.190Z",
     "brandCount": 193,
     "patternCount": 1105,
     "networkPatternCount": 21
@@ -27440,14 +27440,14 @@
     {
       "id": "fake-delivery-status-tracker",
       "group": "brandImpersonation",
-      "description": "Fake package tracking status UI with progress bar/steps — courier tracking page impersonation",
+      "description": "Fake package tracking status UI demanding payment for delivery fees/customs — courier tracking page impersonation",
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "note": "Fake delivery tracking status UIs showing package progress (in transit, processing, out for delivery) with a progress bar/steps UI create believable courier page impersonation. The tracking UI is real-looking but the action (pay/verify) is the scam.",
+      "note": "Fake delivery tracking pages impersonating couriers that demand small fees for customs, redelivery, or package release. Legitimate retailers show tracking but don't demand unexpected payment fees. The tracking UI looks real but the fee demand is the scam.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-11",
+      "rev": 2,
       "match": [
         {
           "content": "tracking",
@@ -27455,11 +27455,11 @@
           "fast_pattern": true
         },
         {
-          "pattern": "in\\s*transit|out\\s*for\\s*delivery|delivered|processing|shipped|dispatch",
+          "pattern": "in\\s*transit|out\\s*for\\s*delivery|delivered|processing|shipped|dispatch|held|pending",
           "flags": "i"
         },
         {
-          "pattern": "(?:provide|enter|confirm|update).*(?:address|payment|\\bcard\\b|details)",
+          "pattern": "(?:delivery|customs?|redelivery|shipping)\\s*(?:fee|charge|payment)|(?:pay|confirm).*(?:to\\s*(?:release|deliver|receive))|(?:failed|unable)\\s*(?:to\\s*)?deliver|(?:additional|small)\\s*(?:fee|payment)|reschedule.*(?:pay|fee)",
           "flags": "i"
         },
         {
@@ -27468,7 +27468,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "courier-logo-header-form-combo",
@@ -30901,12 +30901,12 @@
       "group": "credentialHarvesting",
       "description": "Address update form for supposed delivery problem — harvests full physical address and personal info",
       "severity": "medium",
-      "weight": 0.25,
+      "weight": 0.2,
       "source": "html",
-      "note": "Address update forms claiming delivery failure due to incorrect/incomplete address harvest full physical addresses. The data enables identity theft, physical attacks, and targeted social engineering with the victim's real address.",
+      "note": "Address update forms claiming delivery failure due to incorrect/incomplete address harvest full physical addresses. Refined to require phishing-specific delivery failure language and exclude pages with legitimate account navigation elements. The data enables identity theft, physical attacks, and targeted social engineering with the victim's real address.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-11",
+      "rev": 2,
       "match": [
         {
           "content": "address",
@@ -30926,12 +30926,21 @@
           "flags": "i"
         },
         {
+          "pattern": "(?:delivery\\s+(?:failed|problem|issue|attempt)|package\\s+(?:held|waiting|returned)|unable\\s+to\\s+deliver|address\\s+(?:incorrect|incomplete|invalid))",
+          "flags": "i"
+        },
+        {
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "pattern": "(?:my[\\s-]?account|order\\s+history|track\\s+(?:my\\s+)?order|sign\\s+out|log\\s*out)",
+          "flags": "i",
+          "negated": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
     },
     {
       "id": "small-fee-card-harvest",
@@ -40090,12 +40099,12 @@
       "group": "socialEngineering",
       "description": "Fake subscription renewal or expiration warning — McAfee/Norton/antivirus phishing",
       "severity": "high",
-      "weight": 0.25,
+      "weight": 0.2,
       "source": "html",
-      "note": "Fake subscription renewal scams impersonating McAfee, Norton, and other software are a top phishing vector. They create urgency about 'expired protection' to harvest payment information. [FP fix: requires form/input element] [FP fix v2: expiry keywords must appear within 3000 chars of form/input]",
+      "note": "Fake subscription renewal scams impersonating McAfee, Norton, and other software are a top phishing vector. They create urgency about 'expired protection' to harvest payment information. [FP fix: requires form/input element] [FP fix v2: requires security software brand OR threat/urgency language typical of tech support scams]",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-11",
+      "rev": 2,
       "match": [
         {
           "content": "subscription",
@@ -40107,11 +40116,15 @@
           "flags": "i"
         },
         {
-          "pattern": "renew|reactivat|restore|update.*(?:now|payment)|\\bpay\\b|\\bcard\\b|\\$",
+          "pattern": "renew|reactivat|restore|update.*(?:now|payment)|\\bpay\\b|\\$\\d",
           "flags": "i"
         },
         {
           "pattern": "<(?:form|input)",
+          "flags": "i"
+        },
+        {
+          "pattern": "mcafee|norton|avast|avg|kaspersky|bitdefender|windows\\s*defender|virus|malware|threat|infected|at\\s*risk|unprotected|computer.*(?:danger|risk)|(?:act|renew|call).*(?:immediately|now|today)|your.*(?:pc|computer|device).*(?:is|are|will\\s*be)",
           "flags": "i"
         },
         {
@@ -40120,7 +40133,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "fake-airdrop-claim-page",
@@ -40294,14 +40307,14 @@
     {
       "id": "invoice-payment-bec-lure",
       "group": "socialEngineering",
-      "description": "Invoice payment or wire transfer urgency text — BEC landing page indicator",
+      "description": "Minimal page with invoice/wire payment harvesting — BEC landing page indicator",
       "severity": "medium",
-      "weight": 0.25,
+      "weight": 0.2,
       "source": "html",
-      "note": "Invoice/payment urgency text combined with payment action prompts is characteristic of Business Email Compromise landing pages. These harvest banking details or redirect victims to payment fraud pages.",
+      "note": "BEC landing pages typically lack navigation/footer infrastructure and prompt users to enter or update banking details. Requires minimal page structure plus active credential harvesting language to distinguish from legitimate invoice documentation.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-11",
+      "rev": 2,
       "match": [
         {
           "content": "invoice",
@@ -40320,9 +40333,23 @@
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "content": "<footer",
+          "negated": true,
+          "nocase": true
+        },
+        {
+          "pattern": "<input[^>]*type=[\"']?(?:text|email|password|tel)",
+          "flags": "i",
+          "negated": false
+        },
+        {
+          "pattern": "(?:update|verify|confirm|submit)\\s*(?:your)?\\s*(?:payment|banking|account)",
+          "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
     },
     {
       "id": "geek-squad-renewal-scam",
@@ -41186,14 +41213,14 @@
     {
       "id": "zerofont-preheader-fake-security",
       "group": "socialEngineering",
-      "description": "Hidden preheader text claiming email was scanned/verified — ZeroFont fake security assurance",
+      "description": "Hidden preheader text claiming email was scanned/verified combined with phishing urgency indicators — ZeroFont fake security assurance",
       "severity": "high",
-      "weight": 0.3,
+      "weight": 0.25,
       "source": "html",
-      "note": "Hidden text claiming 'Scanned and secured by Advanced Threat Protection' or similar fake security assurances appears in email previews, making the message look legitimate. SANS ISC documented this as a 'new spin' on ZeroFont in September 2023, still active.",
+      "note": "Hidden text claiming 'Scanned and secured by Advanced Threat Protection' combined with phishing urgency language. Requires both fake security preheader AND phishing call-to-action to reduce false positives from legitimate email disclaimers. SANS ISC documented this as a 'new spin' on ZeroFont in September 2023.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-11",
+      "rev": 2,
       "match": [
         {
           "content": "font-size",
@@ -41204,16 +41231,25 @@
           "flags": "i"
         },
         {
-          "pattern": "scanned|verified|secured|protected|safe|clean|threat\\s*protection|virus\\s*free|malware\\s*free|trusted",
+          "pattern": "scanned\\s+(and\\s+)?(secured|verified)|verified\\s+by\\s+[a-z]+\\s*(threat|security|protection)|advanced\\s+threat\\s+protection|microsoft\\s+defender\\s+(has\\s+)?scanned",
+          "flags": "i"
+        },
+        {
+          "pattern": "verify\\s+(your|now)|confirm\\s+(your|now)|update\\s+(your|payment|billing)|action\\s+required|account\\s+(suspended|locked|limited)|click\\s+(here|below)|expire[sd]?|urgent",
           "flags": "i"
         },
         {
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "content": "<footer",
+          "negated": true,
+          "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "shared-document-view-prompt",
@@ -41501,14 +41537,14 @@
     {
       "id": "callback-phishing-phone-cancel",
       "group": "socialEngineering",
-      "description": "Callback phishing — subscription/invoice with phone number to call for cancellation",
+      "description": "Callback phishing — urgent subscription/invoice scam with phone number to call for cancellation",
       "severity": "high",
-      "weight": 0.3,
+      "weight": 0.25,
       "source": "html",
-      "note": "Callback phishing: fake invoice/subscription with phone number to call for cancellation. [FP fix: added word boundaries (\"border\" was matching \"order\"), requires actual phone number format (not just the word \"call\"), cancel/refund must be within 2000 chars of the phone number, added <nav> negation.]",
+      "note": "Callback phishing: fake urgent invoice/subscription with phone number to call for cancellation. [FP fix v2: added urgency indicators requirement (will be charged, immediately, etc.), reduced proximity window from 2000 to 800 chars, added negation for legitimate customer service language (business hours, etc.), slightly reduced weight.]",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-11",
+      "rev": 2,
       "match": [
         {
           "content": "cancel",
@@ -41520,20 +41556,29 @@
           "flags": "i"
         },
         {
-          "pattern": "(?:call|phone|dial|contact)\\s{0,5}(?:us\\s+)?(?:at\\s+)?(?:\\+?1[\\s.-]?)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}|(?:\\+?1[\\s.-]?)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}",
+          "pattern": "(?:call|phone|dial|contact)\\s{0,5}(?:us\\s+)?(?:at\\s+)?(?:\\+?1[\\s.-]?)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}",
           "flags": "i"
         },
         {
-          "pattern": "(?:cancel|refund|dispute|unauthorized)[\\s\\S]{0,2000}\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}|\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}[\\s\\S]{0,2000}(?:cancel|refund|dispute|unauthorized)",
+          "pattern": "(?:cancel|refund|dispute|unauthorized)[\\s\\S]{0,800}\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}|\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}[\\s\\S]{0,800}(?:cancel|refund|dispute|unauthorized)",
+          "flags": "i"
+        },
+        {
+          "pattern": "\\b(?:will\\s+be\\s+charged|has\\s+been\\s+charged|auto[\\s-]?renew|immediately|within\\s+\\d+\\s+hours?|urgent|act\\s+now|today|debited\\s+from|charged\\s+to\\s+your)\\b",
           "flags": "i"
         },
         {
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "pattern": "\\b(?:customer\\s+service\\s+hours|business\\s+hours|mon(?:day)?\\s*[-–]\\s*fri(?:day)?|our\\s+team\\s+is\\s+available)\\b",
+          "negated": true,
+          "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
     },
     {
       "id": "callback-phishing-amount-phone",
