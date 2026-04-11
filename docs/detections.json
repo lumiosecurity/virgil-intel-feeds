@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-11-22:47",
-    "generatedAt": "2026-04-11T22:47:28.190Z",
+    "version": "2026-04-11-22:53",
+    "generatedAt": "2026-04-11T22:53:03.337Z",
     "brandCount": 193,
-    "patternCount": 1105,
+    "patternCount": 1104,
     "networkPatternCount": 21
   },
   "adScriptSignatures": [
@@ -31939,14 +31939,14 @@
     {
       "id": "vite-build-pattern-phishing",
       "group": "hostingPatterns",
-      "description": "Vite build pattern with hashed asset names and minimal HTML commonly used for phishing SPAs on legitimate platforms",
+      "description": "Vite build pattern with hashed asset names - extremely common in legitimate sites, minimal signal value",
       "severity": "low",
-      "weight": 0.05,
+      "weight": 0.01,
       "source": "html",
-      "note": "Vite bundler output pattern with hashed filenames - low weight as legitimate sites use this too, but useful as corroborating signal",
+      "note": "Vite bundler output pattern - near-zero weight as this is standard for modern web apps. Only useful when combined with multiple other strong phishing indicators. Consider retiring if FPs persist.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-11",
+      "rev": 2,
       "patternString": "crossorigin\\s+src=['\"][^'\"]*assets/index-[A-Za-z0-9_-]{8,}\\.(js|css)['\"][\\s\\S]{0,200}link[^>]*stylesheet[^>]*crossorigin[^>]*assets/index-[A-Za-z0-9_-]{8,}\\.css",
       "patternFlags": "i"
     },
@@ -35837,15 +35837,15 @@
     {
       "id": "unicode-login-evasion",
       "group": "phishkitSignatures",
-      "description": "Unicode character substitution in login-related titles",
+      "description": "Unicode homoglyph substitution in login-related text (g replaced with lookalikes)",
       "severity": "high",
       "weight": 0.35,
       "source": "html",
       "note": "",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
-      "patternString": "Lo[ᘜ𝗀ɡ𝙜]in|[Ll]o[ᘜ𝗀ɡ𝙜]in|Login.*[®™©]",
+      "updated": "2026-04-11",
+      "rev": 2,
+      "patternString": "[Ll]o[ᘜ𝗀𝙜]in|[Ll]oɡin",
       "patternFlags": "i"
     },
     {
@@ -36994,20 +36994,6 @@
       "updated": "2026-04-07",
       "rev": 1,
       "patternString": "navigator\\.serviceWorker\\.register\\([\\s\\S]{0,200}(?:\\.js|\\.php|sw\\.js|worker\\.js)",
-      "patternFlags": "i"
-    },
-    {
-      "id": "cache-busting-hash-filename",
-      "group": "phishkitSignatures",
-      "description": "JavaScript file loaded with cache-busting hash in filename — BlackForce kit signature",
-      "severity": "medium",
-      "weight": 0.2,
-      "source": "html",
-      "note": "JavaScript files with cache-busting hashes in filenames like index-a1b2c3d4.js are characteristic of BlackForce phishing kit. The hashes force browsers to load fresh copies, bypassing cached security analysis.",
-      "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
-      "patternString": "<script[^>]*src=['\"][^'\"]*index-[a-f0-9]{8,}[\\._-]?[a-f0-9]*\\.js['\"]",
       "patternFlags": "i"
     },
     {
@@ -41143,22 +41129,22 @@
       "severity": "high",
       "weight": 0.3,
       "source": "html",
-      "note": "Threatening DMV action, vehicle registration holds, or license plate suspension for unpaid tolls is the highest-pressure escalation in toll phishing. Real toll agencies follow lengthy legal processes, not instant SMS threats. [FP fix: requires form/input element] [FP fix v2: requires proximity to form/input element]",
+      "note": "Threatening DMV action, vehicle registration holds, or license plate suspension for unpaid tolls is the highest-pressure escalation in toll phishing. Real toll agencies follow lengthy legal processes, not instant SMS threats. [FP fix: requires form/input element] [FP fix v2: requires toll-specific keyword to establish context, preventing matches on unrelated registration contexts like gaming/church sites]",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-11",
+      "rev": 2,
       "match": [
         {
-          "content": "registration",
-          "nocase": true,
+          "pattern": "toll|ezpass|sunpass|fastrak|e-?zpass|ipass|peach\\s*pass",
+          "flags": "i",
           "fast_pattern": true
         },
         {
-          "pattern": "registration|license|vehicle|DMV|plate",
+          "pattern": "vehicle\\s*registration|DMV|license\\s*plate|plate\\s*number",
           "flags": "i"
         },
         {
-          "pattern": "suspend|revoke|cancel|hold|penalty|fine|fee",
+          "pattern": "suspend|revoke|cancel|hold|penalty|fine(?:s)?\\b",
           "flags": "i"
         },
         {
@@ -41171,7 +41157,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "toll-collections-escalation",
@@ -41180,26 +41166,22 @@
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "note": "Threatening collections agency referral, legal action, or credit score impact for unpaid tolls is extreme-pressure toll phishing. Real toll debt follows months of physical mail notices before any collections referral.",
+      "note": "Threatening collections agency referral, legal action, or credit score impact for unpaid tolls is extreme-pressure toll phishing. Pattern now requires explicit toll-road context (toll authority names or toll+collections proximity) to avoid FPs on sites using 'collection' in other contexts.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-11",
+      "rev": 2,
       "match": [
         {
-          "content": "collection",
-          "nocase": true,
+          "pattern": "(?:toll|e-?z\\s*pass|sun\\s*pass|fast\\s*trak|i-?pass|pike\\s*pass|good\\s*to\\s*go|peach\\s*pass|express\\s*lane)\\s*.{0,50}(?:collection|legal\\s*action|court|attorney|judgment)",
+          "flags": "i",
           "fast_pattern": true
         },
         {
-          "pattern": "collection|legal\\s*action|court|attorney|judgment|credit\\s*(?:report|score|bureau)",
+          "pattern": "unpaid\\s*(?:toll|violation|balance)|(?:toll|violation)\\s*(?:fee|charge|balance)",
           "flags": "i"
         },
         {
-          "pattern": "toll|unpaid|balance|violation|outstanding",
-          "flags": "i"
-        },
-        {
-          "pattern": "\\bpay\\b|\\bcard\\b|fee|amount|charge|\\$",
+          "pattern": "\\bpay\\b|\\bcard\\b|amount|\\$\\s*\\d",
           "flags": "i"
         },
         {
@@ -42889,15 +42871,15 @@
     {
       "id": "whatsapp-extra-char-typosquat",
       "group": "typosquatPatterns",
-      "description": "WhatsApp typosquats with extra repeated characters in domain context",
+      "description": "WhatsApp typosquats with extra repeated characters - domain must be the typosquatted name itself",
       "severity": "high",
       "weight": 0.35,
       "source": "html",
       "note": "",
       "created": "2026-04-07",
       "updated": "2026-04-11",
-      "rev": 2,
-      "patternString": "(?:https?://|//|[\"'])[\\w.-]*(?:whatt+s?app|whatss+app|wh+atsapp|whatsap+p+)[\\w.-]*\\.",
+      "rev": 3,
+      "patternString": "(?:https?://|//)(?:www\\.)?(?:whatt+s?app|whatss+app|wh+atsapp|whatsap+p+)(?:-[\\w]+)?\\.[a-z]{2,10}(?:[/?#]|$)",
       "patternFlags": "i"
     },
     {
@@ -43190,12 +43172,12 @@
       "group": "urlHeuristics",
       "description": "Detects domains using brand-job/career/hiring pattern with fake meeting or reference IDs commonly used in employment scam phishkits",
       "severity": "high",
-      "weight": 0.45,
+      "weight": 0.4,
       "source": "url",
-      "note": "",
+      "note": "Refined to require suspicious ID/token parameters typical of phishkits; legitimate career sites use structured paths not random IDs",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-11",
+      "rev": 2,
       "match": [
         {
           "content": "job",
@@ -43211,7 +43193,7 @@
           "flags": "i"
         },
         {
-          "pattern": "\\\\.(?:com|org|net|info)",
+          "pattern": "(?:ref(?:erence)?|meeting|verify|confirm|id|token|session|code)[=_-]?[a-z0-9]{8,}",
           "flags": "i"
         },
         {
@@ -43220,7 +43202,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "constantcontact-landing-page-abuse",
