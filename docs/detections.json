@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-11-22:34",
-    "generatedAt": "2026-04-11T22:34:41.325Z",
+    "version": "2026-04-11-22:36",
+    "generatedAt": "2026-04-11T22:36:56.513Z",
     "brandCount": 193,
     "patternCount": 1105,
     "networkPatternCount": 21
@@ -36807,7 +36807,7 @@
       "group": "phishkitSignatures",
       "description": "Keystroke accumulation via keypress/keydown handler — credential keylogger pattern (building-block signal only)",
       "severity": "low",
-      "weight": 0.02,
+      "weight": 0.05,
       "source": "js",
       "note": "DOWNWEIGHTED from 0.05 to 0.02 after FPs on abbott.com, zoom.us, ladesk.com. Pattern matches legitimate SPA behaviors (search-as-you-type, form UX). Weight 0.02 ensures this is purely a supporting signal — requires multiple corroborating indicators (fake login form, brand impersonation, suspicious domain) to contribute to detection. Candidate for meta-rule that combines with document-level listener scope or external exfil domain checks.",
       "created": "2026-04-07",
