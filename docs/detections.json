@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-11-05:47",
-    "generatedAt": "2026-04-11T05:47:48.556Z",
+    "version": "2026-04-11-22:34",
+    "generatedAt": "2026-04-11T22:34:41.325Z",
     "brandCount": 193,
-    "patternCount": 1108,
+    "patternCount": 1105,
     "networkPatternCount": 21
   },
   "adScriptSignatures": [
@@ -27334,34 +27334,6 @@
       "patternFlags": "i"
     },
     {
-      "id": "brand-logo-svg-inline",
-      "group": "brandImpersonation",
-      "description": "Major brand logo embedded as inline SVG to avoid external image loading detection",
-      "severity": "low",
-      "weight": 0.05,
-      "source": "html",
-      "note": "Embedding brand logos as inline SVG avoids making external requests that could be tracked or blocked. Phishing kits inline SVG brand logos so the page looks legitimate without loading any external assets. — LOWERED: SVG icons are ubiquitous on legitimate sites",
-      "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
-      "match": [
-        {
-          "content": "<svg",
-          "fast_pattern": true
-        },
-        {
-          "pattern": "Microsoft|Google|Apple|PayPal|Amazon|Netflix|Facebook|LinkedIn|Dropbox|Adobe|Zoom|Slack",
-          "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
-        }
-      ],
-      "condition": "0 & 1 & 2"
-    },
-    {
       "id": "theme-color-mobile-branding",
       "group": "brandImpersonation",
       "description": "Theme-color meta tag set to match brand colors — mobile browser chrome impersonation",
@@ -28310,12 +28282,12 @@
       "group": "captchaGating",
       "description": "CAPTCHA success triggers fetch for phishing page payload — Tycoon's gate-then-load architecture",
       "severity": "high",
-      "weight": 0.3,
+      "weight": 0.25,
       "source": "both",
-      "note": "After successful CAPTCHA verification, Tycoon fetches the actual phishing page payload from an attacker-controlled server. The CAPTCHA gate→success→fetch-payload chain ensures security scanners that can't solve the CAPTCHA never see the credential form. [FP fix: added <nav negation - legitimate sites with reCAPTCHA + fetch (WordPress, CMS) always have navigation elements]",
+      "note": "After successful CAPTCHA verification, Tycoon fetches the actual phishing page payload from an attacker-controlled server. The CAPTCHA gate→success→fetch-payload chain ensures security scanners that can't solve the CAPTCHA never see the credential form. [FP fix rev2: excluded legitimate API patterns (/api/v1/user, /api/auth, etc.) that capitaloneshopping/speedtest use; added requirement for DOM injection methods (innerHTML/document.write) which indicate fetched content is being rendered as page content rather than processed as data; weight reduced 0.30→0.25]",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 2,
+      "updated": "2026-04-11",
+      "rev": 3,
       "match": [
         {
           "content": "captcha",
@@ -28337,9 +28309,18 @@
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "pattern": "/api/(?:v\\d+/)?(?:user|auth|login|account|config)",
+          "negated": true,
+          "flags": "i"
+        },
+        {
+          "pattern": "innerHTML|document\\.write|insertAdjacentHTML",
+          "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
     },
     {
       "id": "tycoon-iconcaptcha-integration",
@@ -36824,14 +36805,14 @@
     {
       "id": "keylogger-keypress-accumulate",
       "group": "phishkitSignatures",
-      "description": "Keystroke accumulation via keypress/keydown handler — credential keylogger pattern",
+      "description": "Keystroke accumulation via keypress/keydown handler — credential keylogger pattern (building-block signal only)",
       "severity": "low",
-      "weight": 0.05,
+      "weight": 0.02,
       "source": "js",
-      "note": "Observation-level signal: keystroke accumulation + exfil destination present on same page. Too generic alone (fires on SPAs with search-as-you-type). Weight 0.05 — will become a building block for meta-rules that combine this with other signals (no visible input, external exfil domain, global document listener).",
+      "note": "DOWNWEIGHTED from 0.05 to 0.02 after FPs on abbott.com, zoom.us, ladesk.com. Pattern matches legitimate SPA behaviors (search-as-you-type, form UX). Weight 0.02 ensures this is purely a supporting signal — requires multiple corroborating indicators (fake login form, brand impersonation, suspicious domain) to contribute to detection. Candidate for meta-rule that combines with document-level listener scope or external exfil domain checks.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 2,
+      "updated": "2026-04-11",
+      "rev": 3,
       "match": [
         {
           "content": "addEventListener",
@@ -38525,14 +38506,14 @@
     {
       "id": "thank-you-redirect-after-credentials",
       "group": "phishkitSignatures",
-      "description": "Generic 'Thank you' or 'Success' message shown after credential submission — phishing completion page",
+      "description": "Generic 'Thank you' or 'Success' message shown after credential submission with phishing indicators — phishing completion page",
       "severity": "medium",
-      "weight": 0.2,
+      "weight": 0.15,
       "source": "html",
-      "note": "A generic 'Thank you, your account has been verified/updated' message followed by a redirect is the phishing completion page. After stealing credentials, the kit shows a success message then redirects to the real site.",
+      "note": "A generic 'Thank you, your account has been verified/updated' message followed by a timed redirect is the phishing completion page. Requires credential-related language and excludes e-commerce thank-you pages and sites with proper navigation structure.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-11",
+      "rev": 2,
       "match": [
         {
           "content": "thank",
@@ -38544,16 +38525,30 @@
           "flags": "i"
         },
         {
-          "pattern": "redirect|location\\.href|location\\.replace|window\\.location",
+          "pattern": "(?:redirect|location\\.href|location\\.replace|window\\.location).*?(?:setTimeout|\\d{3,5})",
+          "flags": "i"
+        },
+        {
+          "pattern": "(?:account|password|credential|login|secur(?:e|ity)|verif(?:y|ied|ication)|bank|paypal|microsoft|apple|amazon|netflix)",
           "flags": "i"
         },
         {
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "content": "<footer",
+          "negated": true,
+          "nocase": true
+        },
+        {
+          "pattern": "(?:cart|order|purchase|shipping|tracking|subscribe|newsletter)",
+          "negated": true,
+          "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
     },
     {
       "id": "tycoon-email-first-then-password",
@@ -39442,15 +39437,15 @@
     {
       "id": "data-attributes-victim-tracking",
       "group": "phishkitSignatures",
-      "description": "Custom data attributes used for victim tracking or campaign identification",
+      "description": "Custom data attributes used for victim tracking or campaign identification in phishkits",
       "severity": "medium",
-      "weight": 0.2,
+      "weight": 0.15,
       "source": "html",
-      "note": "Phishkits use custom data attributes to track victims, campaigns, or sessions. Names like data-victim, data-campaign, data-track with long values are characteristic.",
+      "note": "Phishkits use distinctively named data attributes to track victims and stolen credentials. Generic terms like 'track', 'campaign', 'uid', 'session-id' removed as they're common in legitimate analytics. Pattern now focuses on phishing-specific terminology.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
-      "patternString": "data-(?:victim|target|campaign|uid|session-id|track)=[\"'][^\"']{8,}[\"']",
+      "updated": "2026-04-11",
+      "rev": 2,
+      "patternString": "data-(?:victim|phish|creds?|exfil|loot|pwned|grabbed)(?:-?\\w*)?=[\"'][^\"']{8,}[\"']",
       "patternFlags": "i"
     },
     {
@@ -40513,20 +40508,6 @@
       "updated": "2026-04-07",
       "rev": 1,
       "patternString": "(?:App\\s*Store|apps\\.apple\\.com|apple\\.com/app)[\\s\\S]{0,500}(?:GET|Download|Install|Open)[\\s\\S]{0,300}(?:rating|\\d+\\.\\d\\s*(?:out|stars|rating)|reviews|Age\\s*Rating)",
-      "patternFlags": "i"
-    },
-    {
-      "id": "ios-smart-banner-spoof",
-      "group": "socialEngineering",
-      "description": "Fake iOS Smart App Banner prompting app install — impersonates native iOS UI element",
-      "severity": "high",
-      "weight": 0.3,
-      "source": "html",
-      "note": "Fake Smart App Banners using apple-itunes-app meta tags trick iOS users into thinking there's a native app to install. The banner links to a phishing PWA or sideloaded enterprise app instead of the real App Store.",
-      "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
-      "patternString": "(?:apple-itunes-app|smart-app-banner|apple-mobile-web-app)[\\s\\S]{0,200}(?:app-id|content=['\"]app-id=\\d+|meta\\s+name=['\"]apple)",
       "patternFlags": "i"
     },
     {
@@ -42863,15 +42844,15 @@
     {
       "id": "whatsapp-extra-char-typosquat",
       "group": "typosquatPatterns",
-      "description": "WhatsApp typosquats with extra repeated characters",
+      "description": "WhatsApp typosquats with extra repeated characters in domain context",
       "severity": "high",
-      "weight": 0.4,
+      "weight": 0.35,
       "source": "html",
       "note": "",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
-      "patternString": "whats?app+a|whas+tapp|whatss?app+",
+      "updated": "2026-04-11",
+      "rev": 2,
+      "patternString": "(?:https?://|//|[\"'])[\\w.-]*(?:whatt+s?app|whatss+app|wh+atsapp|whatsap+p+)[\\w.-]*\\.",
       "patternFlags": "i"
     },
     {
@@ -43570,33 +43551,37 @@
       "id": "null-footer-links-phish",
       "group": "urlHeuristics",
       "description": "Footer navigation links pointing to # or javascript:void — phishing page with non-functional navigation",
-      "severity": "medium",
-      "weight": 0.15,
+      "severity": "low",
+      "weight": 0.08,
       "source": "html",
-      "note": "Two or more footer/navigation links pointing to # or javascript:void(0) indicates a phishing page with decorative non-functional links. Phishers copy the visual layout of legitimate sites but don't bother making footer links work. [FP fix: now requires 3+ null links AND no <nav element. Single # anchors are common on legit sites.]",
+      "note": "Four or more footer links pointing to # or javascript:void alongside a login form indicates phishing. Weight reduced to 0.08 as non-functional links are common on legitimate SPAs, landing pages, and adult sites. Now requires login form presence to fire.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-11",
+      "rev": 2,
       "match": [
         {
           "content": "href",
           "fast_pattern": true
         },
         {
-          "pattern": "(?:href=[\\x27\\\"](?:#|javascript:void|javascript:;)[\\x27\\\"].*){3,}",
+          "pattern": "(?:href=[\\x27\\\"](?:#|javascript:void|javascript:;)[\\x27\\\"].*){4,}",
           "flags": "is"
         },
         {
-          "pattern": "(?:Privacy|Terms|Contact|About|Support|Help|FAQ)",
+          "pattern": "(?:Privacy\\s*Policy|Terms\\s*(?:of\\s*)?(?:Service|Use)|Contact\\s*Us|About\\s*Us|Support|Help\\s*Center)",
           "flags": "i"
         },
         {
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "pattern": "<form[^>]*(?:password|login|signin|credential)",
+          "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "base-href-external-domain",
@@ -43764,34 +43749,6 @@
       "rev": 1,
       "patternString": "<meta[^>]*http-equiv=['\"]refresh['\"][^>]*content=['\"]\\d+;\\s*url=['\"]?https?://[^'\"\\s>]+",
       "patternFlags": "i"
-    },
-    {
-      "id": "external-links-only-page",
-      "group": "urlHeuristics",
-      "description": "Page where all hyperlinks point to external domains — no internal navigation structure",
-      "severity": "low",
-      "weight": 0.05,
-      "source": "html",
-      "note": "A page where all links are absolute URLs to external domains (no relative internal links) indicates a page without internal site structure. Phishing pages link out to the real brand site for Terms/Privacy but have no internal pages. [FP fix: excludes pages with <nav> element — content sites have external links alongside navigation] — LOWERED: social media links on any site trigger this",
-      "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
-      "match": [
-        {
-          "content": "href=",
-          "fast_pattern": true
-        },
-        {
-          "pattern": "<a[^>]*href=['\\\"]https?://[^'\\\"]+['\\\"][^>]*>[\\s\\S]{0,300}<a[^>]*href=['\\\"]https?://[^'\\\"]+['\\\"][^>]*>[\\s\\S]{0,300}<a[^>]*href=['\\\"]https?://[^'\\\"]+['\\\"]",
-          "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
-        }
-      ],
-      "condition": "1 & 2"
     },
     {
       "id": "tycoon-redirect-chain-intermediate",
