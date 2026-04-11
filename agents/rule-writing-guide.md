@@ -361,7 +361,7 @@ Default is `"any"` — almost all network patterns should use this. Only specify
 `"high"`, `"medium"`, or `"low"`. Nothing else.
 
 ### `weight`
-A number from `0.05` to `0.50`. See the weight table below for how to choose.
+A number from `0` to `0.50`. Use `0` for observation-level signals that should only contribute as meta-rule building blocks. See the weight table below for how to choose.
 
 ### `patternFlags`
 Usually `"i"` for case-insensitive. Can be `""`, `"g"`, `"gi"`, or any combination of `g`, `i`, `m`, `s`, `u`, `y`. Almost always just `"i"`.
@@ -955,7 +955,7 @@ Before including a rule in your response, verify ALL of these:
 - [ ] `id` matches `^[a-z0-9-]+$` and is not a placeholder
 - [ ] `group` is one of the 13 valid values listed in this document
 - [ ] `source` is `"html"`, `"js"`, or `"both"` — nothing else
-- [ ] `weight` is between 0.05 and 0.50, calibrated to pattern specificity not threat severity
+- [ ] `weight` is between 0 and 0.50, calibrated to pattern specificity not threat severity (0 = observation-level/meta-rule building block)
 - [ ] `patternString` has all backslashes double-escaped for JSON
 - [ ] `patternString` would compile in `new RegExp(patternString, patternFlags)` without throwing
 - [ ] The pattern has at least one anchor string (6+ literal chars or 8+ char unbroken word)
@@ -981,7 +981,7 @@ Before including a rule in your response, verify ALL of these:
 - [ ] `group` is one of the 13 valid values listed in this document
 - [ ] `target` is `"url"`, `"body"`, `"fieldNames"`, or `"any"` — nothing else
 - [ ] `transport` is `"any"`, `"fetch"`, `"xhr"`, `"beacon"`, or `"websocket"` (default `"any"`)
-- [ ] `weight` is between 0.05 and 0.50, calibrated to pattern specificity
+- [ ] `weight` is between 0 and 0.50, calibrated to pattern specificity (0 = observation-level/meta-rule building block)
 - [ ] `patternString` has all backslashes double-escaped for JSON
 - [ ] `patternString` would compile in `new RegExp(patternString, patternFlags)` without throwing
 - [ ] The pattern would NOT match legitimate SSO logins (Okta, Google, Microsoft, Apple)

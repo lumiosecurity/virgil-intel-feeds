@@ -430,7 +430,7 @@ IMPORTANT — use ONLY these exact values:
 - id: lowercase alphanumeric with hyphens only (e.g. "telegram-exfil-pattern")
 - group: "phishkitSignatures" | "cdnGating" | "captchaGating" | "botEvasion" | "obfuscation" | "brandImpersonation" | "credentialHarvesting" | "socialEngineering" | "titleImpersonation" | "typosquatPatterns" | "urlHeuristics"
 - source: "html" | "js" | "both" (NOT "url", "title", "dom", "text", "hostname" — those are invalid)
-- weight: number between 0.05 and 0.50
+- weight: number between 0 and 0.50 (0 = observation-level signal, building block for meta-rules only; use 0.05–0.10 for low-confidence signals)
 - severity: "high" | "medium" | "low"
 
 REGEX PERFORMANCE RULES — patterns run against 5-10MB page source on EVERY page load:

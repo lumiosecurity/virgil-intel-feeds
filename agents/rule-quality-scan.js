@@ -66,8 +66,8 @@ async function main() {
         if (pat.group && !VALID_GROUPS.has(pat.group)) {
           issues.push({ file: `${dir}/${fname}`, issue: `${ctx}: invalid group "${pat.group}"` });
         }
-        if (typeof pat.weight === 'number' && (pat.weight < 0.05 || pat.weight > 0.50)) {
-          issues.push({ file: `${dir}/${fname}`, issue: `${ctx}: weight ${pat.weight} out of range (0.05–0.50)` });
+        if (typeof pat.weight === 'number' && (pat.weight < 0 || pat.weight > 0.50)) {
+          issues.push({ file: `${dir}/${fname}`, issue: `${ctx}: weight ${pat.weight} out of range (0–0.50) — use 0 for observation-level/meta-rule building blocks` });
         }
       }
     }
