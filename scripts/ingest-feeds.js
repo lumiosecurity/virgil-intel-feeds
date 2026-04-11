@@ -201,16 +201,30 @@ async function main() {
         const urlResult = analyseUrl(url, feed.name);
         if (!urlResult) return null;
 
-        // Step 2: Fetch page source via worker proxy and run source patterns
-        let sourceHits = [];
+        // Step 2: Fetch page source via worker proxy and run source patterns.
+        // NOTE: do NOT call analyseUrl() again — the URL hash is already in `seen`
+        // from step 1 and a second call would hit the dedup guard and return null.
+        // Instead, merge source hits directly into the result from step 1.
         if (patterns.length > 0 && TELEMETRY_ENDPOINT) {
           const pageData = await fetchPageSource(url);
           if (pageData?.source) {
-            const html = pageData.source;
-            const js   = extractInlineJs(html);
-            sourceHits = runSourcePatterns(html, js, patterns);
-            // Re-analyse with page content merged in
-            return analyseUrl(url, feed.name, pageData, sourceHits);
+            const html       = pageData.source;
+            const js         = extractInlineJs(html);
+            const sourceHits = runSourcePatterns(html, js, patterns);
+
+            // Merge source pattern signals and re-cap the score
+            const sourceSignals = sourceHits.map(h => ({
+              type:        h.type,
+              severity:    h.severity,
+              weight:      h.weight,
+              description: h.description,
+            }));
+            const sourceScore = sourceSignals.reduce((s, h) => s + h.weight, 0);
+
+            urlResult.signals.push(...sourceSignals);
+            urlResult.riskScore     = Math.min(urlResult.riskScore + sourceScore, 1.0);
+            urlResult.pageTitle     = pageData.title || null;
+            urlResult.hadPageContent = true;
           }
         }
         return urlResult;
