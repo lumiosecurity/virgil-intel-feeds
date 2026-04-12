@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-12-06:54",
-    "generatedAt": "2026-04-12T06:54:23.752Z",
+    "version": "2026-04-12-19:25",
+    "generatedAt": "2026-04-12T19:25:05.233Z",
     "brandCount": 193,
-    "patternCount": 1104,
+    "patternCount": 1103,
     "networkPatternCount": 21
   },
   "adScriptSignatures": [
@@ -29693,14 +29693,14 @@
     {
       "id": "timeout-redirect-to-legit",
       "group": "credentialHarvesting",
-      "description": "Page auto-redirects to legitimate site after timeout — self-destructing phishing page",
+      "description": "Page auto-redirects to legitimate site after timeout — self-destructing phishing page with credential form",
       "severity": "low",
       "weight": 0.05,
       "source": "both",
-      "note": "A timed auto-redirect to a legitimate brand site after a delay (encoded as milliseconds like 300000 or 5*60*1000) is a self-destruct mechanism. The phishing page exists only temporarily, then becomes an innocent redirect. [Observation-level: setTimeout + redirect to brand — legitimate SSO/OAuth flows do this] [FP fix: added interstitial negation - legitimate paywall/subscription interstitials use setTimeout+redirect patterns identical to phishing self-destruct] — LOWERED: setTimeout+reload is common on content sites",
+      "note": "A timed auto-redirect to a legitimate brand site after a delay is a self-destruct mechanism — phishing page exists temporarily, then becomes innocent redirect. Requires password input field to distinguish from legitimate session management, OAuth flows, and interstitial pages. [Observation-level: setTimeout + redirect to brand + credential form] [FP fix: added interstitial negation, password field requirement per A15 guidance] — LOWERED: setTimeout+reload common on content sites",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 2,
+      "updated": "2026-04-12",
+      "rev": 3,
       "match": [
         {
           "content": "setTimeout",
@@ -29722,9 +29722,13 @@
           "content": "interstitial",
           "nocase": true,
           "negated": true
+        },
+        {
+          "pattern": "<input[^>]+type=[\"']?password",
+          "flags": "i"
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "cross-origin-iframe-login",
@@ -38335,44 +38339,6 @@
       "patternFlags": "i"
     },
     {
-      "id": "aitm-redirect-after-capture",
-      "group": "phishkitSignatures",
-      "description": "Redirect to legitimate service after credential capture — AiTM post-phish legitimacy redirect",
-      "severity": "medium",
-      "weight": 0.1,
-      "source": "both",
-      "note": "Redirecting to the legitimate Microsoft/Google login page AFTER sending credentials to an external endpoint is the AiTM post-capture redirect. The victim ends up at the real login page, thinking nothing happened, while their credentials are already stolen. [FP fix: added <nav negation - legitimate sites with Google Sign-In have fetch+then+location+google in their scripts naturally] — LOWERED from 0.25: matches too broadly on sites with fetch + window.location",
-      "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 2,
-      "match": [
-        {
-          "content": "location",
-          "fast_pattern": true
-        },
-        {
-          "pattern": "fetch|XMLHttpRequest|sendBeacon"
-        },
-        {
-          "pattern": "then|onload|callback|success",
-          "flags": "i"
-        },
-        {
-          "pattern": "location\\.href|window\\.location"
-        },
-        {
-          "pattern": "microsoft|google|apple|amazon|paypal|netflix",
-          "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
-        }
-      ],
-      "condition": "1 & 2 & 3 & 4 & 5"
-    },
-    {
       "id": "evilproxy-phishlet-marker",
       "group": "phishkitSignatures",
       "description": "EvilProxy phishlet artifacts — custom JavaScript variables or DOM attributes from EvilProxy kit",
@@ -42871,15 +42837,15 @@
     {
       "id": "whatsapp-extra-char-typosquat",
       "group": "typosquatPatterns",
-      "description": "WhatsApp typosquats with extra repeated characters - domain must be the typosquatted name itself",
+      "description": "WhatsApp typosquats with extra repeated characters - excludes legitimate whatsapp.com/net domains",
       "severity": "high",
       "weight": 0.35,
       "source": "html",
       "note": "",
       "created": "2026-04-07",
-      "updated": "2026-04-11",
-      "rev": 3,
-      "patternString": "(?:https?://|//)(?:www\\.)?(?:whatt+s?app|whatss+app|wh+atsapp|whatsap+p+)(?:-[\\w]+)?\\.[a-z]{2,10}(?:[/?#]|$)",
+      "updated": "2026-04-12",
+      "rev": 4,
+      "patternString": "(?:https?://|//)(?:www\\.)?(?!whatsapp\\.(?:com|net)(?:[/?#]|$))(?:whatt{2,}s?app|whatss{2,}app|wh{2,}atsapp|whatsap{2,}p*|whatsapp{2,})(?:-[\\w]+)?\\.[a-z]{2,10}(?:[/?#]|$)",
       "patternFlags": "i"
     },
     {
