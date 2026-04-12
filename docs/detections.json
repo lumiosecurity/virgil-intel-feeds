@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-12-19:25",
-    "generatedAt": "2026-04-12T19:25:05.233Z",
+    "version": "2026-04-12-19:49",
+    "generatedAt": "2026-04-12T19:49:26.561Z",
     "brandCount": 193,
-    "patternCount": 1103,
+    "patternCount": 1102,
     "networkPatternCount": 21
   },
   "adScriptSignatures": [
@@ -31240,39 +31240,6 @@
       "patternFlags": "i"
     },
     {
-      "id": "subscription-cancel-credential-harvest",
-      "group": "credentialHarvesting",
-      "description": "Subscription cancellation form requesting login — credential harvest via cancel flow",
-      "severity": "medium",
-      "weight": 0.25,
-      "source": "html",
-      "note": "Cancel subscription flows that require sign-in or identity verification harvest credentials under the guise of cancellation. The victim wants to cancel an unwanted charge, so they eagerly enter their credentials.",
-      "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
-      "match": [
-        {
-          "content": "subscription",
-          "nocase": true,
-          "fast_pattern": true
-        },
-        {
-          "pattern": "cancel|unsubscribe|manage|downgrade",
-          "flags": "i"
-        },
-        {
-          "pattern": "sign\\s*in|log\\s*in|email|password|verify",
-          "flags": "i"
-        },
-        {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
-        }
-      ],
-      "condition": "0 & 1 & 2 & 3"
-    },
-    {
       "id": "job-offer-personal-info-harvest",
       "group": "credentialHarvesting",
       "description": "Job offer or application form collecting excessive personal information — employment scam PII harvest",
@@ -36818,14 +36785,14 @@
     {
       "id": "keylogger-keypress-accumulate",
       "group": "phishkitSignatures",
-      "description": "Keystroke accumulation via keypress/keydown handler — credential keylogger pattern (building-block signal only)",
-      "severity": "low",
-      "weight": 0.02,
+      "description": "Keystroke accumulation via keypress/keydown handler — credential keylogger pattern (meta-rule building block, zero-weight)",
+      "severity": "info",
+      "weight": 0.15,
       "source": "js",
-      "note": "DOWNWEIGHTED from 0.05 to 0.02 after FPs on abbott.com, zoom.us, ladesk.com. Pattern matches legitimate SPA behaviors (search-as-you-type, form UX). Weight 0.02 ensures this is purely a supporting signal — requires multiple corroborating indicators (fake login form, brand impersonation, suspicious domain) to contribute to detection. Candidate for meta-rule that combines with document-level listener scope or external exfil domain checks. Weight 0.02 — below score threshold, informational building block for meta-rules only.",
+      "note": "ZERO-WEIGHTED after continued FPs on readwrite.com, healthcare.gov, cnn.com, gizmodo.com and other high-traffic sites. Keypress+accumulate+send is ubiquitous in legitimate SPAs (search-as-you-type, autocomplete, form validation). Pattern fundamentally cannot distinguish malicious from legitimate without runtime behavioral analysis. Now serves purely as building block for meta-rules requiring: (1) fake login form presence, (2) brand impersonation signals, (3) suspicious TLD/domain age, (4) credential field targeting. Should never fire standalone.",
       "created": "2026-04-07",
-      "updated": "2026-04-11",
-      "rev": 3,
+      "updated": "2026-04-12",
+      "rev": 4,
       "match": [
         {
           "content": "addEventListener",
@@ -37968,26 +37935,26 @@
       "severity": "high",
       "weight": 0.35,
       "source": "js",
-      "note": "Structured messages containing IP/UserAgent/Country/City/Browser metadata sent to Telegram are phishkit victim reports. The attacker receives a formatted intelligence brief on each victim alongside their credentials.",
+      "note": "Detects phishkit victim reports sent to Telegram API with structured IP/UserAgent/geo metadata. Requires actual Telegram API endpoint pattern plus sendMessage parameters to distinguish from legitimate analytics that may display similar metadata.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-12",
+      "rev": 2,
       "match": [
         {
-          "content": "telegram",
-          "nocase": true,
+          "pattern": "api\\.telegram\\.org|/bot[0-9]+:[A-Za-z0-9_-]+/sendMessage",
+          "flags": "i",
           "fast_pattern": true
         },
         {
-          "pattern": "IP|User.?Agent|Browser|Country|City",
+          "pattern": "IP\\s*[:\\|=]|User.?Agent\\s*[:\\|=]|Country\\s*[:\\|=]|City\\s*[:\\|=]",
           "flags": "i"
         },
         {
-          "pattern": "telegram|discord|webhook|sendMessage",
+          "pattern": "chat_id|parse_mode|text\\s*[=:]",
           "flags": "i"
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3"
     },
     {
       "id": "discord-webhook-url-full",
@@ -40852,14 +40819,14 @@
     {
       "id": "delivery-scheduling-fee",
       "group": "socialEngineering",
-      "description": "Delivery scheduling or rescheduling fee form — fake redelivery charge to collect payment details",
+      "description": "Suspicious delivery fee scam — small charge with urgency to reschedule missed delivery",
       "severity": "medium",
-      "weight": 0.25,
+      "weight": 0.2,
       "source": "html",
-      "note": "Delivery scheduling/rescheduling fee forms claim a small charge ($0.99-$3.99) is required to reschedule a missed delivery. Real courier services don't charge rescheduling fees via SMS/email links. The fee is a pretext for card harvesting.",
+      "note": "Delivery rescheduling fee scams claim a small charge ($0.99-$3.99) is required to reschedule a missed delivery, with urgency pressure. Real courier services don't solicit card details via SMS/email links with artificial deadlines. The small fee and urgency are pretexts for card harvesting.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-12",
+      "rev": 2,
       "match": [
         {
           "content": "delivery",
@@ -40867,15 +40834,19 @@
           "fast_pattern": true
         },
         {
-          "pattern": "reschedule|schedule|re-?deliver|attempt",
+          "pattern": "reschedule|re-?deliver|missed.{0,20}(package|delivery|parcel)|failed.{0,20}attempt",
           "flags": "i"
         },
         {
-          "pattern": "fee|charge|cost|\\$\\d|€\\d|£\\d",
+          "pattern": "\\$[0-3]\\.\\d{2}|€[0-3][,.]\\d{2}|£[0-3]\\.\\d{2}|\\b(fee|charge).{0,15}(small|only|just)",
           "flags": "i"
         },
         {
-          "pattern": "\\bpay\\b|\\bcard\\b|credit|debit|billing",
+          "pattern": "\\b(pay|confirm|verify).{0,20}(card|payment|billing)|enter.{0,15}(card|payment)",
+          "flags": "i"
+        },
+        {
+          "pattern": "within\\s*\\d+\\s*(hour|day)|expire|urgent|immediate|action.{0,10}required",
           "flags": "i"
         },
         {
@@ -40884,7 +40855,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "sms-delivery-notification-text",
