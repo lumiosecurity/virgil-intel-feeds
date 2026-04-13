@@ -189,7 +189,12 @@ export const github = {
   reviewPR:       (repo, n, event, body, comments=[]) => gh('POST', `/repos/${cfg.orgName}/${repo}/pulls/${n}/reviews`, { event, body, comments }),
   createIssue:    (repo, title, body, labels=[]) => gh('POST', `/repos/${cfg.orgName}/${repo}/issues`, { title, body, labels }),
   getFileContent: (repo, path, ref='main') => gh('GET', `/repos/${cfg.orgName}/${repo}/contents/${path}?ref=${ref}`),
-  createOrUpdateFile: (repo, path, message, content, sha=null) => gh('PUT', `/repos/${cfg.orgName}/${repo}/contents/${path}`, { message, content: Buffer.from(content).toString('base64'), ...(sha && { sha }) }),
+  createOrUpdateFile: (repo, path, message, content, sha=null, branch=null) => gh('PUT', `/repos/${cfg.orgName}/${repo}/contents/${path}`, { message, content: Buffer.from(content).toString('base64'), ...(sha && { sha }), ...(branch && { branch }) }),
+  // Branch management — used by graduation agent to create PRs
+  getRef:         (repo, ref)       => gh('GET',  `/repos/${cfg.orgName}/${repo}/git/ref/${ref}`),
+  createRef:      (repo, ref, sha)  => gh('POST', `/repos/${cfg.orgName}/${repo}/git/refs`, { ref, sha }),
+  createPullRequest: (repo, title, body, head, base='main') =>
+    gh('POST', `/repos/${cfg.orgName}/${repo}/pulls`, { title, body, head, base }),
 };
 
 // ── Certificate Transparency ───────────────────────────────────────────────────
