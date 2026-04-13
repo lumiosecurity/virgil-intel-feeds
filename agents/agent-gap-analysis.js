@@ -260,6 +260,56 @@ async function main() {
 
   console.log(`Hash FP candidates (fired on legitimate domains): ${hashFpCandidates.length} rule(s)`);
 
+  // ── Watch hash graduation candidates ────────────────────────────────────────
+  // Rules with watchOnly:true have been observed in the wild — this query finds
+  // ones that have fired on enough unique domains to be ready for promotion.
+  // Graduation threshold: 3+ unique domains (confirmed cross-campaign reuse)
+  //                   OR  2+ unique installs on separate days (independent confirmation)
+  let watchGraduationCandidates = [];
+  try {
+    watchGraduationCandidates = d1raw(`
+      SELECT
+        rule_id,
+        kit_label,
+        COUNT(DISTINCT hostname)                        AS unique_domains,
+        COUNT(DISTINCT install_id)                      AS unique_installs,
+        COUNT(*)                                        AS total_sightings,
+        MIN(created_at)                                 AS first_seen,
+        MAX(created_at)                                 AS last_seen,
+        GROUP_CONCAT(DISTINCT hostname)                 AS sample_hostnames,
+        SUM(CASE WHEN match_type = 'exact'      THEN 1 END) AS exact_hits,
+        SUM(CASE WHEN match_type = 'normalized' THEN 1 END) AS norm_hits
+      FROM resource_hash_watch_hits
+      WHERE created_at >= datetime('now', '-${LOOKBACK_DAYS} days')
+      GROUP BY rule_id, kit_label
+      HAVING unique_domains >= 3 OR (unique_installs >= 2 AND total_sightings >= 5)
+      ORDER BY unique_domains DESC, total_sightings DESC
+      LIMIT 20
+    `);
+  } catch (e) {
+    console.warn('Watch graduation query failed (table may not exist yet):', e.message);
+  }
+
+  // All watch hits (including below graduation threshold) for context
+  let allWatchHits = [];
+  try {
+    allWatchHits = d1raw(`
+      SELECT
+        rule_id, kit_label,
+        COUNT(DISTINCT hostname) AS unique_domains,
+        COUNT(*) AS total_sightings,
+        MIN(created_at) AS first_seen
+      FROM resource_hash_watch_hits
+      WHERE created_at >= datetime('now', '-${LOOKBACK_DAYS} days')
+      GROUP BY rule_id, kit_label
+      ORDER BY unique_domains DESC
+      LIMIT 30
+    `);
+  } catch {}
+
+  console.log(`Watch hash graduation candidates (≥3 domains): ${watchGraduationCandidates.length}`);
+  console.log(`All watch rules with hits: ${allWatchHits.length}`);
+
   // ── Nano concordance analysis ───────────────────────────────────────────────
   // Find cases where Nano said SAFE but Claude said DANGEROUS — these are
   // Nano blind spots that may indicate categories needing tighter thresholds
@@ -358,6 +408,35 @@ ${hashFpCandidates.length > 0 ? hashFpCandidates.slice(0,10).map(r =>
   `Active since: ${r.first_seen?.slice(0,10)}`
 ).join('\n') : '(no FP candidates — circuit breaker has not fired. Hash rules appear safe.)'}
 
+### Watch hash graduation candidates (watchOnly rules observed in the wild)
+These are canary rules with watchOnly:true that have been seen firing on real pages.
+Rules that reach the graduation threshold (3+ unique domains OR 2+ installs) are
+ready to be promoted to full detection rules by removing watchOnly:true.
+
+${watchGraduationCandidates.length > 0
+  ? `🎓 READY TO PROMOTE (${watchGraduationCandidates.length} rule(s)):\n` +
+    watchGraduationCandidates.map(r =>
+      `- \`${r.rule_id}\` (${r.kit_label || 'unknown kit'}): ` +
+      `${r.unique_domains} unique domains, ${r.unique_installs} installs, ` +
+      `${r.total_sightings} sightings, ` +
+      `exact: ${r.exact_hits||0} norm: ${r.norm_hits||0}, ` +
+      `first seen: ${r.first_seen?.slice(0,10)}, ` +
+      `last seen: ${r.last_seen?.slice(0,10)}\n` +
+      `  Sample domains: ${(r.sample_hostnames||'').split(',').slice(0,3).join(', ')}`
+    ).join('\n')
+  : '(no watch rules have reached graduation threshold yet)'
+}
+
+${allWatchHits.length > 0 && allWatchHits.length > watchGraduationCandidates.length
+  ? `Still accumulating (${allWatchHits.length - watchGraduationCandidates.length} rule(s) below threshold):\n` +
+    allWatchHits
+      .filter(r => !watchGraduationCandidates.some(g => g.rule_id === r.rule_id))
+      .slice(0,5)
+      .map(r => `- \`${r.rule_id}\`: ${r.unique_domains} domains, ${r.total_sightings} sightings (need 3 domains to graduate)`)
+      .join('\n')
+  : ''
+}
+
 ### Hash-saved detections with weak heuristics (Scenario B: heuristics were light)
 These are detections where a resource hash rule fired BUT the pre-hash heuristic
 score was < 0.35. The hash did the heavy lifting — traditional rules were not
@@ -429,6 +508,16 @@ you MUST call each one out explicitly with:
 - Urgency rating: CRITICAL (fires on major brand like paypal.com, chase.com) or HIGH (fires on popular site)
 - Never suggest "add domain to safelist" — the hash is wrong, not the domain
 If no FP candidates, state explicitly: "No hash FP candidates detected this period."
+
+**🎓 C. Watch hash graduation — MANDATORY action for each ready-to-promote rule:**
+For every rule in the "Watch hash graduation candidates" section that has reached the
+graduation threshold (3+ unique domains OR 2+ installs with 5+ sightings):
+- Name the rule ID and kit label
+- Confirm it has NOT appeared in the FP candidates section (if it has, do NOT promote — investigate the FP first)
+- State the exact edit to make: "Remove watchOnly: true from rule ${r.rule_id} in rules/source/resourceHashes.json"
+- Rate confidence: HIGH (normalised hash matches, 5+ domains), MEDIUM (exact hash only, 3 domains), LOW (borderline)
+- If confidence is LOW, recommend one more week of observation instead of immediate promotion
+If no rules are ready, state explicitly: "No watch rules ready for graduation this period."
 
 **C. Hash-dependent kits needing heuristic backup** (from the hash-saved detections above):
 For each kit where the pre-hash score was low (< 0.35), propose concrete source or domain rules that would catch the same kit WITHOUT the hash — treating the hash-saved examples as a labelled training set:
@@ -550,6 +639,40 @@ ${hashSavedDetections.slice(0,12).map(r =>
 
 </details>` : ''}
 
+${watchGraduationCandidates.length > 0 ? `<details>
+<summary>🎓 Watch hash graduation — ${watchGraduationCandidates.length} rule(s) READY TO PROMOTE</summary>
+
+These watchOnly canary rules have reached the graduation threshold and are ready to become live detection rules.
+To promote: remove \`watchOnly: true\` from the rule in \`rules/source/resourceHashes.json\`, then publish.
+**Verify the rule is NOT in the FP candidates table before promoting.**
+
+| Rule ID | Kit | Domains | Installs | Sightings | Exact | Normalised | First seen | Sample domains |
+|---------|-----|---------|---------|----------|-------|-----------|-----------|---------------|
+${watchGraduationCandidates.slice(0,15).map(r =>
+  `| \`${r.rule_id}\` | ${r.kit_label||'—'} | ${r.unique_domains} | ${r.unique_installs} | ${r.total_sightings} | ${r.exact_hits||0} | ${r.norm_hits||0} | ${r.first_seen?.slice(0,10)} | ${(r.sample_hostnames||'').split(',').slice(0,2).join(', ')} |`
+).join('\n')}
+
+\`\`\`bash
+# Promote a watch rule (replace <RULE_ID> with the rule id above)
+# Edit rules/source/resourceHashes.json:
+#   Remove the "watchOnly": true line from the rule with id: <RULE_ID>
+# Then commit and run publish-detections.yml
+\`\`\`
+
+</details>` : ''}
+
+${allWatchHits.length > 0 ? `<details>
+<summary>All watch rule sightings (${allWatchHits.length} rules observed, ${watchGraduationCandidates.length} ready to graduate)</summary>
+
+| Rule ID | Kit | Unique domains | Sightings | First seen | Status |
+|---------|-----|---------------|----------|-----------|--------|
+${allWatchHits.slice(0,20).map(r => {
+  const ready = watchGraduationCandidates.some(g => g.rule_id === r.rule_id);
+  return `| \`${r.rule_id}\` | ${r.kit_label||'—'} | ${r.unique_domains} | ${r.total_sightings} | ${r.first_seen?.slice(0,10)} | ${ready ? '🎓 Ready to promote' : `${r.unique_domains}/3 domains`} |`;
+}).join('\n')}
+
+</details>` : ''}
+
 ---
 
 ## Next steps
@@ -557,8 +680,9 @@ ${hashSavedDetections.slice(0,12).map(r =>
 A maintainer should:
 1. Review the Priority Gaps above
 2. For any **Hash-Dependent Kits** listed — prioritise the proposed source/domain rules so detection doesn't rely on hashes alone
-3. Ship Quick Wins via remote config (no Store push needed): edit \`core-rules\`, run compile-feeds, trigger Publish Detection Config
-4. File separate issues for any changes requiring JS code updates
+3. **Promote any graduated watch rules** — remove \`watchOnly: true\`, publish, verify no FP candidates first
+4. Ship Quick Wins via remote config (no Store push needed): edit \`core-rules\`, run compile-feeds, trigger Publish Detection Config
+5. File separate issues for any changes requiring JS code updates
 
 ---
 *Generated by Virgil Gap Analysis Agent at ${new Date().toISOString()}*`;
