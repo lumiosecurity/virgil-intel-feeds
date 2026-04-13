@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-13-22:21",
-    "generatedAt": "2026-04-13T22:21:57.559Z",
+    "version": "2026-04-13-22:24",
+    "generatedAt": "2026-04-13T22:24:27.552Z",
     "brandCount": 193,
     "patternCount": 1100,
     "networkPatternCount": 21
@@ -393,9 +393,6 @@
         "gemni",
         "geminibalance",
         "gemenii",
-        "gemiñi",
-        "gemíni",
-        "gémini",
         "gemmini",
         "geminilogin",
         "geminisignin",
@@ -434,8 +431,7 @@
       "typos": [
         "trustwalet",
         "trust-wallet",
-        "trustapp",
-        "trustwalet"
+        "trustapp"
       ],
       "created": "2026-04-07",
       "updated": "2026-04-07",
@@ -1750,7 +1746,6 @@
         "wlse",
         "wiise",
         "w1se",
-        "wisee",
         "wisee"
       ],
       "created": "2026-04-07",
@@ -1769,7 +1764,6 @@
         "rob1nhood",
         "robinhoodd",
         "robinhoood",
-        "robinhod",
         "r0binhood"
       ],
       "created": "2026-04-07",
@@ -1939,8 +1933,7 @@
       "typos": [
         "usaaa",
         "ussaa",
-        "usa-a",
-        "ussaa"
+        "usa-a"
       ],
       "created": "2026-04-07",
       "updated": "2026-04-07",
@@ -2094,7 +2087,6 @@
         "robloxx",
         "rablox",
         "robloxs",
-        "robiox",
         "ro-blox"
       ],
       "created": "2026-04-07",
@@ -3036,7 +3028,6 @@
         "pintrest",
         "plnterest",
         "pinterestt",
-        "plnterest",
         "pintarest"
       ],
       "created": "2026-04-07",
@@ -3392,7 +3383,6 @@
         "googie",
         "google-signin",
         "googl3",
-        "googIe",
         "googel",
         "goog1e"
       ],
@@ -3564,7 +3554,6 @@
         "atnt",
         "att-wireless",
         "attnet",
-        "at&t",
         "at-t",
         "attt"
       ],
@@ -43081,7 +43070,7 @@
       "description": "Detects domains using brand-job/career/hiring pattern with fake meeting or reference IDs commonly used in employment scam phishkits",
       "severity": "high",
       "weight": 0.4,
-      "source": "url",
+      "source": "both",
       "note": "Refined to require suspicious ID/token parameters typical of phishkits; legitimate career sites use structured paths not random IDs",
       "created": "2026-04-07",
       "updated": "2026-04-11",
