@@ -477,9 +477,127 @@ function evaluateRules(rules) {
           eval_.issues.push(`Weight ${rule.weight} too high for ${patternLength}-char network pattern in ${rule.group} (max safe: ${maxSafeWeight} unless ≥${minSpecificityForHighWeight} literal chars)`);
         }
       }
-    }
 
-    evaluations.push(eval_);
+    } else if (rule.id && Array.isArray(rule.resources) && rule.resources.length > 0) {
+      // ── Resource content hash rule evaluation ─────────────────────────────
+      // FP risk is high and specific — evaluate every dimension carefully.
+
+      // 1. Every resource must have at least one real hash (not null/placeholder)
+      const nullHashResources = rule.resources.filter(r =>
+        !r.sha256 && !r.normalizedSha256
+      );
+      if (nullHashResources.length > 0) {
+        eval_.issues.push(
+          `${nullHashResources.length} resource(s) have no hashes — run harvest-resource-hashes.js first. ` +
+          `Never promote a rule with null hashes: it will match on pathPattern alone.`
+        );
+      }
+
+      // 2. Every resource must have a valid pathPattern regex
+      for (const res of rule.resources) {
+        if (!res.pathPattern) {
+          eval_.issues.push(`Resource entry missing pathPattern — required for path pre-filter`);
+          continue;
+        }
+        try { new RegExp(res.pathPattern, 'i'); } catch (e) {
+          eval_.issues.push(`Resource pathPattern "${res.pathPattern}" is invalid regex: ${e.message}`);
+        }
+      }
+
+      // 3. CRITICAL: Detect overly generic filenames — highest FP risk.
+      // These filenames appear on millions of legitimate sites and must not be
+      // used as the sole pathPattern without at least two other matching resources.
+      const HYPER_GENERIC_NAMES = [
+        'style.css', 'styles.css', 'main.css', 'app.css', 'index.css',
+        'main.js',   'app.js',    'index.js', 'bundle.js', 'chunk.js',
+        'script.js', 'scripts.js','common.js', 'vendor.js', 'runtime.js',
+        'core.js',   'utils.js',  'helpers.js','base.css',  'global.css',
+      ];
+      const GENERIC_NAMES = [
+        'login.css', 'auth.css', 'signin.css', 'form.css', 'portal.css',
+        'login.js',  'auth.js',  'signin.js',  'form.js',  'validate.js',
+      ];
+
+      for (const res of rule.resources) {
+        if (!res.pathPattern) continue;
+        const filename = res.pathPattern.replace(/^\(\?:\^|\/\)/,'').replace(/\(\?:\\\\?\|\$\).*$/, '');
+        const isHyperGeneric = HYPER_GENERIC_NAMES.some(n => filename.toLowerCase().includes(n.replace('.', '\\.')));
+        const isGeneric      = GENERIC_NAMES.some(n => filename.toLowerCase().includes(n.replace('.', '\\.')));
+
+        if (isHyperGeneric) {
+          if (rule.resources.length === 1) {
+            // Single resource with a hyper-generic filename — near-certain FP
+            eval_.issues.push(
+              `CRITICAL: pathPattern "${res.pathPattern}" is a hyper-generic filename ` +
+              `("${filename}") that appears on millions of legitimate sites. ` +
+              `With only 1 resource, this WILL cause false positives. ` +
+              `Either (a) add more kit-specific resources with matchStrategy:"all", ` +
+              `(b) add directory context to the pathPattern (e.g. "/assets/kit-specific/style.css"), ` +
+              `or (c) use only the normalizedSha256 (not the exact hash) since generic CSS ` +
+              `served identically across legitimate and phish pages is the prime FP source.`
+            );
+          } else if (rule.matchStrategy !== 'all') {
+            eval_.warnings.push(
+              `pathPattern "${res.pathPattern}" is hyper-generic. ` +
+              `Multiple resources defined — change matchStrategy to "all" so ALL must match ` +
+              `before the rule fires. "any" with a generic filename will still FP.`
+            );
+          }
+        } else if (isGeneric && rule.resources.length === 1) {
+          eval_.warnings.push(
+            `pathPattern "${res.pathPattern}" is a common filename for login/auth pages ` +
+            `— consider adding a second resource or using matchStrategy:"all". ` +
+            `If the CSS content is truly kit-specific the hash alone is sufficient, ` +
+            `but document why in the note field.`
+          );
+        }
+      }
+
+      // 4. Weight cap for rules with any generic resource
+      const hasAnyGeneric = rule.resources.some(r => {
+        const fn = (r.pathPattern || '').toLowerCase();
+        return HYPER_GENERIC_NAMES.some(n => fn.includes(n.replace('.', '\\.'))) ||
+               GENERIC_NAMES.some(n => fn.includes(n.replace('.', '\\.')));
+      });
+      if (hasAnyGeneric && (rule.weight || 0) > 0.50) {
+        eval_.issues.push(
+          `Weight ${rule.weight} too high for a rule with generic filename(s). ` +
+          `Max 0.50 when any resource uses a common filename — higher weights require ` +
+          `kit-specific paths (e.g. "/panel/v4/grab.css") or matchStrategy:"all" ` +
+          `with multiple confirmed kit-specific resources.`
+        );
+      }
+
+      // 5. Require the note field on every resource — without it, future reviewers
+      // can't tell whether the hash was harvested from a live kit or invented.
+      // A note also documents when/where the hash was captured for expiry purposes.
+      const missingNotes = rule.resources.filter(r => !r.note || r.note.trim().length < 10);
+      if (missingNotes.length > 0) {
+        eval_.warnings.push(
+          `${missingNotes.length} resource(s) missing descriptive note. ` +
+          `Note should explain when/where the hash was harvested and what makes the file kit-specific. ` +
+          `Required so maintainers can evaluate FP risk at a glance.`
+        );
+      }
+
+      // 6. Require kitLabel — anonymous hash rules are unmaintainable
+      if (!rule.kitLabel || rule.kitLabel.trim() === '') {
+        eval_.warnings.push(
+          `Missing kitLabel — add a human-readable kit name (e.g. "W3LL Panel v4"). ` +
+          `Required for gap analysis aggregation and FP investigation.`
+        );
+      }
+
+      // 7. matchStrategy "all" strongly preferred when >= 2 resources
+      if (rule.resources.length >= 2 && rule.matchStrategy !== 'all') {
+        eval_.warnings.push(
+          `${rule.resources.length} resources defined but matchStrategy is "${rule.matchStrategy || 'any'}". ` +
+          `"any" fires on the first match — consider "all" so the rule only fires when ` +
+          `multiple kit-specific files are present simultaneously, reducing FP risk.`
+        );
+      }
+    }
+    
   }
 
   const allPassed = evaluations.every(e => e.issues.length === 0);
@@ -518,18 +636,35 @@ RULE TYPES:
 - Brand entries: typosquat variants of known brands
 - Source patterns: regex matched against page HTML/JS source code
 - Network patterns: regex matched against outbound HTTP request metadata (destination URLs, POST bodies, field names). These run in the content script's exfiltration interceptor against live network requests, NOT against page source. FP risk is different — SSO flows, analytics beacons, and legitimate form backends are the main FP vectors.
+- Resource hash rules: SHA-256 fingerprints of CSS/JS files from phishing kits. These fire when a user visits a page that serves a same-origin CSS or JS file matching the stored hash. FP RISK IS THE HIGHEST OF ALL RULE TYPES — a bad hash silently flags real brand login pages as phishing. Evaluate these with extreme care.
+
+RESOURCE HASH RULE FP EVALUATION — apply these checks in order:
+
+1. NULL HASHES → AUTOMATIC FAIL. A rule with sha256:null or normalizedSha256:null will match on pathPattern alone (any page serving a file with that filename gets flagged). This is equivalent to a regex that matches everything. If any resource entry has both hashes null, FAIL immediately.
+
+2. GENERIC FILENAMES: The pathPattern "(?:^|/)style.css(?:\\?|$)" matches the CSS file on paypal.com, chase.com, and millions of other legitimate sites. Ask yourself: if a phishkit clones a brand's CSS verbatim (the most common kit technique), does this hash also match the brand's own legitimate page? If yes, flag it. Generic filenames (style.css, app.js, main.css, index.js) require either (a) a directory-anchored path that only appears in phishkits, or (b) matchStrategy:"all" with multiple non-generic resources.
+
+3. BRAND-CLONED CSS: The most dangerous FP source. Many phishkits download the target brand's actual CSS and serve it unchanged. If the harvested hash comes from a file named after the brand (e.g. "paypal-login.css") or from a path matching the brand's CDN structure, the hash likely matches what the brand serves legitimately — and will FP on every visit to the real brand. Reject these without confirmed evidence the file is kit-specific (modified or added content, not a verbatim clone).
+
+4. matchStrategy:"any" with generic filenames: If the rule fires when ANY one resource matches, and any of those resources has a generic filename, the rule can FP independently of the other resources. Require matchStrategy:"all" or reject.
+
+5. MISSING NOTES: Every resource needs a note explaining what makes the file kit-specific (e.g., "Contains hardcoded Telegram bot template not present in the brand's actual CSS"). Without this, no one can evaluate whether the hash is safe to ship.
 
 PASS criteria:
 - Typosquats are plausibly related to the brand and not common English words
 - Source patterns are specific enough to not match legitimate sites
 - Network patterns don't match legitimate SSO, analytics, payment, or WordPress requests
+- Resource hash rules: all hashes populated, pathPatterns are specific or anchored, matchStrategy appropriate for filename specificity, notes explain kit-specificity
 - Weights are proportional to pattern specificity
 - No critical issues found
-- Regex patterns are performance-safe: no unanchored .* with DOTALL, no nested quantifiers, no multiple sequential .* without bounded quantifiers
+- Regex patterns are performance-safe
 
 FAIL criteria (any one = FAIL):
 - Pattern matches legitimate sites (FP risk)
 - Network pattern matches legitimate SSO/auth/analytics/payment requests
+- Resource hash rule has any null/missing hashes
+- Resource hash rule uses generic filename with matchStrategy:"any" and single resource
+- Resource hash pathPattern could match a legitimate brand's own CSS served from their domain
 - Regex too broad for common page structures
 - Generic typosquats unrelated to brand
 - Weight disproportionate to specificity

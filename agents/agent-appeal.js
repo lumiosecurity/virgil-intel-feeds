@@ -90,6 +90,46 @@ async function main() {
 
   const inBlocklistCriteria = blocklistRows.length > 0;
 
+  // ── Check if resource hash rules fired on this domain ──────────────────────
+  // If the FP was caused by a resource hash match (not a domain/source pattern),
+  // the right fix is removing that specific hash from the rule — NOT adding the
+  // domain to the safe list. Safe-listing only prevents future verdicts on this
+  // domain; it doesn't fix the bad hash that might FP on other legitimate sites.
+  let hashFpEvidence = [];
+  try {
+    hashFpEvidence = d1`
+      SELECT rule_ids, kit_labels, reason, created_at
+      FROM resource_hash_fp_candidates
+      WHERE hostname = ${domain}
+        AND created_at >= datetime('now', '-30 days')
+      ORDER BY created_at DESC
+      LIMIT 5
+    `;
+  } catch {
+    // Table may not exist on older D1 instances
+  }
+
+  // Also check if any resource hash signals fired in regular verdicts for this domain
+  let hashSignalsInVerdicts = [];
+  try {
+    hashSignalsInVerdicts = d1`
+      SELECT rhs.rule_id, rhs.kit_label, rhs.match_type, rhs.resource_path,
+             v.risk_level, v.confidence
+      FROM resource_hash_signals rhs
+      JOIN verdicts v ON rhs.verdict_id = v.id
+      WHERE v.registered_domain = ${domain}
+        AND v.created_at >= datetime('now', '-30 days')
+      ORDER BY v.created_at DESC
+      LIMIT 10
+    `;
+  } catch {
+    // Table may not exist
+  }
+
+  const hasHashFpEvidence  = hashFpEvidence.length > 0;
+  const hasHashVerdicts     = hashSignalsInVerdicts.length > 0;
+  const likelyCausedByHash  = hasHashFpEvidence || hashSignalsInVerdicts.some(r => r.risk_level === 'dangerous');
+
   // ── Evaluate auto-approve criteria ─────────────────────────────────────────
   const checks = {
     domainAge:    ct?.ageDays >= AUTO_APPROVE_CRITERIA.minDomainAgeDays,
@@ -134,35 +174,94 @@ ${ct ? `- First cert issued: ${new Date(ct.firstSeenTs).toISOString().slice(0,10
 
 **Auto-approve threshold met:** ${autoApprove ? 'YES' : 'NO'} (${checksPassed}/${Object.keys(checks).length})
 
+${likelyCausedByHash ? `## ⚠️  Resource Hash FP Evidence
+This false positive may have been caused by a resource hash rule matching a CSS/JS file
+on this legitimate domain — NOT by a domain or source pattern.
+
+**IMPORTANT: If this is a hash-caused FP, adding the domain to the safe list is the WRONG fix.**
+The hash will continue firing on other legitimate sites that serve the same file.
+The correct fix is to remove the specific hash entry from the rule's resources[] array.
+
+Circuit breaker suppression events (hash fired, was auto-suppressed):
+${hashFpEvidence.slice(0,3).map(e =>
+  `- Rule IDs: ${e.rule_ids} | Kits: ${e.kit_labels || 'unknown'} | ${e.created_at?.slice(0,10)}`
+).join('\n') || '(none recorded)'}
+
+Resource hash signals in verdicts for this domain:
+${hashSignalsInVerdicts.slice(0,5).map(r =>
+  `- Rule: \`${r.rule_id}\` | Kit: ${r.kit_label || 'unknown'} | Match: ${r.match_type} | File: ${r.resource_path || 'unknown'} | Verdict: ${r.risk_level}`
+).join('\n') || '(none recorded)'}
+
+If you recommend REMOVE due to a hash FP, include REMOVE_HASH in your response (not just REMOVE)
+so the automated system knows to flag the specific hash for removal rather than adding to safelist.` : ''}
+
 ## Issue body (user's explanation)
 ${issue.body?.slice(0, 800)}
 
 ## Your recommendation
 
 Give ONE of:
-- **REMOVE**: Remove from blocklist, add to safe list. Explain why the evidence supports this.
+- **REMOVE**: Remove from blocklist, add to safe list (use when domain is legitimate AND the block was NOT caused by a resource hash rule)
+- **REMOVE_HASH**: The block was caused by a resource hash match. Domain is legitimate. The hash must be removed from the rule's resources[] — adding to safe list alone won't fix it for other sites
 - **ESCALATE**: Evidence is ambiguous, human review needed. Explain what additional verification would resolve it.
 - **REJECT_APPEAL**: Domain shows signs of being malicious. Explain the evidence.
 
 Then provide:
 - 2-3 sentence justification
 - If REMOVE: exact safe list entry format: \`domain.com\`
+- If REMOVE_HASH: which rule ID and which resource path/hash to remove (be specific — e.g. "remove the sha256 entry for /style.css from rule w3ll-panel-v4-resources")
 - If ESCALATE: specific question that needs answering
 - If REJECT_APPEAL: what malicious indicators remain`;
 
   const recommendation = await claude(systemPrompt, userContent, 800);
 
-  const isRemove   = recommendation.includes('**REMOVE**') || recommendation.startsWith('REMOVE');
-  const isReject   = recommendation.includes('**REJECT_APPEAL**') || recommendation.startsWith('REJECT_APPEAL');
-  const isEscalate = !isRemove && !isReject;
+  const isRemove     = recommendation.includes('**REMOVE**') || recommendation.startsWith('REMOVE');
+  const isRemoveHash = recommendation.includes('**REMOVE_HASH**') || recommendation.startsWith('REMOVE_HASH');
+  const isReject     = recommendation.includes('**REJECT_APPEAL**') || recommendation.startsWith('REJECT_APPEAL');
+  const isEscalate   = !isRemove && !isRemoveHash && !isReject;
 
-  const action = isRemove ? 'REMOVE' : isReject ? 'REJECT_APPEAL' : 'ESCALATE';
+  const action = isRemoveHash ? 'REMOVE_HASH'
+               : isRemove     ? 'REMOVE'
+               : isReject     ? 'REJECT_APPEAL'
+               : 'ESCALATE';
   const confidence = autoApprove ? 'high' : checksPassed >= 3 ? 'medium' : 'low';
 
   // ── Act on recommendation ───────────────────────────────────────────────────
   let actionTaken = '';
 
-  if (isRemove && autoApprove && !DRY_RUN) {
+  if (isRemoveHash && !DRY_RUN) {
+    // Hash-caused FP — do NOT auto-modify rules (removing a hash requires human confirmation)
+    // Instead: add a label and a clear comment so a maintainer can surgically remove the hash.
+    // We CAN add to safelist as a stopgap, but the real fix is the hash removal.
+    actionTaken = [
+      `⚠️ **Hash FP detected.** This false positive was caused by a resource hash rule, not a domain block.`,
+      `**Stopgap:** \`${domain}\` has been added to the safe list to prevent further FPs on this domain.`,
+      `**Root fix required (manual):** A maintainer must remove the specific hash entry from \`rules/source/resourceHashes.json\` as described in the recommendation above.`,
+      `The label \`hash-fp-needs-removal\` has been added to track this.`,
+    ].join('\n');
+    // Add domain to safe list as a stopgap (prevents FPs on this specific domain immediately)
+    try {
+      const safeListFile = await github.getFileContent(cfg.coreRulesRepo, 'safe-list/domains.txt').catch(() => null);
+      const currentContent = safeListFile
+        ? Buffer.from(safeListFile.content, 'base64').toString('utf8')
+        : '# Virgil community safe list\n# One domain per line\n';
+      if (!currentContent.includes(domain)) {
+        const newContent = currentContent.trimEnd() +
+          `\n${domain}  # STOPGAP: hash FP, see issue #${ISSUE_NUMBER} — hash must also be removed from resourceHashes.json\n`;
+        await github.createOrUpdateFile(
+          cfg.coreRulesRepo,
+          'safe-list/domains.txt',
+          `chore: stopgap safelist for hash FP — ${domain} (issue #${ISSUE_NUMBER})`,
+          newContent,
+          safeListFile?.sha || null
+        );
+      }
+    } catch (e) {
+      actionTaken += `\n⚠️ Could not update safe list: ${e.message}`;
+    }
+    await github.addLabel(REPO, ISSUE_NUMBER, ['hash-fp-needs-removal']).catch(() => {});
+
+  } else if (isRemove && autoApprove && !DRY_RUN) {
     // High-confidence auto-removal: add to safe list in core-rules
     try {
       // Get current safe list file

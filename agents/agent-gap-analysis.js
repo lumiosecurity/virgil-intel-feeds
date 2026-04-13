@@ -228,6 +228,38 @@ async function main() {
   console.log(`Resource hash rule effectiveness: ${resourceHashEffectiveness.length} rules`);
   console.log(`Hash-saved detections (pre-hash score < 0.35): ${hashSavedDetections.length} kit/rule pairs`);
 
+  // ── Resource hash FP candidates ─────────────────────────────────────────────
+  // Fired when a hash rule matched on a Tranco-tier-1 domain and was suppressed
+  // by the circuit breaker. Any rule_id appearing here is likely FP-prone —
+  // it either cloned a brand's own CSS verbatim, or has a pathPattern generic
+  // enough to match legitimate sites. Needs immediate human review and likely
+  // hash removal from the rule's resources[] array.
+  let hashFpCandidates = [];
+  try {
+    // Group by rule_id extracted from the JSON array field.
+    // SQLite's JSON_EACH lets us unnest the rule_ids array into rows.
+    hashFpCandidates = d1raw(`
+      SELECT
+        json_each.value                               AS rule_id,
+        COUNT(DISTINCT rhfp.hostname)                 AS unique_legit_domains,
+        COUNT(DISTINCT rhfp.install_id)               AS unique_installs,
+        GROUP_CONCAT(DISTINCT rhfp.hostname)          AS sample_hostnames,
+        MIN(rhfp.created_at)                          AS first_seen,
+        MAX(rhfp.created_at)                          AS last_seen
+      FROM resource_hash_fp_candidates rhfp,
+           json_each(rhfp.rule_ids)
+      WHERE rhfp.created_at >= datetime('now', '-${LOOKBACK_DAYS} days')
+      GROUP BY json_each.value
+      HAVING unique_legit_domains >= 1
+      ORDER BY unique_legit_domains DESC, unique_installs DESC
+      LIMIT 20
+    `);
+  } catch (e) {
+    console.warn('FP candidates query failed (table may not exist yet):', e.message);
+  }
+
+  console.log(`Hash FP candidates (fired on legitimate domains): ${hashFpCandidates.length} rule(s)`);
+
   // ── Nano concordance analysis ───────────────────────────────────────────────
   // Find cases where Nano said SAFE but Claude said DANGEROUS — these are
   // Nano blind spots that may indicate categories needing tighter thresholds
@@ -312,6 +344,20 @@ ${resourceHashEffectiveness.length > 0 ? resourceHashEffectiveness.slice(0,12).m
   `exact: ${r.exact_matches} normalized: ${r.normalized_matches}`
 ).join('\n') : '(no resource hash data yet — table populates as rules ship and detections accumulate)'}
 
+### ⚠️  Hash rules firing on LEGITIMATE domains (circuit breaker FP candidates)
+These rule IDs fired on Tranco-tier-1 domains and were suppressed by the runtime
+circuit breaker. Each entry represents a likely FALSE POSITIVE — the hash probably
+matches a file that a phishkit cloned verbatim from a real brand's login page,
+so the hash fires on both the phishkit AND the legitimate brand.
+THESE REQUIRE IMMEDIATE HUMAN REVIEW. The affected hash must be removed from
+the rule's resources[] array — adding the domain to the safelist is NOT the fix.
+${hashFpCandidates.length > 0 ? hashFpCandidates.slice(0,10).map(r =>
+  `- ⚠️  \`${r.rule_id}\`: fired on ${r.unique_legit_domains} legitimate domain(s) ` +
+  `across ${r.unique_installs} install(s). ` +
+  `Sample domains: ${(r.sample_hostnames || '').split(',').slice(0,3).join(', ')}. ` +
+  `Active since: ${r.first_seen?.slice(0,10)}`
+).join('\n') : '(no FP candidates — circuit breaker has not fired. Hash rules appear safe.)'}
+
 ### Hash-saved detections with weak heuristics (Scenario B: heuristics were light)
 These are detections where a resource hash rule fired BUT the pre-hash heuristic
 score was < 0.35. The hash did the heavy lifting — traditional rules were not
@@ -373,14 +419,25 @@ This section is NEW — address both directions:
 - Which have low precision (<60%) and may need the pathPattern tightened?
 - Are any rules firing exclusively on normalised matches (meaning operators always rotate tokens)? That's expected — just note it.
 
-**B. Hash-dependent kits needing heuristic backup** (from the hash-saved detections above):
+**⚠️  B. FP candidates — MANDATORY action required if any present:**
+If the "Hash rules firing on LEGITIMATE domains" section above contains any entries,
+you MUST call each one out explicitly with:
+- Rule ID and which legitimate domains it fired on
+- Diagnosis: is this a brand-clone CSS match? A generic filename match? A template file?
+- Exact remediation: which specific hash (sha256 or normalizedSha256) to remove from
+  the rule's resources[] array in rules/source/resourceHashes.json, and why
+- Urgency rating: CRITICAL (fires on major brand like paypal.com, chase.com) or HIGH (fires on popular site)
+- Never suggest "add domain to safelist" — the hash is wrong, not the domain
+If no FP candidates, state explicitly: "No hash FP candidates detected this period."
+
+**C. Hash-dependent kits needing heuristic backup** (from the hash-saved detections above):
 For each kit where the pre-hash score was low (< 0.35), propose concrete source or domain rules that would catch the same kit WITHOUT the hash — treating the hash-saved examples as a labelled training set:
 - What do the "heuristic signals that DID fire" tell you about the kit's page structure?
 - Propose 1-2 source pattern rules (regex against HTML/JS) or domain rules that would push the pre-hash score above 0.35 for this kit family
 - Format each proposed rule as JSON in Virgil schema format so it can be auto-promoted
 - Priority: kits with more occurrences and lower pre-hash scores first
 
-**C. Detection layer balance**
+**D. Detection layer balance**
 Is the detection ratio healthy? If hash rules are saving >20% of dangerous verdicts that heuristics missed, that's a signal the heuristic layer is underpowered relative to the kits currently in circulation. Call it out explicitly with the numbers.
 
 ### Nano Blind Spots
@@ -455,6 +512,27 @@ ${resourceHashEffectiveness.length > 0 ? `<details>
 ${resourceHashEffectiveness.slice(0,15).map(r =>
   `| \`${r.rule_id}\` | ${r.kit_label || '—'} | ${r.phish_fires} | ${r.total_fires} | ${(r.precision*100).toFixed(0)}% | ${r.exact_matches} | ${r.normalized_matches} | ${r.unique_domains} |`
 ).join('\n')}
+
+</details>` : ''}
+
+${hashFpCandidates.length > 0 ? `<details>
+<summary>⚠️  Hash FP candidates — fired on LEGITIMATE domains (${hashFpCandidates.length} rule(s)) — REQUIRES IMMEDIATE REVIEW</summary>
+
+These rule IDs fired on Tranco-tier-1 (top ~1000) domains and were suppressed by the runtime circuit breaker.
+**The hash must be removed from the rule, not the domain added to the safe list.**
+
+| Rule ID | Legitimate domains hit | Unique installs | Sample domains | First seen |
+|---------|----------------------|----------------|---------------|-----------|
+${hashFpCandidates.slice(0,15).map(r =>
+  `| \`${r.rule_id}\` | ${r.unique_legit_domains} | ${r.unique_installs} | ${(r.sample_hostnames||'').split(',').slice(0,2).join(', ')} | ${r.first_seen?.slice(0,10)} |`
+).join('\n')}
+
+**To remove a specific hash from a rule:**
+\`\`\`bash
+# Edit rules/source/resourceHashes.json
+# Find the rule by id, remove the specific resources[] entry whose sha256 caused the FP
+# Then re-run publish-detections.yml
+\`\`\`
 
 </details>` : ''}
 
