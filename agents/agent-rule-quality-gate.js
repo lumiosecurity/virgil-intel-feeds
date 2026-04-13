@@ -31,6 +31,39 @@ const MAX_ATTEMPTS = 3;
 
 if (!ISSUE_NUMBER) { console.error('ISSUE_NUMBER required'); process.exit(1); }
 
+// ── Load known-good brand resource hashes ─────────────────────────────────────
+// Fetched from GitHub Pages (published by publish-detections.yml alongside
+// detections.json). Used to detect brand-clone FPs in proposed resourceHash
+// rules before they are promoted — if any proposed hash matches a file from
+// a real brand's login page, the rule will FP on that brand's site.
+// Falls back to empty sets gracefully so other checks still run.
+
+const KNOWN_GOOD_URL = 'https://lumiosecurity.github.io/virgil-intel-feeds/resource-safe-hashes.json';
+
+let _knownGoodExact = new Set(); // sha256 → brandKey (stringified as "sha256:brandKey")
+let _knownGoodNorm  = new Set();
+let _knownGoodMap   = new Map(); // sha256 → brandKey  (for display in issues/warnings)
+
+async function loadKnownGoodHashes() {
+  try {
+    const resp = await fetch(KNOWN_GOOD_URL, { signal: AbortSignal.timeout(8000) });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const db = await resp.json();
+    let count = 0;
+    for (const [brandKey, entry] of Object.entries(db)) {
+      if (brandKey === '_meta' || !Array.isArray(entry.resources)) continue;
+      for (const res of entry.resources) {
+        if (res.sha256)           { _knownGoodExact.add(res.sha256); _knownGoodMap.set(res.sha256, brandKey); count++; }
+        if (res.normalizedSha256) { _knownGoodNorm.add(res.normalizedSha256); _knownGoodMap.set(res.normalizedSha256, brandKey); }
+      }
+    }
+    console.log(`Known-good resource hashes: ${count} entries from ${Object.keys(db).filter(k => k !== '_meta').length} brands`);
+  } catch (e) {
+    console.warn(`Could not load known-good hashes from GitHub Pages: ${e.message}`);
+    console.warn(`Brand-clone FP check will be skipped — run publish-detections.yml to publish resource-safe-hashes.json`);
+  }
+}
+
 // ── Load rule writing guide for Opus final-attempt rewrite ───────────────────
 let RULE_WRITING_GUIDE = '';
 try {
@@ -596,6 +629,33 @@ function evaluateRules(rules) {
           `multiple kit-specific files are present simultaneously, reducing FP risk.`
         );
       }
+
+      // 8. GROUND TRUTH CHECK: compare proposed hashes against known-good brand files.
+      // This is the definitive brand-clone FP detector. If any proposed sha256 or
+      // normalizedSha256 matches a hash from resource-safe-hashes.json (built by
+      // generate-resource-hashes.js from real brand login pages), the rule captures
+      // a brand-cloned file and WILL false-positive on that brand's own login page.
+      // The known-good check supersedes all other FP reasoning — a hash match here
+      // is not a "warning", it is a certain false positive.
+      if (_knownGoodExact.size > 0 || _knownGoodNorm.size > 0) {
+        for (const res of rule.resources) {
+          const fpBrandExact = res.sha256           && _knownGoodMap.get(res.sha256);
+          const fpBrandNorm  = res.normalizedSha256 && _knownGoodMap.get(res.normalizedSha256);
+          const fpBrand      = fpBrandExact || fpBrandNorm;
+          if (fpBrand) {
+            const matchKind = fpBrandExact ? 'exact raw' : 'normalised';
+            eval_.issues.push(
+              `BRAND-CLONE FP CONFIRMED: path "${res.pathPattern}" has a ${matchKind} SHA-256 ` +
+              `that matches a CSS/JS file served from ${fpBrand}'s legitimate login page ` +
+              `(verified in resource-safe-hashes.json). ` +
+              `This rule WILL false-positive on every visit to the real ${fpBrand} site. ` +
+              `The phishkit cloned this file verbatim — it cannot safely be used as a detection signal. ` +
+              `Remove this resource entry from the rule or use a kit-specific file instead.`
+            );
+            eval_.fpMatches.push(`${fpBrand}:${res.pathPattern}`);
+          }
+        }
+      }
     }
     
   }
@@ -845,6 +905,11 @@ function extractRulesFromComment(comment) {
 async function main() {
   console.log(`\nAgent 4: Rule Quality Gate — Issue #${ISSUE_NUMBER}`);
   console.log(`Max attempts: ${MAX_ATTEMPTS}\n`);
+
+  // Load known-good brand resource hashes before any rule evaluation.
+  // This populates _knownGoodExact and _knownGoodNorm used by evaluateRules()
+  // to detect brand-clone FPs in proposed resourceHash rules.
+  await loadKnownGoodHashes();
 
   const issue = await github.getIssue(REPO, ISSUE_NUMBER);
   if (!issue) { console.error('Issue not found'); process.exit(1); }

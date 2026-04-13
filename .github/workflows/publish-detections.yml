@@ -86,6 +86,17 @@ jobs:
             echo "detections.json generated:"
             node -e "const d=require('./src/background/detections.json'); console.log('  brands:', d.brandEntries?.length, 'patterns:', d.sourcePatterns?.length, 'TLDs:', Object.keys(d.tldRisk||{}).length)"
           fi
+          # Copy resource-safe-hashes.json for agent access (quality gate checks proposed
+          # hash rules against this to detect brand-clone FPs at promotion time).
+          # Served at: https://lumiosecurity.github.io/virgil-intel-feeds/resource-safe-hashes.json
+          if [ -f src/background/resource-safe-hashes.json ]; then
+            cp src/background/resource-safe-hashes.json ../docs/resource-safe-hashes.json
+            BRAND_COUNT=$(node -e "const d=require('./src/background/resource-safe-hashes.json'); console.log(Object.keys(d).filter(k=>k!=='_meta').length)" 2>/dev/null || echo "0")
+            RESOURCE_COUNT=$(node -e "const d=require('./src/background/resource-safe-hashes.json'); let n=0; for(const[k,v] of Object.entries(d)){if(k!=='_meta'&&v.resources)n+=v.resources.length;} console.log(n)" 2>/dev/null || echo "0")
+            echo "resource-safe-hashes.json: ${BRAND_COUNT} brands, ${RESOURCE_COUNT} resource hashes"
+          else
+            echo "resource-safe-hashes.json not found — run tools/generate-resource-hashes.js to build it"
+          fi
           # Copy tranco-popularity.json for CDN serving (10K–1M downscore data)
           if [ -f feeds/tranco-popularity.json ]; then
             cp feeds/tranco-popularity.json ../docs/tranco-popularity.json
@@ -114,7 +125,7 @@ jobs:
         run: |
           git config user.name  "virgil-detections[bot]"
           git config user.email "detections-bot@lumiosecurity"
-          git add docs/detections.json docs/tranco-popularity.json feeds/
+          git add docs/detections.json docs/tranco-popularity.json docs/resource-safe-hashes.json feeds/
           if git diff --cached --quiet; then
             echo "No changes"
           else
