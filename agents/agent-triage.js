@@ -170,6 +170,99 @@ async function main() {
     }
   }
 
+  // ── Resource hash harvesting ──────────────────────────────────────────────────
+  // When the page is still live, opportunistically fetch same-origin CSS/JS files
+  // and compute SHA-256 fingerprints. These are included in the Claude prompt so
+  // the agent can propose resourceHashes rules alongside source/domain rules.
+  // Mirrors the logic in tools/harvest-resource-hashes.js exactly.
+  let resourceHarvestResults = [];
+  const harvestHtml = liveFetch?.html || (htmlSource ? htmlSource.slice(0, 10000) : null);
+  if (isRuleGap && url && url !== 'not provided' && harvestHtml) {
+    console.log('Resource hash harvest: extracting same-origin CSS/JS...');
+
+    // Normalisation helpers — must match resource-hash-detector.js exactly so hashes are comparable
+    const { createHash } = await import('node:crypto');
+    const sha256hex = (text) => createHash('sha256').update(text, 'utf8').digest('hex');
+    const normalizeCss = (t) => t.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\s+/g, ' ').trim();
+    const normalizeJs  = (t) => t
+      .replace(/\/\*[\s\S]*?\*\//g, ' ')
+      .replace(/\/\/[^\n]*/g,       ' ')
+      .replace(/\s+/g,              ' ')
+      .replace(/((?:token|bot_token|bot_id|chat_id|chatid|apiurl|api_url|endpoint|target|receiver|webhook|sendto|grab_url|send_url|log_url|mail_to)\s*[:=]\s*)["'][^"']{0,500}["']/gi, '$1"__REDACTED__"')
+      .trim();
+
+    const NOISE = ['jquery','bootstrap','lodash','underscore','moment','react','vue','angular',
+      'font-awesome','fontawesome','material-ui','tailwind','popper','animate.min','slick','swiper',
+      'axios','babel','webpack','polyfill','modernizr','google-analytics','gtag','fbevents',
+      'clarity','recaptcha','hcaptcha','turnstile'];
+
+    let baseOrigin;
+    try { baseOrigin = new URL(url).origin; } catch { baseOrigin = null; }
+
+    if (baseOrigin) {
+      // Extract same-origin resource URLs from the available HTML
+      const resourceUrls = [];
+      const seen = new Set();
+      const addRes = (rawHref, type) => {
+        try {
+          const abs = new URL(rawHref, url);
+          if (abs.origin !== baseOrigin) return;
+          if (seen.has(abs.href)) return;
+          seen.add(abs.href);
+          const lower = abs.pathname.toLowerCase();
+          if (NOISE.some(f => lower.includes(f))) return;
+          resourceUrls.push({ url: abs.href, path: abs.pathname, type });
+        } catch {}
+      };
+      for (const m of harvestHtml.matchAll(/<script[^>]+src=["']([^"']+)["']/gi))          addRes(m[1], 'script');
+      for (const m of harvestHtml.matchAll(/<link[^>]+rel=["']stylesheet["'][^>]+href=["']([^"']+)["']/gi)) addRes(m[1], 'stylesheet');
+      for (const m of harvestHtml.matchAll(/<link[^>]+href=["']([^"']+)["'][^>]+rel=["']stylesheet["']/gi)) addRes(m[1], 'stylesheet');
+
+      // Fetch and hash up to 6 resources within a 12-second total budget
+      const MAX_BYTES = 256 * 1024;
+      const deadline  = Date.now() + 12000;
+      let fetched = 0;
+
+      for (const res of resourceUrls.slice(0, 8)) {
+        if (Date.now() > deadline || fetched >= 6) break;
+        try {
+          const r = await fetch(res.url, {
+            headers: { 'User-Agent': 'Mozilla/5.0 (compatible; VirgilSecurityBot/1.0)' },
+            signal: AbortSignal.timeout(4000),
+          });
+          if (!r.ok) continue;
+          const text = await r.text();
+          if (text.length > MAX_BYTES) continue;
+
+          const isJs   = res.type === 'script';
+          const isCss  = res.type === 'stylesheet';
+          const rawHash  = sha256hex(text);
+          const normText = isJs ? normalizeJs(text) : isCss ? normalizeCss(text) : text;
+          const normHash = sha256hex(normText);
+
+          // Build a pathPattern anchored to the filename
+          const filename    = res.path.replace(/.*\//, '');
+          const escapedName = filename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const pathPattern = `(?:^|/)${escapedName}(?:\\?|$)`;
+
+          resourceHarvestResults.push({
+            path: res.path,
+            type: res.type,
+            pathPattern,
+            sha256: rawHash,
+            normalizedSha256: normHash,
+            mediaType: isJs ? 'application/javascript' : 'text/css',
+          });
+          fetched++;
+          console.log(`  harvested ${res.path} (${text.length} bytes) sha256=${rawHash.slice(0,12)}...`);
+        } catch (e) {
+          console.log(`  harvest failed for ${res.path}: ${e.message}`);
+        }
+      }
+      console.log(`Resource harvest complete: ${resourceHarvestResults.length} resource(s) fingerprinted`);
+    }
+  }
+
   // ── Gather domain intelligence ───────────────────────────────────────────────
   console.log('Gathering domain intelligence...');
   const [intel, heuristics] = await Promise.all([
@@ -353,6 +446,8 @@ ${domHashCorpusData.uniqueDangerousDomains >= 10 ? '⚠️  HIGH-CONFIDENCE CAMP
 Hash: \`${domHashFromIssue}\`
 No prior corpus data for this hash (first time seen).` : ''}
 
+${resourceHarvestResults.length > 0 ? `## Harvested Resource Hashes (live — ${new Date().toISOString().slice(0,10)})\n${resourceHarvestResults.length} same-origin CSS/JS file(s) fingerprinted from the live page.\nCSS is especially stable — operators cannot change styles without breaking the visual impersonation.\n\n${resourceHarvestResults.map((r, i) => '### Resource ' + (i+1) + ': ' + r.path + '\nType: ' + r.type + ' | mediaType: ' + r.mediaType + '\npathPattern:         ' + r.pathPattern + '\nsha256 (exact):      ' + r.sha256 + '\nsha256 (normalised): ' + r.normalizedSha256 + '\nNormalised hash tolerates per-deployment rotation of bot tokens and POST endpoints.').join('\n\n')}\n\nIMPORTANT: If any paths look kit-specific (not jQuery/Bootstrap/generic libs), include a resourceHashes entry in your proposed rules using these exact hashes.` : isRuleGap && url && url !== 'not provided' ? '## Resource Hashes\nLive resource harvest unavailable (page may be down or no same-origin CSS/JS found). Skip resourceHashes rule type for this issue.' : ''}
+
 ## Your task
 
 ${isRuleGap ? `This is a rule-gap issue. Claude already confirmed this is phishing at ${confidence || 'high'} confidence. Your job is NOT to re-evaluate whether it's phishing — it is. Your job is to propose the 3 best local rules that would catch this without Claude.
@@ -492,7 +587,38 @@ DOM hash weight guidance:
 kitName convention: <brand>-<kit-family>-v<N> (e.g. "paypal-16shop-v3", "microsoft-evilginx-v2")
 If the hash appears in the DOM Structure Hash section above with 2+ unique dangerous domains, ALWAYS include a domHashes entry as one of your proposed rules.
 
-4. **Recommended action** (primary rule type — NO_ACTION IS NOT VALID for rule-gap issues): ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADD_NETWORK_PATTERN / ADJUST_WEIGHT / NEEDS_MANUAL_REVIEW` : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
+Resource content hash rules (propose when Harvested Resource Hashes section is present):
+Use the exact hashes provided in the "Harvested Resource Hashes" section above. Do NOT invent hashes.
+Schema:
+\`\`\`json
+{
+  "id": "kit-name-slug-resources",
+  "description": "KitName phishkit — CSS/JS resource fingerprints",
+  "severity": "high",
+  "weight": 0.55,
+  "kitLabel": "Kit Name",
+  "matchStrategy": "any",
+  "resources": [
+    {
+      "pathPattern": "(?:^|/)filename\\\\.css(?:\\\\?|$)",
+      "sha256": "<64-char hex from Harvested Resource Hashes section>",
+      "normalizedSha256": "<64-char hex from Harvested Resource Hashes section>",
+      "mediaType": "text/css",
+      "note": "Kit-specific stylesheet — stable across deployments"
+    }
+  ]
+}
+\`\`\`
+Weight guidance:
+- 0.40 — one supporting resource (combine with source pattern)
+- 0.55 — one distinctive file (standalone signal)
+- 0.65 — multiple kit-specific files matched (near-definitive)
+matchStrategy "any" = one matching resource fires the rule (default, recommended).
+matchStrategy "all" = all listed resources must match (use for kits with many generic files).
+id convention: <brand>-<kit-family>-resources (e.g. "paypal-16shop-resources", "microsoft-w3ll-v4-resources")
+ONLY propose a resourceHashes rule if the Harvested Resource Hashes section is present and shows kit-specific paths.
+
+4. **Recommended action** (primary rule type — NO_ACTION IS NOT VALID for rule-gap issues): ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADD_NETWORK_PATTERN / ADD_RESOURCE_HASH_ENTRY / ADJUST_WEIGHT / NEEDS_MANUAL_REVIEW` : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
 
 1. **What is this page?** Describe what you see visually. What brand does it impersonate? What is it asking the user to do?
 2. **Is this phishing?** Based on the page content. Be direct.
@@ -520,7 +646,7 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
   // Sonnet generates (cheap, fast), Opus validates (expensive, thorough).
   const analysis = await claude(systemPrompt, userContent, isRuleGap ? 4000 : 2000, screenshotUrl, null);
 
-  const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|ADD_SOURCE_PATTERN|ADD_NETWORK_PATTERN|ADD_DOM_HASH_ENTRY|NO_ACTION|NEEDS_MANUAL_REVIEW/);
+  const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|ADD_SOURCE_PATTERN|ADD_NETWORK_PATTERN|ADD_DOM_HASH_ENTRY|ADD_RESOURCE_HASH_ENTRY|NO_ACTION|NEEDS_MANUAL_REVIEW/);
   let action = actionMatch2?.[0] || 'NEEDS_MANUAL_REVIEW';
 
   // NO_ACTION is never valid for rule-gap issues — the detection worked but the gap still needs closing
@@ -530,14 +656,15 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
   }
 
   const actionLabel = {
-    ADD_TO_SAFELIST:     'confirmed-fp',
-    ADD_TYPOSQUAT:       'confirmed-fn',
-    ADJUST_WEIGHT:       'rule-updated',
-    ADD_BRAND_ENTRY:     'rule-updated',
-    ADD_SOURCE_PATTERN:  'rule-updated',
-    ADD_NETWORK_PATTERN: 'rule-updated',
-    NO_ACTION:           'wont-fix',
-    NEEDS_MANUAL_REVIEW: 'needs-triage',
+    ADD_TO_SAFELIST:        'confirmed-fp',
+    ADD_TYPOSQUAT:          'confirmed-fn',
+    ADJUST_WEIGHT:          'rule-updated',
+    ADD_BRAND_ENTRY:        'rule-updated',
+    ADD_SOURCE_PATTERN:     'rule-updated',
+    ADD_NETWORK_PATTERN:    'rule-updated',
+    ADD_RESOURCE_HASH_ENTRY:'rule-updated',
+    NO_ACTION:              'wont-fix',
+    NEEDS_MANUAL_REVIEW:    'needs-triage',
   }[action] || 'needs-triage';
 
   const heuristicScore = confidenceValue;
