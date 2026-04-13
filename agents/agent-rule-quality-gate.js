@@ -526,11 +526,21 @@ function evaluateRules(rules) {
         );
       }
 
-      // 2. Every resource must have a valid pathPattern regex
+      // 2. pathPattern is OPTIONAL. When absent, the rule checks ALL non-noise
+      //    same-origin CSS/JS files — correct but broader and slower.
+      //    When present, it must be a valid regex (performance pre-filter).
       for (const res of rule.resources) {
         if (!res.pathPattern) {
-          eval_.issues.push(`Resource entry missing pathPattern — required for path pre-filter`);
-          continue;
+          // Warning, not an issue — absent pathPattern is valid but has performance implications.
+          // It's the right choice when the hash is from an IOC feed, a watchlist, or a kit with
+          // randomised filenames (Webpack chunk hashes etc.).
+          eval_.warnings.push(
+            `Resource entry has no pathPattern — the rule will check ALL same-origin CSS/JS ` +
+            `files on matching pages (up to ${8} files). This is correct but slower than a ` +
+            `targeted pattern. If you know a characteristic path or filename, add it. ` +
+            `If the kit uses randomised filenames (e.g. Webpack chunks), omitting pathPattern is intentional.`
+          );
+          continue; // no pattern to validate
         }
         try { new RegExp(res.pathPattern, 'i'); } catch (e) {
           eval_.issues.push(`Resource pathPattern "${res.pathPattern}" is invalid regex: ${e.message}`);
@@ -702,7 +712,9 @@ RESOURCE HASH RULE FP EVALUATION — apply these checks in order:
 
 1. NULL HASHES → AUTOMATIC FAIL. A rule with sha256:null or normalizedSha256:null will match on pathPattern alone (any page serving a file with that filename gets flagged). This is equivalent to a regex that matches everything. If any resource entry has both hashes null, FAIL immediately.
 
-2. GENERIC FILENAMES: The pathPattern "(?:^|/)style.css(?:\\?|$)" matches the CSS file on paypal.com, chase.com, and millions of other legitimate sites. Ask yourself: if a phishkit clones a brand's CSS verbatim (the most common kit technique), does this hash also match the brand's own legitimate page? If yes, flag it. Generic filenames (style.css, app.js, main.css, index.js) require either (a) a directory-anchored path that only appears in phishkits, or (b) matchStrategy:"all" with multiple non-generic resources.
+2. MISSING pathPattern → NOT a failure. pathPattern is optional. When absent, the rule checks all non-noise same-origin CSS/JS files and compares hashes. This is the correct design for rules built from IOC feeds, watchlists, or kits with randomised filenames (Webpack chunk hashes like "chunk.8f3a2b1c.js"). The performance cost is bounded by MAX_FETCH_RESOURCES (8 files). Only flag as a concern if the rule has many resources with no patterns AND is expected to fire on popular sites.
+
+3. GENERIC FILENAMES: The pathPattern "(?:^|/)style.css(?:\\?|$)" matches the CSS file on paypal.com, chase.com, and millions of other legitimate sites. Ask yourself: if a phishkit clones a brand's CSS verbatim (the most common kit technique), does this hash also match the brand's own legitimate page? If yes, flag it. Generic filenames (style.css, app.js, main.css, index.js) require either (a) a directory-anchored path that only appears in phishkits, or (b) matchStrategy:"all" with multiple non-generic resources.
 
 3. BRAND-CLONED CSS: The most dangerous FP source. Many phishkits download the target brand's actual CSS and serve it unchanged. If the harvested hash comes from a file named after the brand (e.g. "paypal-login.css") or from a path matching the brand's CDN structure, the hash likely matches what the brand serves legitimately — and will FP on every visit to the real brand. Reject these without confirmed evidence the file is kit-specific (modified or added content, not a verbatim clone).
 
