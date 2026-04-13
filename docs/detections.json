@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-13-11:08",
-    "generatedAt": "2026-04-13T11:08:05.469Z",
+    "version": "2026-04-13-21:43",
+    "generatedAt": "2026-04-13T21:43:44.418Z",
     "brandCount": 193,
-    "patternCount": 1101,
+    "patternCount": 1100,
     "networkPatternCount": 21
   },
   "adScriptSignatures": [
@@ -24457,17 +24457,6 @@
     "yealink.com"
   ],
   "sourcePatterns": [
-    {
-      "id": "example-source-pattern",
-      "group": "phishkitSignatures",
-      "description": "What this pattern detects",
-      "severity": "high",
-      "weight": 0.4,
-      "source": "js",
-      "note": "Why this regex is distinctive and low false-positive",
-      "patternString": "example\\.pattern\\.here",
-      "patternFlags": "i"
-    },
     {
       "id": "mobile-redirect-phishing-pattern",
       "group": "botEvasion",

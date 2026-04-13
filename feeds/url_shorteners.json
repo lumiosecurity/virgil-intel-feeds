@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/url_shorteners.txt",
-    "syncedAt": "2026-04-13T11:08:00.339Z",
+    "syncedAt": "2026-04-13T21:43:39.762Z",
     "role": "url_shorteners",
     "description": "URL shorteners that can mask phishing destinations",
-    "count": 342
+    "count": 343
   },
   "entries": [
     "1in.me",
@@ -13,6 +13,7 @@
     "1url.my",
     "2big.at",
     "2ly.link",
+    "2nco.com",
     "2pl.us",
     "2tu.us",
     "2ya.com",

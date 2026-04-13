@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-13T11:08:02.711Z",
+    "compiledAt": "2026-04-13T21:43:41.767Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -748,6 +748,7 @@
     "1url.my",
     "2big.at",
     "2ly.link",
+    "2nco.com",
     "2pl.us",
     "2tu.us",
     "2ya.com",
