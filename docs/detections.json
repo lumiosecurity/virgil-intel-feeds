@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-13-05:05",
-    "generatedAt": "2026-04-13T05:05:13.139Z",
+    "version": "2026-04-13-05:45",
+    "generatedAt": "2026-04-13T05:45:59.767Z",
     "brandCount": 193,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -45542,6 +45542,220 @@
       },
       "created": "2026-04-07",
       "updated": "2026-04-07",
+      "rev": 1
+    },
+    {
+      "id": "resource-hash-multi-fire",
+      "description": "Two or more distinct resource hash rules fired on the same page — prevents double-counting and calibrates to a single high-confidence weight",
+      "conditions": {
+        "all": [
+          {
+            "signal_prefix_count": {
+              "prefix": "resource-hash-",
+              "gte": 2
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "replace",
+        "weight": 0.65,
+        "severity": "high"
+      },
+      "created": "2026-04-12",
+      "updated": "2026-04-12",
+      "rev": 1
+    },
+    {
+      "id": "resource-hash-plus-brand-credential",
+      "description": "Kit fingerprint match on a domain impersonating a known brand, with a password form — near-definitive credential phishing",
+      "conditions": {
+        "all": [
+          {
+            "signal_prefix": "resource-hash-"
+          },
+          {
+            "signal_group": "brandImpersonation"
+          },
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "replace",
+        "weight": 0.75,
+        "severity": "high"
+      },
+      "created": "2026-04-12",
+      "updated": "2026-04-12",
+      "rev": 1
+    },
+    {
+      "id": "resource-hash-plus-telegram-exfil",
+      "description": "Kit fingerprint match AND Telegram bot exfiltration code — kit identified AND exfil endpoint confirmed, near-definitive",
+      "conditions": {
+        "all": [
+          {
+            "signal_prefix": "resource-hash-"
+          }
+        ],
+        "any": [
+          {
+            "signal": "source-telegram-bot-exfil"
+          },
+          {
+            "signal": "source-telegram-bot-exfil-token"
+          },
+          {
+            "signal": "source-telegram-bot-exfil-obfuscated"
+          },
+          {
+            "signal": "source-telegram-api-fetch-post"
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.25,
+        "severity": "high"
+      },
+      "created": "2026-04-12",
+      "updated": "2026-04-12",
+      "rev": 1
+    },
+    {
+      "id": "resource-hash-plus-dom-template",
+      "description": "Both CSS/JS file hashes AND DOM structure hash match known phishkit fingerprints — two independent kit fingerprinting methods agree",
+      "conditions": {
+        "all": [
+          {
+            "signal_prefix": "resource-hash-"
+          },
+          {
+            "has_dom_hash_match": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      },
+      "created": "2026-04-12",
+      "updated": "2026-04-12",
+      "rev": 1
+    },
+    {
+      "id": "resource-hash-plus-new-domain",
+      "description": "Kit fingerprint on a domain less than 7 days old — newly registered phishkit deployment",
+      "conditions": {
+        "all": [
+          {
+            "signal_prefix": "resource-hash-"
+          },
+          {
+            "domain_age_days": {
+              "lt": 7
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "high"
+      },
+      "created": "2026-04-12",
+      "updated": "2026-04-12",
+      "rev": 1
+    },
+    {
+      "id": "resource-hash-plus-visual-impersonation",
+      "description": "Kit fingerprint match AND visual analysis confirmed brand impersonation — CSS/JS fingerprint and screenshot analysis both agree",
+      "conditions": {
+        "all": [
+          {
+            "signal_prefix": "resource-hash-"
+          },
+          {
+            "has_visual_match": true
+          },
+          {
+            "visual_match_confidence": {
+              "gte": 0.65
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "high"
+      },
+      "created": "2026-04-12",
+      "updated": "2026-04-12",
+      "rev": 1
+    },
+    {
+      "id": "resource-hash-weak-heuristics-calibrate",
+      "description": "Resource hash fired but heuristic score before hash arrival was low (< 0.30) — hash is doing the heavy lifting; calibrate to avoid over-reliance on a single signal type",
+      "conditions": {
+        "all": [
+          {
+            "signal_prefix": "resource-hash-"
+          },
+          {
+            "pre_async_score": {
+              "lt": 0.3
+            }
+          },
+          {
+            "not": {
+              "has_password_form": true
+            }
+          },
+          {
+            "not": {
+              "signal_group": "brandImpersonation"
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "downscore",
+        "weight": 0.4,
+        "severity": "medium"
+      },
+      "created": "2026-04-12",
+      "updated": "2026-04-12",
+      "rev": 1
+    },
+    {
+      "id": "resource-hash-weak-heuristics-plus-form",
+      "description": "Hash did the heavy lifting (pre-hash score < 0.30) BUT a password form is present — low heuristic coverage plus confirmed credential UI; boost to compensate",
+      "conditions": {
+        "all": [
+          {
+            "signal_prefix": "resource-hash-"
+          },
+          {
+            "pre_async_score": {
+              "lt": 0.3
+            }
+          },
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "high"
+      },
+      "created": "2026-04-12",
+      "updated": "2026-04-12",
       "rev": 1
     },
     {

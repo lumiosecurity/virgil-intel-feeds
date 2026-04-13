@@ -1,0 +1,12 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "generated": "1970-01-01T00:00:00.000Z",
+    "algorithm": "SHA-256 of raw content + SHA-256 of normalised content",
+    "normalisation": "Strip comments and whitespace; redact token/endpoint variable values",
+    "purpose": "Known-good CSS/JS hashes from legitimate brand login pages. Any phishkit resource rule that matches one of these hashes is capturing a brand-cloned file — it will false-positive on the real brand's login page. Used by harvest-resource-hashes.js (warn at creation), resource-hash-detector.js (suppress at runtime), and agent-rule-quality-gate.js (block at promotion).",
+    "brandCount": 0,
+    "resourceCount": 0,
+    "note": "EMPTY PLACEHOLDER. Run tools/generate-resource-hashes.js to populate from live brand login pages."
+  }
+}
