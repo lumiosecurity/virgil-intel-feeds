@@ -515,14 +515,37 @@ function evaluateRules(rules) {
       // ── Resource content hash rule evaluation ─────────────────────────────
       // FP risk is high and specific — evaluate every dimension carefully.
 
-      // 1. Every resource must have at least one real hash (not null/placeholder)
-      const nullHashResources = rule.resources.filter(r =>
-        !r.sha256 && !r.normalizedSha256
+      // 1. Every resource entry needs a hash, a pathPattern, or both.
+      //
+      //   pathPattern + hash:  full fingerprint (path pre-filter + content check)
+      //   pathPattern only:    path-only trigger — fires on URL match, no fetch.
+      //                        Valid when content rotates too fast to hash (PHP gate
+      //                        files, session scripts). Default weight 0.30.
+      //   hash only:           content fingerprint with no path constraint.
+      //   neither:             AUTOMATIC FAIL — entry is useless.
+      //
+      // Note: path-only entries are weaker signals than content hashes. Flag them
+      // so the author knows, but do not fail — they're intentionally valid.
+      const uselessResources = rule.resources.filter(r =>
+        !r.sha256 && !r.normalizedSha256 && !r.pathPattern
       );
-      if (nullHashResources.length > 0) {
+      if (uselessResources.length > 0) {
         eval_.issues.push(
-          `${nullHashResources.length} resource(s) have no hashes — run harvest-resource-hashes.js first. ` +
-          `Never promote a rule with null hashes: it will match on pathPattern alone.`
+          `AUTOMATIC FAIL: ${uselessResources.length} resource entry(ies) have neither a hash nor a pathPattern. ` +
+          `Every entry needs at least one: a hash (content fingerprint), a pathPattern (path trigger), or both. ` +
+          `Path-only entries (pathPattern without hash) are valid when content rotates too fast to hash.`
+        );
+      }
+
+      const pathOnlyResources = rule.resources.filter(r =>
+        !!(r.pathPattern) && !(r.sha256 || r.normalizedSha256)
+      );
+      if (pathOnlyResources.length > 0) {
+        eval_.warnings.push(
+          `${pathOnlyResources.length} resource entry(ies) are path-only (pathPattern present, no hash). ` +
+          `These fire on URL pattern match alone — no content comparison, no fetch required. ` +
+          `Effective weight will be ~0.30 (lower than hash rules at 0.55). ` +
+          `Consider adding hashes when a stable version of the file is captured.`
         );
       }
 
@@ -710,7 +733,7 @@ RULE TYPES:
 
 RESOURCE HASH RULE FP EVALUATION — apply these checks in order:
 
-1. NULL HASHES → AUTOMATIC FAIL. A rule with sha256:null or normalizedSha256:null will match on pathPattern alone (any page serving a file with that filename gets flagged). This is equivalent to a regex that matches everything. If any resource entry has both hashes null, FAIL immediately.
+1. NULL HASHES → only fail if pathPattern is ALSO absent. A resource entry with pathPattern but no hash is a path-only trigger — intentionally valid when content rotates too fast to fingerprint (PHP gate files, session-embedded scripts). It fires on URL pattern match alone (no fetch). If an entry has NEITHER a hash NOR a pathPattern, FAIL — it's useless. If an entry has pathPattern but no hash, warn but do not fail.
 
 2. MISSING pathPattern → NOT a failure. pathPattern is optional. When absent, the rule checks all non-noise same-origin CSS/JS files and compares hashes. This is the correct design for rules built from IOC feeds, watchlists, or kits with randomised filenames (Webpack chunk hashes like "chunk.8f3a2b1c.js"). The performance cost is bounded by MAX_FETCH_RESOURCES (8 files). Only flag as a concern if the rule has many resources with no patterns AND is expected to fire on popular sites.
 
