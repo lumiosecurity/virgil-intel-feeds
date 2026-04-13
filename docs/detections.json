@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-13-05:45",
-    "generatedAt": "2026-04-13T05:45:59.767Z",
+    "version": "2026-04-13-06:48",
+    "generatedAt": "2026-04-13T06:48:51.318Z",
     "brandCount": 193,
     "patternCount": 1102,
     "networkPatternCount": 21
@@ -45165,6 +45165,170 @@
       "created": "2026-04-07",
       "updated": "2026-04-07",
       "rev": 1
+    },
+    {
+      "id": "aitm-webmail-abused-host-credential",
+      "description": "AiTM classic: webmail delivery → trusted hosting abuse → credential harvest. Elevates confidence when the full funnel is visible even if each page scored borderline.",
+      "conditions": {
+        "all": [
+          {
+            "chain_pattern": "aitm"
+          },
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.25,
+        "severity": "critical"
+      }
+    },
+    {
+      "id": "aitm-without-credential-form",
+      "description": "AiTM pattern detected but current page has no password field yet — flag as suspicious to warn before the user reaches the credential stage.",
+      "conditions": {
+        "all": [
+          {
+            "chain_pattern": "aitm"
+          },
+          {
+            "not": {
+              "has_password_form": true
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "chain-email-shortener-credential",
+      "description": "Obfuscated delivery chain: email → URL shortener → credential harvest. The shortener obscures the final destination, a classic evasion technique.",
+      "conditions": {
+        "all": [
+          {
+            "chain_pattern": "email-shortener-credential"
+          },
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.18,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "chain-parent-dangerous-with-form",
+      "description": "Parent page was DANGEROUS and current page has a form — assume current page is the credential collection stage of the same attack.",
+      "conditions": {
+        "all": [
+          {
+            "chain_signal": "chain-parent-dangerous"
+          },
+          {
+            "has_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.22,
+        "severity": "critical"
+      }
+    },
+    {
+      "id": "chain-parent-dangerous-no-form",
+      "description": "Parent page was DANGEROUS and current page has no form yet — may be a redirect or loading stage. Elevate to suspicious.",
+      "conditions": {
+        "all": [
+          {
+            "chain_signal": "chain-parent-dangerous"
+          },
+          {
+            "not": {
+              "has_form": true
+            }
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.12,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "chain-deep-credential-harvest",
+      "description": "Credential request reached after 2+ navigation hops from a webmail or messaging origin — multi-stage funnel, increase prior.",
+      "conditions": {
+        "all": [
+          {
+            "chain_depth": {
+              "gte": 2
+            }
+          },
+          {
+            "has_password_form": true
+          },
+          {
+            "chain_any_signal": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.15,
+        "severity": "high"
+      }
+    },
+    {
+      "id": "chain-webmail-first-visit-credential",
+      "description": "Email origin + first-ever visit to this domain + credential request — combines arrival, relationship, and chain context for high-confidence detection.",
+      "conditions": {
+        "all": [
+          {
+            "chain_origin": "webmail"
+          },
+          {
+            "is_first_visit": true
+          },
+          {
+            "has_password_form": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.2,
+        "severity": "critical"
+      }
+    },
+    {
+      "id": "chain-abused-host-visual-match",
+      "description": "Page on a commonly-abused hosting platform has a visual hash match to a known brand login page — definitive shared-doc lure.",
+      "conditions": {
+        "all": [
+          {
+            "chain_signal": "chain-intermediate-abused-hosting"
+          },
+          {
+            "has_visual_match": true
+          }
+        ]
+      },
+      "action": {
+        "scope": "boost",
+        "weight": 0.25,
+        "severity": "critical"
+      }
     },
     {
       "id": "zerofont-cluster-dedup",
