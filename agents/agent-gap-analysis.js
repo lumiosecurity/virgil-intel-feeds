@@ -146,6 +146,88 @@ async function main() {
 
   console.log(`Uncoded DOM template patterns (3+ unique domains): ${uncodedTemplates.length}`);
 
+  // ── Resource hash rule effectiveness (Scenario A) ──────────────────────────
+  // Which hash rules are firing most? Are they high-precision?
+  // Also: which kit labels appear most in dangerous verdicts?
+  // Answers "how much work are hashes doing?" and "which kits are active?"
+  let resourceHashEffectiveness = [];
+  let hashSavedDetections = [];
+  try {
+    resourceHashEffectiveness = d1raw(`
+      SELECT
+        rhs.rule_id,
+        rhs.kit_label,
+        COUNT(DISTINCT v.registered_domain)                                     AS unique_domains,
+        COUNT(*)                                                                 AS total_fires,
+        SUM(CASE WHEN v.risk_level IN ('suspicious','dangerous') THEN 1 END)   AS phish_fires,
+        SUM(CASE WHEN v.risk_level = 'safe' THEN 1 END)                        AS safe_fires,
+        CAST(SUM(CASE WHEN v.risk_level IN ('suspicious','dangerous') THEN 1 END)
+             AS FLOAT) / (COUNT(*) + 1)                                         AS precision,
+        SUM(CASE WHEN rhs.match_type = 'exact'      THEN 1 ELSE 0 END)        AS exact_matches,
+        SUM(CASE WHEN rhs.match_type = 'normalized' THEN 1 ELSE 0 END)        AS normalized_matches
+      FROM resource_hash_signals rhs
+      JOIN verdicts v ON rhs.verdict_id = v.id
+      WHERE v.created_at >= datetime('now', '-${LOOKBACK_DAYS} days')
+      GROUP BY rhs.rule_id, rhs.kit_label
+      ORDER BY phish_fires DESC
+      LIMIT 20
+    `);
+
+    // ── Scenario B: Hash-saved detections with weak heuristics ───────────────
+    // Verdicts where a resource hash signal fired AND the pre-async heuristic
+    // score was low (< 0.35). These are pages where traditional rules missed
+    // and only the hash caught it — the hash is doing more work than it should.
+    // For each kit label, the signal_types from the verdict tells us what
+    // heuristic signals DID fire, helping identify what rules to strengthen.
+    hashSavedDetections = d1raw(`
+      SELECT
+        rhs.kit_label,
+        rhs.rule_id,
+        COUNT(DISTINCT v.registered_domain)                         AS unique_domains,
+        COUNT(*)                                                     AS occurrences,
+        AVG(v.heuristic_score_pre_async)                            AS avg_pre_hash_score,
+        AVG(v.confidence)                                           AS avg_final_score,
+        GROUP_CONCAT(DISTINCT v.detected_brand)                     AS brands,
+        GROUP_CONCAT(DISTINCT v.tld)                                AS tlds
+      FROM resource_hash_signals rhs
+      JOIN verdicts v ON rhs.verdict_id = v.id
+      WHERE v.risk_level IN ('suspicious', 'dangerous')
+        AND v.heuristic_score_pre_async IS NOT NULL
+        AND v.heuristic_score_pre_async < 0.35
+        AND v.created_at >= datetime('now', '-${LOOKBACK_DAYS} days')
+      GROUP BY rhs.kit_label, rhs.rule_id
+      HAVING occurrences >= 2
+      ORDER BY occurrences DESC, avg_pre_hash_score ASC
+      LIMIT 15
+    `);
+
+    // For each hash-saved kit, pull what heuristic signals DID fire on those
+    // pages — this tells us what the kit's "heuristic fingerprint" looks like
+    // so Claude can propose complementary source/domain rules
+    for (const kit of hashSavedDetections.slice(0, 5)) {
+      const sigRows = d1raw(`
+        SELECT s.type, COUNT(*) as hits, AVG(s.weight) as avg_weight
+        FROM signals s
+        JOIN verdicts v ON s.verdict_id = v.id
+        JOIN resource_hash_signals rhs ON rhs.verdict_id = v.id
+        WHERE rhs.rule_id = '${kit.rule_id}'
+          AND v.heuristic_score_pre_async < 0.35
+          AND v.risk_level IN ('suspicious', 'dangerous')
+          AND v.created_at >= datetime('now', '-${LOOKBACK_DAYS} days')
+          AND s.type NOT LIKE 'resource-hash-%'
+        GROUP BY s.type
+        ORDER BY hits DESC
+        LIMIT 8
+      `);
+      kit.presentSignals = sigRows;
+    }
+  } catch (e) {
+    console.warn('Resource hash queries failed (table may not exist yet):', e.message);
+  }
+
+  console.log(`Resource hash rule effectiveness: ${resourceHashEffectiveness.length} rules`);
+  console.log(`Hash-saved detections (pre-hash score < 0.35): ${hashSavedDetections.length} kit/rule pairs`);
+
   // ── Nano concordance analysis ───────────────────────────────────────────────
   // Find cases where Nano said SAFE but Claude said DANGEROUS — these are
   // Nano blind spots that may indicate categories needing tighter thresholds
@@ -220,6 +302,33 @@ ${uncodedTemplates.slice(0,10).map(r =>
   `- \`${r.dom_structure_hash?.slice(0,16)}…\`: ${r.unique_domains} unique domains, ${r.total_hits} total hits, brands: ${r.brands || 'unknown'} (first seen: ${r.first_seen?.slice(0,10)})`
 ).join('\n') || '(none)'}
 
+### Resource hash rule effectiveness (Scenario A: hash fires on confirmed phish)
+How much work are CSS/JS file hash rules doing? Precision tells you whether
+a rule is reliable or generating false positives.
+${resourceHashEffectiveness.length > 0 ? resourceHashEffectiveness.slice(0,12).map(r =>
+  `- \`${r.rule_id}\` (kit: ${r.kit_label || 'unknown'}): ` +
+  `${r.phish_fires}/${r.total_fires} phish (${(r.precision*100).toFixed(0)}% precision), ` +
+  `${r.unique_domains} unique domains, ` +
+  `exact: ${r.exact_matches} normalized: ${r.normalized_matches}`
+).join('\n') : '(no resource hash data yet — table populates as rules ship and detections accumulate)'}
+
+### Hash-saved detections with weak heuristics (Scenario B: heuristics were light)
+These are detections where a resource hash rule fired BUT the pre-hash heuristic
+score was < 0.35. The hash did the heavy lifting — traditional rules were not
+covering this kit adequately. Each kit here needs stronger source/domain rules
+as backup so detections don't depend on the hash alone.
+${hashSavedDetections.length > 0 ? hashSavedDetections.slice(0,8).map(r => {
+  const sigList = (r.presentSignals || []).slice(0,5)
+    .map(s => `${s.type}(w:${s.avg_weight?.toFixed(2)})`)
+    .join(', ');
+  return `- Kit: \`${r.kit_label || r.rule_id}\`: ` +
+    `${r.occurrences} hash-saves across ${r.unique_domains} domains, ` +
+    `avg pre-hash score: ${r.avg_pre_hash_score?.toFixed(2)}, ` +
+    `avg final score: ${r.avg_final_score?.toFixed(2)}, ` +
+    `brands: ${r.brands || 'unknown'}\n` +
+    `  Heuristic signals that DID fire: ${sigList || '(none recorded)'}`;
+}).join('\n') : '(no hash-saved detections yet — populates once pre_async scoring is live)'}
+
 ### Nano vs Claude concordance
 Gemini Nano pre-screens pages before Claude. When Nano says SAFE but Claude says DANGEROUS, that's a dangerous miss — the page would have been skipped without Claude.
 - Total comparisons: ${nanoStats.total}
@@ -255,6 +364,24 @@ For any uncoded DOM template patterns with 5+ unique domains, propose a domHashe
 - Estimate the kitName based on the associated brands and hit pattern
 - Weight: 0.30 for 3-4 domains, 0.40 for 5-9 domains, 0.45 for 10+
 - These can ship via remote config immediately — highest ROI of any rule type
+
+### Resource Hash Coverage Analysis
+This section is NEW — address both directions:
+
+**A. Hash rule health** (from the effectiveness table above):
+- Which hash rules have high precision (>80%) and are safe to rely on?
+- Which have low precision (<60%) and may need the pathPattern tightened?
+- Are any rules firing exclusively on normalised matches (meaning operators always rotate tokens)? That's expected — just note it.
+
+**B. Hash-dependent kits needing heuristic backup** (from the hash-saved detections above):
+For each kit where the pre-hash score was low (< 0.35), propose concrete source or domain rules that would catch the same kit WITHOUT the hash — treating the hash-saved examples as a labelled training set:
+- What do the "heuristic signals that DID fire" tell you about the kit's page structure?
+- Propose 1-2 source pattern rules (regex against HTML/JS) or domain rules that would push the pre-hash score above 0.35 for this kit family
+- Format each proposed rule as JSON in Virgil schema format so it can be auto-promoted
+- Priority: kits with more occurrences and lower pre-hash scores first
+
+**C. Detection layer balance**
+Is the detection ratio healthy? If hash rules are saving >20% of dangerous verdicts that heuristics missed, that's a signal the heuristic layer is underpowered relative to the kits currently in circulation. Call it out explicitly with the numbers.
 
 ### Nano Blind Spots
 If there are Nano dangerous misses (Nano SAFE → Claude DANGEROUS), identify patterns:
@@ -320,14 +447,40 @@ Nano agreement rate: ${nanoStats.total > 0 ? ((nanoStats.concordant / nanoStats.
 
 </details>` : ''}
 
+${resourceHashEffectiveness.length > 0 ? `<details>
+<summary>Resource hash rule effectiveness (${resourceHashEffectiveness.length} rules)</summary>
+
+| Rule ID | Kit | Phish fires | Total fires | Precision | Exact | Normalised | Domains |
+|---------|-----|------------|------------|----------|-------|-----------|---------|
+${resourceHashEffectiveness.slice(0,15).map(r =>
+  `| \`${r.rule_id}\` | ${r.kit_label || '—'} | ${r.phish_fires} | ${r.total_fires} | ${(r.precision*100).toFixed(0)}% | ${r.exact_matches} | ${r.normalized_matches} | ${r.unique_domains} |`
+).join('\n')}
+
+</details>` : ''}
+
+${hashSavedDetections.length > 0 ? `<details>
+<summary>Hash-saved detections — heuristics were weak (${hashSavedDetections.length} kit/rule pairs)</summary>
+
+These kits were caught by resource hash rules but would have been missed by heuristics alone (pre-hash score < 0.35).
+Each represents a heuristic coverage gap that needs source/domain rules as backup.
+
+| Kit | Rule | Domains | Occurrences | Pre-hash score | Final score | Heuristic signals present |
+|-----|------|---------|------------|---------------|------------|--------------------------|
+${hashSavedDetections.slice(0,12).map(r =>
+  `| ${r.kit_label || '—'} | \`${r.rule_id}\` | ${r.unique_domains} | ${r.occurrences} | ${r.avg_pre_hash_score?.toFixed(2)} | ${r.avg_final_score?.toFixed(2)} | ${(r.presentSignals||[]).slice(0,3).map(s => s.type).join(', ') || '(none)'} |`
+).join('\n')}
+
+</details>` : ''}
+
 ---
 
 ## Next steps
 
 A maintainer should:
 1. Review the Priority Gaps above
-2. Ship Quick Wins via remote config (no Store push needed): edit \`core-rules\`, run compile-feeds, trigger Publish Detection Config
-3. File separate issues for any changes requiring JS code updates
+2. For any **Hash-Dependent Kits** listed — prioritise the proposed source/domain rules so detection doesn't rely on hashes alone
+3. Ship Quick Wins via remote config (no Store push needed): edit \`core-rules\`, run compile-feeds, trigger Publish Detection Config
+4. File separate issues for any changes requiring JS code updates
 
 ---
 *Generated by Virgil Gap Analysis Agent at ${new Date().toISOString()}*`;
