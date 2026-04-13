@@ -1,9 +1,9 @@
 {
   "_meta": {
-    "version": "2026-04-13-09:14",
-    "generatedAt": "2026-04-13T09:14:36.934Z",
+    "version": "2026-04-13-11:08",
+    "generatedAt": "2026-04-13T11:08:05.469Z",
     "brandCount": 193,
-    "patternCount": 1102,
+    "patternCount": 1101,
     "networkPatternCount": 21
   },
   "adScriptSignatures": [
@@ -27414,15 +27414,15 @@
     {
       "id": "outdated-copyright-year",
       "group": "brandImpersonation",
-      "description": "Copyright year significantly outdated — phishing page copied from an old version of the target site",
+      "description": "Copyright year significantly outdated — may indicate phishing page copied from an old version of the target site",
       "severity": "low",
-      "weight": 0.1,
+      "weight": 0.05,
       "source": "html",
-      "note": "A copyright year from 2010-2023 (significantly older than the current year 2026) suggests the phishing page was cloned from an older snapshot of the target site. Phishers don't update the copyright year when they copy login pages.",
+      "note": "A copyright year from 2010-2022 (3+ years older than current year 2026) may suggest a cloned phishing page, but many legitimate sites also fail to update copyright years. Downweighted to 0.05 to serve only as a weak supporting signal. Narrowed range to 2022 and earlier (excluding 2023) to reduce noise from sites just one update cycle behind.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
-      "patternString": "(?:©|&copy;|copyright)\\s*(?:20(?:1[0-9]|2[0-3]))[\\s\\S]{0,100}(?:All\\s*Rights\\s*Reserved|rights\\s*reserved)",
+      "updated": "2026-04-13",
+      "rev": 2,
+      "patternString": "(?:©|&copy;|copyright)\\s*(?:20(?:1[0-9]|2[0-2]))[\\s\\S]{0,100}(?:All\\s*Rights\\s*Reserved|rights\\s*reserved)",
       "patternFlags": "i"
     },
     {
@@ -28861,14 +28861,14 @@
     {
       "id": "keystroke-click-tracking-counters",
       "group": "credentialHarvesting",
-      "description": "Detects phishing pages that track keystrokes, clicks, and time-on-page via inline counters — characteristic of phishing simulations and credential harvesting kits",
+      "description": "Detects phishing pages that display visible keystroke/click tracking counters — characteristic of phishing simulations and credential harvesting kits that create urgency by showing victims their inputs are being monitored",
       "severity": "high",
-      "weight": 0.3,
+      "weight": 0.25,
       "source": "html",
-      "note": "Phishkits that display tracking counters to create urgency. Simplified — the literal is already very specific.",
+      "note": "Phishkits display visible counters (e.g., 'Keystrokes: 14') to create urgency. Requires counter-display patterns, not just word 'keystrokes' which appears in educational/developer content.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-13",
+      "rev": 2,
       "match": [
         {
           "content": "keystrokes",
@@ -28876,11 +28876,11 @@
           "fast_pattern": true
         },
         {
-          "pattern": "keystrokes|clicks\\s*tracked|time\\s*on\\s*page",
+          "pattern": "keystrokes\\s*(?::|tracked|captured|logged|recorded)\\s*[<\\d]|(?:clicks|keys)\\s*(?::|=)\\s*\\d|tracking\\s*your\\s*(?:keystrokes|activity)",
           "flags": "i"
         }
       ],
-      "condition": "1"
+      "condition": "all"
     },
     {
       "id": "hidden-field-credential-relay",
@@ -36785,34 +36785,6 @@
       "patternFlags": "i"
     },
     {
-      "id": "keylogger-keypress-accumulate",
-      "group": "phishkitSignatures",
-      "description": "Keystroke accumulation via keypress/keydown handler — credential keylogger pattern (meta-rule building block, zero-weight)",
-      "severity": "info",
-      "weight": 0.15,
-      "source": "js",
-      "note": "ZERO-WEIGHTED after continued FPs on readwrite.com, healthcare.gov, cnn.com, gizmodo.com and other high-traffic sites. Keypress+accumulate+send is ubiquitous in legitimate SPAs (search-as-you-type, autocomplete, form validation). Pattern fundamentally cannot distinguish malicious from legitimate without runtime behavioral analysis. Now serves purely as building block for meta-rules requiring: (1) fake login form presence, (2) brand impersonation signals, (3) suspicious TLD/domain age, (4) credential field targeting. Should never fire standalone.",
-      "created": "2026-04-07",
-      "updated": "2026-04-12",
-      "rev": 4,
-      "match": [
-        {
-          "content": "addEventListener",
-          "fast_pattern": true
-        },
-        {
-          "pattern": "keypress|keydown|keyup"
-        },
-        {
-          "pattern": "\\+=\\s*(?:e\\.key|String\\.fromCharCode)|push\\(|concat\\("
-        },
-        {
-          "pattern": "fetch|XMLHttpRequest|sendBeacon|new\\s+Image"
-        }
-      ],
-      "condition": "0 & 1 & 2 & 3"
-    },
-    {
       "id": "window-opener-blank-redirect",
       "group": "phishkitSignatures",
       "description": "Window.opener manipulation combined with about:blank — tabnabbing phishing technique",
@@ -40619,14 +40591,14 @@
     {
       "id": "countdown-urgency-timer",
       "group": "socialEngineering",
-      "description": "Countdown timer creating urgency — account action expires in X minutes/hours pattern",
+      "description": "Countdown timer creating urgency — account verification/security action expires pattern",
       "severity": "low",
       "weight": 0.05,
       "source": "both",
-      "note": "JavaScript countdown timers showing 'X minutes remaining' or 'expires in...' create artificial urgency on phishing pages. The timer pressures victims to enter credentials quickly before 'time runs out'. [Observation-level: Countdown timer — sales pages, event countdowns, session timeouts] [FP fix: added negation for subscription/paywall language - news sites use countdown timers for free article limits]",
+      "note": "JavaScript countdown timers showing 'X minutes remaining' combined with account security threats create artificial urgency on phishing pages. Requires security-related language (verify, suspended, locked) to distinguish from legitimate e-commerce countdown timers. [Observation-level: Countdown timer — sales pages, event countdowns, session timeouts] [FP fix rev3: requires account security threat language, excludes e-commerce/sale terminology to avoid Lazada-style flash sale timers]",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 2,
+      "updated": "2026-04-13",
+      "rev": 3,
       "match": [
         {
           "content": "countdown",
@@ -40644,17 +40616,16 @@
           "pattern": "innerHTML|textContent|innerText|display"
         },
         {
-          "content": "<nav",
-          "negated": true,
-          "nocase": true
+          "pattern": "verif|suspend|locked|disabled|unusual.{0,20}activity|security.{0,20}alert|confirm.{0,20}identity|restore.{0,20}access",
+          "flags": "i"
         },
         {
-          "pattern": "subscribe|subscription|paywall|membership|premium",
+          "pattern": "sale|deal|offer|promo|discount|flash|cart|checkout|shipping|delivery|order|bid|auction",
           "flags": "i",
           "negated": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "mailto-support-link-phish",
@@ -40788,14 +40759,14 @@
     {
       "id": "package-held-urgency-text",
       "group": "socialEngineering",
-      "description": "Package held/on hold/pending urgency text — delivery status pressure for immediate action",
+      "description": "Package held/on hold/pending urgency text with credential harvesting indicators — delivery phishing pressure",
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "note": "Text claiming a package is 'on hold', 'pending', 'delayed', or 'awaiting action' combined with a required action (pay, verify, update) creates urgency. This is the fundamental social engineering pattern of ALL delivery phishing.",
+      "note": "Text claiming a package is 'on hold', 'pending', 'delayed', or 'awaiting action' combined with a required action AND credential harvesting indicators. Match 4 requires password fields or verification/login language to distinguish from legitimate delivery status pages.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-13",
+      "rev": 2,
       "match": [
         {
           "content": "package",
@@ -40814,9 +40785,13 @@
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "pattern": "type=[\"']?password|enter.*(?:card|cvv|ssn)|verify.*(?:identity|account)|confirm.*(?:details|information)|login.*(?:here|now|below)",
+          "flags": "i"
         }
       ],
-      "condition": "0 & 1 & 2 & 3"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "delivery-scheduling-fee",
@@ -42016,14 +41991,14 @@
     {
       "id": "authoritative-access-language",
       "group": "socialEngineering",
-      "description": "Formal authoritative language about access rights — legal-sounding text suppressing skepticism on phishing pages",
+      "description": "Formal authoritative language about access rights near credential inputs — legal-sounding text suppressing skepticism on phishing pages",
       "severity": "medium",
-      "weight": 0.2,
+      "weight": 0.15,
       "source": "html",
-      "note": "Formal, legal-sounding language about access rights ('rightful recipient', 'unauthorized access is prohibited', 'protected file') combined with a login form creates false authority. This language discourages the victim from questioning the page's legitimacy. Real login pages don't lecture about unauthorized access.",
+      "note": "Formal, legal-sounding language about access rights ('rightful recipient', 'unauthorized access is prohibited') appearing near password fields or verification prompts, NOT in footer/legal sections. Real login pages don't lecture about unauthorized access next to the login form itself.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-13",
+      "rev": 2,
       "match": [
         {
           "content": "unauthorized",
@@ -42035,8 +42010,12 @@
           "flags": "i"
         },
         {
-          "pattern": "prohibited|forbidden|not\\s*(?:permitted|allowed)|strictly",
+          "pattern": "type=[\"']?password|verify\\s*(?:your|account)|confirm\\s*(?:your\\s*)?(?:identity|credentials)|enter\\s*(?:your\\s*)?password",
           "flags": "i"
+        },
+        {
+          "pattern": "<footer[^>]*>.*(?:unauthorized|prohibited)|(?:terms\\s*(?:of\\s*)?(?:service|use)|privacy\\s*policy|legal\\s*notice).*(?:unauthorized|prohibited)",
+          "flags": "is"
         },
         {
           "content": "<nav",
@@ -42044,7 +42023,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 | (0 & 2) & 3"
+      "condition": "(0 & 1 & 2 & !3) & 4"
     },
     {
       "id": "netflix-signin-language-pattern",
@@ -43365,14 +43344,14 @@
     {
       "id": "multiple-redirect-chain",
       "group": "urlHeuristics",
-      "description": "Multiple sequential redirects in JavaScript — phishing redirect chain",
-      "severity": "medium",
-      "weight": 0.1,
+      "description": "Multiple sequential redirects in JavaScript — potential redirect chain (low confidence)",
+      "severity": "low",
+      "weight": 0.05,
       "source": "js",
-      "note": "Two or more redirect assignments in the same script indicate a redirect chain. Phishing kits bounce through multiple intermediary pages before landing on the final credential harvesting page. — LOWERED from 0.20: internal navigation links produce false matches",
+      "note": "Two or more redirect assignments in the same script. Common in phishing kits but also legitimate for auth flows, analytics, and A/B testing. Weight minimized to 0.05 as this pattern alone cannot distinguish malicious from legitimate redirect chains — requires corroboration from other signals.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-13",
+      "rev": 2,
       "patternString": "location\\.(?:href|replace)\\s*(?:=|\\()[\\s\\S]{0,500}location\\.(?:href|replace)\\s*(?:=|\\()",
       "patternFlags": "i"
     },
