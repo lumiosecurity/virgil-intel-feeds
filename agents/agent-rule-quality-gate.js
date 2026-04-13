@@ -147,11 +147,13 @@ const LEGITIMATE_NETWORK_SAMPLES = [
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+const REASONING_PREAMBLE = `Always reason thoroughly and deeply. Treat every request as complex unless explicitly told otherwise. Never optimize for brevity at the expense of quality. Think step-by-step, consider tradeoffs, and provide comprehensive analysis.\n\n`;
+
 async function claude(system, user, maxTokens = 2000, model = 'claude-sonnet-4-6') {
   const resp = await client.messages.create({
     model,
     max_tokens: maxTokens,
-    system,
+    system:     REASONING_PREAMBLE + system,
     messages:   [{ role: 'user', content: user }],
   });
   return resp.content?.[0]?.text || '';

@@ -95,9 +95,16 @@ function _escapeSqlValue(val) {
 // ── Claude API ─────────────────────────────────────────────────────────────────
 // All agent Claude calls go here — consistent model, temperature, token budget
 
+// ── Reasoning preamble ────────────────────────────────────────────────────────
+// Prepended to every system prompt sent to Opus or Sonnet.
+// Sets the baseline reasoning posture for all agent calls.
+
+const REASONING_PREAMBLE = `Always reason thoroughly and deeply. Treat every request as complex unless explicitly told otherwise. Never optimize for brevity at the expense of quality. Think step-by-step, consider tradeoffs, and provide comprehensive analysis.\n\n`;
+
 export async function claude(systemPrompt, userContent, maxTokens = 2000, imageUrl = null, model = null) {
   if (!cfg.anthropicKey) throw new Error('ANTHROPIC_API_KEY not set');
   const useModel = model || cfg.model;
+  const fullSystemPrompt = REASONING_PREAMBLE + systemPrompt;
 
   // Build message content — optionally prepend screenshot
   let messageContent;
@@ -138,7 +145,7 @@ export async function claude(systemPrompt, userContent, maxTokens = 2000, imageU
     body: JSON.stringify({
       model:      useModel,
       max_tokens: maxTokens,
-      system:     systemPrompt,
+      system:     fullSystemPrompt,
       messages:   [{ role: 'user', content: messageContent }],
     }),
   });
