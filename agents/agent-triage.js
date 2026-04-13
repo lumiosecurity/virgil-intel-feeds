@@ -618,7 +618,17 @@ matchStrategy "all" = all listed resources must match (use for kits with many ge
 id convention: <brand>-<kit-family>-resources (e.g. "paypal-16shop-resources", "microsoft-w3ll-v4-resources")
 ONLY propose a resourceHashes rule if the Harvested Resource Hashes section is present and shows kit-specific paths.
 
-4. **Recommended action** (primary rule type — NO_ACTION IS NOT VALID for rule-gap issues): ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADD_NETWORK_PATTERN / ADD_RESOURCE_HASH_ENTRY / ADJUST_WEIGHT / NEEDS_MANUAL_REVIEW` : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
+4. **Recommended action** (primary rule type — NO_ACTION IS NOT VALID for rule-gap issues): ADD_BRAND_ENTRY / ADD_TYPOSQUAT / ADD_SOURCE_PATTERN / ADD_NETWORK_PATTERN / ADD_RESOURCE_HASH_ENTRY / ADJUST_WEIGHT / ADD_META_RULE / NEEDS_MANUAL_REVIEW
+
+**CRITICAL — multi-stage funnel detection:**
+If the signals include any `chain-*` type (e.g. `chain-origin-webmail`, `chain-pattern-aitm`, `chain-intermediate-abused-hosting`), this phish was caught because of the user's cross-page navigation chain — NOT because of anything distinctive in the page source. In this case:
+- Do NOT propose a source pattern — the page source may be generic or even legitimately hosted
+- DO propose a meta-rule using chain conditions (ADD_META_RULE)
+- Chain meta-rules belong in virgil-core-rules/rules/meta/ (same pipeline as other meta rules)
+- Valid chain conditions: chain_signal, chain_pattern, chain_depth, chain_origin, chain_any_signal
+- Named chain patterns: "aitm" (email → abused hosting → credential), "email-shortener-credential", "cascading-suspicious", "email-direct-credential"
+- Example meta-rule for an AiTM gap: { "conditions": { "all": [{ "chain_pattern": "aitm" }, { "has_password_form": true }] }, "action": { "scope": "boost", "weight": 0.25, "severity": "critical" } }
+- Chain conditions are combined with page-level conditions (has_password_form, heuristic_score, has_visual_match) for specificity — never use chain_any_signal alone as the only condition : `Start by describing what you see on the page — use the screenshot and page content as your primary evidence.
 
 1. **What is this page?** Describe what you see visually. What brand does it impersonate? What is it asking the user to do?
 2. **Is this phishing?** Based on the page content. Be direct.
@@ -646,7 +656,7 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
   // Sonnet generates (cheap, fast), Opus validates (expensive, thorough).
   const analysis = await claude(systemPrompt, userContent, isRuleGap ? 4000 : 2000, screenshotUrl, null);
 
-  const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|ADD_SOURCE_PATTERN|ADD_NETWORK_PATTERN|ADD_DOM_HASH_ENTRY|ADD_RESOURCE_HASH_ENTRY|NO_ACTION|NEEDS_MANUAL_REVIEW/);
+  const actionMatch2 = analysis.match(/ADD_TO_SAFELIST|ADD_TYPOSQUAT|ADJUST_WEIGHT|ADD_BRAND_ENTRY|ADD_SOURCE_PATTERN|ADD_NETWORK_PATTERN|ADD_DOM_HASH_ENTRY|ADD_RESOURCE_HASH_ENTRY|ADD_META_RULE|NO_ACTION|NEEDS_MANUAL_REVIEW/);
   let action = actionMatch2?.[0] || 'NEEDS_MANUAL_REVIEW';
 
   // NO_ACTION is never valid for rule-gap issues — the detection worked but the gap still needs closing
@@ -663,6 +673,7 @@ Be direct and specific. Focus on what the page does, not where it's hosted.`;
     ADD_SOURCE_PATTERN:     'rule-updated',
     ADD_NETWORK_PATTERN:    'rule-updated',
     ADD_RESOURCE_HASH_ENTRY:'rule-updated',
+    ADD_META_RULE:          'rule-updated',
     NO_ACTION:              'wont-fix',
     NEEDS_MANUAL_REVIEW:    'needs-triage',
   }[action] || 'needs-triage';

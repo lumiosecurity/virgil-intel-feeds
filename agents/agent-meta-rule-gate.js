@@ -32,13 +32,31 @@ const VALID_GROUPS = new Set([
 const VALID_NUMERIC_OPS = new Set(['lt', 'lte', 'gt', 'gte', 'eq', 'neq']);
 
 const VALID_CONDITION_KEYS = new Set([
-  'signal', 'signal_group', 'signal_prefix', 'where',
+  // Core signal conditions
+  'signal', 'signal_group', 'signal_prefix', 'signal_prefix_count', 'resource_hash_kit', 'where',
+  // Form conditions
   'has_form', 'has_password_form', 'has_credit_card_form',
   'has_external_form', 'has_login_form',
+  // Visual / DOM hash conditions
   'has_visual_match', 'visual_match_confidence', 'visual_match_brand',
   'has_dom_hash_match', 'dom_hash_brand',
+  // Domain age conditions
   'domain_age_hours', 'domain_age_days',
-  'heuristic_score', 'not',
+  // Score condition
+  'heuristic_score',
+  // Behavioral model conditions (invariant shape detection)
+  'behavioral_shape_score', 'behavioral_dimension', 'behavioral_pattern',
+  'behavioral_credential_gated', 'is_first_visit',
+  // Attack chain conditions (cross-page navigation tracking)
+  // chain_signal: exact chain signal type (e.g. "chain-origin-webmail", "chain-parent-dangerous")
+  // chain_pattern: named funnel — "aitm", "email-shortener-credential",
+  //                "cascading-suspicious", "email-direct-credential"
+  // chain_depth: { gte: N } — ancestor hop count
+  // chain_origin: "webmail" | "messaging" | "chat" — root page type
+  // chain_any_signal: true if any chain signal present
+  'chain_signal', 'chain_pattern', 'chain_depth', 'chain_origin', 'chain_any_signal',
+  // Negation wrapper
+  'not',
 ]);
 
 async function main() {
@@ -154,6 +172,25 @@ Your job is to determine if each proposed rule is:
 1. LOGICALLY SOUND: Does the signal combination genuinely indicate phishing (for boost/replace) or score inflation (for downscore)?
 2. APPROPRIATELY WEIGHTED: Is the weight proportional to the combination's specificity?
 3. SAFE: Could this rule cause false positives (boost rules flagging legit pages) or false negatives (downscore rules suppressing real phish)?
+
+## Condition type reference
+
+Standard conditions: signal, signal_group, signal_prefix, has_password_form, has_visual_match, domain_age_days, heuristic_score, not, etc.
+
+Behavioral model conditions: behavioral_shape_score, behavioral_dimension, behavioral_pattern, behavioral_credential_gated, is_first_visit. These fire based on the user's browsing history and arrival context — they are invariant to page content.
+
+Attack chain conditions — these fire based on the user's cross-page navigation history:
+- chain_signal: a specific chain signal type is present (e.g. "chain-origin-webmail" = user arrived from Gmail/Outlook; "chain-parent-dangerous" = preceding page was flagged dangerous; "chain-intermediate-abused-hosting" = chain passed through SharePoint/Notion/Google Sites etc.)
+- chain_pattern: a named multi-stage attack funnel was detected:
+    "aitm" — email → abused trusted hosting → credential harvest (classic AiTM)
+    "email-shortener-credential" — email → URL shortener → credential harvest
+    "cascading-suspicious" — 2+ suspicious predecessor pages before credential request
+    "email-direct-credential" — single-hop email → credential request
+- chain_depth: { gte: N } — how many navigation hops preceded this page
+- chain_origin: "webmail" | "messaging" | "chat" — root page type
+- chain_any_signal: any chain signal present at all
+
+FP risk guidance for chain conditions: chain signals include a MIN_CHAIN_SIGNAL_SCORE guard (0.25) — they suppress entirely if no ancestor scored >= 0.25. Safe-listed domains and address-bar navigations always break the chain. A chain-pattern rule with has_password_form is very specific and low FP risk. A chain_any_signal rule without page-level corroboration is higher FP risk — require at least one page-level condition alongside it.
 
 Review each rule and respond with a JSON object:
 {

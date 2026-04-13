@@ -148,6 +148,7 @@ Available condition types:
 - signal: exact signal type (e.g. "new-domain-whois", "known-typosquat", "brand-in-subdomain")
 - signal_group: any signal from a phishkit group (phishkitSignatures, credentialHarvesting, botEvasion, obfuscation, brandImpersonation, socialEngineering, titleImpersonation, cdnGating, captchaGating, typosquatPatterns, urlHeuristics, hostingPatterns)
 - signal_prefix: any signal whose type starts with X (e.g. "source-" for all source patterns)
+- signal_prefix_count: { prefix: "X", gte: N } — count of distinct signals matching a prefix
 - has_form, has_password_form, has_credit_card_form, has_external_form, has_login_form: boolean
 - has_visual_match, visual_match_confidence, visual_match_brand: screenshot hash conditions
 - has_dom_hash_match, dom_hash_brand: DOM structure hash conditions
@@ -155,6 +156,22 @@ Available condition types:
 - heuristic_score: numeric comparison on the running risk score
 - not: negation wrapper
 - where: filter on signal metadata fields (e.g. { "ageDays": { "lt": 7 } })
+- behavioral_shape_score: numeric comparison on behavioral model shape score
+- behavioral_dimension: true if a specific dimension ("arrival", "relationship", "intent", "pressure", "coherence", "isolation") has signals
+- behavioral_pattern: substring match on the named behavioral shape (e.g. "CANONICAL", "AiTM")
+- behavioral_credential_gated: true if the behavioral model activated (password field present)
+- is_first_visit: true if the user has never visited this domain before (from chrome.history)
+- chain_signal: a specific attack chain signal is present — valid values include:
+    "chain-origin-webmail", "chain-origin-messaging",
+    "chain-intermediate-abused-hosting", "chain-intermediate-url-shortener",
+    "chain-parent-dangerous", "chain-parent-suspicious",
+    "chain-depth-credential-harvest", "chain-depth-deep", "chain-brand-mismatch"
+- chain_pattern: a named multi-stage attack funnel was detected — valid values:
+    "aitm" (email → abused trusted hosting → credential harvest),
+    "email-shortener-credential", "cascading-suspicious", "email-direct-credential"
+- chain_depth: { gte: N } — number of navigation hops before this page
+- chain_origin: "webmail" | "messaging" | "chat" — root page type of the chain
+- chain_any_signal: true if any chain signal is present
 
 Numeric operators: lt, lte, gt, gte, eq, neq
 
@@ -191,7 +208,8 @@ ${[...existingIds].join(', ') || '(none)'}
 Propose meta rules based on this data. Focus on:
 1. Binding weak signal pairs with >= 80% precision into boost rules
 2. Replacing correlated signal groups that inflate scores with calibrated weights
-3. Only propose rules with clear corpus evidence — no speculative combinations`;
+3. Only propose rules with clear corpus evidence — no speculative combinations
+4. If chain signals (type prefix "chain-") appear in the high-precision pairs, propose chain-aware meta rules. Chain conditions are especially valuable for multi-stage AiTM funnels where each individual page scores low — the combination of chain_pattern + has_password_form is very high precision and low FP risk`;
 
   console.log('Asking Claude for meta rule proposals...');
   const response = await claude(systemPrompt, userContent, 4000, null, MODEL);
