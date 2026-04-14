@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-14-10:08",
-    "generatedAt": "2026-04-14T10:08:47.943Z",
+    "version": "2026-04-14-16:57",
+    "generatedAt": "2026-04-14T16:57:39.686Z",
     "brandCount": 193,
     "patternCount": 1100,
     "networkPatternCount": 21
@@ -29936,7 +29936,7 @@
       "note": "Detects hidden input fields specifically configured with autocomplete for credit card or password data - a technique for silent credential harvesting. Legitimate hidden fields (CSRF tokens, session data) don't use sensitive autocomplete values. [FP fix: Now requires type=hidden AND sensitive autocomplete on same element, excludes common CSRF token patterns. Previously matched any hidden element + autocomplete anywhere on page]",
       "created": "2026-04-07",
       "updated": "2026-04-14",
-      "rev": 3,
+      "rev": 4,
       "match": [
         {
           "content": "autocomplete",
@@ -29946,9 +29946,14 @@
         {
           "pattern": "<input[^>]*type\\s*=\\s*[\"']hidden[\"'][^>]*autocomplete\\s*=\\s*[\"'](?:cc-|current-password|new-password)",
           "flags": "i"
+        },
+        {
+          "pattern": "name\\s*=\\s*[\"'](?:csrf|_token|authenticity_token|__RequestVerificationToken|_csrf)",
+          "flags": "i",
+          "negated": true
         }
       ],
-      "condition": "1 & 2 & !negative"
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "designmode-editable-page",
