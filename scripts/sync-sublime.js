@@ -233,10 +233,14 @@ function compileFeeds(results) {
       ...toSet(all, 'free_subdomain_hosts'),
       ...toSet(all, 'self_service_creation_platforms'),
     ].filter((v, i, a) => a.indexOf(v) === i), // deduplicate
-    // Separate field: self-service creation platforms only — used by the
-    // abused-service interceptor which needs this curated list without the
-    // 300+ obscure free-subdomain-host entries mixed in.
-    abusedServiceHosts: toSet(all, 'self_service_creation_platforms'),
+    // Separate field: all three domain feeds merged — used by the abused-service
+    // interceptor which needs this curated list without mixing in TLD entries,
+    // email providers, or other non-hosting Sublime feeds.
+    abusedServiceHosts: [
+      ...toSet(all, 'free_subdomain_hosts'),
+      ...toSet(all, 'self_service_creation_platforms'),
+      ...toSet(all, 'free_file_hosts'),
+    ].filter((v, i, a) => a.indexOf(v) === i),
     freeFileHosts:      toSet(all, 'free_file_hosts'),
     urlShorteners:      toSet(all, 'url_shorteners'),
     disposableEmail:    toSet(all, 'disposable_email_providers'),
