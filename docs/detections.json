@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-14-07:11",
-    "generatedAt": "2026-04-14T07:11:31.110Z",
+    "version": "2026-04-14-10:08",
+    "generatedAt": "2026-04-14T10:08:47.943Z",
     "brandCount": 193,
     "patternCount": 1100,
     "networkPatternCount": 21
@@ -28615,13 +28615,13 @@
       "id": "cookie-to-hidden-input-exfil",
       "group": "credentialHarvesting",
       "description": "document.cookie value injected into a hidden form input for submission",
-      "severity": "high",
-      "weight": 0.4,
+      "severity": "medium",
+      "weight": 0.1,
       "source": "js",
-      "note": "Phishkits stuff stolen cookies into hidden form fields so they get submitted alongside harvested credentials. Legitimate forms don't put document.cookie into hidden inputs.",
+      "note": "Phishkits stuff stolen cookies into hidden form fields so they get submitted alongside harvested credentials. However, legitimate sites also use this pattern for session management, CSRF tokens, and queue management. Downweighted to 0.1 as a supporting signal only - requires other indicators to be actionable.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-14",
+      "rev": 2,
       "patternString": "(?:type=[\"']hidden[\"'][^>]{0,200}value\\s*=|value\\s*=)[^>]{0,100}document\\.cookie",
       "patternFlags": "i"
     },
@@ -29929,14 +29929,14 @@
     {
       "id": "form-autofill-exfil-hidden",
       "group": "credentialHarvesting",
-      "description": "Hidden form fields designed to capture browser autofill data — silent credential harvesting",
+      "description": "Hidden form fields with sensitive autocomplete attributes designed to capture browser autofill data — silent credential harvesting",
       "severity": "high",
-      "weight": 0.3,
+      "weight": 0.25,
       "source": "html",
-      "note": "Hidden input fields with autocomplete attributes trick browsers into auto-filling credit card, name, email, phone, and address data. The fields are invisible to the user but the browser fills them automatically, enabling silent PII harvesting. [FP fix: now requires autocomplete= attribute with sensitive field values, not just the word \"autofill\". Previously matched data-autofill=\"false\" which is a site DISABLING autofill]",
+      "note": "Detects hidden input fields specifically configured with autocomplete for credit card or password data - a technique for silent credential harvesting. Legitimate hidden fields (CSRF tokens, session data) don't use sensitive autocomplete values. [FP fix: Now requires type=hidden AND sensitive autocomplete on same element, excludes common CSRF token patterns. Previously matched any hidden element + autocomplete anywhere on page]",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 2,
+      "updated": "2026-04-14",
+      "rev": 3,
       "match": [
         {
           "content": "autocomplete",
@@ -29944,19 +29944,11 @@
           "fast_pattern": true
         },
         {
-          "pattern": "autocomplete\\s*=\\s*[\"'](?:on|cc-|address|tel|email|username|current-password|new-password)",
-          "flags": "i"
-        },
-        {
-          "pattern": "hidden|display:\\s*none|visibility:\\s*hidden|opacity:\\s*0",
-          "flags": "i"
-        },
-        {
-          "pattern": "credit|\\bcard\\b|address|name|email|phone|password",
+          "pattern": "<input[^>]*type\\s*=\\s*[\"']hidden[\"'][^>]*autocomplete\\s*=\\s*[\"'](?:cc-|current-password|new-password)",
           "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & !negative"
     },
     {
       "id": "designmode-editable-page",
@@ -38602,15 +38594,15 @@
     {
       "id": "bitb-fake-address-display",
       "group": "phishkitSignatures",
-      "description": "Fake URL/address bar showing legitimate domain — BitB spoofed address bar element",
+      "description": "Fake URL/address bar showing legitimate domain — BitB spoofed address bar element with structural indicators",
       "severity": "high",
-      "weight": 0.4,
+      "weight": 0.35,
       "source": "html",
-      "note": "A legitimate auth URL (accounts.google.com, login.microsoftonline.com, etc.) displayed as TEXT alongside a lock/padlock icon is a BitB fake address bar. The real URL is the page's URL, not the text displayed in the fake bar.",
+      "note": "Detects BitB fake address bars by requiring structural HTML elements (div with address/url/browser classes) containing a legitimate auth URL followed by a lock icon rendered as an HTML element. Plain text mentions in documentation or help content won't match due to structural requirements.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
-      "patternString": "(?:https://accounts\\.google\\.com|https://login\\.microsoftonline\\.com|https://www\\.facebook\\.com|https://login\\.live\\.com|https://appleid\\.apple\\.com)[\\s\\S]{0,300}(?:padlock|lock|secure|🔒|&#128274;|ssl|https-icon)",
+      "updated": "2026-04-14",
+      "rev": 2,
+      "patternString": "(?:<div[^>]*(?:address|url|browser|title|header|toolbar)[^>]*>[\\s\\S]{0,150})?(?:https://accounts\\.google\\.com|https://login\\.microsoftonline\\.com|https://www\\.facebook\\.com|https://login\\.live\\.com|https://appleid\\.apple\\.com)(?:/[^\"'\\s<]{0,50})?[\\s\\S]{0,100}(?:<(?:img|span|i|svg)[^>]*(?:lock|padlock|secure|ssl)[^>]*>|🔒|&#128274;)",
       "patternFlags": "i"
     },
     {
@@ -41162,14 +41154,14 @@
     {
       "id": "shared-document-preview-blur",
       "group": "socialEngineering",
-      "description": "Blurred or partially visible document preview behind login overlay — document lure visual trick",
+      "description": "Blurred or partially visible document preview behind login overlay — document lure visual trick (excludes legitimate SaaS apps)",
       "severity": "medium",
-      "weight": 0.25,
+      "weight": 0.2,
       "source": "html",
-      "note": "A blurred or partially transparent document preview behind a login overlay is the visual trick that makes shared document phishing convincing. The victim can see enough of the document to believe it's real, but must 'sign in' to view it clearly.",
+      "note": "A blurred document preview behind a login overlay is a visual trick in shared document phishing. Excludes legitimate SaaS apps identified by service worker registration, API versioning patterns, OAuth infrastructure, and web app manifests. Weight reduced slightly due to blur being common in modern UI.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-14",
+      "rev": 2,
       "match": [
         {
           "content": "blur",
@@ -41192,9 +41184,19 @@
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "pattern": "serviceWorker|manifest\\.json|/api/v\\d|/oauth|/auth/callback|/__/auth/",
+          "flags": "i",
+          "negated": true
+        },
+        {
+          "pattern": "<meta[^>]+application-name|<link[^>]+manifest",
+          "flags": "i",
+          "negated": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
     },
     {
       "id": "voicemail-listen-prompt",
@@ -41755,14 +41757,14 @@
     {
       "id": "document-image-login-overlay",
       "group": "socialEngineering",
-      "description": "Document preview as static background image with centered login modal — image-based document lure",
+      "description": "Document preview as static background image with centered login modal — image-based document lure with urgency indicators",
       "severity": "high",
-      "weight": 0.3,
+      "weight": 0.25,
       "source": "html",
-      "note": "A static document/invoice/PDF image as background with a positioned login modal on top is the visual layout of image-based document lures. The 'document' is a screenshot or placeholder image, not real interactive content. The login modal steals credentials.",
+      "note": "A static document/invoice/PDF image as background with a positioned login modal on top is the visual layout of image-based document lures. Requires urgency language typical of phishing and excludes legitimate SaaS platforms with app framework indicators. The 'document' is a screenshot or placeholder image, not real interactive content.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-14",
+      "rev": 2,
       "match": [
         {
           "content": "position",
@@ -41780,12 +41782,21 @@
           "content": "password"
         },
         {
+          "pattern": "(?:verify|confirm|expire|suspend|unusual\\s*activity|secure\\s*your|action\\s*required|immediately)",
+          "flags": "i"
+        },
+        {
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "pattern": "(?:dashboard|<aside|sidebar|app-root|ng-app|data-reactroot|__next)",
+          "flags": "i",
+          "negated": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
     },
     {
       "id": "secure-message-view-login",

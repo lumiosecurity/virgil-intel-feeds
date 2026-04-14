@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/self_service_creation_platform_domains.txt",
-    "syncedAt": "2026-04-14T07:11:25.097Z",
+    "syncedAt": "2026-04-14T10:08:40.241Z",
     "role": "free_subdomain_hosts",
     "description": "Self-service website creation platforms where anyone can host content",
     "count": 97
