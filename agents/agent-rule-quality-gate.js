@@ -366,7 +366,19 @@ function evaluateRules(rules) {
         eval_.warnings.push('No explicit fast_pattern set — engine will auto-select the longest content string. Consider marking the most specific content with fast_pattern: true.');
       }
 
-      // ── Validate condition expression ─────────────────────────────────
+      // ── Detect 'negative' field anti-pattern ──────────────────────────
+      // The 'negative' field does not exist in the schema and is silently
+      // ignored by pattern-worker.js — any exclusion logic intended via
+      // 'negative' is never evaluated. Exclusion patterns must be in the
+      // match[] array with negated: true, referenced by index in condition.
+      if (rule.negative !== undefined) {
+        eval_.issues.push(
+          `Rule has a 'negative' field — this field does not exist in the schema and is silently ignored by the pattern engine. ` +
+          `Move exclusion patterns into the match[] array with negated: true, then reference them by 0-based index in the condition ` +
+          `(e.g., match[2] with negated: true → condition "0 & 1 & 2"). ` +
+          `The 'negative' field you wrote will never run.`
+        );
+      }
       if (rule.condition) {
         // Syntax: only digits, spaces, &, |, !, ()
         if (!/^[\d\s&|!()]+$/.test(rule.condition)) {
@@ -769,6 +781,9 @@ FAIL criteria (any one = FAIL):
 - .* with DOTALL flag
 - Nested quantifiers
 - 3+ sequential unbounded .*
+- Multi-match rule has a "negative" field (silently ignored — exclusions must use negated: true in match[])
+- Multi-match condition uses 1-based indices (engine is 0-based — out-of-bounds indices always evaluate false)
+- Multi-match entry with negated: true referenced as !N in condition (double-negation — inverts intended logic)
 
 Respond with exactly: PASS or FAIL on the first line, then your reasoning.`;
 
@@ -813,6 +828,12 @@ For source patterns:
 - Start patterns with a literal prefix of 4+ chars
 - Reduce weight if pattern is too broad (max 0.25 for phishkitSignatures, 0.35 for others)
 - If a pattern is unfixable, include "action": "remove" in the JSON
+
+For multi-match source patterns specifically:
+- NEVER use a "negative" field — it does not exist in the schema and is silently ignored by the pattern engine. Move exclusion patterns into the match[] array with negated: true, then reference them by 0-based index in the condition.
+- Condition indices are 0-BASED: match[0] = 0, match[1] = 1, etc. A condition of "1 & 2" on a two-entry match[] is an out-of-bounds reference — the rule will never fire.
+- Do NOT double-negate: a match entry with negated: true already has its result inverted. Reference it with its plain index, not with !N.
+- Every multi-match rule must have exactly one content entry with fast_pattern: true.
 
 For brand entries:
 - Remove generic typos that are common English words
