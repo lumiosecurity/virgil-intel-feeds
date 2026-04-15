@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-04-15-07:12",
-    "generatedAt": "2026-04-15T07:12:16.889Z",
+    "version": "2026-04-15-10:15",
+    "generatedAt": "2026-04-15T10:15:06.698Z",
     "brandCount": 193,
     "patternCount": 1100,
     "networkPatternCount": 21
@@ -29817,13 +29817,13 @@
       "id": "exfil-to-non-origin-endpoint",
       "group": "credentialHarvesting",
       "description": "Form submission or fetch to a different domain than the page origin — credential exfiltration to third party",
-      "severity": "medium",
-      "weight": 0.25,
+      "severity": "low",
+      "weight": 0.1,
       "source": "html",
-      "note": "A form with an absolute URL action pointing to an external domain, containing a password field, indicates cross-origin credential submission. Legitimate login pages submit to their own domain. Moderate weight because some SSO flows use cross-origin POST.",
+      "note": "A form with an absolute URL action pointing to an external domain, containing a password field. Many legitimate sites use cross-origin POST for SSO (auth0, okta), payment processing (stripe, paypal), and third-party form services. Low weight as a contributing signal only — cannot determine phishing on its own due to prevalence of legitimate cross-origin auth flows.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-15",
+      "rev": 2,
       "patternString": "<form[^>]*action=['\"]https?://[^'\"]*\\.[a-z]{2,}[^'\"]*['\"][^>]*>[\\s\\S]{0,1000}<input[^>]*type=['\"]password['\"]",
       "patternFlags": "i"
     },
@@ -30820,15 +30820,15 @@
     {
       "id": "form-cross-origin-action-any-field",
       "group": "credentialHarvesting",
-      "description": "Form with absolute URL action and any text+password input combo — keyword-free credential harvest detection",
+      "description": "Form with absolute URL action (excluding known auth/payment providers) and any text+password input combo — keyword-free credential harvest detection",
       "severity": "medium",
-      "weight": 0.25,
+      "weight": 0.2,
       "source": "html",
-      "note": "Detects credential forms by STRUCTURE not keywords: a POST form with absolute cross-origin action containing both a text/email input and a password input. Catches phish even when all field names/IDs are randomized.",
+      "note": "Detects credential forms by STRUCTURE not keywords: a POST form with absolute cross-origin action containing both a text/email input and a password input. Excludes known legitimate SSO providers (Auth0, Okta, Microsoft, Google, Apple), payment gateways (Stripe, PayPal, Braintree, Adyen), form builders (Typeform, Jotform, Wufoo), and hosting control panel providers (WHMCS, Blesta). Catches phish even when all field names/IDs are randomized.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
-      "patternString": "<form[^>]*action=['\"]https?://[^'\"]{10,}['\"][^>]*method=['\"]post['\"][\\s\\S]{0,1000}<input[^>]*type=['\"](?:text|email)['\"][\\s\\S]{0,500}<input[^>]*type=['\"]password['\"]",
+      "updated": "2026-04-15",
+      "rev": 2,
+      "patternString": "<form[^>]*action=['\"]https?://(?!([^'\"]*\\.)?(auth0\\.com|okta\\.com|onelogin\\.com|duosecurity\\.com|ping(one|identity)\\.com|cognito-idp\\.[\\w-]+\\.amazonaws\\.com|login\\.microsoftonline\\.com|accounts\\.google\\.com|appleid\\.apple\\.com|stripe\\.com|braintree-api\\.com|paypal\\.com|adyen\\.com|checkout\\.com|wufoo\\.com|typeform\\.com|jotform\\.com|formstack\\.com|cognito(forms)?\\.com|netlify\\.com|vercel\\.app|cloudflare\\.com|whmcs\\.com|blesta\\.com|clientexec\\.com|hostbill\\.com)/)[^'\"]{10,}['\"][^>]*method=['\"]post['\"][\\s\\S]{0,1000}<input[^>]*type=['\"](?:text|email)['\"][\\s\\S]{0,500}<input[^>]*type=['\"]password['\"]",
       "patternFlags": "i"
     },
     {
@@ -31273,14 +31273,14 @@
     {
       "id": "aitm-multi-step-page-state",
       "group": "credentialHarvesting",
-      "description": "Multi-step authentication state machine — manages email→password→MFA flow progression",
+      "description": "Multi-step AiTM authentication state machine with credential forwarding indicators",
       "severity": "medium",
-      "weight": 0.25,
+      "weight": 0.2,
       "source": "js",
-      "note": "A JavaScript state machine managing email→password→MFA step progression by showing/hiding page sections is the AiTM multi-step authentication flow controller. Each step captures different credentials and the kit advances through the auth flow.",
+      "note": "A JavaScript state machine managing email→password→MFA step progression that also forwards captured credentials externally. The combination of step-based UI management with credential exfiltration calls indicates AiTM proxy kit behavior rather than legitimate multi-step auth.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-15",
+      "rev": 2,
       "match": [
         {
           "content": "step",
@@ -31293,9 +31293,13 @@
         },
         {
           "pattern": "style\\.display|classList|visibility|innerHTML"
+        },
+        {
+          "pattern": "(?:fetch|XMLHttpRequest|\\$\\.(?:ajax|post)|axios|sendBeacon)\\s*\\([^)]*(?:credentials?|pass(?:word)?|token|session|email|login)",
+          "flags": "i"
         }
       ],
-      "condition": "1 & 2"
+      "condition": "1 & 2 & 3 & 4"
     },
     {
       "id": "password-form-no-forgot-link",
@@ -31558,10 +31562,10 @@
       "severity": "medium",
       "weight": 0.2,
       "source": "html",
-      "note": "Surcharge pages claiming a package exceeds weight or size limits and requires additional payment are a delivery phishing variant. Real surcharges are handled by the sender, not collected via web pages from the recipient.",
+      "note": "Surcharge pages claiming a package exceeds weight or size limits and requires additional payment are a delivery phishing variant. Real surcharges are handled by the sender, not collected via web pages from the recipient. Excludes legitimate airline baggage/cargo services and freight contexts.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-15",
+      "rev": 2,
       "match": [
         {
           "content": "overweight",
@@ -31580,9 +31584,19 @@
           "content": "<nav",
           "negated": true,
           "nocase": true
+        },
+        {
+          "pattern": "baggage|luggage|check-in|booking\\s*reference|flight|itinerary|cabin\\s*class|cargo\\s*service",
+          "flags": "i",
+          "negated": true
+        },
+        {
+          "pattern": "air(?:line|ways|port)|aviation|freight\\s*forward",
+          "flags": "i",
+          "negated": true
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "courier-tracking-input-form",
@@ -34169,14 +34183,14 @@
     {
       "id": "jsobs-domain-lock-check",
       "group": "obfuscation",
-      "description": "javascript-obfuscator domainLock — restricts code execution to specific domains",
+      "description": "javascript-obfuscator domainLock — restricts code execution to specific domains (informational)",
       "severity": "low",
-      "weight": 0.1,
+      "weight": 0.05,
       "source": "js",
-      "note": "domainLock restricts obfuscated code to specific domains. If the hostname doesn't match, the code enters an infinite loop or triggers debugger. The domain check + infinite loop/debugger fallback is a strong obfuscator.io indicator. [Observation-level: Domain lock — obfuscator.io feature, used by legitimate paid scripts]",
+      "note": "domainLock restricts obfuscated code to specific domains. If the hostname doesn't match, the code enters an infinite loop or triggers debugger. This is a javascript-obfuscator.io feature used legitimately for licensing/DRM protection (fliphtml5, alamy, etc.) as well as by phishing kits. Low weight ensures it only contributes context, never decides. [Observation-level: Domain lock — dual-use obfuscator.io feature]",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-15",
+      "rev": 2,
       "patternString": "(?:location|hostname|host|domain)[\\s\\S]{0,200}(?:indexOf|includes|match|test)\\([\\s\\S]{0,100}\\)[\\s\\S]{0,200}(?:while\\(!\\!\\[\\]\\)|while\\(true\\)|for\\(;;\\)|return|debugger)",
       "patternFlags": "i"
     },
@@ -41290,12 +41304,12 @@
       "group": "socialEngineering",
       "description": "Package held/on hold/pending urgency text with credential harvesting indicators — delivery phishing pressure",
       "severity": "medium",
-      "weight": 0.25,
+      "weight": 0.2,
       "source": "html",
-      "note": "Text claiming a package is 'on hold', 'pending', 'delayed', or 'awaiting action' combined with a required action AND credential harvesting indicators. Match 4 requires password fields or verification/login language to distinguish from legitimate delivery status pages.",
+      "note": "Text claiming a package is 'on hold', 'pending', 'delayed', or 'awaiting action' combined with a required action AND credential harvesting indicators AND urgency/threat language. Excludes legitimate airline/travel booking contexts. Match 6 excludes travel industry terminology. Match 7 requires time-pressure or account threat language typical of phishing.",
       "created": "2026-04-07",
-      "updated": "2026-04-13",
-      "rev": 2,
+      "updated": "2026-04-15",
+      "rev": 3,
       "match": [
         {
           "content": "package",
@@ -41318,9 +41332,18 @@
         {
           "pattern": "type=[\"']?password|enter.*(?:card|cvv|ssn)|verify.*(?:identity|account)|confirm.*(?:details|information)|login.*(?:here|now|below)",
           "flags": "i"
+        },
+        {
+          "pattern": "booking\\s*(?:reference|number|confirmation)|flight\\s*(?:status|details)|itinerary|check-in\\s*online|manage\\s*(?:booking|reservation)|baggage\\s*(?:tracking|allowance)",
+          "flags": "i",
+          "negated": true
+        },
+        {
+          "pattern": "(?:within|in)\\s*\\d+\\s*(?:hours?|days?)|account.*(?:suspend|terminat|lock)|immediate(?:ly)?\\s*(?:verify|confirm|update)",
+          "flags": "i"
         }
       ],
-      "condition": "0 & 1 & 2 & 3 & 4"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "delivery-scheduling-fee",
@@ -42392,14 +42415,14 @@
     {
       "id": "fax-voicemail-document-lure",
       "group": "socialEngineering",
-      "description": "Fax or voicemail notification requiring login — legacy communication lure for credential harvest",
+      "description": "Fax or voicemail notification with document viewer framing requiring login — legacy communication lure for credential harvest",
       "severity": "medium",
       "weight": 0.25,
       "source": "html",
-      "note": "Fake fax or voicemail notifications requiring login to 'listen' or 'view' the message are legacy communication lures. They impersonate services like eFax, RingCentral, or Microsoft 365 voicemail. The login form is the actual phishing payload.",
+      "note": "Fake fax or voicemail notifications requiring login to 'listen' or 'view' the message are legacy communication lures. They impersonate services like eFax, RingCentral, or Microsoft 365 voicemail. Refined to require document viewer framing and urgency language to avoid FPs on legitimate business platforms.",
       "created": "2026-04-07",
-      "updated": "2026-04-07",
-      "rev": 1,
+      "updated": "2026-04-15",
+      "rev": 2,
       "match": [
         {
           "content": "password",
@@ -42410,11 +42433,15 @@
           "flags": "i"
         },
         {
-          "pattern": "received|notification|new",
+          "pattern": "view\\s*(your)?\\s*(secure\\s*)?document|preview\\s*message|listen\\s*to\\s*(your)?\\s*message|open\\s*attachment",
           "flags": "i"
         },
         {
           "pattern": "sign.?in|log.?in|password|credential",
+          "flags": "i"
+        },
+        {
+          "pattern": "expir|urgent|action\\s*required|verify\\s*your|confirm\\s*your",
           "flags": "i"
         },
         {
@@ -42423,7 +42450,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "document-page-count-preview-lure",
