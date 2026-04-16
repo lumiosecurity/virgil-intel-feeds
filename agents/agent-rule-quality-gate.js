@@ -18,6 +18,7 @@
 // Env vars: ISSUE_NUMBER, GITHUB_TOKEN, ANTHROPIC_API_KEY
 
 import { cfg, d1, github } from './agent-tools.js';
+import { isRegexSafe, validateRegex } from './regex-safety.js';
 import Anthropic from '@anthropic-ai/sdk';
 import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
@@ -216,6 +217,17 @@ function evaluateRules(rules) {
         eval_.issues.push(`Invalid regex: ${e.message}`);
       }
 
+      // ── ReDoS safety check (hard block) ─────────────────────────────────
+      // Uses the shared regex-safety module — same check that runs in the
+      // extension's remote-config.js validator. If a pattern fails here,
+      // it would also be rejected by every extension install, so promoting
+      // it would be pointless (and dangerous if the extension check is
+      // ever bypassed).
+      if (compilesOk && !isRegexSafe(rule.patternString)) {
+        eval_.issues.push('🛑 REDOS BLOCK: Pattern contains nested quantifiers or unsafe backtracking structure. Restructure to avoid (a+)+, (a*)+, or similar nested repetition.');
+        compilesOk = false; // skip further evaluation — pattern is unsafe
+      }
+
       if (compilesOk) {
         const patternLength = rule.patternString.replace(/[.*+?^${}()|[\]\\]/g, '').length;
 
@@ -225,7 +237,6 @@ function evaluateRules(rules) {
         const dotstarCount = (ps.match(/(?<!\\)\.\*/g) || []).length;
         const hasAlternation = /(?<!\\)\|/.test(ps);
         const hasDotall = flags.includes('s');
-        const hasNestedQuant = /[+*]\)[+*?]/.test(ps);
         const lookaheadCount = (ps.match(/\(\?=/g) || []).length;
 
         let perfScore = 0;
@@ -246,10 +257,6 @@ function evaluateRules(rules) {
         if (lookaheadCount >= 2 && dotstarCount > 0) {
           perfScore += lookaheadCount;
           perfIssues.push(`${lookaheadCount} lookaheads with .* — rewrite as ordered match or split into separate patterns.`);
-        }
-        if (hasNestedQuant) {
-          perfScore += 5;
-          perfIssues.push(`Nested quantifiers — catastrophic backtracking risk. Restructure pattern.`);
         }
 
         if (perfScore >= 5) {
