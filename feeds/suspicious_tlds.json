@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
-    "syncedAt": "2026-04-15T10:14:58.550Z",
+    "syncedAt": "2026-04-16T07:13:04.496Z",
     "role": "tld_risk",
     "description": "TLDs frequently abused, free to register, or rarely used legitimately",
-    "count": 138,
+    "count": 140,
     "defaultWeight": 0.2
   },
   "entries": [
@@ -16,6 +16,7 @@
     "army",
     "beauty",
     "best",
+    "bet",
     "bio",
     "biz",
     "biz.id",
@@ -120,6 +121,7 @@
     "social",
     "solutions",
     "space",
+    "store",
     "stream",
     "su",
     "sx",

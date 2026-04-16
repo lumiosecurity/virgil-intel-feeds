@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
-    "syncedAt": "2026-04-15T10:14:58.809Z",
+    "syncedAt": "2026-04-16T07:13:04.591Z",
     "role": "free_subdomain_hosts",
     "description": "Sites allowing anyone to create subdomains and host arbitrary content",
-    "count": 310
+    "count": 311
   },
   "entries": [
     "000webhost.com",
@@ -191,6 +191,7 @@
     "mybluehost.me",
     "mybluemix.net",
     "myportfolio.com",
+    "mypreview.site",
     "myqcloud.com",
     "mystrikingly.com",
     "name.ac",
