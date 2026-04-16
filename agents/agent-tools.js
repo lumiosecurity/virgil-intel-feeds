@@ -26,6 +26,10 @@ export const cfg = {
 //
 // For static SQL without user-controlled values, use d1raw():
 //   d1raw('SELECT COUNT(*) as cnt FROM verdicts')
+//
+// For SQL with dynamically-built placeholders (e.g. IN-lists), pass params
+// as the second argument — they are escaped through the same path as d1`...`:
+//   d1raw(`SELECT * FROM x WHERE id IN (${placeholders})`, ids)
 
 export function d1(strings, ...values) {
   // Tagged template literal: strings are the static parts, values are interpolations
@@ -36,8 +40,13 @@ export function d1(strings, ...values) {
   return _executeD1(sql, values);
 }
 
-export function d1raw(sql) {
-  return _executeD1(sql, []);
+export function d1raw(sql, params = []) {
+  // params is optional — supports callsites that build placeholders dynamically
+  // (e.g. WHERE id IN (?,?,?,?) where the count is data-dependent). When
+  // omitted, behaves exactly as before. agent-watch-graduation.js was passing
+  // params to the previous one-arg signature and they were silently dropped,
+  // which broke the FP-blocking gate (it always saw zero blocked rules).
+  return _executeD1(sql, params);
 }
 
 function _executeD1(sql, params) {
