@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/self_service_creation_platform_domains.txt",
-    "syncedAt": "2026-04-16T10:08:47.679Z",
+    "syncedAt": "2026-04-17T07:12:46.956Z",
     "role": "free_subdomain_hosts",
     "description": "Self-service website creation platforms where anyone can host content",
-    "count": 137
+    "count": 139
   },
   "entries": [
     "acrobat.adobe.com",
@@ -27,6 +27,7 @@
     "app.mural.co",
     "app.slidebean.com",
     "app.smartsuite.com",
+    "app.usewhale.io",
     "appsheet.com",
     "appwrite.network",
     "archbee.com",
@@ -125,6 +126,7 @@
     "surveymonkey.com",
     "systeme.io",
     "tana.pub",
+    "taskade.com",
     "teachable.com",
     "tithelysetup.com",
     "typedream.app",

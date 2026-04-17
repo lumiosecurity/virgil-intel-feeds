@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-04-16T10:08:50.224Z",
+    "compiledAt": "2026-04-17T07:12:50.089Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -489,6 +489,7 @@
     "app.mural.co",
     "app.slidebean.com",
     "app.smartsuite.com",
+    "app.usewhale.io",
     "appsheet.com",
     "appwrite.network",
     "archbee.com",
@@ -582,6 +583,7 @@
     "surveymonkey.com",
     "systeme.io",
     "tana.pub",
+    "taskade.com",
     "teachable.com",
     "tithelysetup.com",
     "typedream.app",
@@ -930,6 +932,7 @@
     "app.mural.co",
     "app.slidebean.com",
     "app.smartsuite.com",
+    "app.usewhale.io",
     "appsheet.com",
     "appwrite.network",
     "archbee.com",
@@ -1023,6 +1026,7 @@
     "surveymonkey.com",
     "systeme.io",
     "tana.pub",
+    "taskade.com",
     "teachable.com",
     "tithelysetup.com",
     "typedream.app",
