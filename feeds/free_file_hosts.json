@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_file_hosts.txt",
-    "syncedAt": "2026-04-21T05:08:54.189Z",
+    "syncedAt": "2026-04-22T04:34:43.284Z",
     "role": "free_file_hosts",
     "description": "Sites allowing anyone to upload and serve files publicly",
-    "count": 198
+    "count": 200
   },
   "entries": [
     "0x0.st",
@@ -33,11 +33,13 @@
     "attachment.outlook.live.net",
     "attachments.office.net",
     "aurorashard.org",
+    "azurestaticapps.net",
     "backblazeb2.com",
     "beautiful.ai",
     "behance.net",
     "bitbucket.com",
     "bitbucket.org",
+    "blob.core.windows.net",
     "box.com",
     "buildin.ai",
     "bunkr.site",

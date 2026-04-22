@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/self_service_creation_platform_domains.txt",
-    "syncedAt": "2026-04-21T05:08:54.059Z",
+    "syncedAt": "2026-04-22T04:34:43.193Z",
     "role": "free_subdomain_hosts",
     "description": "Self-service website creation platforms where anyone can host content",
-    "count": 147
+    "count": 149
   },
   "entries": [
     "acrobat.adobe.com",
@@ -100,6 +100,7 @@
     "mixpanel.com",
     "mockflow.com",
     "monday.com",
+    "myninja.ai",
     "myportfolio.com",
     "netlify.app",
     "onepage.me",
@@ -125,6 +126,7 @@
     "seesaw.me",
     "share.articulate.com",
     "sign.com",
+    "sign.zoho.com",
     "soloist.ai",
     "square.site",
     "static.hf.space",
