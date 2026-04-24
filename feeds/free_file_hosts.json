@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_file_hosts.txt",
-    "syncedAt": "2026-04-23T04:39:32.988Z",
+    "syncedAt": "2026-04-24T04:43:17.037Z",
     "role": "free_file_hosts",
     "description": "Sites allowing anyone to upload and serve files publicly",
     "count": 200
