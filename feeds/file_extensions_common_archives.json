@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/file_extensions_common_archives.txt",
-    "syncedAt": "2026-05-01T05:30:04.013Z",
+    "syncedAt": "2026-05-02T04:48:38.359Z",
     "role": "archive_extensions",
     "description": "Archive extensions used to deliver malicious payloads",
     "count": 10
