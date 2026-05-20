@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-05-19T05:54:51.813Z",
+    "compiledAt": "2026-05-20T05:54:00.948Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -105,6 +105,7 @@
     ".online": 0.2,
     ".ooo": 0.2,
     ".party": 0.2,
+    ".pe": 0.2,
     ".photos": 0.2,
     ".pictures": 0.2,
     ".pizza": 0.2,
