@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_file_hosts.txt",
-    "syncedAt": "2026-05-26T05:54:51.694Z",
+    "syncedAt": "2026-05-27T06:04:56.086Z",
     "role": "free_file_hosts",
     "description": "Sites allowing anyone to upload and serve files publicly",
-    "count": 200
+    "count": 201
   },
   "entries": [
     "0x0.st",
@@ -110,6 +110,7 @@
     "icedrive.net",
     "iceiy.com",
     "idrive.com",
+    "image2url.com",
     "indd.adobe.com",
     "issuu.com",
     "isu.pub",

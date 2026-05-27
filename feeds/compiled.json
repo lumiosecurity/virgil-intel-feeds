@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-05-26T05:54:54.081Z",
+    "compiledAt": "2026-05-27T06:04:58.463Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -1152,6 +1152,7 @@
     "icedrive.net",
     "iceiy.com",
     "idrive.com",
+    "image2url.com",
     "indd.adobe.com",
     "jottacloud.com",
     "jumpshare.com",
@@ -1340,6 +1341,7 @@
     "icedrive.net",
     "iceiy.com",
     "idrive.com",
+    "image2url.com",
     "indd.adobe.com",
     "issuu.com",
     "isu.pub",
