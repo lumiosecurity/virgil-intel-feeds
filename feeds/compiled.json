@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-05-28T05:56:50.807Z",
+    "compiledAt": "2026-05-29T06:00:13.750Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -1149,6 +1149,7 @@
     "hidrive.ionos.com",
     "hightail.com",
     "hmstorage.net",
+    "html.cafe",
     "icedrive.net",
     "iceiy.com",
     "idrive.com",
@@ -1338,6 +1339,7 @@
     "hidrive.ionos.com",
     "hightail.com",
     "hmstorage.net",
+    "html.cafe",
     "icedrive.net",
     "iceiy.com",
     "idrive.com",
