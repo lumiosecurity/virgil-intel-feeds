@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-06-01T11:44:39.413Z",
+    "compiledAt": "2026-06-02T06:24:41.457Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -473,6 +473,7 @@
     "zendesk.com",
     "zx9.de",
     "acrobat.adobe.com",
+    "addevent.com",
     "aidaform.com",
     "airtable.com",
     "anygen.io",
@@ -926,6 +927,7 @@
     "zendesk.com",
     "zx9.de",
     "acrobat.adobe.com",
+    "addevent.com",
     "aidaform.com",
     "airtable.com",
     "anygen.io",

@@ -1,13 +1,14 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/self_service_creation_platform_domains.txt",
-    "syncedAt": "2026-06-01T11:44:36.703Z",
+    "syncedAt": "2026-06-02T06:24:39.024Z",
     "role": "free_subdomain_hosts",
     "description": "Self-service website creation platforms where anyone can host content",
-    "count": 149
+    "count": 150
   },
   "entries": [
     "acrobat.adobe.com",
+    "addevent.com",
     "aidaform.com",
     "airtable.com",
     "amplifyapp.com",
