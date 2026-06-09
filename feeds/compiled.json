@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-06-08T11:05:50.759Z",
+    "compiledAt": "2026-06-09T05:55:46.788Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -23991,6 +23991,7 @@
     "mail.by",
     "mail.byte.it",
     "mail.ch",
+    "mail.co.uk",
     "mail.co.za",
     "mail.com",
     "mail.com.tr",
@@ -24045,6 +24046,7 @@
     "mail.theboys.com",
     "mail.txzs188.com",
     "mail.ua",
+    "mail.uk",
     "mail.unionpay.pl",
     "mail.usa.com",
     "mail.vasarhely.hu",

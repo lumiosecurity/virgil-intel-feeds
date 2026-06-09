@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_email_providers.txt",
-    "syncedAt": "2026-06-08T11:05:50.361Z",
+    "syncedAt": "2026-06-09T05:55:46.365Z",
     "role": "free_email",
     "description": "Free email providers — suspicious as credential form POST destinations",
-    "count": 22586
+    "count": 22588
   },
   "entries": [
     "0-00.usa.cc",
@@ -11676,6 +11676,7 @@
     "mail.by",
     "mail.byte.it",
     "mail.ch",
+    "mail.co.uk",
     "mail.co.za",
     "mail.com",
     "mail.com.tr",
@@ -11730,6 +11731,7 @@
     "mail.theboys.com",
     "mail.txzs188.com",
     "mail.ua",
+    "mail.uk",
     "mail.unionpay.pl",
     "mail.usa.com",
     "mail.vasarhely.hu",
