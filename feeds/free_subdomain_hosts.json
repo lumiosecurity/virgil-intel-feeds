@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
-    "syncedAt": "2026-06-11T06:29:24.013Z",
+    "syncedAt": "2026-06-12T06:21:43.954Z",
     "role": "free_subdomain_hosts",
     "description": "Sites allowing anyone to create subdomains and host arbitrary content",
-    "count": 311
+    "count": 312
   },
   "entries": [
     "000webhost.com",
@@ -76,6 +76,7 @@
     "community.lc",
     "cool.hn",
     "cool.lc",
+    "creatium.site",
     "creatorlink.net",
     "cs-clan.org",
     "csb.app",

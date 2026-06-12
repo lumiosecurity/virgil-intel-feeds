@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-06-11T06:29:26.282Z",
+    "compiledAt": "2026-06-12T06:21:47.230Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -230,6 +230,7 @@
     "community.lc",
     "cool.hn",
     "cool.lc",
+    "creatium.site",
     "creatorlink.net",
     "cs-clan.org",
     "csb.app",
@@ -684,6 +685,7 @@
     "community.lc",
     "cool.hn",
     "cool.lc",
+    "creatium.site",
     "creatorlink.net",
     "cs-clan.org",
     "csb.app",
