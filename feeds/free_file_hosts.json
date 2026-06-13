@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_file_hosts.txt",
-    "syncedAt": "2026-06-12T06:21:44.283Z",
+    "syncedAt": "2026-06-13T06:04:29.291Z",
     "role": "free_file_hosts",
     "description": "Sites allowing anyone to upload and serve files publicly",
-    "count": 202
+    "count": 203
   },
   "entries": [
     "0x0.st",
@@ -29,6 +29,7 @@
     "archive.org",
     "archive.ph",
     "ardrive.net",
+    "assets.adobe.com",
     "assets.cdn.filesafe.space",
     "attachment.outlook.live.net",
     "attachments.office.net",

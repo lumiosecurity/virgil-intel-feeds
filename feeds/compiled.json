@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-06-12T06:21:47.230Z",
+    "compiledAt": "2026-06-13T06:04:32.281Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -1085,6 +1085,7 @@
     "archive.org",
     "archive.ph",
     "ardrive.net",
+    "assets.adobe.com",
     "assets.cdn.filesafe.space",
     "attachment.outlook.live.net",
     "attachments.office.net",
@@ -1265,6 +1266,7 @@
     "archive.org",
     "archive.ph",
     "ardrive.net",
+    "assets.adobe.com",
     "assets.cdn.filesafe.space",
     "attachment.outlook.live.net",
     "attachments.office.net",
