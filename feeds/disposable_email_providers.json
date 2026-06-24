@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/disposable_email_providers.txt",
-    "syncedAt": "2026-06-23T05:55:23.426Z",
+    "syncedAt": "2026-06-24T05:54:24.860Z",
     "role": "disposable_email",
     "description": "Throwaway email providers — suspicious as form submission targets",
-    "count": 10523
+    "count": 10522
   },
   "entries": [
     "0-00.usa.cc",
@@ -6688,7 +6688,6 @@
     "nospam2me.com",
     "nospam4.us",
     "nospamfor.us",
-    "nospammail.net",
     "nospammer.ovh",
     "nospamthanks.info",
     "not0k.com",
