@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-06-25T05:54:02.635Z",
+    "compiledAt": "2026-06-26T05:57:39.498Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -145,6 +145,7 @@
     ".ua": 0.2,
     ".uno": 0.2,
     ".us": 0.2,
+    ".vi": 0.2,
     ".vip": 0.2,
     ".vu": 0.2,
     ".wang": 0.2,
@@ -367,6 +368,7 @@
     "on.lc",
     "ondigitalocean.app",
     "online.gp",
+    "onlyoffice.com",
     "onlytap.io",
     "onrender.com",
     "onthewifi.com",
@@ -822,6 +824,7 @@
     "on.lc",
     "ondigitalocean.app",
     "online.gp",
+    "onlyoffice.com",
     "onlytap.io",
     "onrender.com",
     "onthewifi.com",
