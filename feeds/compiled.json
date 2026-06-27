@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-06-26T05:57:39.498Z",
+    "compiledAt": "2026-06-27T05:41:56.183Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -113,6 +113,7 @@
     ".pro": 0.2,
     ".pub": 0.2,
     ".pw": 0.2,
+    ".qpon": 0.2,
     ".racing": 0.2,
     ".re": 0.2,
     ".ren": 0.2,
