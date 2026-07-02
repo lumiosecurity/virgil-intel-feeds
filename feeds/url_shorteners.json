@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/url_shorteners.txt",
-    "syncedAt": "2026-07-01T06:13:09.435Z",
+    "syncedAt": "2026-07-02T05:44:52.517Z",
     "role": "url_shorteners",
     "description": "URL shorteners that can mask phishing destinations",
-    "count": 350
+    "count": 351
   },
   "entries": [
     "1in.me",
@@ -92,6 +92,7 @@
     "fly2.ws",
     "fon.gs",
     "fwd4.me",
+    "geno.link",
     "gl.am",
     "go.9nl.com",
     "go2.me",

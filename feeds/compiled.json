@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-07-01T06:13:11.563Z",
+    "compiledAt": "2026-07-02T05:44:54.657Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -1538,6 +1538,7 @@
     "fly2.ws",
     "fon.gs",
     "fwd4.me",
+    "geno.link",
     "gl.am",
     "go.9nl.com",
     "go2.me",
