@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-07-06T10:46:05.022Z",
+    "compiledAt": "2026-07-07T05:54:05.411Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -1186,6 +1186,7 @@
     "ncv.microsoft.com",
     "nethunt.com",
     "new.express.adobe.com",
+    "notion.com",
     "notion.so",
     "od.lk",
     "onedrive.live.com",
@@ -1381,6 +1382,7 @@
     "ncv.microsoft.com",
     "nethunt.com",
     "new.express.adobe.com",
+    "notion.com",
     "notion.so",
     "od.lk",
     "onedrive.live.com",
