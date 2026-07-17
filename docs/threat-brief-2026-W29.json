@@ -1,0 +1,17 @@
+{
+  "week": "2026-W29",
+  "generated_at": "2026-07-17T16:58:53.423Z",
+  "total_detections": 0,
+  "prev_week_detections": 0,
+  "top_brands": [],
+  "phishkit_families": [
+    {
+      "Total queries executed": 1,
+      "Rows read": 2,
+      "Rows written": 0,
+      "Database size (MB)": "83.03"
+    }
+  ],
+  "tld_abuse": [],
+  "local_coverage": null
+}
