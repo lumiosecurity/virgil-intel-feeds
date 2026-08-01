@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_file_hosts.txt",
-    "syncedAt": "2026-07-31T05:19:14.997Z",
+    "syncedAt": "2026-08-01T05:12:07.442Z",
     "role": "free_file_hosts",
     "description": "Sites allowing anyone to upload and serve files publicly",
-    "count": 204
+    "count": 205
   },
   "entries": [
     "0x0.st",
@@ -208,6 +208,7 @@
     "webmail-oxcs.register.com",
     "wetransfer.com",
     "wikisend.com",
+    "wixsite.com",
     "workflowy.com",
     "xara.com",
     "zippyshare.com"

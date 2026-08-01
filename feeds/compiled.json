@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-07-31T05:19:18.182Z",
+    "compiledAt": "2026-08-01T05:12:10.120Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -1450,6 +1450,7 @@
     "webmail-oxcs.register.com",
     "wetransfer.com",
     "wikisend.com",
+    "wixsite.com",
     "workflowy.com",
     "xara.com",
     "zippyshare.com"
