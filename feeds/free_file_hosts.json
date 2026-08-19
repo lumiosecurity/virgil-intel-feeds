@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_file_hosts.txt",
-    "syncedAt": "2026-08-18T02:44:02.559Z",
+    "syncedAt": "2026-08-19T02:46:04.562Z",
     "role": "free_file_hosts",
     "description": "Sites allowing anyone to upload and serve files publicly",
-    "count": 205
+    "count": 207
   },
   "entries": [
     "0x0.st",
@@ -108,6 +108,7 @@
     "hidrive.ionos.com",
     "hightail.com",
     "hmstorage.net",
+    "hstn.me",
     "html.cafe",
     "icedrive.net",
     "iceiy.com",
@@ -176,6 +177,7 @@
     "storage.googleapis.com",
     "sufybkt.com",
     "sugarsync.com",
+    "supabase.co",
     "surveymonkey.com",
     "sway.cloud.microsoft",
     "sway.office.com",

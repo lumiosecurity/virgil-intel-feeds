@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
-    "syncedAt": "2026-08-18T02:44:02.197Z",
+    "syncedAt": "2026-08-19T02:46:04.099Z",
     "role": "free_subdomain_hosts",
     "description": "Sites allowing anyone to create subdomains and host arbitrary content",
-    "count": 313
+    "count": 315
   },
   "entries": [
     "000webhost.com",
@@ -101,6 +101,7 @@
     "dynamics.com",
     "dyndns.dk",
     "easywp.com",
+    "eb-sites.com",
     "ee.tn",
     "english.lc",
     "es.cx",
@@ -202,6 +203,7 @@
     "ng.tn",
     "ngrok.io",
     "nimbusweb.me",
+    "nip.io",
     "nl.gp",
     "nl.tn",
     "notion.site",
