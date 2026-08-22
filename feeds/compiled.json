@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-08-21T02:51:56.559Z",
+    "compiledAt": "2026-08-22T02:43:40.858Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -1526,6 +1526,7 @@
     "viewer.joomag.com",
     "vikingfile.com",
     "vultrobjects.com",
+    "wasabisys.com",
     "we.tl",
     "webmail-oxcs.register.com",
     "wetransfer.com",

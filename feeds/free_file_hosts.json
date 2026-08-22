@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_file_hosts.txt",
-    "syncedAt": "2026-08-21T02:51:53.558Z",
+    "syncedAt": "2026-08-22T02:43:36.044Z",
     "role": "free_file_hosts",
     "description": "Sites allowing anyone to upload and serve files publicly",
-    "count": 207
+    "count": 208
   },
   "entries": [
     "0x0.st",
@@ -206,6 +206,7 @@
     "viewer.joomag.com",
     "vikingfile.com",
     "vultrobjects.com",
+    "wasabisys.com",
     "we.tl",
     "webmail-oxcs.register.com",
     "wetransfer.com",
