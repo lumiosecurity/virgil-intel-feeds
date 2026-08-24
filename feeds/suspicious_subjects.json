@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/suspicious_subjects.txt",
-    "syncedAt": "2026-08-24T02:52:17.718Z",
+    "syncedAt": "2026-08-24T07:05:33.235Z",
     "role": "suspicious_subject_phrases",
     "description": "Words and phrases suspicious in phishing lure subjects/headings",
     "count": 113
