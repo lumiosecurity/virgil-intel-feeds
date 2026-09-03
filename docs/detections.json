@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "2026-09-03-06:32",
-    "generatedAt": "2026-09-03T06:32:25.642Z",
+    "version": "2026-09-03-23:42",
+    "generatedAt": "2026-09-03T23:42:18.824Z",
     "brandCount": 193,
     "patternCount": 1100,
     "networkPatternCount": 21
@@ -27899,7 +27899,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "(?:support|secure|login|signin|account|help|verify)\\\\.[a-zA-Z0-9-]*(?:paypal|venmo|chase|wellsfargo|bankofamerica|amazon|apple|microsoft|google)\\\\.[a-zA-Z0-9-]+\\\\.(?:org|net|info|biz|top|tk|ml|ga|cf)",
+          "pattern": "(?:support|secure|login|signin|account|help|verify)\\.[a-zA-Z0-9-]*(?:paypal|venmo|chase|wellsfargo|bankofamerica|amazon|apple|microsoft|google)\\.[a-zA-Z0-9-]+\\.(?:org|net|info|biz|top|tk|ml|ga|cf)",
           "flags": "i"
         },
         {
@@ -28154,7 +28154,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "20[12]\\\\d"
+          "pattern": "20[12]\\d"
         },
         {
           "pattern": "(?:Microsoft|Google|Apple|PayPal|Amazon|Netflix|Facebook|Meta|Adobe|Dropbox|LinkedIn|Twitter|Zoom)",
@@ -28227,7 +28227,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "courier-logo-header-form-combo",
@@ -28324,7 +28324,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "(?:E-?Z-?Pass|SunPass|FasTrak|I-?Pass|TxTag|Peach\\\\s*Pass|ExpressToll|NTTA|EZDrive|Good\\\\s*To\\\\s*Go|RiverLink|PikePass)",
+          "pattern": "(?:E-?Z-?Pass|SunPass|FasTrak|I-?Pass|TxTag|Peach\\s*Pass|ExpressToll|NTTA|EZDrive|Good\\s*To\\s*Go|RiverLink|PikePass)",
           "flags": "i"
         },
         {
@@ -28440,7 +28440,7 @@
           "content": "password"
         },
         {
-          "pattern": "sign.?in|log.?in|enter\\\\s*(?:your\\\\s*)?(?:email|password)",
+          "pattern": "sign.?in|log.?in|enter\\s*(?:your\\s*)?(?:email|password)",
           "flags": "i"
         },
         {
@@ -29079,7 +29079,7 @@
           "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "tycoon-iconcaptcha-integration",
@@ -29556,7 +29556,7 @@
       "created": "2026-04-07",
       "updated": "2026-04-07",
       "rev": 1,
-      "patternString": "(?:dmv|irs|ssa|uscis|txdmv|txdps|dps)\\.(?:[a-z0-9-]{1,63}\\.)+(?!gov\\b)[a-z]{2,10}/pay",
+      "patternString": "(?:dmv|irs|ssa|uscis|txdmv|txdps|dps)\\.[a-z0-9.-]{1,120}\\.(?!gov\\b)[a-z]{2,10}/pay",
       "patternFlags": "i"
     },
     {
@@ -29923,10 +29923,10 @@
           "flags": "i"
         },
         {
-          "pattern": "(?:window\\\\.location|location\\\\.href|location\\\\.replace)"
+          "pattern": "(?:window\\.location|location\\.href|location\\.replace)"
         },
         {
-          "pattern": "(?:microsoft|google|apple|amazon|paypal|netflix|wellsfargo|chase)\\\\.com",
+          "pattern": "(?:microsoft|google|apple|amazon|paypal|netflix|wellsfargo|chase)\\.com",
           "flags": "i"
         },
         {
@@ -31533,7 +31533,7 @@
           "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "password-form-no-forgot-link",
@@ -31713,7 +31713,7 @@
           "negated": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "small-fee-card-harvest",
@@ -31830,7 +31830,7 @@
           "negated": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "courier-tracking-input-form",
@@ -32166,7 +32166,7 @@
           "content": "action="
         },
         {
-          "pattern": "(?:post|login|submit|process|save|send|check|verify|\\bauth\\b|validate|data|go|next|result|handler|action|gate|panel|recv|log)\\\\.php",
+          "pattern": "(?:post|login|submit|process|save|send|check|verify|\\bauth\\b|validate|data|go|next|result|handler|action|gate|panel|recv|log)\\.php",
           "flags": "i"
         },
         {
@@ -32199,7 +32199,7 @@
           "flags": "i"
         },
         {
-          "pattern": "\\\\.php|api\\\\.telegram|discord|webhook",
+          "pattern": "\\.php|api\\.telegram|discord|webhook",
           "flags": "i"
         },
         {
@@ -32529,7 +32529,7 @@
       "created": "2026-04-07",
       "updated": "2026-04-07",
       "rev": 1,
-      "patternString": "(?:<input[^>]*type=[\"']hidden[\"'][^>]*name=[\"'](?:ip|browser|os|country|city|timezone|screen|useragent|user_agent|resolution)[\"'][^>]*>[\\s\\S]{0,200}){3,}",
+      "patternString": "<input[^>]*type=[\"']hidden[\"'][^>]*name=[\"'](?:ip|browser|os|country|city|timezone|screen|useragent|user_agent|resolution)[\"'][^>]*>[\\s\\S]{0,200}<input[^>]*type=[\"']hidden[\"'][^>]*name=[\"'](?:ip|browser|os|country|city|timezone|screen|useragent|user_agent|resolution)[\"'][^>]*>[\\s\\S]{0,200}<input[^>]*type=[\"']hidden[\"'][^>]*name=[\"'](?:ip|browser|os|country|city|timezone|screen|useragent|user_agent|resolution)[\"'][^>]*>",
       "patternFlags": "i"
     },
     {
@@ -32900,7 +32900,7 @@
       "id": "aws-s3-hosting",
       "group": "hostingPatterns",
       "description": "Content loaded from AWS S3 bucket — abused cloud storage for phishing",
-      "severity": "informational",
+      "severity": "low",
       "weight": 0.15,
       "source": "html",
       "note": "AWS S3 bucket reference on page. Zero-weighted building block — S3 is one of the most common asset hosting services on the web (CDN, images, CSS, tracking pixels). This pattern provides no direct phishing signal but exists for meta-rule composition. The amazon-s3-bucket-phishing pattern (0.25) handles actual phishing by requiring credential forms near S3 URLs. Do not increase weight without adding discriminating conditions.",
@@ -33614,7 +33614,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "String\\.fromCharCode\\((?:\\d{2,3}\\s*,\\s*){9,}\\d{2,3}",
+          "pattern": "String\\.fromCharCode\\(\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}\\s*,\\s*\\d{2,3}",
           "flags": "i"
         },
         {
@@ -33720,7 +33720,7 @@
       "created": "2026-04-07",
       "updated": "2026-04-07",
       "rev": 1,
-      "patternString": "(?:\\.toString\\((?:16|36)\\)[\\s\\S]{0,50}){3,}",
+      "patternString": "\\.toString\\((?:16|36)\\)[\\s\\S]{0,50}\\.toString\\((?:16|36)\\)[\\s\\S]{0,50}\\.toString\\((?:16|36)\\)",
       "patternFlags": "i"
     },
     {
@@ -34495,7 +34495,7 @@
       "created": "2026-04-07",
       "updated": "2026-04-07",
       "rev": 1,
-      "patternString": "(?:var\\s+_[a-z]\\d+\\s*=\\s*['\"][^'\"]{5,20}['\"];\\s*){5,}",
+      "patternString": "var\\s+_[a-z]\\d+\\s*=\\s*['\"][^'\"]{5,20}['\"];\\s*var\\s+_[a-z]\\d+\\s*=\\s*['\"][^'\"]{5,20}['\"];\\s*var\\s+_[a-z]\\d+\\s*=\\s*['\"][^'\"]{5,20}['\"];\\s*var\\s+_[a-z]\\d+\\s*=\\s*['\"][^'\"]{5,20}['\"];\\s*var\\s+_[a-z]\\d+\\s*=\\s*['\"][^'\"]{5,20}['\"];\\s*",
       "patternFlags": "i"
     },
     {
@@ -34523,7 +34523,7 @@
       "created": "2026-04-07",
       "updated": "2026-04-07",
       "rev": 1,
-      "patternString": "eval\\((?:[a-zA-Z_$][\\w$]*\\s*\\+\\s*){3,}",
+      "patternString": "eval\\([a-zA-Z_$][\\w$]*\\s*\\+\\s*[a-zA-Z_$][\\w$]*\\s*\\+\\s*[a-zA-Z_$][\\w$]*\\s*\\+\\s*",
       "patternFlags": "i"
     },
     {
@@ -34537,7 +34537,7 @@
       "created": "2026-04-07",
       "updated": "2026-04-07",
       "rev": 1,
-      "patternString": "new\\s+Function\\((?:[a-zA-Z_$][\\w$]*\\s*\\+\\s*){2,}",
+      "patternString": "new\\s+Function\\([a-zA-Z_$][\\w$]*\\s*\\+\\s*[a-zA-Z_$][\\w$]*\\s*\\+\\s*",
       "patternFlags": "i"
     },
     {
@@ -35803,7 +35803,7 @@
       "created": "2026-04-07",
       "updated": "2026-04-07",
       "rev": 1,
-      "patternString": "rel=[\"'](?:shortcut )?icon[\"'][^>]*href=[\"']https?://(?!(?:[a-z0-9-]+\\.)*microsoft\\.com)[^\"']*(?:favicon|icon)[^\"']*microsoft[^\"']*\\.ico",
+      "patternString": "rel=[\"'](?:shortcut )?icon[\"'][^>]*href=[\"']https?://(?!(?:[a-z0-9.-]+\\.)?microsoft\\.com)[^\"']*(?:favicon|icon)[^\"']*microsoft[^\"']*\\.ico",
       "patternFlags": "i"
     },
     {
@@ -35929,7 +35929,7 @@
       "created": "2026-04-07",
       "updated": "2026-04-07",
       "rev": 1,
-      "patternString": "(?:&#[0-9]{1,6};){6,30}[^<]{0,200}(?:bet365|paypal|amazon|microsoft|apple|google)",
+      "patternString": "&#[0-9]{1,6};&#[0-9]{1,6};&#[0-9]{1,6};&#[0-9]{1,6};&#[0-9]{1,6};&#[0-9]{1,6};[^<]{0,200}(?:bet365|paypal|amazon|microsoft|apple|google)",
       "patternFlags": "i"
     },
     {
@@ -36532,7 +36532,7 @@
       "created": "2026-04-07",
       "updated": "2026-04-07",
       "rev": 1,
-      "patternString": "(login|sign\\s+in|webmail).{0,500}(AU\\s+\\$\\d+\\.\\d+.*OFF|Direct\\s+from\\s+\\w+.*Direct\\s+from\\s+\\w+){3,}",
+      "patternString": "(?:login|sign\\s+in|webmail)[\\s\\S]{0,500}(?:AU\\s+\\$\\d+\\.\\d+[^<]{0,100}OFF|Direct\\s+from\\s+\\w+)[\\s\\S]{0,300}(?:AU\\s+\\$\\d+\\.\\d+[^<]{0,100}OFF|Direct\\s+from\\s+\\w+)[\\s\\S]{0,300}(?:AU\\s+\\$\\d+\\.\\d+[^<]{0,100}OFF|Direct\\s+from\\s+\\w+)",
       "patternFlags": "i"
     },
     {
@@ -38778,7 +38778,7 @@
           "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3"
+      "condition": "0 & 1 & 2"
     },
     {
       "id": "discord-webhook-url-full",
@@ -39305,7 +39305,7 @@
           "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "tycoon-email-first-then-password",
@@ -40892,7 +40892,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "fake-airdrop-claim-page",
@@ -41108,7 +41108,7 @@
           "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "geek-squad-renewal-scam",
@@ -41491,7 +41491,7 @@
           "negated": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "mailto-support-link-phish",
@@ -41707,7 +41707,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "sms-delivery-notification-text",
@@ -41946,7 +41946,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "toll-collections-escalation",
@@ -41979,7 +41979,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "zerofont-preheader-fake-security",
@@ -42020,7 +42020,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "shared-document-view-prompt",
@@ -42100,7 +42100,7 @@
           "negated": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "voicemail-listen-prompt",
@@ -42359,7 +42359,7 @@
           "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "callback-phishing-amount-phone",
@@ -42700,7 +42700,7 @@
           "negated": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6 & 7"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5 & 6"
     },
     {
       "id": "secure-message-view-login",
@@ -42773,7 +42773,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5 & 6"
+      "condition": "0 & 1 & 2 & 3 & 4 & 5"
     },
     {
       "id": "document-page-count-preview-lure",
@@ -42828,11 +42828,11 @@
           "fast_pattern": true
         },
         {
-          "pattern": "(?:from|sent\\\\s*by|shared\\\\s*by)\\\\s*(?::|\\\\s)[\\\\s\\\\S]{0,100}@[a-z0-9.-]+\\\\.[a-z]{2,}",
+          "pattern": "(?:from|sent\\s*by|shared\\s*by)\\s*(?::|\\s)[\\s\\S]{0,100}@[a-z0-9.-]+\\.[a-z]{2,}",
           "flags": "i"
         },
         {
-          "pattern": "(?:View|Open|Access|Review|Download)\\\\s*(?:Document|File|PDF|Message)",
+          "pattern": "(?:View|Open|Access|Review|Download)\\s*(?:Document|File|PDF|Message)",
           "flags": "i"
         },
         {
@@ -42883,7 +42883,7 @@
       "created": "2026-04-07",
       "updated": "2026-04-07",
       "rev": 1,
-      "patternString": "(?:<input[^>]*type=['\"]radio['\"][^>]*>[\\s\\S]{0,100}){2,}(?:View|Download|Send|Open|Access|Print|Forward|Share)[\\s\\S]{0,2000}(?:<input[^>]*type=['\"](?:password|hidden)['\"]|<form[^>]*action)",
+      "patternString": "<input[^>]*type=['\"]radio['\"][^>]*>[\\s\\S]{0,100}<input[^>]*type=['\"]radio['\"][^>]*>[\\s\\S]{0,100}(?:View|Download|Send|Open|Access|Print|Forward|Share)[\\s\\S]{0,2000}(?:<input[^>]*type=['\"](?:password|hidden)['\"]|<form[^>]*action)",
       "patternFlags": "i"
     },
     {
@@ -43757,7 +43757,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "(?:txdmv|dmv|irs|ssa|uscis|dol|hud|dps|txdot|txdps)\\\\.[a-z0-9-]+\\\\.(?:life|top|xyz|click|shop|online|site|store|fun|icu|buzz|cc|pw|tk|ml|ga|cf|gq)",
+          "pattern": "(?:txdmv|dmv|irs|ssa|uscis|dol|hud|dps|txdot|txdps)\\.[a-z0-9-]+\\.(?:life|top|xyz|click|shop|online|site|store|fun|icu|buzz|cc|pw|tk|ml|ga|cf|gq)",
           "flags": "i"
         },
         {
@@ -44018,7 +44018,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "constantcontact-landing-page-abuse",
@@ -44371,7 +44371,7 @@
           "nocase": true
         }
       ],
-      "condition": "1 & 2 & 3 & 4"
+      "condition": "0 & 1 & 2 & 3"
     },
     {
       "id": "link-in-bio-redirect",
@@ -44404,7 +44404,7 @@
           "fast_pattern": true
         },
         {
-          "pattern": "(?:href=[\\x27\\\"](?:#|javascript:void|javascript:;)[\\x27\\\"].*){4,}",
+          "pattern": "href=[\\x27\\\"](?:#|javascript:void\\(0?\\)|javascript:;)[\\x27\\\"][\\s\\S]{0,1500}href=[\\x27\\\"](?:#|javascript:void\\(0?\\)|javascript:;)[\\x27\\\"][\\s\\S]{0,1500}href=[\\x27\\\"](?:#|javascript:void\\(0?\\)|javascript:;)[\\x27\\\"][\\s\\S]{0,1500}href=[\\x27\\\"](?:#|javascript:void\\(0?\\)|javascript:;)[\\x27\\\"]",
           "flags": "is"
         },
         {
@@ -44421,7 +44421,7 @@
           "flags": "i"
         }
       ],
-      "condition": "1 & 2 & 3 & 4 & 5"
+      "condition": "0 & 1 & 2 & 3 & 4"
     },
     {
       "id": "base-href-external-domain",
@@ -44505,7 +44505,7 @@
           "nocase": true
         },
         {
-          "pattern": "(?:<a\\s[^>]*href=[\\x27\\\"]https?://[^>]*>.*){5,}",
+          "pattern": "<a\\s[^>]*href=[\\x27\\\"]https?://[^>]*>[\\s\\S]{0,2000}<a\\s[^>]*href=[\\x27\\\"]https?://[^>]*>[\\s\\S]{0,2000}<a\\s[^>]*href=[\\x27\\\"]https?://[^>]*>[\\s\\S]{0,2000}<a\\s[^>]*href=[\\x27\\\"]https?://[^>]*>[\\s\\S]{0,2000}<a\\s[^>]*href=[\\x27\\\"]https?://[^>]*>",
           "flags": "is",
           "negated": true
         }
@@ -44532,7 +44532,7 @@
           "content": "action="
         },
         {
-          "pattern": "\\\\.(?:xyz|top|tk|ml|ga|cf|gq|buzz|work|click|link|surf|icu|monster|rest|quest|cfd|sbs)[/\\x27\\\"]",
+          "pattern": "\\.(?:xyz|top|tk|ml|ga|cf|gq|buzz|work|click|link|surf|icu|monster|rest|quest|cfd|sbs)[/\\x27\\\"]",
           "flags": "i"
         },
         {
@@ -44806,7 +44806,7 @@
       "weight": 0.4,
       "target": "body",
       "transport": "any",
-      "patternString": "(?:cookie|cookies|document_cookie|doc_cookie)(?:=|%3D|\": ?\")(?:[\\w-]+=.{3,};\\s*){2,}",
+      "patternString": "(?:cookie|cookies|document_cookie|doc_cookie)(?:=|%3D|\": ?\")[\\w-]+=[^;]{3,200};\\s*[\\w-]+=[^;]{3,200};",
       "patternFlags": "i",
       "note": "Phishkits dump the full document.cookie string into a POST body field. The pattern matches a field named cookie/cookies containing multiple semicolon-separated key=value pairs — the signature shape of a cookie dump.",
       "created": "2026-04-07",
@@ -44896,7 +44896,7 @@
       "weight": 0.3,
       "target": "body",
       "transport": "any",
-      "patternString": "(?:(?:password|passwd|pass|email|login)=[^&]+&[^&]*){2,}[A-Za-z0-9+/]{80,}={0,2}",
+      "patternString": "(?:password|passwd|pass|email|login)=[^&]+&[^&]{0,200}(?:password|passwd|pass|email|login)=[^&]+&[^&]{0,200}[A-Za-z0-9+/]{80,}={0,2}",
       "patternFlags": "i",
       "note": "Phishkits sometimes base64-encode the entire credential payload before exfiltrating. The pattern requires at least 2 credential-like fields AND a long base64 string.",
       "created": "2026-04-07",
