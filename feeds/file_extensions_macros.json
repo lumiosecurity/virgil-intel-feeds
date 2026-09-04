@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/file_extensions_macros.txt",
-    "syncedAt": "2026-09-03T23:42:14.198Z",
+    "syncedAt": "2026-09-04T06:34:30.950Z",
     "role": "macro_extensions",
     "description": "Macro-capable file extensions — suspicious as download links on credential pages",
     "count": 22
