@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/url_shorteners.txt",
-    "syncedAt": "2026-09-08T06:34:41.835Z",
+    "syncedAt": "2026-09-09T06:46:54.250Z",
     "role": "url_shorteners",
     "description": "URL shorteners that can mask phishing destinations",
-    "count": 352
+    "count": 353
   },
   "entries": [
     "1in.me",
@@ -23,6 +23,7 @@
     "a.nf",
     "a2a.me",
     "abbrr.com",
+    "abre.ai",
     "acesse.dev",
     "acesse.one",
     "adjix.com",

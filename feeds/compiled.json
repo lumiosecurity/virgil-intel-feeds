@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-09-08T06:34:44.200Z",
+    "compiledAt": "2026-09-09T06:46:57.307Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -1575,6 +1575,7 @@
     "a.nf",
     "a2a.me",
     "abbrr.com",
+    "abre.ai",
     "acesse.dev",
     "acesse.one",
     "adjix.com",
