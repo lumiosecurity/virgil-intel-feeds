@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/disposable_email_providers.txt",
-    "syncedAt": "2026-09-11T06:40:00.312Z",
+    "syncedAt": "2026-09-12T06:33:45.096Z",
     "role": "disposable_email",
     "description": "Throwaway email providers — suspicious as form submission targets",
     "count": 10522
