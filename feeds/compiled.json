@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-09-15T06:48:29.617Z",
+    "compiledAt": "2026-09-16T06:52:38.819Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -1782,6 +1782,7 @@
     "short.ie",
     "short.io",
     "short.to",
+    "shorten.is",
     "shorten.tv",
     "shorten.world",
     "shorter.gg",
