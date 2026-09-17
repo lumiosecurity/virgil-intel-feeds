@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/self_service_creation_platform_domains.txt",
-    "syncedAt": "2026-09-16T06:52:36.584Z",
+    "syncedAt": "2026-09-17T06:47:54.914Z",
     "role": "free_subdomain_hosts",
     "description": "Self-service website creation platforms where anyone can host content",
-    "count": 199
+    "count": 200
   },
   "entries": [
     "ac-page.com",
@@ -126,6 +126,7 @@
     "lighthouse.storage",
     "lovable.app",
     "lucid.app",
+    "maze.co",
     "miricanvas.com",
     "mixpanel.com",
     "mockflow.com",

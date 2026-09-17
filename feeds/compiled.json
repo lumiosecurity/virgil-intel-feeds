@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-09-16T06:52:38.819Z",
+    "compiledAt": "2026-09-17T06:47:57.593Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -593,6 +593,7 @@
     "lighthouse.storage",
     "lovable.app",
     "lucid.app",
+    "maze.co",
     "miricanvas.com",
     "mixpanel.com",
     "mockflow.com",
@@ -1096,6 +1097,7 @@
     "lighthouse.storage",
     "lovable.app",
     "lucid.app",
+    "maze.co",
     "miricanvas.com",
     "mixpanel.com",
     "mockflow.com",
