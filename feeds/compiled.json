@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-09-17T06:47:57.593Z",
+    "compiledAt": "2026-09-18T06:43:58.856Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -1667,6 +1667,7 @@
     "href.in",
     "ht.ly",
     "htxt.it",
+    "hubs.la",
     "hubs.ly",
     "hugeurl.com",
     "hurl.it",

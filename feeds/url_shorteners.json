@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/url_shorteners.txt",
-    "syncedAt": "2026-09-17T06:47:55.248Z",
+    "syncedAt": "2026-09-18T06:43:56.456Z",
     "role": "url_shorteners",
     "description": "URL shorteners that can mask phishing destinations",
-    "count": 354
+    "count": 355
   },
   "entries": [
     "1in.me",
@@ -113,6 +113,7 @@
     "href.in",
     "ht.ly",
     "htxt.it",
+    "hubs.la",
     "hubs.ly",
     "hugeurl.com",
     "hurl.it",
