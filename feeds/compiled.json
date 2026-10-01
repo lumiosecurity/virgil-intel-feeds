@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-09-30T07:32:21.123Z",
+    "compiledAt": "2026-10-01T07:51:52.419Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -512,6 +512,7 @@
     "app.upbase.io",
     "app.usewhale.io",
     "app.whirr.co",
+    "apps.knack.com",
     "appsheet.com",
     "appwrite.network",
     "archbee.com",
@@ -1016,6 +1017,7 @@
     "app.upbase.io",
     "app.usewhale.io",
     "app.whirr.co",
+    "apps.knack.com",
     "appsheet.com",
     "appwrite.network",
     "archbee.com",

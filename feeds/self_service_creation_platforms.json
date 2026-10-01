@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/self_service_creation_platform_domains.txt",
-    "syncedAt": "2026-09-30T07:32:18.790Z",
+    "syncedAt": "2026-10-01T07:51:49.957Z",
     "role": "free_subdomain_hosts",
     "description": "Self-service website creation platforms where anyone can host content",
-    "count": 200
+    "count": 201
   },
   "entries": [
     "ac-page.com",
@@ -42,6 +42,7 @@
     "app.upbase.io",
     "app.usewhale.io",
     "app.whirr.co",
+    "apps.knack.com",
     "appsheet.com",
     "appwrite.network",
     "archbee.com",
