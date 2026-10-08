@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/suspicious_content.txt",
-    "syncedAt": "2026-10-07T07:45:15.722Z",
+    "syncedAt": "2026-10-08T08:03:08.175Z",
     "role": "suspicious_content_phrases",
     "description": "Words and phrases suspicious in phishing page body content",
     "count": 62
