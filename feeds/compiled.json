@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-10-08T08:03:08.790Z",
+    "compiledAt": "2026-10-09T08:03:24.827Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",

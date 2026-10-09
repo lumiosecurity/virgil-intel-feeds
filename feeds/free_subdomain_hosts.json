@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
-    "syncedAt": "2026-10-08T08:03:05.514Z",
+    "syncedAt": "2026-10-09T08:03:21.955Z",
     "role": "free_subdomain_hosts",
     "description": "Sites allowing anyone to create subdomains and host arbitrary content",
     "count": 315
