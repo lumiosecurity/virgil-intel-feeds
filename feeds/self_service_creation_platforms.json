@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/self_service_creation_platform_domains.txt",
-    "syncedAt": "2026-10-09T08:03:22.070Z",
+    "syncedAt": "2026-10-10T07:46:44.138Z",
     "role": "free_subdomain_hosts",
     "description": "Self-service website creation platforms where anyone can host content",
-    "count": 201
+    "count": 202
   },
   "entries": [
     "ac-page.com",
@@ -33,6 +33,7 @@
     "app.mural.co",
     "app.neuroflash.com",
     "app.notion.com",
+    "app.pocper.com",
     "app.publr.co",
     "app.slidebean.com",
     "app.smartsheet.com",

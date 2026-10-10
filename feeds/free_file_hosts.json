@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/free_file_hosts.txt",
-    "syncedAt": "2026-10-09T08:03:22.200Z",
+    "syncedAt": "2026-10-10T07:46:44.481Z",
     "role": "free_file_hosts",
     "description": "Sites allowing anyone to upload and serve files publicly",
-    "count": 210
+    "count": 211
   },
   "entries": [
     "0x0.st",
@@ -67,6 +67,7 @@
     "digitaloceanspaces.com",
     "docs.google.com",
     "docs.zoom.us",
+    "docsend.com",
     "down.mdiaload.com",
     "drime.cloud",
     "drive.google.com",
