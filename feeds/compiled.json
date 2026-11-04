@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-11-03T08:41:03.064Z",
+    "compiledAt": "2026-11-04T08:10:20.282Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -8056,6 +8056,7 @@
     "monsieurbiz.wtf",
     "monsterjcy.com",
     "montagebridalsalon.com",
+    "monthmail.com",
     "montokop.pw",
     "monumentmail.com",
     "mooblan.ml",
