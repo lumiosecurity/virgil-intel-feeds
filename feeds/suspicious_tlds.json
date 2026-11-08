@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
-    "syncedAt": "2026-11-07T07:51:44.180Z",
+    "syncedAt": "2026-11-08T08:06:47.225Z",
     "role": "tld_risk",
     "description": "TLDs frequently abused, free to register, or rarely used legitimately",
     "count": 144,

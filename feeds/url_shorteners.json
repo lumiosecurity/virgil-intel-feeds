@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/url_shorteners.txt",
-    "syncedAt": "2026-11-07T07:51:44.759Z",
+    "syncedAt": "2026-11-08T08:06:47.695Z",
     "role": "url_shorteners",
     "description": "URL shorteners that can mask phishing destinations",
     "count": 356
