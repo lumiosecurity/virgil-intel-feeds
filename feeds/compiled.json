@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-11-12T08:52:58.010Z",
+    "compiledAt": "2026-11-13T08:49:01.000Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -1691,6 +1691,7 @@
     "ionos.ly",
     "is.gd",
     "iscool.net",
+    "ishortn.ink",
     "iterasi.net",
     "jijr.com",
     "jmp2.net",
@@ -5273,6 +5274,7 @@
     "flashdelivery.com",
     "flashmail.co",
     "flashvoi.recipes",
+    "fldubai.com",
     "fleckens.hu",
     "flemail.ru",
     "flexionars.info",

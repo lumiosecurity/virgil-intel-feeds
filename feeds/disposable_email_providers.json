@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/disposable_email_providers.txt",
-    "syncedAt": "2026-11-12T08:52:56.281Z",
+    "syncedAt": "2026-11-13T08:48:59.350Z",
     "role": "disposable_email",
     "description": "Throwaway email providers — suspicious as form submission targets",
-    "count": 10523
+    "count": 10524
   },
   "entries": [
     "0-00.usa.cc",
@@ -3351,6 +3351,7 @@
     "flashdelivery.com",
     "flashmail.co",
     "flashvoi.recipes",
+    "fldubai.com",
     "fleckens.hu",
     "flemail.ru",
     "flexionars.info",

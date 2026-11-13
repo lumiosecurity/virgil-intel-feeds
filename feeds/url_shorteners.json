@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/url_shorteners.txt",
-    "syncedAt": "2026-11-12T08:52:55.981Z",
+    "syncedAt": "2026-11-13T08:48:58.973Z",
     "role": "url_shorteners",
     "description": "URL shorteners that can mask phishing destinations",
-    "count": 356
+    "count": 357
   },
   "entries": [
     "1in.me",
@@ -127,6 +127,7 @@
     "ionos.ly",
     "is.gd",
     "iscool.net",
+    "ishortn.ink",
     "iterasi.net",
     "jijr.com",
     "jmp2.net",
