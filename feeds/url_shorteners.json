@@ -1,10 +1,10 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/url_shorteners.txt",
-    "syncedAt": "2026-11-17T09:46:11.418Z",
+    "syncedAt": "2026-11-18T09:17:15.879Z",
     "role": "url_shorteners",
     "description": "URL shorteners that can mask phishing destinations",
-    "count": 357
+    "count": 358
   },
   "entries": [
     "1in.me",
@@ -224,6 +224,7 @@
     "safe.mn",
     "scan.page",
     "scnv.io",
+    "search.app",
     "share.google",
     "sharein.com",
     "sharetabs.com",

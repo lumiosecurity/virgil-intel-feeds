@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "compiledAt": "2026-11-17T09:46:13.973Z",
+    "compiledAt": "2026-11-18T09:17:18.173Z",
     "sources": [
       "https://github.com/sublime-security/static-files/blob/master/suspicious_tlds.txt",
       "https://github.com/sublime-security/static-files/blob/master/free_subdomain_hosts.txt",
@@ -1788,6 +1788,7 @@
     "safe.mn",
     "scan.page",
     "scnv.io",
+    "search.app",
     "share.google",
     "sharein.com",
     "sharetabs.com",
