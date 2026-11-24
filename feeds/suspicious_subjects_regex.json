@@ -1,7 +1,7 @@
 {
   "_meta": {
     "source": "https://github.com/sublime-security/static-files/blob/master/suspicious_subjects_regex.txt",
-    "syncedAt": "2026-11-23T17:44:09.967Z",
+    "syncedAt": "2026-11-24T11:41:13.081Z",
     "role": "suspicious_subject_regex",
     "description": "Regex patterns for suspicious subject/heading lures",
     "count": 122
